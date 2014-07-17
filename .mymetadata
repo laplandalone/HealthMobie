@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="HealthMobile"
+  id="myeclipse.1386060307372"
+  context-root="/HealthMobile"
+  j2ee-spec="5.0"
+  archive="HealthMobile.war">
+  <attributes>
+    <attribute name="webrootdir" value="WebRoot" />
+  </attributes>
+</project-module>
+
