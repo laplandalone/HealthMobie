@@ -1,0 +1,86 @@
+@CHARSET "UTF-8";
+
+.resKey{
+	background-color:#d7ecf7;
+	border-bottom:1px solid #cccccc;
+}
+
+.resValue{
+	border-bottom:1px solid #cccccc;
+}
+
+/* construction */
+.titlemaincont{
+	text-align:center;
+	position:relative;
+}
+
+.contmain{
+	height:398px;
+}
+
+.contleftframe{
+	width:4px;
+	height:28px;
+	background-image: url(/pub/img/leftframe.gif);
+	float:left;
+	margin-top:16px;
+}
+
+.contmiddleframe{
+	height:28px;
+	width:966px;
+	background-image: url(/pub/img/middleframe.gif);
+	background-repeat:repeat-x;
+	font-weight:bold;
+	font-size:14px;
+	color:#474747;
+	line-height:28px;
+	float:left;
+	margin-top:16px;
+}
+
+.contrightframe{
+	width:4px;
+	height:28px;
+	background-image: url(/pub/img/rightframe.gif);
+	float:left;
+	margin-top:16px;
+}
+
+.resPage{
+	color:#474747;
+}
+
+.contmaint{
+	height:44px;
+}
+
+.contpayleft{
+	height:44px;
+}
+
+.contpaymain{
+	height:44px;
+	line-height:44px;
+}
+
+.contpayright{
+	height:44px;
+}
+
+.contmainb{
+	height:374px;
+}
+
+.contbankleft{
+	height:374px;
+}
+
+.contbankmain{
+	height:374px;
+}
+
+.contbankright{
+	height:374px;
+}

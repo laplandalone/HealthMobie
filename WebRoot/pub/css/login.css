@@ -1,0 +1,57 @@
+@CHARSET "UTF-8";
+
+.content{
+	padding-top:60px;
+	height:535px;
+}
+
+.conttop{
+	width:500px;
+}
+
+.titlemain{
+	width:478px;
+}
+
+.contmain{
+	width:500px;
+	height:214px;
+}
+
+.titlemaincont{
+	text-align: center;
+	color:#11288f;
+	font-size: 25px;
+}
+
+.contmainb{
+	height:174px;
+}
+
+.contbankleft{
+	height:174px;
+}
+
+.contbankmain{
+	height:174px;
+}
+
+.contbankright{
+	height:174px;
+}
+
+.contpaymain{
+	width:474px;
+}
+
+.contbankmain{
+	width:472px;
+}
+
+.bottom{
+	width:500px;
+}
+
+.bottomcont{
+	width:474px;
+}

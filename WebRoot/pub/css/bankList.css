@@ -1,0 +1,384 @@
+@CHARSET "UTF-8";
+
+body{
+	margin:0 auto;
+	padding:0 0;
+	background-color: #f3f9ff;
+	font-family: "微软雅黑";
+}
+
+img{
+	border:none;
+}
+
+a{
+	text-decoration: none;
+}
+
+
+/* util tools */
+.fontTit{
+	font-size: 16px;
+	height:60px;
+	line-height:60px;
+}
+
+.linkSel{
+	text-decoration: none;
+	font-size: 16px;
+	color: #000000;
+	width:76px;
+	height:30px;
+	margin-top:14px;
+	line-height:30px;
+	display: block;
+	float: left;
+	text-align: center;
+	border: 2px solid #8dc918;
+}
+
+.linkAnc{
+	text-decoration: none;
+	font-size: 16px;
+	color: #000000;
+	width:76px;
+	height:32px;
+	margin-top:14px;
+	line-height:32px;
+	display: block;
+	float: left;
+	text-align: center;
+	border:1px solid #e6e6e6;
+	background-color:#f2f2f2;
+}
+
+.space{
+	padding-left:15px;
+	float:left;
+}
+
+.titLabel{
+	font-size: 20px;
+	color:#11288f;
+	padding-left:50px;
+}
+
+.titSubLabel{
+	font-size: 14px;
+	color:#6c6c6c;
+	padding-left:50px;
+}
+
+.money{
+	font-size:40px;
+	color:#6fa012;
+}
+
+.yuan{
+	font-size:14px;
+	color:#000000;
+	line-height:81px;
+	margin-right:20px;
+}
+
+/* layout */
+.top{
+	height:69px;
+	width:100%;
+	background-image: url('/pub/img/topbak.png');
+	background-repeat: repeat-x;
+	margin:0 auto;
+	padding:0 0;
+	/*position: absolute;*/
+	top:0px;
+}
+
+.logo{
+	height:57px;
+	width:100%;
+	background-image: url('/pub/img/logo.jpg');
+	margin-left:20px;
+	background-repeat: no-repeat;
+	padding:0 0;
+}
+
+.baseInfo{
+	float:right;
+	height:57px;
+	width:363px;
+	margin-left:20px;
+	margin-top: 30px;
+}
+
+.baseInfo a{
+	color : #0099ff;
+	text-decoration : none;
+}
+
+.baseInfo a:HOVER{
+	color:#ff0000;
+}
+
+
+.content{
+	height:585px;
+	width:100%;
+	background-color: #f3f9ff;
+	padding-top:10px;
+	/*position:absolute;*/
+	bottom: 0px;
+}
+
+.conttop{
+	margin:0 auto;
+	padding:0 0;
+	width:1000px;
+	height:91px;
+}
+
+.titleleft{
+	margin:0 auto;
+	padding:0 0;
+	width:11px;
+	height:91px;
+	background-image: url('/pub/img/contitleft.png');
+	background-repeat: no-repeat;
+	background-position:0px 3px;
+	float: left;
+}
+
+.titlemain{
+	float: left;
+	width:978px;
+	position: relative;
+}
+
+.titlemaintop{
+	background-image:url('/pub/img/contittop.png');
+	background-repeat: repeat-x;
+	background-position:0px 0px;
+	width:100%;
+	height:10px;
+	margin:0 auto;
+	padding:0 0;
+}
+
+.titlemaincont{
+	background-color: #ffffff;
+	border-bottom:1px solid #cccccc;
+	height:80px;
+	line-height: 75px;
+	margin: 0 auto;
+	padding: 0 0;
+	_margin-top:-12px;
+}
+
+.pricePos{
+	position:absolute;
+	right:0px;
+	top:8px;
+}
+
+.titleright{
+	float: left;
+	margin:0 auto;
+	padding:0 0;
+	width:11px;
+	height:91px;
+	background-image: url('/pub/img/contitright.png');
+	background-repeat: no-repeat;
+	background-position:0px 4px;
+}
+
+.contmain{
+	margin:0 auto;
+	padding:0 0;
+	width:1000px;
+	height:364px;
+}
+
+.contmaint{
+	height:60px;
+	background-color: #ffffff;
+}
+
+.contpayleft{
+	width:13px;
+	height:60px;
+	background-image:url('/pub/img/contmainleft.png');
+	background-position:-2px 0px;
+	background-repeat: no-repeat;
+	float:left;
+}
+
+.contpaymain{
+	float:left;
+	width:974px;
+	height:60px;
+	line-height:60px;
+}
+
+.contpaymaintit{
+	width:150px;
+	text-align: center;
+	float:left;
+	padding-left:1px;
+}
+
+.contpaymaininfo{
+	float:left;
+	text-align:left;	
+}
+
+.contpayright{
+	width:13px;
+	height:60px;
+	background-image:url('/pub/img/contmainright.png');
+	background-repeat: no-repeat;
+	float:right;
+}
+
+.contbankmaininfo{
+	height:250px;
+}
+
+.contbankmaininfoleft{
+	width:150px;
+	text-align: center;
+	float:left;
+}
+
+.contbankmaininforight{
+	float:left;
+	padding-top:8px;
+}
+
+.contbankmainbot{
+	height:64px;
+}
+
+.contbankmainbot a{
+	margin-left:150px;
+}
+
+.contmainb{
+	height:324px;
+	background-color: #ffffff;
+}
+
+.contbankleft{
+	width:14px;
+	height:324px;
+	_height:334px;
+	background-image: url('/pub/img/mainbakleft.png');
+	background-repeat: repeat-y;
+	background-position:-3px 0px;
+	float: left;
+}
+
+.contbankmain{
+	float:left;
+	height:324px;
+	width:972px;
+}
+
+.contbankright{
+	width:14px;
+	height:324px;
+	_height:334px;
+	background-image: url('/pub/img/mainbakright.png');
+	background-repeat: repeat-y;
+	background-position:4px 0px;
+	float: right;
+}
+
+.contbottom{
+	margin:0 auto;
+	padding:0 0;
+	width:1000px;
+	height:120px;
+	background-color: #ffffff;
+}
+
+.applyleft{
+	width:14px;
+	height:100px;
+	_height:120px;
+	background-image: url('/pub/img/mainbakleft.png');
+	background-repeat: repeat-y;
+	background-position:-3px 0px;
+	float: left;
+}
+
+.applymain{
+	float:left;
+	width:972px;
+}
+
+.applymain ul{
+	width:902px;
+	margin:0 auto 0 30px;
+	border-top:1px solid #819b5c;
+	padding-top:10px;
+	list-style-type: none;
+	padding-left:0px;
+}
+
+.applymain ul li:FIRST-CHILD{
+	padding-left:5px;
+	font-size: 13px;
+}
+
+.applymain ul li{
+	padding-left:5px;
+	font-size: 13px;
+}
+
+
+.applyright{
+	width:14px;
+	height:100px;
+	_height:120px;
+	background-image: url('/pub/img/mainbakright.png');
+	background-repeat: repeat-y;
+	background-position:4px 0px;
+	float: right;
+}
+
+.bottom{
+	width:1000px;
+	height:14px;
+	margin:0 auto;
+}
+
+.bottomleft{
+	width:13px;
+	height:14px;
+	background-image:url('/pub/img/leftbow.png');
+	background-repeat:no-repeat;
+	float: left;
+}
+
+.bottomcont{
+	width:974px;
+	height:14px;
+	background-image:url('/pub/img/middleline.png');
+	background-repeat:repeat-x;
+	float: left;
+}
+
+.bottomright{
+	width:13px;
+	height:14px;
+	background-image:url('/pub/img/rightbow.png');
+	background-repeat:no-repeat;
+	float: left;
+}
+
+.tabletop td{
+	text-align:center !important;
+}
+
+.ui_buttons{
+	text-align: center !important;
+}

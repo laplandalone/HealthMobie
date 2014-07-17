@@ -1,0 +1,11 @@
+@CHARSET "UTF-8";
+.ctrl{
+	margin:0 auto;
+	text-align:center;
+	margin-top:20px;
+	height:50px;
+}
+
+.tabletop td{
+	text-align:center !important;
+}
