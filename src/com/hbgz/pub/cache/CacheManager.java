@@ -58,4 +58,9 @@ public class CacheManager
 		}
 		return null;
 	}
+	
+	  public Map getAuthCode(String accNbr)
+	  {
+		  return sysCacheDao.getAuthCode(accNbr);
+	  }
 }
