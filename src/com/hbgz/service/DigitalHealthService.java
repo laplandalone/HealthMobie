@@ -356,10 +356,9 @@ public class DigitalHealthService
 	}
 
 	@ServiceType(value = "BUS20021")
-	public String getAuthCode(String accNbr) throws  Exception
+	public String getAuthCode(String accNbr,String type) throws  Exception
 	{
 		CacheManager cacheManager = (CacheManager) BeanFactoryHelper.getBean("cacheManager");
-		
 		Map map =cacheManager.getAuthCode(accNbr);
 		String url="http://api.app2e.com/smsBigSend.api.php";
 		Map<String, String > params = new HashMap<String, String>();
@@ -367,9 +366,23 @@ public class DigitalHealthService
 		params.put("pwd", "cb6fbeee3deb608f000a8f132531b738");
 		params.put("p", accNbr);
 		params.put("isUrlEncode", "no");
-//		params.put("msg","【海星通技术】尊敬的用户，您注册验证码是"+StringUtil.getMapKeyVal(map, accNbr)+"。健康管家愿成为您健康的好帮手");
-		
-		return HttpUtil.http(url, params, "", "", "");
+//	    params.put("msg","【海星通技术】尊敬的用户，您注册验证码是"+StringUtil.getMapKeyVal(map, accNbr)+"。健康管家愿成为您健康的好帮手");
+			
+		String msgRst= HttpUtil.http(url, params, "", "", "");
+	    JSONObject jsonObject = JSONObject.fromObject(msgRst);
+	    String status = jsonObject.getString("status");
+		if("set_psw".equals(type) && "100".equals(status))
+		{
+			
+			List userList = hibernateObjectDao.findByProperty("HospitalUserT", "telephone",accNbr);
+			if(ObjectCensor.checkListIsNull(userList))
+			{
+				HospitalUserT user = (HospitalUserT) userList.get(0);
+				user.setPassword(StringUtil.getMapKeyVal(map, accNbr));
+				hibernateObjectDao.update(user);
+			}
+		}
+		return msgRst;
 	}
 
 	@ServiceType(value = "BUS20022")
