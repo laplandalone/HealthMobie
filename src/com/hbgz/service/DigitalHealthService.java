@@ -372,6 +372,24 @@ public class DigitalHealthService
 		return HttpUtil.http(url, params, "", "", "");
 	}
 
+	@ServiceType(value = "BUS20022")
+	public String CheckAuthCode(String accNbr,String authCode) throws  Exception
+	{
+		CacheManager cacheManager = (CacheManager) BeanFactoryHelper.getBean("cacheManager");
+		
+		Map map =cacheManager.getAuthCode(accNbr);
+		
+		String authCodeT=StringUtil.getMapKeyVal(map, accNbr);
+		
+		if(authCode.equals(authCodeT))
+		{
+			return "true";
+		}else
+		{
+			return "false";
+		}
+	}
+
 	// 查询用户的挂号订单
 	public List qryRegisterOrder(String hospitalName, String teamName, String doctorName,
 			String startTime, String endTime, String userId) throws Exception
