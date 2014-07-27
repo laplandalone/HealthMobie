@@ -24,6 +24,7 @@ a {color: #000; text-decoration: none;}
     <div id="menu">
         <ul>
            <li><img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; <a href="/registerOrderList.jsp" target="main">预约挂号管理</a></li>
+           <li><img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; <a href="/registerOrderList.jsp" target="main">用户提问管理</a></li>
           <!-- 
             <li><img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; <a href="/mobile.htm?method=queryPre" target="main">电子处方管理</a></li>
             <li><img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; <a href="/mobile.htm?method=showUser" target="main">系统用户管理</a></li>

@@ -28,6 +28,22 @@ public class CacheManager
 	@Autowired
 	private SysCacheDao sysCacheDao;
 	
+	public String getImgIp(String hospitalId) throws QryException
+	{
+		List list = sysCacheDao.getHospitalConfig();
+		HashMap mapComp = new HashMap();
+		mapComp.put("hospitalId",hospitalId);
+		mapComp.put("configType", "IMGWEB");
+		mapComp.put("configName", "imgip");
+		List subList = StringUtil.getSubMapList(list, mapComp);
+		if(ObjectCensor.checkListIsNull(subList))
+		{
+			Map mapT=(Map) subList.get(0);
+			return StringUtil.getMapKeyVal(mapT,"configVal");
+		}
+		return "";
+	}
+	
 	public String getUplodPathByType(String hospitalId,String type) throws QryException
 	{
 		List list = sysCacheDao.getHospitalConfig();

@@ -1,5 +1,6 @@
 package com.hbgz.service;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -305,15 +306,25 @@ public class DigitalHealthService
 
 	@ServiceType(value = "BUS20018")
 	public JSONArray getNewsByHospitalId(String hospitalId, String type, String typeId)
-			throws QryException
+			throws QryException, UnsupportedEncodingException
 	{
 		List<HospitalNewsT> list = hibernateObjectDao.qryHospitalNews(hospitalId, type, typeId);
+		
+		CacheManager cacheManager = (CacheManager) BeanFactoryHelper.getBean("cacheManager");
+		String imgIp = cacheManager.getImgIp(hospitalId);
+		
 		for (HospitalNewsT hospitalNewsT : list)
 		{
 			byte[] contentT = hospitalNewsT.getNewsContent();
 			if (contentT != null)
 			{
-				hospitalNewsT.setContent(new String(contentT));
+				hospitalNewsT.setContent(new String(contentT,"gb2312"));
+				String newsImg=hospitalNewsT.getNewsImages();
+				if (newsImg!=null && !"".equals(newsImg))
+				{
+					hospitalNewsT.setNewsImages(imgIp+hospitalNewsT.getNewsImages());
+				}
+				
 			}
 			hospitalNewsT.setNewsContent(null);
 		}
@@ -366,7 +377,7 @@ public class DigitalHealthService
 		params.put("pwd", "cb6fbeee3deb608f000a8f132531b738");
 		params.put("p", accNbr);
 		params.put("isUrlEncode", "no");
-//	    params.put("msg","【海星通技术】尊敬的用户，您注册验证码是"+StringUtil.getMapKeyVal(map, accNbr)+"。健康管家愿成为您健康的好帮手");
+	    params.put("msg","【海星通技术】尊敬的用户，您注册验证码是"+StringUtil.getMapKeyVal(map, accNbr)+"。健康管家愿成为您健康的好帮手");
 			
 		String msgRst= HttpUtil.http(url, params, "", "", "");
 	    JSONObject jsonObject = JSONObject.fromObject(msgRst);
