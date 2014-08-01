@@ -309,4 +309,29 @@ public class DigitalHealthDao
 		}
 		return itzcQryCenter.executeSqlByMapListWithTrans(query.toString(), lstParam);
 	}
+	
+	public List getDoctorById(String doctorId) throws QryException
+	{
+		String sql = "select a.*,b.team_name,c.name manager_name,c.password from doctor_t a,team_t b,hospital_manager_t c where a.state='00A' and a.team_id=b.team_id and a.doctor_id=? and c.state(+)='00A' and c.doctor_id(+)=a.doctor_id";
+		ArrayList lstParam = new ArrayList();
+		lstParam.add(doctorId);
+		return itzcQryCenter.executeSqlByMapList(sql, lstParam);
+	}
+	
+	public List getDoctorRegister(String doctorId) throws QryException
+	{
+		String sql = "select  * from doctor_register_t where state='00A' and doctor_id=?";
+		ArrayList lstParam = new ArrayList();
+		lstParam.add(doctorId);
+		return itzcQryCenter.executeSqlByMapList(sql, lstParam);
+	}
+	
+	public List getHospitalManager(String userName, String password) throws QryException
+	{
+		String sql = "select a.* from hospital_manager_t a where a.state='00A' and a.name=? and a.password=? ";
+		ArrayList lstParam = new ArrayList();
+		lstParam.add(userName);
+		lstParam.add(password);
+		return itzcQryCenter.executeSqlByMapList(sql, lstParam);
+	}
 }

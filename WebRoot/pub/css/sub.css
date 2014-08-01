@@ -82,8 +82,8 @@ a:hover {color:#F00;}
 .titlecentre{ height:28px; float:left;}
 .titleright {  height:28px; width:50px; float:right; background:url(../images/upArrows.png) 90% 45% no-repeat;  }
 .titleright1 {  height:28px; width:50px; float:right; background:url(../images/downArrows.png) 90% 45% no-repeat;  }
-.title h3 {color:#4D920A; display: inline; height:28px; line-height:28px; margin-left:10px;margin-top:0px;}
-.title a {color:#4D920A;;height:28px; line-height:28px;}
+.titleba h3 {color:#4D920A; display: inline; height:28px; line-height:28px; margin-left:10px;margin-top:0px;}
+.titleBase a {color:#4D920A;;height:28px; line-height:28px;}
 .title a:hover{color:#F00;}
 .box{height:auto; width:99%;; margin-top:3px;border:1px solid #d2d2d2; background-color:#FFF;}
 .box1{height:270px; width:99%; margin-top:3px;border:1px solid #d2d2d2; background-color:#FFF;}
@@ -139,7 +139,7 @@ input.subtext3{width:70px;border:1px solid #C0DC56;background:#fff;}
 }
 .inputtable{
 	width:145px;
-	border:1px solid #cccccc;
+	border:1px solid #C0DC56;
 	background:#fff; 
 	height:22px;
 }
@@ -256,6 +256,57 @@ input.subtext3{width:70px;border:1px solid #C0DC56;background:#fff;}
 	padding:0 2px;
 	font-weight:bold;
 }
+
+.ctrlEx{
+	position:absolute;
+	left:5px;
+	margin-right:10px;
+	width:99%;
+	height:28px;
+}
+.ctrlEx table{
+	width:99%;
+	height:30px;
+}
+.prevEx a{
+	width:100px;
+	height:20px;
+	color:#ff0000;
+	font-weight:bold;
+}
+
+.nextEx a{
+	width:100px;
+	height:20px;
+	color:#ff0000;
+	font-weight:bold;
+}
+#totalPageEx{
+	color:#0099ff;
+	margin:0 5px;
+	font-weight:bold;	
+}
+#gotoPageEx{
+	width:50px;
+	text-align:center;
+	border:1px solid #abd020;
+	height:20px;
+	line-height:20px;
+	margin:0 5px;
+}
+#gotoEx{
+	background:url('/orderManage/pub/images/submit-bg.png');
+	height:23px;
+	width:56px;
+	border:none;
+}
+
+.tagNodeEx{
+	cursor:pointer;
+	padding:0 2px;
+	font-weight:bold;
+}
+
 
 /* tree */
 #treeConstruct{width:850px;height:410px;}
@@ -388,7 +439,7 @@ box-shadow:2px 2px 10px #909090;/*opera或ie9*/
 }
 
 .linkmore:hover{
-	color : #ff0000;
+	color : #ff0000 !important;
 }
 
 .forkChaPic{

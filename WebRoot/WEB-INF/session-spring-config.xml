@@ -58,7 +58,8 @@
 				</prop>
 				<prop key="hibernate.show_sql">false</prop>
 				<prop key="hibernate.query.factory_class">
-					org.hibernate.hql.classic.ClassicQueryTranslatorFactory
+					<!--  2.x org.hibernate.hql.classic.ClassicQueryTranslatorFactory-->
+					org.hibernate.hql.ast.ASTQueryTranslatorFactory  <!-- 3.x -->
 				</prop>
 			</props>
 		</property>

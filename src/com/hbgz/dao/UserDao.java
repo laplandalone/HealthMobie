@@ -38,15 +38,6 @@ public class UserDao
 		return itzcQryCenter.executeSqlByMapList(sql, lstParam);
 	}
 	
-	public List getHospitalManager(String userName, String password) throws QryException
-	{
-		String sql = "select a.* from hospital_manager_t a where a.state='00A' and a.name=? and a.password=? ";
-		ArrayList lstParam = new ArrayList();
-		lstParam.add(userName);
-		lstParam.add(password);
-		return itzcQryCenter.executeSqlByMapList(sql, lstParam);
-	}
-	
 	public List getUserList() throws QryException
 	{
 		String sql = "select a.*,b.store_name from user_t a,medical_store_t b where a.state='00A' and a.store_id=b.store_id(+)";

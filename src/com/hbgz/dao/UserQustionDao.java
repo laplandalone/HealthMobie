@@ -31,6 +31,16 @@ public class UserQustionDao extends BaseDao
 		return list;
 	}
 	
+	public List<UserQuestionT> qryQuestionTsByQuestionId(String questionId)
+	{
+		if (!ObjectCensor.isStrRegular(questionId))
+		{
+			return null;
+		}
+		List list =this.find("from UserQuestionT as model where model.recordType='ask' and model.qestionId=?", new String[] { questionId });
+		return list;
+	}
+	
 	public List<UserQuestionT> qryQuestionTsByIds(String userId,String doctorId)
 	{
 		if (!ObjectCensor.isStrRegular(doctorId))

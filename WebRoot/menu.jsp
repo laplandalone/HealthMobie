@@ -1,12 +1,14 @@
 ﻿<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
 	String path = request.getContextPath();
+    String doctorId= request.getParameter("doctorId");
+    System.out.println("doctorId"+doctorId);
 %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html >
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>无标题文档</title>
 <style type="text/css">
 html, body {height:100%;overflow:hidden;} /*为兼容ie7,ff*/
 body {font-family:Arial, Helvetica, sans-serif; font-size:12px; margin:0px; text-align:center; border-right:1px #ccc solid;}
@@ -23,15 +25,27 @@ a {color: #000; text-decoration: none;}
 <div id="all">
     <div id="menu">
         <ul>
-           <li><img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; <a href="/registerOrderList.jsp" target="main">预约挂号管理</a></li>
-           <li><img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; <a href="/registerOrderList.jsp" target="main">用户提问管理</a></li>
+        <c:if test="${sessionScope.userPrivs=='1'}">
+		   <li><img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; <a href="/registerOrderList.jsp" target="main">预约挂号管理</a></li>
+	   </c:if>
+	    <c:if test="${sessionScope.userPrivs=='2'}">
+		    <li><img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; <a href="/view/question/questionList.jsp?&doctorId=<%=doctorId%>" target="main">用户提问管理</a></li>
+		    <li><img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; <a href="/doctor.htm?method=queryPre&doctorId=<%=doctorId%>" target="main">医生信息管理</a></li>
+	   </c:if>
+           <c:if test="${sessionScope.userPrivs=='3'}">
+		   <li><img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; <a href="/registerOrderList.jsp" target="main">预约挂号管理</a></li>
+		    <li><img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; <a href="/view/question/questionList.jsp?&doctorId=<%=doctorId%>" target="main">用户提问管理</a></li>
+		    <li><img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; <a href="/doctor.htm?method=queryPre&doctorId=<%=doctorId%>" target="main">医生信息管理</a></li>
+	   </c:if>
           <!-- 
             <li><img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; <a href="/mobile.htm?method=queryPre" target="main">电子处方管理</a></li>
             <li><img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; <a href="/mobile.htm?method=showUser" target="main">系统用户管理</a></li>
            	<li><img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; <a href="/mobile.htm?method=showStore" target="main">药店资料管理</a></li>
-           <li><img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; <a href="/mobile.htm?method=showUser" target="main">药店用户管理</a></li>-->
+           <li><img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; <a href="/mobile.htm?method=showUser" target="main">药店用户管理</a></li>
+           -->
         </ul>
     </div>
 </div>
+
 </body>
 </html>

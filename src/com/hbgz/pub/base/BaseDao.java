@@ -140,6 +140,17 @@ public abstract class BaseDao
 		}
 	}
 
+	public boolean delete(String modelName, String propertyName, String value)
+	{
+		String queryString = "delete " + modelName + " as model where model." + propertyName + "= ?";
+		Session session = this.getHibernateTemplate().getSessionFactory().openSession();
+		Query queryObject = session.createQuery(queryString);
+		queryObject.setParameter(0, value);
+		queryObject.executeUpdate();
+		session.close();
+		return true;
+	}
+	
 	public List find(String query, Object[] list) 
 	{
 		return this.getHibernateTemplate().find(query, list);

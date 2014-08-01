@@ -6,17 +6,19 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.support.DaoSupport;
 import org.springframework.stereotype.Service;
 
 import com.hbgz.dao.DigitalHealthDao;
+import com.hbgz.dao.DoctorDao;
 import com.hbgz.dao.HibernateObjectDao;
 import com.hbgz.dao.UserQustionDao;
+import com.hbgz.model.DoctorRegisterT;
 import com.hbgz.model.HospitalNewsT;
 import com.hbgz.model.HospitalUserT;
 import com.hbgz.model.RegisterOrderT;
@@ -44,6 +46,9 @@ public class DigitalHealthService
 
 	@Autowired
 	UserQustionDao userQustionDao;
+	
+	@Autowired
+	DoctorDao doctorDao;
 
 	@Autowired
 	HibernateObjectDao hibernateObjectDao;
@@ -92,13 +97,22 @@ public class DigitalHealthService
 					String introduce = StringUtil.getMapKeyVal(subMap, "introduce");
 					String post = StringUtil.getMapKeyVal(subMap, "post");
 					Map newMap = new HashMap();
+					
 					newMap.put("doctorName", doctorName);
 					newMap.put("teamName", teamName);
 					newMap.put("doctorId", doctorId);
 					newMap.put("teamId", teamId);
 					newMap.put("introduce", introduce);
 					newMap.put("post", post);
-					newMap.put("day", DateUtils.CHN_DATE_FORMAT.format(dateT) + " 星期" + weekStr);
+					
+//					newMap.put("day", DateUtils.CHN_DATE_FORMAT.format(dateT) + " 星期" + weekStr);
+					
+					newMap.put("day", "一");
+					if(list.contains(newMap))
+					{
+						continue;
+					}
+					
 					list.add(newMap);
 				}
 			}
@@ -208,8 +222,24 @@ public class DigitalHealthService
 	public boolean addUserQuestion(String userQestion) throws Exception
 	{
 		UserQuestionT qestionT = (UserQuestionT) JsonUtils.toBean(userQestion, UserQuestionT.class);
-		qestionT.setQestionId(sysId.getId() + "");
+		String questionId=qestionT.getQestionId();
+		if(questionId==null || "".equals(questionId))
+		{
+			qestionT.setQestionId(sysId.getId() + "");
+		}
 		userQustionDao.save(qestionT);
+		return true;
+	}
+
+	public boolean updateUserQuestion(String questionId,String authType) throws Exception
+	{
+		List<UserQuestionT> questionTs= userQustionDao.qryQuestionTsByQuestionId(questionId);
+		if(ObjectCensor.checkListIsNull(questionTs))
+		{
+			UserQuestionT questionT = questionTs.get(0);
+			questionT.setAuthType(authType);
+			userQustionDao.update(questionT);
+		}
 		return true;
 	}
 
@@ -218,6 +248,32 @@ public class DigitalHealthService
 	{
 		List list = userQustionDao.qryQuestionTs(doctorId);
 		JSONArray jsonArray = JsonUtils.fromArray(list);
+		return jsonArray;
+	}
+	
+	public JSONArray getUserQuestionsByDoctorId(String doctorId,String hospitalId) throws JsonException, QryException
+	{
+		List<UserQuestionT> list = userQustionDao.qryQuestionTs(doctorId);
+		
+		JSONArray jsonArray = JsonUtils.fromArray(list);
+		CacheManager cacheManager = (CacheManager) BeanFactoryHelper.getBean("cacheManager");
+		String imgIp = cacheManager.getImgIp("101");
+		
+		for (int i = 0; i < jsonArray.size(); i++)
+		{
+			JSONObject jsonObject = jsonArray.getJSONObject(i);
+			String imgT=jsonObject.getString("imgUrl");
+			String[] imgs = imgT.split(",");
+			if(imgs!=null && imgs.length>0)
+			{
+				for(int n=0;n<imgs.length;n++)
+				{
+					jsonObject.put("imgUrl"+n, imgIp+imgs[n]);
+				}
+			}
+			
+		}
+		System.out.println(jsonArray);
 		return jsonArray;
 	}
 
@@ -445,5 +501,84 @@ public class DigitalHealthService
 			}
 		}
 		return flag;
+	}
+	
+	public Map getUserWeb(String userName, String password) throws Exception
+	{
+		if (ObjectCensor.isStrRegular(userName, password))
+		{
+			List userLst = digitalHealthDao.getHospitalManager(userName, password);
+
+			if (userLst != null && userLst.size() != 0)
+			{
+				return (Map) userLst.get(0);
+			}
+		}
+		return null;
+	}
+	
+	public Map getDoctor(String doctorId) throws Exception
+	{
+		if (ObjectCensor.isStrRegular(doctorId))
+		{
+			List doctorLst = digitalHealthDao.getDoctorById(doctorId);
+
+			if (doctorLst != null && doctorLst.size() != 0)
+			{
+				return (Map) doctorLst.get(0);
+			}
+		}
+		return null;
+	}
+	
+	public List getDoctorRegister(String doctorId) throws Exception
+	{
+		if (ObjectCensor.isStrRegular(doctorId))
+		{
+			List registerLst = digitalHealthDao.getDoctorRegister(doctorId);
+			return registerLst;
+		}
+		return null;
+	}
+	
+	/**
+	 * 获取医生列表
+	 * @param hospitalId
+	 * @return
+	 * @throws QryException
+	 */
+	public JSONArray getDoctorByHospitalId(String hospitalId,String doctorId) throws QryException
+	{
+		if (ObjectCensor.isStrRegular(hospitalId))
+		{
+			List list = doctorDao.qryDoctorsByHospitalId(hospitalId,doctorId);
+			return JSONArray.fromObject(list);
+		}
+		
+		return null;
+	}
+	
+	public boolean updateHospitalMananger(String hospitalId,String doctorId,String name,String password) throws QryException
+	{
+		if (ObjectCensor.isStrRegular(hospitalId,doctorId,name,password))
+		{
+			return doctorDao.updateHospitalMananger(hospitalId, doctorId, name, password);
+		}
+		return false;
+	}
+	
+	public boolean updateDoctorRegisterTimes(String registerTimes,String doctorId) throws QryException, JsonException
+	{
+		List<DoctorRegisterT> list = JsonUtils.toArray(registerTimes, DoctorRegisterT.class);
+		
+		doctorDao.delete("DoctorRegisterT", "doctorId", "G10");
+		
+		for (DoctorRegisterT doctorRegisterT:list)
+		{
+//			doctorRegisterT.setRegisterId(sysId.getId()+"");
+//			doctorRegisterT.setCaeateDate(new Date());
+//			doctorDao.save(doctorRegisterT);
+		}
+		return true;
 	}
 }

@@ -92,8 +92,6 @@ public class MobileController
 	@RequestMapping(params = "method=login")
 	public ModelAndView login(HttpServletResponse response , HttpServletRequest request) throws Exception
 	{
-		 String configDir = System.getProperty("user.dir");
-		 System.out.println("configDir:"+configDir);
 		ModelAndView model = new ModelAndView();
 		HttpSession session = request.getSession();
 		String username = request.getParameter("username");
@@ -104,12 +102,21 @@ public class MobileController
 			username = sessName;
 		}
 		try{
-			Map user = loginService.getUserWeb(username, password);
+			Map user = digitalHealthService.getUserWeb(username, password);
+			
 			if(user!=null)
 			{
 				String userId = StringUtil.getMapKeyVal(user, "manager_id");
-				session.setAttribute("username", username);
+				String hospitalId =  StringUtil.getMapKeyVal(user, "hospital_id");
+				String userPrivs= StringUtil.getMapKeyVal(user, "privs");
+				String doctorId= StringUtil.getMapKeyVal(user, "doctor_id");
+				model.addObject("doctorId", doctorId);
 				session.setAttribute("userId", userId);
+				session.setAttribute("username", username);
+				session.setAttribute("hospitalId", hospitalId);
+				session.setAttribute("userPrivs", userPrivs);
+				session.setAttribute("password", password);
+				
 				model.setViewName("index");
 			}
 			else

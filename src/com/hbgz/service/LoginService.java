@@ -22,26 +22,14 @@ public class LoginService
 	@Autowired
 	private UserDao userDao;
 	
+	
+	
 	@ServiceType(value = "BUS1023")
 	public Map validInfo(String userName, String password) throws Exception
 	{
 		if (ObjectCensor.isStrRegular(userName, password))
 		{
 			List userLst = userDao.getUser(userName, password);
-
-			if (userLst != null && userLst.size() != 0)
-			{
-				return (Map) userLst.get(0);
-			}
-		}
-		return null;
-	}
-	
-	public Map getUserWeb(String userName, String password) throws Exception
-	{
-		if (ObjectCensor.isStrRegular(userName, password))
-		{
-			List userLst = userDao.getHospitalManager(userName, password);
 
 			if (userLst != null && userLst.size() != 0)
 			{
