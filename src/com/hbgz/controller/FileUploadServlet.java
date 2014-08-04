@@ -82,11 +82,11 @@ public class FileUploadServlet extends HttpServlet
 					imgages += imgUrl + ",";
 				}
 			}
-			String questionT = object.getString("questionT");
-			UserQuestionT qestionT = (UserQuestionT) JsonUtils.toBean(questionT,
+			String questionTs = object.getString("questionT");
+			UserQuestionT questionT = (UserQuestionT) JsonUtils.toBean(questionTs,
 					UserQuestionT.class);
-			qestionT.setImgUrl(imgages);
-			JSONObject str = JSONObject.fromObject(qestionT);
+			questionT.setImgUrl(imgages);
+			JSONObject str = JSONObject.fromObject(questionT);
 			String param = "{channel:\"Q\",channelType:\"Android\",serviceType:\"BUS2007\",securityCode:\"0000000000\",params:{'userQestion':'"
 					+ str.toString() + "'},rtnDataFormatType:\"JSONObject\"}";
 			retVal = ServiceEngine.invokeService(param);

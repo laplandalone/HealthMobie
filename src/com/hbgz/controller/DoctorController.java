@@ -112,11 +112,12 @@ public class DoctorController
 		
 		String name = (String)request.getParameter("name");
 		String password = (String)request.getParameter("password");
-		
+		String fee = (String)request.getParameter("fee"); 
 		
 		if(ObjectCensor.isStrRegular(doctorId,hospitalId,name,password) )
 		{
 			digitalHealthService.updateHospitalMananger(hospitalId, doctorId, name, password);
+			digitalHealthService.updateDoctor(doctorId, fee);
 			model.addObject("reslut", "success");
 			model.setViewName("/view/doctor/updateDoctor");
 		}

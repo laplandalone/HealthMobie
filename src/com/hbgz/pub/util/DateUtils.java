@@ -117,6 +117,10 @@
      }
    }
  
+   public Date getDD() throws ParseException
+   {
+	     return CHN_DATE_TIME_EXTENDED_FORMAT.parse(getDate());
+   }
    public String getDate()
    {
      Calendar calendar = Calendar.getInstance();

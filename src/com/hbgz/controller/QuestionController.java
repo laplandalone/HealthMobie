@@ -79,11 +79,11 @@ public class QuestionController
 			userQuestionT.setContent(content);
 			userQuestionT.setUserId(userId);
 		    userQuestionT.setDoctorId(doctorId);
-			userQuestionT.setQestionId(questionId);
+			userQuestionT.setQuestionId(questionId);
 			userQuestionT.setUserTelephone(telephone);
 			userQuestionT.setRecordType("ans");
 			userQuestionT.setState("00A");
-			userQuestionT.setCreateDate(new Date());
+			
 			JSONObject userQestion = JSONObject.fromObject(userQuestionT);
 			
 			digitalHealthService.updateUserQuestion(questionId, authType);

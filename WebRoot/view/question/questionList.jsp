@@ -171,7 +171,7 @@
 					<td align="center" width='15%'><c:out
 							value="${ques.userTelephone}" />
 					</td>
-					<td align="center"><div id ="<c:out value="${ques.qestionId}" />content" ><c:out value="${ques.content }" /></div></td>
+					<td align="center"><div id ="<c:out value="${ques.questionId}" />content" ><c:out value="${ques.content }" /></div></td>
 					<td align="center">
 					<c:choose>
 							<c:when test="${ques.imgUrl0!=null && ques.imgUrl0!=''}">
@@ -215,7 +215,7 @@
 					
 					<td style="text-align:center !important">
 					<a href="javascript:void(0)" class="linkmore"
-									onclick="verifyFunc('${ques.doctorId}','${ques.qestionId}','${ques.userId}','${ques.userTelephone}','${ques.qestionId}content')">回复</a>
+									onclick="verifyFunc('${ques.doctorId}','${ques.questionId}','${ques.userId}','${ques.userTelephone}','${ques.questionId}content')">回复</a>
 					</td>
 				</tr>
 			</c:forEach>

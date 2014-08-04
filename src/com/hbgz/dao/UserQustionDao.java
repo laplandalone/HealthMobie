@@ -17,7 +17,7 @@ public class UserQustionDao extends BaseDao
 		{
 			return null;
 		}
-		List list =this.findListByProperty("UserQuestionT", "doctorId", doctorId);
+		List list =this.find("from UserQuestionT as model where model.recordType='ask' and  model.doctorId=? order by createDate desc", new String[] { doctorId });
 		return list;
 	}
 	
@@ -37,7 +37,7 @@ public class UserQustionDao extends BaseDao
 		{
 			return null;
 		}
-		List list =this.find("from UserQuestionT as model where model.recordType='ask' and model.qestionId=?", new String[] { questionId });
+		List list =this.find("from UserQuestionT as model where model.recordType='ask' and model.questionId=?", new String[] { questionId });
 		return list;
 	}
 	
@@ -47,7 +47,7 @@ public class UserQustionDao extends BaseDao
 		{
 			return null;
 		}
-		List list =this.find("from UserQuestionT as model where model.doctorId=? and model.userId=?", new String[] { doctorId,userId });
+		List list =this.find("from UserQuestionT as model where model.doctorId=? and model.userId=? order by createDate asc", new String[] { doctorId,userId });
 		return list;
 	}
 }

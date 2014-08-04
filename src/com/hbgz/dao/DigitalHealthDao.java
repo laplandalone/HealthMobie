@@ -101,7 +101,7 @@ public class DigitalHealthDao
 		{
 			return null;
 		}
-		String sql = "select distinct (t.register_week),a.doctor_id,a.name,a.post,b.team_name,a.introduce from doctor_register_t t,doctor_t a,team_t b where t.state='00A' and a.doctor_id=t.doctor_id and b.team_id=t.team_id and t.team_id=?";
+		String sql = "select distinct (a.doctor_id),a.doctor_id,a.name ,a.post,b.team_name,a.introduce from doctor_register_t t,doctor_t a,team_t b where t.state='00A' and a.doctor_id=t.doctor_id and b.team_id=t.team_id and t.team_id=?";
 		ArrayList lstParam = new ArrayList();
 		lstParam.add(teamId);
 		return itzcQryCenter.executeSqlByMapListWithTrans(sql.toString(), lstParam);

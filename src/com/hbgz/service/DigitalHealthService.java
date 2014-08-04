@@ -24,11 +24,13 @@ import com.hbgz.dao.DoctorDao;
 import com.hbgz.dao.HibernateObjectDao;
 import com.hbgz.dao.UserQustionDao;
 import com.hbgz.model.DoctorRegisterT;
+import com.hbgz.model.DoctorT;
 import com.hbgz.model.HospitalNewsT;
 import com.hbgz.model.HospitalUserT;
 import com.hbgz.model.RegisterOrderT;
 import com.hbgz.model.UserQuestionT;
 import com.hbgz.pub.annotation.ServiceType;
+import com.hbgz.pub.base.SysDate;
 import com.hbgz.pub.cache.CacheManager;
 import com.hbgz.pub.exception.JsonException;
 import com.hbgz.pub.exception.QryException;
@@ -41,6 +43,7 @@ import com.hbgz.pub.util.HttpUtil;
 import com.hbgz.pub.util.JsonUtils;
 import com.hbgz.pub.util.ObjectCensor;
 import com.hbgz.pub.util.StringUtil;
+
 
 @Service(value = "BUS200")
 public class DigitalHealthService
@@ -88,16 +91,16 @@ public class DigitalHealthService
 		Date date = new Date();
 		if (ObjectCensor.checkListIsNull(orderList))
 		{
-			for (int i = 1; i <= orderDayLen; i++)
-			{
-				Date dateT = DateUtils.afterNDate(i);
-				String weekStr = DateUtils.getWeekOfDate(dateT);
-				Map mapComp = new HashMap();
-				mapComp.put("registerWeek", weekStr);
-				List subList = StringUtil.getSubMapList(orderList, mapComp);
-				for (int n = 0; n < subList.size(); n++)
+//			for (int i = 1; i <= orderDayLen; i++)
+//			{
+//				Date dateT = DateUtils.afterNDate(i);
+//				String weekStr = DateUtils.getWeekOfDate(dateT);
+//				Map mapComp = new HashMap();
+//				mapComp.put("registerWeek", weekStr);
+//				List subList = StringUtil.getSubMapList(orderList, mapComp);
+				for (int n = 0; n < orderList.size(); n++)
 				{
-					Map subMap = (Map) subList.get(n);
+					Map subMap = (Map) orderList.get(n);
 					String doctorName = StringUtil.getMapKeyVal(subMap, "name");
 					String teamName = StringUtil.getMapKeyVal(subMap, "teamName");
 					String doctorId = StringUtil.getMapKeyVal(subMap, "doctorId");
@@ -121,7 +124,7 @@ public class DigitalHealthService
 					}
 					
 					list.add(newMap);
-				}
+//				}
 			}
 		}
 		JSONObject obj = new JSONObject();
@@ -132,7 +135,7 @@ public class DigitalHealthService
 	@ServiceType(value = "BUS2004")
 	public JSONObject getOrderByDoctorId(String doctorId) throws QryException
 	{
-		int orderDayLen = 5;
+		int orderDayLen = 3;
 		List orderList = digitalHealthDao.getOrderByDoctorId(doctorId);
 		List ordertotalList = digitalHealthDao.qryOrderTotalNum(doctorId);
 		List list = new ArrayList();
@@ -226,15 +229,18 @@ public class DigitalHealthService
 	}
 
 	@ServiceType(value = "BUS2007")
-	public boolean addUserQuestion(String userQestion) throws Exception
+	public boolean addUserQuestion(String userQuestion) throws Exception
 	{
-		UserQuestionT qestionT = (UserQuestionT) JsonUtils.toBean(userQestion, UserQuestionT.class);
-		String questionId=qestionT.getQestionId();
+		UserQuestionT questionT = (UserQuestionT) JsonUtils.toBean(userQuestion, UserQuestionT.class);
+		String questionId=questionT.getQuestionId();
+		questionT.setId(sysId.getId() + "");
+	
+		questionT.setCreateDate(SysDate.getSysDate());
 		if(questionId==null || "".equals(questionId))
 		{
-			qestionT.setQestionId(sysId.getId() + "");
+			questionT.setQuestionId(sysId.getId() + "");
 		}
-		userQustionDao.save(qestionT);
+		userQustionDao.save(questionT);
 		return true;
 	}
 
@@ -262,7 +268,7 @@ public class DigitalHealthService
 	{
 		List<UserQuestionT> list = userQustionDao.qryQuestionTs(doctorId);
 		
-		JSONArray jsonArray = JsonUtils.fromArray(list);
+		JSONArray jsonArray = JsonUtils.fromArrayTimestamp(list);
 		CacheManager cacheManager = (CacheManager) BeanFactoryHelper.getBean("cacheManager");
 		String imgIp = cacheManager.getImgIp(hospitalId);
 		
@@ -347,7 +353,7 @@ public class DigitalHealthService
 	public JSONArray getQuestionTsByUserId(String userId) throws QryException
 	{
 		List list = userQustionDao.qryQuestionTsByUserId(userId);
-		JSONArray jsonArray = JsonUtils.fromArray(list);
+		JSONArray jsonArray = JsonUtils.fromArrayTimestamp(list);
 		return jsonArray;
 	}
 
@@ -355,7 +361,7 @@ public class DigitalHealthService
 	public JSONArray getQuestionTsByIds(String userId, String doctorId) throws QryException
 	{
 		List list = userQustionDao.qryQuestionTsByIds(userId, doctorId);
-		JSONArray jsonArray = JsonUtils.fromArray(list);
+		JSONArray jsonArray = JsonUtils.fromArrayTimestamp(list);
 		return jsonArray;
 	}
 
@@ -593,6 +599,21 @@ public class DigitalHealthService
 		return false;
 	}
 	
+	public boolean updateDoctor(String doctorId,String fee) throws QryException
+	{
+		if (ObjectCensor.isStrRegular(doctorId,fee))
+		{
+			List<DoctorT> doctorTs=doctorDao.findByProperty("DoctorT", "doctorId", doctorId);
+			if(ObjectCensor.checkListIsNull(doctorTs))
+			{
+				DoctorT doctorT = doctorTs.get(0);
+				doctorT.setRegisterFee(fee);
+				hibernateObjectDao.update(doctorT);
+			}
+		}
+		return false;
+	}
+	
 	public boolean updateDoctorRegisterTimes(String registerTimes,String doctorId) throws QryException, JsonException
 	{
 		List<DoctorRegisterT> list = JsonUtils.toArray(registerTimes, DoctorRegisterT.class);
@@ -620,7 +641,6 @@ public class DigitalHealthService
 		{
 			MultipartFile partFile = entity.getValue();
 			String fileName = partFile.getOriginalFilename();
-			System.out.println(fileName);
 		    if(fileName.endsWith(".txt"))
 		    {
 			File localFile = new File(fileName);

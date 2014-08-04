@@ -1,6 +1,7 @@
 package com.hbgz.pub.util;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -92,6 +93,35 @@ public class JsonUtils
 		return JSONArray.fromObject(list , config);
 	}
 
+	public static JSONArray fromArrayTimestamp(List list)
+	{
+		JsonConfig config = new JsonConfig();
+		config.registerJsonValueProcessor(Timestamp.class, new JsonValueProcessor(){
+			public Object processArrayValue(Object value, JsonConfig config) 
+			{
+				return process(value);
+			}
+
+			public Object processObjectValue(String key, Object value, JsonConfig config) 
+			{
+				return process(value);
+			}
+			private Object process(Object value)
+			{
+				if(value == null)
+				{
+					return "";
+				}
+				else 
+				{
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					
+					return sdf.format(value);
+				}
+			}
+		});
+		return JSONArray.fromObject(list , config);
+	}
 	public static JSONObject fromObject(Object obj)
 	{
 		JsonConfig config = new JsonConfig();

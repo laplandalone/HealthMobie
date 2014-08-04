@@ -63,7 +63,7 @@ function refundAjax()
 	var name = $("#name");
 	var psw = $("#password");
 	var confimPsw = $("#confimPassword");
-
+    var fee=$("#fee");
 	if(name.val()=='')
 	{
 		alert("用户名为空!");
@@ -85,7 +85,7 @@ function refundAjax()
 	$.ajax({
 		url:"/doctor.htm?method=updateDoctor",
 		type:"POST",
-		data:"name="+name.val()+"&password="+psw.val()+"&confimPassword="+confimPsw.val()+"&doctorId="+'${doctor.doctor_id}',
+		data:"name="+name.val()+"&password="+psw.val()+"&confimPassword="+confimPsw.val()+"&doctorId="+'${doctor.doctor_id}'+"&fee="+fee.val(),
 		success:function(data)
 		{
 			$.dialog.alert('操作成功',function(){
@@ -128,6 +128,10 @@ function refundAjax()
 				<tr>
 					<td align="center" width='20%'>科室</td>
 					<td align="center">${doctor.team_name}</td>
+				</tr>
+				<tr>
+					<td align="center" width='20%'>挂号费</td>
+					<td align="center"><input type="text" id="fee" class="subtext" value='${doctor.register_fee}'></td>
 				</tr>
 				<tr>
 					<td align="center" width='20%'>登录用户名</td>

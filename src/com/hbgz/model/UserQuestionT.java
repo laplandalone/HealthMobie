@@ -1,24 +1,23 @@
 package com.hbgz.model;
 
-import java.util.Date;
+import java.sql.Timestamp;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 /**
  * UserQuestionT entity. @author MyEclipse Persistence Tools
  */
 @Entity
 @Table(name = "USER_QUESTION_T")
-public class UserQuestionT implements java.io.Serializable
-{
+public class UserQuestionT implements java.io.Serializable {
 
 	// Fields
 
-	private String qestionId;
+	private String id;
+	private String questionId;
 	private String userId;
 	private String doctorId;
 	private String userTelephone;
@@ -26,28 +25,29 @@ public class UserQuestionT implements java.io.Serializable
 	private String authType;
 	private String content;
 	private String state;
-	private Date createDate=new Date();
+	private Timestamp createDate;
 	private String imgUrl;
 
 	// Constructors
 
 	/** default constructor */
-	public UserQuestionT()
-	{
+	public UserQuestionT() {
 	}
 
 	/** minimal constructor */
-	public UserQuestionT(String qestionId)
-	{
-		this.qestionId = qestionId;
+	public UserQuestionT(String id, String questionId, Timestamp createDate) {
+		this.id = id;
+		this.questionId = questionId;
+		this.createDate = createDate;
 	}
 
 	/** full constructor */
-	public UserQuestionT(String qestionId, String userId, String doctorId, String userTelephone,
-			String recordType, String authType, String content, String state, Date createDate,
-			String imgUrl)
-	{
-		this.qestionId = qestionId;
+	public UserQuestionT(String id, String questionId, String userId,
+			String doctorId, String userTelephone, String recordType,
+			String authType, String content, String state, Timestamp createDate,
+			String imgUrl) {
+		this.id = id;
+		this.questionId = questionId;
 		this.userId = userId;
 		this.doctorId = doctorId;
 		this.userTelephone = userTelephone;
@@ -61,114 +61,102 @@ public class UserQuestionT implements java.io.Serializable
 
 	// Property accessors
 	@Id
-	@Column(name = "QESTION_ID", unique = true, nullable = false, length = 20)
-	public String getQestionId()
-	{
-		return this.qestionId;
+	@Column(name = "ID", unique = true, nullable = false, length = 20)
+	public String getId() {
+		return this.id;
 	}
 
-	public void setQestionId(String qestionId)
-	{
-		this.qestionId = qestionId;
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	@Column(name = "QUESTION_ID", nullable = false, length = 20)
+	public String getQuestionId() {
+		return this.questionId;
+	}
+
+	public void setQuestionId(String questionId) {
+		this.questionId = questionId;
 	}
 
 	@Column(name = "USER_ID", length = 20)
-	public String getUserId()
-	{
+	public String getUserId() {
 		return this.userId;
 	}
 
-	public void setUserId(String userId)
-	{
+	public void setUserId(String userId) {
 		this.userId = userId;
 	}
 
 	@Column(name = "DOCTOR_ID", length = 20)
-	public String getDoctorId()
-	{
+	public String getDoctorId() {
 		return this.doctorId;
 	}
 
-	public void setDoctorId(String doctorId)
-	{
+	public void setDoctorId(String doctorId) {
 		this.doctorId = doctorId;
 	}
 
 	@Column(name = "USER_TELEPHONE", length = 11)
-	public String getUserTelephone()
-	{
+	public String getUserTelephone() {
 		return this.userTelephone;
 	}
 
-	public void setUserTelephone(String userTelephone)
-	{
+	public void setUserTelephone(String userTelephone) {
 		this.userTelephone = userTelephone;
 	}
 
 	@Column(name = "RECORD_TYPE", length = 4)
-	public String getRecordType()
-	{
+	public String getRecordType() {
 		return this.recordType;
 	}
 
-	public void setRecordType(String recordType)
-	{
+	public void setRecordType(String recordType) {
 		this.recordType = recordType;
 	}
 
 	@Column(name = "AUTH_TYPE", length = 10)
-	public String getAuthType()
-	{
+	public String getAuthType() {
 		return this.authType;
 	}
 
-	public void setAuthType(String authType)
-	{
+	public void setAuthType(String authType) {
 		this.authType = authType;
 	}
 
 	@Column(name = "CONTENT", length = 1000)
-	public String getContent()
-	{
+	public String getContent() {
 		return this.content;
 	}
 
-	public void setContent(String content)
-	{
+	public void setContent(String content) {
 		this.content = content;
 	}
 
 	@Column(name = "STATE", length = 1000)
-	public String getState()
-	{
+	public String getState() {
 		return this.state;
 	}
 
-	public void setState(String state)
-	{
+	public void setState(String state) {
 		this.state = state;
 	}
 
-	@Temporal(TemporalType.DATE)
-	@Column(name = "CREATE_DATE", length = 7)
-	public Date getCreateDate()
-	{
+	@Column(name = "CREATE_DATE", nullable = false)
+	public Timestamp getCreateDate() {
 		return this.createDate;
 	}
 
-	public void setCreateDate(Date createDate)
-	{
+	public void setCreateDate(Timestamp createDate) {
 		this.createDate = createDate;
 	}
 
-	@Column(name = "IMG_URL", length = 50)
-	public String getImgUrl()
-	{
+	@Column(name = "IMG_URL", length = 250)
+	public String getImgUrl() {
 		return this.imgUrl;
 	}
 
-	public void setImgUrl(String imgUrl)
-	{
+	public void setImgUrl(String imgUrl) {
 		this.imgUrl = imgUrl;
 	}
 
