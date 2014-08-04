@@ -9,12 +9,14 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.hbgz.dao.UserDao;
+import com.hbgz.model.HospitalNewsT;
 import com.hbgz.pub.exception.QryException;
 import com.hbgz.pub.file.FileBiz;
 import com.hbgz.pub.invoke.ServiceEngine;
@@ -34,6 +36,8 @@ public class MobileService
 	
 	@Autowired
 	private SysId sysId;
+	
+	
 	
 	public String axis(String param) throws Exception
 	{

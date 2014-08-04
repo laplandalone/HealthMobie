@@ -15,7 +15,6 @@
 			}
 		</script>
 	</head>
-	
 	<body>
 	 	<div class="top">
 	    	<div class="logo">

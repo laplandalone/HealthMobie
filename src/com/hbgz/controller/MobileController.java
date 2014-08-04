@@ -61,6 +61,29 @@ public class MobileController
 			e.printStackTrace();
 		}
 	}
+
+	@RequestMapping(params = "method=addNewsFile")
+    public void addNewsFile(MultipartHttpServletRequest request, HttpServletResponse response) 
+	{
+		response.setCharacterEncoding("UTF-8");
+		PrintWriter out = null ;
+		try 
+		{
+			out = response.getWriter();
+			String retVal =digitalHealthService.addNewsFile(request);
+			
+			String rtn="{returnCode:"+retVal+"}";
+			out.println(rtn);
+			out.close();
+		} 
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+			String rtn="{returnCode:1}";
+			out.println(rtn);
+			out.close();
+		}
+	}
 	
 	@RequestMapping(params = "method=uploadFile")
     public void uploadFile(MultipartHttpServletRequest request, HttpServletResponse response) 
@@ -436,29 +459,22 @@ public class MobileController
 	{
 		ModelAndView model = new ModelAndView("registerOrderList");
 		HttpSession session = request.getSession();
-		session.setAttribute("userId", "10001");
-		String userId = (String)session.getAttribute("userId");
-		if(ObjectCensor.isStrRegular(userId))
-		{
-			String hospitalName = (String)request.getParameter("hospitalName");
-			String teamName = (String)request.getParameter("teamName");
-			String doctorName = (String)request.getParameter("doctorName");
-			String startTime = (String)request.getParameter("startTime");
-			String endTime = (String)request.getParameter("endTime");
-			List registerOrderList = digitalHealthService.qryRegisterOrder(hospitalName, teamName, doctorName, startTime , endTime, userId);
-			model.addObject("registerOrderList", registerOrderList);
-			model.addObject("hospitalName", hospitalName);
-			model.addObject("teamName", teamName);
-			model.addObject("doctorName", doctorName);
-			model.addObject("startTime", startTime);
-			model.addObject("endTime", endTime);
-			model.setViewName("registerOrderList");
-		}
-		else
-		{
-			model.addObject("result", "error");
-			model.setViewName("login");
-		}
+		
+		String hospitalId = (String) session.getAttribute("hospitalId");
+		String teamId=request.getParameter("teamId");
+		String doctorId=request.getParameter("doctorId");
+		
+		String startTime = (String)request.getParameter("startTime");
+		String endTime = (String)request.getParameter("endTime");
+		List registerOrderList = digitalHealthService.qryRegisterOrder(hospitalId, teamId, doctorId, startTime , endTime);
+		model.addObject("registerOrderList", registerOrderList);
+		model.addObject("hospitalId", hospitalId);
+		model.addObject("teamId", teamId);
+		model.addObject("doctorId", doctorId);
+		model.addObject("startTime", startTime);
+		model.addObject("endTime", endTime);
+		model.setViewName("registerOrderList");
+		
 		return model;
 	}
 	

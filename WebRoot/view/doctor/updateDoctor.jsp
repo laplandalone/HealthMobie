@@ -12,10 +12,7 @@
 <head>
 <title></title>
 <script type="text/javascript" src="<%=path%>/pub/js/jquery-1.9.1.min.js"></script>
-
 <link href="<%=path%>/pub/css/sub.css" rel="stylesheet" type="text/css" />
-
-
 <script type="text/javascript" src="<%=path%>pub/dialog/lhgdialog.min.js?skin=idialog"></script>
 <script type="text/javascript" src="<%=path%>/pub/js/calendar.js"></script>
 <script type="text/javascript" src="<%=path%>/pub/js/date.js"></script>
@@ -59,6 +56,47 @@ function updateDoctor()
    window.location.href="/doctor.htm?method=updateDoctor&name="+name.val()+"&password="+psw.val()+"&confimPassword="+confimPsw.val()+"&doctorId="+'${doctor.doctor_id}';
 	
 	
+}
+
+function refundAjax()
+{
+	var name = $("#name");
+	var psw = $("#password");
+	var confimPsw = $("#confimPassword");
+
+	if(name.val()=='')
+	{
+		alert("用户名为空!");
+		return;
+	}
+
+	if(psw.val()=='')
+	{
+		alert("密码为空!");
+		return;
+	}
+	
+	if(psw.val()!=confimPsw.val())
+	{
+		alert("密码不一致请重新输入!");
+		return;
+	}
+	
+	$.ajax({
+		url:"/doctor.htm?method=updateDoctor",
+		type:"POST",
+		data:"name="+name.val()+"&password="+psw.val()+"&confimPassword="+confimPsw.val()+"&doctorId="+'${doctor.doctor_id}',
+		success:function(data)
+		{
+			$.dialog.alert('操作成功',function(){
+				//window.location.href="/ques.htm?method=queryPre";
+			});
+		},
+		error:function(stata)
+		{
+		 
+		}
+	});
 }
 
 </script>
@@ -109,7 +147,7 @@ function updateDoctor()
 			class="maintable1">
 			<br/>
 			<tr align='center'>
-						<input type="button"  align='center' onclick="updateDoctor()" style="background-image:url('/pub/images/btn1_r1_c2.png');width:80px;height:28px;border:none;cursor:pointer" value="修改信息" />
+						<input type="button"  align='center' onclick="refundAjax()" style="background-image:url('/pub/images/btn1_r1_c2.png');width:80px;height:28px;border:none;cursor:pointer" value="修改信息" />
 			</tr>
 			
 		</table>
@@ -121,6 +159,7 @@ function updateDoctor()
 				<div class="titleba"><h3>医生预约时间</h3></div>			
 			</tr>
 		</table>
+		
 		<table width="50%" border="1" cellspacing="0" cellpadding="0" align='center'
 			class="maintable1">
 			<tr class="tabletop">

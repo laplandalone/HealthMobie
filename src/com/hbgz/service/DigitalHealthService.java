@@ -1,5 +1,8 @@
 package com.hbgz.service;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -13,6 +16,8 @@ import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.support.DaoSupport;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.hbgz.dao.DigitalHealthDao;
 import com.hbgz.dao.DoctorDao;
@@ -27,9 +32,11 @@ import com.hbgz.pub.annotation.ServiceType;
 import com.hbgz.pub.cache.CacheManager;
 import com.hbgz.pub.exception.JsonException;
 import com.hbgz.pub.exception.QryException;
+import com.hbgz.pub.file.FileBiz;
 import com.hbgz.pub.resolver.BeanFactoryHelper;
 import com.hbgz.pub.sequence.SysId;
 import com.hbgz.pub.util.DateUtils;
+import com.hbgz.pub.util.FileUtil;
 import com.hbgz.pub.util.HttpUtil;
 import com.hbgz.pub.util.JsonUtils;
 import com.hbgz.pub.util.ObjectCensor;
@@ -257,7 +264,7 @@ public class DigitalHealthService
 		
 		JSONArray jsonArray = JsonUtils.fromArray(list);
 		CacheManager cacheManager = (CacheManager) BeanFactoryHelper.getBean("cacheManager");
-		String imgIp = cacheManager.getImgIp("101");
+		String imgIp = cacheManager.getImgIp(hospitalId);
 		
 		for (int i = 0; i < jsonArray.size(); i++)
 		{
@@ -268,12 +275,13 @@ public class DigitalHealthService
 			{
 				for(int n=0;n<imgs.length;n++)
 				{
-					jsonObject.put("imgUrl"+n, imgIp+imgs[n]);
+					if(ObjectCensor.isStrRegular(imgs[n]))
+					{
+						jsonObject.put("imgUrl"+n, imgIp+imgs[n]);
+					}
 				}
 			}
-			
 		}
-		System.out.println(jsonArray);
 		return jsonArray;
 	}
 
@@ -425,6 +433,14 @@ public class DigitalHealthService
 	@ServiceType(value = "BUS20021")
 	public String getAuthCode(String accNbr,String type) throws  Exception
 	{
+		String pswType="注册验证码";
+		if("set_psw".equals(type))
+		{
+			pswType="新密码";
+		}
+		
+		List userList = hibernateObjectDao.findByProperty("HospitalUserT", "telephone",accNbr);
+		
 		CacheManager cacheManager = (CacheManager) BeanFactoryHelper.getBean("cacheManager");
 		Map map =cacheManager.getAuthCode(accNbr);
 		String url="http://api.app2e.com/smsBigSend.api.php";
@@ -433,23 +449,34 @@ public class DigitalHealthService
 		params.put("pwd", "cb6fbeee3deb608f000a8f132531b738");
 		params.put("p", accNbr);
 		params.put("isUrlEncode", "no");
-	    params.put("msg","【海星通技术】尊敬的用户，您注册验证码是"+StringUtil.getMapKeyVal(map, accNbr)+"。健康管家愿成为您健康的好帮手");
-			
-		String msgRst= HttpUtil.http(url, params, "", "", "");
-	    JSONObject jsonObject = JSONObject.fromObject(msgRst);
-	    String status = jsonObject.getString("status");
-		if("set_psw".equals(type) && "100".equals(status))
+	    params.put("msg","【海星通技术】尊敬的用户，您的"+pswType+"是"+StringUtil.getMapKeyVal(map, accNbr)+"。健康管家愿成为您健康的好帮手");
+		
+		// 新用户注册
+		if(!ObjectCensor.checkListIsNull(userList) && "NEW_USER".equals(type))
 		{
+		    String msgRst= HttpUtil.http(url, params, "", "", "");
+			return msgRst;
+		}else if(ObjectCensor.checkListIsNull(userList) && "NEW_USER".equals(type))//用户已注册
+		{
+			JSONObject object = new JSONObject();
 			
-			List userList = hibernateObjectDao.findByProperty("HospitalUserT", "telephone",accNbr);
-			if(ObjectCensor.checkListIsNull(userList))
+			return "\"{\"status\":000}\"";
+		}
+		else if(ObjectCensor.checkListIsNull(userList) && "set_psw".equals(type))//重置密码
+		{
+			String msgRst= HttpUtil.http(url, params, "", "", "");
+			JSONObject jsonObject = JSONObject.fromObject(msgRst);
+			String status = jsonObject.getString("status");
+			if("100".equals(status))//发送短信成功
 			{
 				HospitalUserT user = (HospitalUserT) userList.get(0);
 				user.setPassword(StringUtil.getMapKeyVal(map, accNbr));
 				hibernateObjectDao.update(user);
 			}
+			return msgRst;
 		}
-		return msgRst;
+		
+		return null;
 	}
 
 	@ServiceType(value = "BUS20022")
@@ -471,11 +498,10 @@ public class DigitalHealthService
 	}
 
 	// 查询用户的挂号订单
-	public List qryRegisterOrder(String hospitalName, String teamName, String doctorName,
-			String startTime, String endTime, String userId) throws Exception
+	public List qryRegisterOrder(String hospitalId, String teamId, String doctorId,
+			String startTime, String endTime) throws Exception
 	{
-		List registerOrderList = digitalHealthDao.qryRegisterOrder(hospitalName, teamName,
-				doctorName, userId, startTime, endTime);
+		List registerOrderList = digitalHealthDao.qryRegisterOrder(hospitalId, teamId,doctorId, startTime, endTime);
 		return registerOrderList;
 	}
 
@@ -571,14 +597,50 @@ public class DigitalHealthService
 	{
 		List<DoctorRegisterT> list = JsonUtils.toArray(registerTimes, DoctorRegisterT.class);
 		
-		doctorDao.delete("DoctorRegisterT", "doctorId", "G10");
+		doctorDao.delete("DoctorRegisterT", "doctorId", doctorId);
 		
 		for (DoctorRegisterT doctorRegisterT:list)
 		{
-//			doctorRegisterT.setRegisterId(sysId.getId()+"");
-//			doctorRegisterT.setCaeateDate(new Date());
-//			doctorDao.save(doctorRegisterT);
+			doctorRegisterT.setRegisterId(sysId.getId()+"");
+			doctorRegisterT.setCaeateDate(new Date());
+			doctorDao.save(doctorRegisterT);
 		}
 		return true;
+	}
+	public String addNewsFile(MultipartHttpServletRequest request) throws Exception
+	{
+		String newsTypeId= request.getParameter("newsTypeId");
+		String newsType = request.getParameter("newsType");
+		String newsTitle= request.getParameter("newsTitle");
+		String hospitalId=request.getParameter("hospitalId");
+	
+		Map<String, MultipartFile> map = request.getFileMap();
+		boolean flag=false;
+		for (Map.Entry<String, MultipartFile> entity : map.entrySet())
+		{
+			MultipartFile partFile = entity.getValue();
+			String fileName = partFile.getOriginalFilename();
+			System.out.println(fileName);
+		    if(fileName.endsWith(".txt"))
+		    {
+			File localFile = new File(fileName);
+			partFile.transferTo(localFile);
+			InputStream is = new FileInputStream(localFile);
+			HospitalNewsT hospitalNewsT = new HospitalNewsT();
+			hospitalNewsT.setCreateDate(new Date());
+			hospitalNewsT.setHospitalId("101");
+			hospitalNewsT.setNewsId("11111");
+			hospitalNewsT.setNewsTitle(newsTitle);
+			hospitalNewsT.setState("00A");
+			hospitalNewsT.setTypeId(newsTypeId);
+			hospitalNewsT.setNewsType(newsType);
+			int length=is.available();
+			byte[] buffer=new byte[length];
+			is.read(buffer);
+			hospitalNewsT.setNewsContent(buffer);
+			hibernateObjectDao.save(hospitalNewsT);		
+		    }
+		}
+		return "";
 	}
 }

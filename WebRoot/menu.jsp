@@ -3,7 +3,6 @@
 <%
 	String path = request.getContextPath();
     String doctorId= request.getParameter("doctorId");
-    System.out.println("doctorId"+doctorId);
 %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html >
@@ -32,9 +31,9 @@ a {color: #000; text-decoration: none;}
 		    <li><img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; <a href="/view/question/questionList.jsp?&doctorId=<%=doctorId%>" target="main">用户提问管理</a></li>
 		    <li><img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; <a href="/doctor.htm?method=queryPre&doctorId=<%=doctorId%>" target="main">医生信息管理</a></li>
 	   </c:if>
-           <c:if test="${sessionScope.userPrivs=='3'}">
-		   <li><img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; <a href="/registerOrderList.jsp" target="main">预约挂号管理</a></li>
-		    <li><img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; <a href="/view/question/questionList.jsp?&doctorId=<%=doctorId%>" target="main">用户提问管理</a></li>
+          
+       <c:if test="${sessionScope.userPrivs=='3'}">
+		    <li><img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; <a href="/registerOrderList.jsp" target="main">预约挂号管理</a></li>
 		    <li><img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; <a href="/doctor.htm?method=queryPre&doctorId=<%=doctorId%>" target="main">医生信息管理</a></li>
 	   </c:if>
           <!-- 

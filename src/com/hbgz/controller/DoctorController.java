@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import com.hbgz.model.DoctorRegisterT;
 import com.hbgz.model.UserQuestionT;
@@ -73,7 +74,6 @@ public class DoctorController
 	{
 		ModelAndView model = new ModelAndView("updateDoctor");
 		String doctorId = (String)request.getParameter("doctorId");
-	
 		
 		if(ObjectCensor.isStrRegular(doctorId))
 		{
@@ -105,7 +105,7 @@ public class DoctorController
 	@RequestMapping(params = "method=updateDoctor")
 	public ModelAndView updateDoctor(HttpServletResponse response , HttpServletRequest request) throws Exception
 	{
-		ModelAndView model = new ModelAndView("questionList");
+		ModelAndView model = new ModelAndView("updateDoctor");
 		HttpSession session = request.getSession();
 		String hospitalId= (String)session.getAttribute("hospitalId");
 		String doctorId = (String)request.getParameter("doctorId");
@@ -113,16 +113,17 @@ public class DoctorController
 		String name = (String)request.getParameter("name");
 		String password = (String)request.getParameter("password");
 		
+		
 		if(ObjectCensor.isStrRegular(doctorId,hospitalId,name,password) )
 		{
 			digitalHealthService.updateHospitalMananger(hospitalId, doctorId, name, password);
 			model.addObject("reslut", "success");
-			model.setViewName("/doctor.htm?method=queryPre&doctorId="+doctorId);
+			model.setViewName("/view/doctor/updateDoctor");
 		}
 		else
 		{
-			model.addObject("result", "error");
-			model.setViewName("login");
+			model.addObject("reslut", "error");
+			model.setViewName("/view/doctor/updateDoctor");
 		}
 		return model;
 	}
@@ -130,7 +131,7 @@ public class DoctorController
 	@RequestMapping(params = "method=updateRegisterTime")
 	public ModelAndView updateRegisterTime(HttpServletResponse response , HttpServletRequest request) throws Exception
 	{
-		ModelAndView model = new ModelAndView("questionList");
+		ModelAndView model = new ModelAndView("updateRegisterTime");
 		HttpSession session = request.getSession();
 		String hospitalId= (String)session.getAttribute("hospitalId");
 		String doctorId = (String)request.getParameter("doctorId");
@@ -142,7 +143,7 @@ public class DoctorController
 		if(ObjectCensor.isStrRegular(doctorId,hospitalId) )
 		{
 			model.addObject("reslut", "success");
-			model.setViewName("/view/question/questionList");
+			return new ModelAndView(new RedirectView("/doctor.htm?method=getDoctor&doctorId="+doctorId));
 		}
 		else
 		{

@@ -4,23 +4,24 @@
 	String path = request.getContextPath();
 %>
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<head>
 		<title></title>
-		<link href="/pub/css/sub.css" rel="stylesheet" type="text/css" />
-		<link href="/pub/css/bankList.css" rel="stylesheet" type="text/css"></link>
-		<link href="/pub/css/manPage.css" rel="stylesheet" type="text/css"></link>
-		<script type="text/javascript" src="pub/js/jquery-1.9.1.min.js"></script>
-		<script type="text/javascript" src="pub/dialog/lhgdialog.min.js?skin=idialog"></script>
-		<script type="text/javascript" src="pub/js/calendar.js"></script>
-		<script type="text/javascript" src="pub/js/date.js"></script>
+	<script type="text/javascript" src="<%=path%>/pub/js/jquery-1.9.1.min.js"></script>
+
+	<link href="<%=path%>/pub/css/sub.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="<%=path%>pub/dialog/lhgdialog.min.js?skin=idialog"></script>
+	<script type="text/javascript" src="<%=path%>/pub/js/calendar.js"></script>
+	<script type="text/javascript" src="<%=path%>/pub/js/date.js"></script>
+	<script type="text/javascript" src="<%=path%>/js/comm.js"></script>
+		
 		<script type="text/javascript" src="js/registerOrder.js"></script>
 	</head>
 
 	<body>
-		<div id="template" style="height:700px;overflow:auto">
-			<div style="height:40px;margin-left:10px;line-height:40px;width:100%">
+		
+		
 				<table width="100%">
 					<tr>
 						<td align="right" width="10%">预约时间：</td>
@@ -38,8 +39,8 @@
 								</tr>
 							</table>
 						</td>
-						<td align="center" width="5%">-至-</td>
-						<td align="center">
+						<td  width="5%">-至-</td>
+						<td >
 							<table class="inputtable" cellspacing="0" cellpadding="0">
 								<tr>
 									<td>
@@ -53,25 +54,33 @@
 								</tr>
 							</table>
 						</td>
-						<td align="right" width="10%">科室名称：</td>
+						
+						<td  width="6%">科室名称：</td>
 						<td width="8%">
-							<input type="text" id="teamName" value="${teamName }"/>
+						<select id="teamId" name="teamId"><option value="10">---科室---</option> </select>
 						</td>
-						<td align="right" width="10%">医生名称：</td>
-						<td width="8%">
-							<input type="text" id="doctorName" value="${doctorName }"/>
+						
+						<td  width="6%"><select id="doctorId" name="doctorId"><option value="10001">---医生---</option> </select></td>
+						<td width="5%">
+							订单状态
 						</td>
+						
+						<td  width="6%"><select id="state" name="state"><option>未处理</option><option>已预约</option><option>已作废</option></select></td>
 						<td>
 							<input type="button" onclick="qryRegisterOrder()" style="background-image:url('/pub/images/btn1_r1_c2.png');width:80px;height:28px;border:none;cursor:pointer" value="查询" />
 						</td>
 					</tr>
 				</table>
-			</div>
+		
 			<table width="100%" border="1" cellspacing="0" cellpadding="0" class="maintable1">
 				<tr class="tabletop">
-					<td align="center" width="8%">订单号</td>
-					<td align="center" width="8%">预约号</td>
-					<td align="center" width="8%">类型</td>
+					<td align="center" width="5%">订单号</td>
+					<td align="center" width="5%">预约号</td>
+					<td align="center" width="4%">类型</td>
+					
+					<td align="center" width="5%">预约人</td>
+					<td align="center" width="8%">预约联系方式</td>
+					
 					<td align="center" width="10%">医院名称</td>
 					<td align="center" width="8%">科室名称</td>
 					<td align="center" width="6%">医生名称</td>
@@ -92,6 +101,10 @@
 								专家号
 							</c:otherwise>
 						</c:choose></td>
+						
+					     <td>${registerOrder.userName }</td>
+						<td>${registerOrder.userTelephone }</td>
+						
 						<td>${registerOrder.hospitalName }</td>
 						<td>${registerOrder.teamName }</td>
 						<td>${registerOrder.doctorName }</td>

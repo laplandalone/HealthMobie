@@ -3,9 +3,10 @@ function qryRegisterOrder()
 	var startTime = $("#startTime").val();
 	var endTime = $("#endTime").val();
 	var hospitalName = $("#hospitalName").val();
-	var teamName = $("#teamName").val();
-	var doctorName = $("#doctorName").val();
-	window.location.href = "/mobile.htm?method=qryRegisterOrder&hospitalName="+hospitalName+"&teamName="+teamName+"&doctorName="+doctorName+"&startTime="+startTime+"&endTime="+endTime;
+	var teamId = $("#teamId").val();
+	var doctorId = $("#doctorId").val();
+	var state = $("#state").val();
+	window.location.href = "/mobile.htm?method=qryRegisterOrder&state="+state+"&teamId="+teamId+"&doctorId="+doctorId+"&startTime="+startTime+"&endTime="+endTime;
 }
 
 //预约挂号

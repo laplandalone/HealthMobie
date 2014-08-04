@@ -281,32 +281,37 @@ public class DigitalHealthDao
 	 * @return
 	 * @throws Exception
 	 */
-	public List qryRegisterOrder(String hospitalName, String teamName,
-			String doctorName, String userId, String startTime, String endTime) throws Exception 
+	public List qryRegisterOrder(String hospitalId, String teamId,
+			String doctorId,  String startTime, String endTime) throws Exception 
 	{
 		StringBuffer query = new StringBuffer();
-		query.append("select a.order_num,a.order_id, a.register_id, a.order_fee,a.doctor_name, a.register_time, a.team_name, b.hospital_name, ");
+		query.append("select a.order_num,a.order_id, a.register_id, a.order_fee,a.doctor_name, a.register_time, a.team_name,a.user_name,a.user_telephone, b.hospital_name, ");
 		query.append("decode(a.order_state, '000', '未处理', '00A', '已预约', '00X', '已作废') order_state ");
-		query.append("from register_order_t a,  hospital_t b ,team_t c ");
-		query.append("where a.team_id=c.team_id and c.hospital_id = b.hospital_id ");
-		query.append("and a.state = '00A' and b.state = '00A' and c.state = '00A' ");
-		query.append("and a.user_id = ? ");
+		query.append("from register_order_t a,  hospital_t b ");
+		query.append("where a.state = '00A' and b.state = '00A'  and b.hospital_id=? ");
+		
 		ArrayList lstParam = new ArrayList();
-		lstParam.add(userId);
+		lstParam.add(hospitalId);
+		
+		if(ObjectCensor.isStrRegular(doctorId))
+		{
+			query.append("and a.doctor_id=?");
+			lstParam.add(doctorId);
+		}
+		
+		if(ObjectCensor.isStrRegular(teamId))
+		{
+			query.append("and a.team_id=?");
+			lstParam.add(teamId);
+		}
+		
 		if(ObjectCensor.isStrRegular(startTime, endTime))
 		{
-			query.append("and to_date(substr(a.register_time, 0, 10), 'yyyy-mm-dd') between to_date(?,'yyyy-mm-dd') and to_date(?,'yyyy-mm-dd') ");
-			lstParam.add(startTime);
-			lstParam.add(endTime);
+//			query.append("and to_date(substr(a.register_time, 0, 10), 'yyyy-mm-dd') between to_date(?,'yyyy-mm-dd') and to_date(?,'yyyy-mm-dd') ");
+//			lstParam.add(startTime);
+//			lstParam.add(endTime);
 		}
-		if(ObjectCensor.isStrRegular(doctorName))
-		{
-			query.append("and upper(b.name) like upper('%"+doctorName+"%') ");
-		}
-		if(ObjectCensor.isStrRegular(teamName))
-		{
-			query.append("and upper(c.team_name) like upper('%"+teamName+"%') ");
-		}
+		
 		return itzcQryCenter.executeSqlByMapListWithTrans(query.toString(), lstParam);
 	}
 	
