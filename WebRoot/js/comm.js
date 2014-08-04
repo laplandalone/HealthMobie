@@ -1,10 +1,9 @@
 
 function lockScreen()
 {
-	alert("123");
+	
 	if(parent.document.getElementById("lockDiv")!=null&&parent.document.getElementById("lockDiv")!=undefined)
 	{
-		alert("123");
 		var lockDiv = parent.document.getElementById("lockDiv");
 		lockDiv.style.display = "block";
 	}

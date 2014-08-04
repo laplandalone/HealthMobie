@@ -42,13 +42,14 @@
 				});
 			}
 			
-			function verifyFunc(doctorId,questionId,userId,telephone,val)
+			function verifyFunc(doctorId,questionId,userId,telephone,id)
 			{
-				lockScreen();	
+			
+				var val= $("#"+id);
 				$.dialog({
 				    id: 'testID',
 				    
-				    content: "<table border='0' cellspacing='10'><tr><td>"+telephone+":</td><td>"+val+"</td></tr><tr><td valign='top'>回复:</td><td><textarea cols='40' rows='4' id='content'></textarea></td></tr><tr ><td>可见范围:</td><td>可见<input type='checkbox' id='public' value='public' checked='checked' /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;不可见<input type='checkbox' onclick=change() id='private' value='private' /></td></tr></table>",			   
+				    content: "<table border='0' cellspacing='10'><tr><td>"+telephone+":</td><td>"+val.html()+"</td></tr><tr><td valign='top'>回复:</td><td><textarea cols='40' rows='4' id='content'></textarea></td></tr><tr ><td>可见范围:</td><td>可见<input type='checkbox' id='public' value='public' checked='checked' /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;不可见<input type='checkbox' onclick=change() id='private' value='private' /></td></tr></table>",			   
 				    
 				    title:"操作",
 				    button: [
@@ -101,16 +102,14 @@
 			    var doctorId='<%=doctorId%>';
 				var startTime = $("#startTime");
 				var endTime = $("#endTime");
-			   
+			  
 				if(doctorId != "")
 				{
-					window.location.href="/ques.htm?method=queryPre&doctorId="+doctorId+"&startTime="+startTime.val()+"&endTime="+endTime.val();
+					var url="/ques.htm?method=queryPre&doctorId="+doctorId+"&startTime="+startTime.val()+"&endTime="+endTime.val();
+							
+					window.location.href=url;
 				}
-				else
-				{
-					alert("查询内容不能为空!");
-					doctorId.focus();
-				}
+				
 			}
 			
 		</script>
@@ -172,8 +171,7 @@
 					<td align="center" width='15%'><c:out
 							value="${ques.userTelephone}" />
 					</td>
-					<td align="center"><c:out value="${ques.content }" />
-					</td>
+					<td align="center"><div id ="<c:out value="${ques.qestionId}" />content" ><c:out value="${ques.content }" /></div></td>
 					<td align="center">
 					<c:choose>
 							<c:when test="${ques.imgUrl0!=null && ques.imgUrl0!=''}">
@@ -217,7 +215,7 @@
 					
 					<td style="text-align:center !important">
 					<a href="javascript:void(0)" class="linkmore"
-									onclick="verifyFunc('${ques.doctorId}','${ques.qestionId}','${ques.userId}','${ques.userTelephone}','${ques.content}')">回复</a>
+									onclick="verifyFunc('${ques.doctorId}','${ques.qestionId}','${ques.userId}','${ques.userTelephone}','${ques.qestionId}content')">回复</a>
 					</td>
 				</tr>
 			</c:forEach>
