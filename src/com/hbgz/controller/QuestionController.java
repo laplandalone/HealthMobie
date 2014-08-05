@@ -1,12 +1,13 @@
 package com.hbgz.controller;
 
-import java.util.Date;
+import java.io.PrintWriter;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.apache.commons.logging.Log;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.hbgz.model.UserQuestionT;
-import com.hbgz.pub.util.DateUtils;
 import com.hbgz.pub.util.ObjectCensor;
 import com.hbgz.service.DigitalHealthService;
 
@@ -47,8 +47,11 @@ public class QuestionController
 		String endTime = (String)request.getParameter("endTime");
 		if(ObjectCensor.isStrRegular(doctorId))
 		{
-			List userFileLst = digitalHealthService.getUserQuestionsByDoctorId(doctorId,hospitalId);
+			List userFileLst = digitalHealthService.getUserQuestionsByDoctorId(doctorId, hospitalId, startTime, endTime);
+			log.error(userFileLst);
 			model.addObject("quesLst", userFileLst);
+			model.addObject("startTime", startTime);
+			model.addObject("endTime", endTime);
 			model.setViewName("/view/question/questionList");
 		}
 		else
@@ -59,12 +62,30 @@ public class QuestionController
 		return model;
 	}
 	
-
+	@RequestMapping(params = "method=qryQuesList")
+	public void qryQuesList(HttpServletRequest request, HttpServletResponse response)
+	{
+		try 
+		{
+			response.setCharacterEncoding("UTF-8");
+			String doctorId = request.getParameter("doctorId");
+			String questionId = request.getParameter("questionId");
+			JSONArray array = digitalHealthService.qryQuesList(doctorId, questionId);
+			log.error(array);
+			PrintWriter out = response.getWriter();
+			out.print(array);
+			out.close();
+		} 
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+	}
+	
 	@RequestMapping(params = "method=updateQues")
 	public ModelAndView updateQuestion(HttpServletResponse response , HttpServletRequest request) throws Exception
 	{
 		ModelAndView model = new ModelAndView("questionList");
-		HttpSession session = request.getSession();
 		String doctorId = (String)request.getParameter("doctorId");
 		String userId = (String)request.getParameter("userId");
 		String authType = (String)request.getParameter("authType");
