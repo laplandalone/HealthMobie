@@ -1,5 +1,5 @@
 $(function(){
-	var date = new Date(); //日期对象
+	var date = new Date(); //鏃ユ湡瀵硅薄
 	var now = null;
 	var before = null;
 	now = date.getFullYear()+"-"; 
@@ -154,7 +154,7 @@ $(function(){
 	$("#endTime").val(now);
 	$("#startTime").val(before);
 });
-var date = new Date(); //日期对象
+var date = new Date(); //鏃ユ湡瀵硅薄
 var now = null;
 var before = null;
 now = date.getFullYear()+"-"; 

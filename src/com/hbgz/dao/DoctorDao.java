@@ -41,7 +41,15 @@ public class DoctorDao extends BaseDao
 		return itzcQryCenter.executeSqlByMapList(sql.toString(), lstParam);
 	}
 	
-	
+	public List qryDoctorList(String hospitalId, String teamId) throws QryException 
+	{
+		StringBuffer sql = new StringBuffer();
+		sql.append("select * from doctor_t where state = '00A' and hospital_id = ? and team_id = ? ");
+		ArrayList lstParam = new ArrayList();
+		lstParam.add(hospitalId);
+		lstParam.add(teamId);
+		return itzcQryCenter.executeSqlByMapListWithTrans(sql.toString(), lstParam);
+	}
 	
 	/**
 	 * 更新用户名，密码
@@ -83,6 +91,5 @@ public class DoctorDao extends BaseDao
 			return flag;
 		}
 	}
-	
 	
 }

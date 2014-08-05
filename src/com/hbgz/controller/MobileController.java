@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import net.sf.json.JSONArray;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.json.MappingJacksonJsonView;
 
+import com.hbgz.pub.exception.QryException;
 import com.hbgz.pub.util.ObjectCensor;
 import com.hbgz.pub.util.StringUtil;
 import com.hbgz.service.DigitalHealthService;
@@ -458,23 +461,24 @@ public class MobileController
 	public ModelAndView qryRegisterOrder(HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		ModelAndView model = new ModelAndView("registerOrderList");
-		HttpSession session = request.getSession();
-		
-		String hospitalId = (String) session.getAttribute("hospitalId");
-		String teamId=request.getParameter("teamId");
-		String doctorId=request.getParameter("doctorId");
-		
-		String startTime = (String)request.getParameter("startTime");
-		String endTime = (String)request.getParameter("endTime");
-		List registerOrderList = digitalHealthService.qryRegisterOrder(hospitalId, teamId, doctorId, startTime , endTime);
+//		HttpSession session = request.getSession();
+//		String hospitalId = (String) session.getAttribute("hospitalId");
+		String hospitalId = "101";
+		String teamId = request.getParameter("teamId");
+		String doctorId = request.getParameter("doctorId");
+		String startTime = (String) request.getParameter("startTime");
+		String endTime = (String) request.getParameter("endTime");
+		String state = (String) request.getParameter("state");
+		List registerOrderList = digitalHealthService.qryRegisterOrder(hospitalId, teamId, doctorId, startTime, endTime, state);
 		model.addObject("registerOrderList", registerOrderList);
 		model.addObject("hospitalId", hospitalId);
 		model.addObject("teamId", teamId);
 		model.addObject("doctorId", doctorId);
 		model.addObject("startTime", startTime);
 		model.addObject("endTime", endTime);
+		model.addObject("state", state);
 		model.setViewName("registerOrderList");
-		
+
 		return model;
 	}
 	
@@ -494,6 +498,27 @@ public class MobileController
 			out.close();
 		} 
 		catch (IOException e) 
+		{
+			
+		}
+		finally
+		{
+			out.close();
+		}
+	}
+	
+	@RequestMapping(params = "method=qryDoctorList")
+	public void qryDoctorList(String hospitalId, String teamId, HttpServletResponse response)
+	{
+		PrintWriter out = null;
+		try 
+		{
+			response.setCharacterEncoding("UTF-8");
+			out = response.getWriter();
+			List sList = digitalHealthService.qryDoctorList(hospitalId, teamId);
+			out.println(JSONArray.fromObject(sList));
+		} 
+		catch (Exception e) 
 		{
 			
 		}

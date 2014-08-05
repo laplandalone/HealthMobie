@@ -281,37 +281,34 @@ public class DigitalHealthDao
 	 * @return
 	 * @throws Exception
 	 */
-	public List qryRegisterOrder(String hospitalId, String teamId,
-			String doctorId,  String startTime, String endTime) throws Exception 
+	public List qryRegisterOrder(String hospitalId, String teamId, String doctorId,  String startTime, String endTime, String state) throws Exception 
 	{
 		StringBuffer query = new StringBuffer();
-		query.append("select a.order_num,a.order_id, a.register_id, a.order_fee,a.doctor_name, a.register_time, a.team_name,a.user_name,a.user_telephone, b.hospital_name, ");
+		query.append("select a.order_num,a.order_id, a.register_id, a.order_fee,a.doctor_name, a.register_time, a.create_date, a.team_name,a.user_name,a.user_telephone, b.hospital_name, ");
 		query.append("decode(a.order_state, '000', '未处理', '00A', '已预约', '00X', '已作废') order_state ");
 		query.append("from register_order_t a,  hospital_t b ");
-		query.append("where a.state = '00A' and b.state = '00A'  and b.hospital_id=? ");
-		
+		query.append("where a.state = '00A' and b.state = '00A'  and b.hospital_id = ? ");
+		query.append("and to_date(substr(a.register_time, 0, 10), 'yyyy-mm-dd') between to_date(?,'yyyy-mm-dd') and to_date(?,'yyyy-mm-dd') ");
 		ArrayList lstParam = new ArrayList();
 		lstParam.add(hospitalId);
-		
+		lstParam.add(startTime);
+		lstParam.add(endTime);
 		if(ObjectCensor.isStrRegular(doctorId))
 		{
-			query.append("and a.doctor_id=?");
+			query.append("and a.doctor_id = ? ");
 			lstParam.add(doctorId);
 		}
-		
 		if(ObjectCensor.isStrRegular(teamId))
 		{
-			query.append("and a.team_id=?");
+			query.append("and a.team_id = ? ");
 			lstParam.add(teamId);
 		}
-		
-		if(ObjectCensor.isStrRegular(startTime, endTime))
+		if(ObjectCensor.isStrRegular(state))
 		{
-//			query.append("and to_date(substr(a.register_time, 0, 10), 'yyyy-mm-dd') between to_date(?,'yyyy-mm-dd') and to_date(?,'yyyy-mm-dd') ");
-//			lstParam.add(startTime);
-//			lstParam.add(endTime);
+			query.append("and a.order_state = ? ");
+			lstParam.add(state);
 		}
-		
+		query.append("order by a.create_date ");
 		return itzcQryCenter.executeSqlByMapListWithTrans(query.toString(), lstParam);
 	}
 	

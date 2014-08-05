@@ -54,4 +54,23 @@ public class SysCacheDao extends BaseDao
     	return map;
     }
 
+	@Cacheable(cacheName = "HospitalConfig")
+	public List qryTeamList(String hospitalId) throws QryException 
+	{
+		StringBuffer sql = new StringBuffer();
+		sql.append("select * from team_t where state = '00A' and hospital_id = ? ");
+		ArrayList lstParam = new ArrayList();
+		lstParam.add(hospitalId);
+		return itzcQryCenter.executeSqlByMapListWithTrans(sql.toString(), lstParam);
+	}
+
+	@Cacheable(cacheName = "HospitalConfig")
+	public List qryDoctorList(String hospitalId) throws QryException 
+	{
+		StringBuffer sql = new StringBuffer();
+		sql.append("select * from doctor_t where state = '00A' and hospital_id = ? ");
+		ArrayList lstParam = new ArrayList();
+		lstParam.add(hospitalId);
+		return itzcQryCenter.executeSqlByMapListWithTrans(sql.toString(), lstParam);
+	}
 }

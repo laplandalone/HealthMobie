@@ -75,8 +75,18 @@ public class CacheManager
 		return null;
 	}
 	
-	  public Map getAuthCode(String accNbr)
-	  {
-		  return sysCacheDao.getAuthCode(accNbr);
-	  }
+	public Map getAuthCode(String accNbr)
+	{
+		return sysCacheDao.getAuthCode(accNbr);
+	}
+
+	public List qryTeamList(String hospitalId) throws QryException 
+	{
+		return sysCacheDao.qryTeamList(hospitalId);
+	}
+
+	public List qryDoctorList(String hospitalId) throws QryException 
+	{
+		return sysCacheDao.qryDoctorList(hospitalId);
+	}
 }

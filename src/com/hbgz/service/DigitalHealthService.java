@@ -14,7 +14,6 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.support.DaoSupport;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -34,11 +33,9 @@ import com.hbgz.pub.base.SysDate;
 import com.hbgz.pub.cache.CacheManager;
 import com.hbgz.pub.exception.JsonException;
 import com.hbgz.pub.exception.QryException;
-import com.hbgz.pub.file.FileBiz;
 import com.hbgz.pub.resolver.BeanFactoryHelper;
 import com.hbgz.pub.sequence.SysId;
 import com.hbgz.pub.util.DateUtils;
-import com.hbgz.pub.util.FileUtil;
 import com.hbgz.pub.util.HttpUtil;
 import com.hbgz.pub.util.JsonUtils;
 import com.hbgz.pub.util.ObjectCensor;
@@ -55,13 +52,13 @@ public class DigitalHealthService
 	private SysId sysId;
 
 	@Autowired
-	UserQustionDao userQustionDao;
+	private UserQustionDao userQustionDao;
 	
 	@Autowired
-	DoctorDao doctorDao;
+	private DoctorDao doctorDao;
 
 	@Autowired
-	HibernateObjectDao hibernateObjectDao;
+	private HibernateObjectDao hibernateObjectDao;
 
 	@ServiceType(value = "BUS2001")
 	public JSONObject getDoctorList(String expertType, String onLineType, String teamId)
@@ -505,9 +502,9 @@ public class DigitalHealthService
 
 	// 查询用户的挂号订单
 	public List qryRegisterOrder(String hospitalId, String teamId, String doctorId,
-			String startTime, String endTime) throws Exception
+			String startTime, String endTime, String state) throws Exception
 	{
-		List registerOrderList = digitalHealthDao.qryRegisterOrder(hospitalId, teamId,doctorId, startTime, endTime);
+		List registerOrderList = digitalHealthDao.qryRegisterOrder(hospitalId, teamId,doctorId, startTime, endTime, state);
 		return registerOrderList;
 	}
 
@@ -662,5 +659,10 @@ public class DigitalHealthService
 		    }
 		}
 		return "";
+	}
+
+	public List qryDoctorList(String hospitalId, String teamId) throws QryException 
+	{
+		return doctorDao.qryDoctorList(hospitalId, teamId);
 	}
 }
