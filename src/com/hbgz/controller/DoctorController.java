@@ -1,15 +1,11 @@
 package com.hbgz.controller;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -19,10 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
-import com.hbgz.model.DoctorRegisterT;
-import com.hbgz.model.UserQuestionT;
-import com.hbgz.pub.sequence.SysId;
-import com.hbgz.pub.util.JsonUtils;
 import com.hbgz.pub.util.ObjectCensor;
 import com.hbgz.pub.util.StringUtil;
 import com.hbgz.service.DigitalHealthService;
@@ -47,20 +39,23 @@ public class DoctorController
 	{
 		ModelAndView model = new ModelAndView("doctors");
 		HttpSession session = request.getSession();
-		String hospitalId= (String)session.getAttribute("hospitalId");
-		
+		String hospitalId = (String) session.getAttribute("hospitalId");
 		String privs = (String) session.getAttribute("userPrivs");
-		String doctorId=request.getParameter("doctorId");
-		if(ObjectCensor.isStrRegular(hospitalId))
+		String doctorId = request.getParameter("doctorId");
+		String teamId = request.getParameter("teamId");
+		String doctorName = request.getParameter("doctorName");
+		if (ObjectCensor.isStrRegular(hospitalId)) 
 		{
-			if("3".equals(privs))
+			if ("3".equals(privs)) 
 			{
-				 doctorId ="";//查询所有，超级管理员
+				doctorId = "";// 查询所有，超级管理员
 			}
-			List doctorLst = digitalHealthService.getDoctorByHospitalId(hospitalId,doctorId);
+			List doctorLst = digitalHealthService.getDoctorByHospitalId(hospitalId, doctorId, teamId, doctorName);
+			model.addObject("teamId", teamId);
+			model.addObject("doctorName", doctorName);
 			model.addObject("doctorLst", doctorLst);
 			model.setViewName("/view/doctor/doctors");
-		}
+		} 
 		else
 		{
 			model.addObject("result", "error");

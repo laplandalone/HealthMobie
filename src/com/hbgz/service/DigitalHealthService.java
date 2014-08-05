@@ -576,14 +576,13 @@ public class DigitalHealthService
 	 * @return
 	 * @throws QryException
 	 */
-	public JSONArray getDoctorByHospitalId(String hospitalId,String doctorId) throws QryException
+	public JSONArray getDoctorByHospitalId(String hospitalId, String doctorId, String teamId, String doctorName) throws QryException
 	{
 		if (ObjectCensor.isStrRegular(hospitalId))
 		{
-			List list = doctorDao.qryDoctorsByHospitalId(hospitalId,doctorId);
+			List list = doctorDao.qryDoctorsByHospitalId(hospitalId, doctorId, teamId, doctorName);
 			return JSONArray.fromObject(list);
 		}
-		
 		return null;
 	}
 	

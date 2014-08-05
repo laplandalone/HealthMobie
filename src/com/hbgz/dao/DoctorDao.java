@@ -3,14 +3,11 @@ package com.hbgz.dao;
 import java.sql.Connection;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.hbgz.model.DoctorRegisterT;
 import com.hbgz.pub.base.BaseDao;
 import com.hbgz.pub.exception.QryException;
 import com.hbgz.pub.qry.QryCenter;
@@ -28,15 +25,27 @@ public class DoctorDao extends BaseDao
 	 * @return
 	 * @throws QryException
 	 */
-	public List qryDoctorsByHospitalId(String hospitalId,String doctorId) throws QryException
+	public List qryDoctorsByHospitalId(String hospitalId, String doctorId, String teamId, String doctorName) throws QryException
 	{
-		StringBuffer sql = new StringBuffer("select t.doctor_id,t.hospital_id,t.telephone,t.post,t.name,t.sex,decode(t.expert_flag,'0','专家')expert_flag,a.team_name from doctor_t t,team_t a where a.team_id=t.team_id and t.hospital_id=?");
+		StringBuffer sql = new StringBuffer();
+		sql.append("select t.doctor_id, t.hospital_id, t.telephone, t.post, t.name, ");
+		sql.append("t.sex, decode(t.expert_flag, '0', '专家') expert_flag, a.team_name ");
+		sql.append("from doctor_t t, team_t a where a.team_id = t.team_id and t.hospital_id = ? ");
 		ArrayList lstParam = new ArrayList();
 		lstParam.add(hospitalId);
 		if(ObjectCensor.isStrRegular(doctorId))
 		{
-			sql.append("and t.doctor_id=?");
+			sql.append("and t.doctor_id = ? ");
 			lstParam.add(doctorId);
+		}
+		if(ObjectCensor.isStrRegular(teamId))
+		{
+			sql.append("and t.team_id = ? ");
+			lstParam.add(teamId);
+		}
+		if(ObjectCensor.isStrRegular(doctorName))
+		{
+			sql.append("and upper(t.name) like upper('%"+doctorName+"%') ");
 		}
 		return itzcQryCenter.executeSqlByMapList(sql.toString(), lstParam);
 	}
