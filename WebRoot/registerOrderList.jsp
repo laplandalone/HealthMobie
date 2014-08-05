@@ -46,7 +46,7 @@
 						</tr>
 					</table>
 				</td>
-				<td align="center" width="5%">-至-</td>
+				<td align="center" width="5%">至</td>
 				<td align="center" width="8%">
 					<table class="inputtable" cellspacing="0" cellpadding="0">
 						<tr>

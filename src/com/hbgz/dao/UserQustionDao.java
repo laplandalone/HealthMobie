@@ -41,13 +41,13 @@ public class UserQustionDao extends BaseDao
 		return list;
 	}
 	
-	public List<UserQuestionT> qryQuestionTsByIds(String userId,String doctorId)
+	public List<UserQuestionT> qryQuestionTsByIds(String questionId)
 	{
-		if (!ObjectCensor.isStrRegular(doctorId))
+		if (!ObjectCensor.isStrRegular(questionId))
 		{
 			return null;
 		}
-		List list =this.find("from UserQuestionT as model where model.doctorId=? and model.userId=? order by createDate asc", new String[] { doctorId,userId });
+		List list =this.find("from UserQuestionT as model where model.questionId=? order by createDate asc", new String[] {questionId});
 		return list;
 	}
 }

@@ -101,7 +101,7 @@ public class DigitalHealthDao
 		{
 			return null;
 		}
-		String sql = "select distinct (a.doctor_id),a.doctor_id,a.name ,a.post,b.team_name,a.introduce from doctor_register_t t,doctor_t a,team_t b where t.state='00A' and a.doctor_id=t.doctor_id and b.team_id=t.team_id and t.team_id=?";
+		String sql = "select distinct (t.register_week),a.doctor_id,a.name ,a.post,b.team_name,a.introduce from doctor_register_t t,doctor_t a,team_t b where t.state='00A' and a.doctor_id=t.doctor_id and b.team_id=t.team_id and t.team_id=?";
 		ArrayList lstParam = new ArrayList();
 		lstParam.add(teamId);
 		return itzcQryCenter.executeSqlByMapListWithTrans(sql.toString(), lstParam);
@@ -124,6 +124,25 @@ public class DigitalHealthDao
 		return itzcQryCenter.executeSqlByMapListWithTrans(sql.toString(), lstParam);
 	}
 
+	/**
+     * 查询专家可预约号
+     * @param doctorId
+     * @return
+     * @throws QryException
+     */
+	public List getOrderByWeekId(String weekId,String doctorId) throws QryException
+	{
+		if (!ObjectCensor.isStrRegular(weekId))
+		{
+			return null;
+		}
+		String sql = "select t.*,a.team_name from doctor_register_t t,team_T a where t.state='00A' and a.team_id=t.team_id and t.doctor_id=? and t.register_week=?";
+		ArrayList lstParam = new ArrayList();
+		lstParam.add(doctorId);
+		lstParam.add(weekId);
+		return itzcQryCenter.executeSqlByMapListWithTrans(sql.toString(), lstParam);
+	}
+	
 	/**
 	 * 查询用户信息
 	 * @param telephone

@@ -88,13 +88,13 @@ public class DigitalHealthService
 		Date date = new Date();
 		if (ObjectCensor.checkListIsNull(orderList))
 		{
-//			for (int i = 1; i <= orderDayLen; i++)
-//			{
-//				Date dateT = DateUtils.afterNDate(i);
-//				String weekStr = DateUtils.getWeekOfDate(dateT);
-//				Map mapComp = new HashMap();
-//				mapComp.put("registerWeek", weekStr);
-//				List subList = StringUtil.getSubMapList(orderList, mapComp);
+			for (int i = 1; i <= orderDayLen; i++)
+			{
+				Date dateT = DateUtils.afterNDate(i);
+				String weekStr = DateUtils.getWeekOfDate(dateT);
+				Map mapComp = new HashMap();
+				mapComp.put("registerWeek", weekStr);
+				List subList = StringUtil.getSubMapList(orderList, mapComp);
 				for (int n = 0; n < orderList.size(); n++)
 				{
 					Map subMap = (Map) orderList.get(n);
@@ -111,17 +111,16 @@ public class DigitalHealthService
 					newMap.put("teamId", teamId);
 					newMap.put("introduce", introduce);
 					newMap.put("post", post);
+					newMap.put("week",weekStr);
+					newMap.put("day", DateUtils.CHN_DATE_FORMAT.format(dateT));
 					
-//					newMap.put("day", DateUtils.CHN_DATE_FORMAT.format(dateT) + " 星期" + weekStr);
-					
-					newMap.put("day", "一");
 					if(list.contains(newMap))
 					{
 						continue;
 					}
 					
 					list.add(newMap);
-//				}
+				}
 			}
 		}
 		JSONObject obj = new JSONObject();
@@ -130,63 +129,58 @@ public class DigitalHealthService
 	}
 
 	@ServiceType(value = "BUS2004")
-	public JSONObject getOrderByDoctorId(String doctorId) throws QryException
+	public JSONObject getOrderByDoctorId(String doctorId,String weekStr,String dateStr) throws QryException
 	{
-		int orderDayLen = 3;
-		List orderList = digitalHealthDao.getOrderByDoctorId(doctorId);
+		
+		List orderList = digitalHealthDao.getOrderByWeekId(weekStr,doctorId);
 		List ordertotalList = digitalHealthDao.qryOrderTotalNum(doctorId);
 		List list = new ArrayList();
-		Date date = new Date();
-
-		for (int i = 1; i <= orderDayLen; i++)
+		
+		Map mapComp = new HashMap();
+		mapComp.put("registerWeek", weekStr);
+		List subList = StringUtil.getSubMapList(orderList, mapComp);
+		
+		for (int n = 0; n < subList.size(); n++)
 		{
-			Date dateT = DateUtils.afterNDate(i);
-			String weekStr = DateUtils.getWeekOfDate(dateT);
-			Map mapComp = new HashMap();
-			mapComp.put("registerWeek", weekStr);
-			List subList = StringUtil.getSubMapList(orderList, mapComp);
-			for (int n = 0; n < subList.size(); n++)
+			Map subMap = (Map) subList.get(n);
+			String doctorName = StringUtil.getMapKeyVal(subMap, "name");
+			String teamName = StringUtil.getMapKeyVal(subMap, "teamName");
+			String teamId = StringUtil.getMapKeyVal(subMap, "teamId");
+			String fee = StringUtil.getMapKeyVal(subMap, "registerFee");
+			String registerNum = StringUtil.getMapKeyVal(subMap, "registerNum");
+			String dayType = StringUtil.getMapKeyVal(subMap, "dayType");
+			String registerId = StringUtil.getMapKeyVal(subMap, "registerId");
+			String workTime = "星期" + weekStr + dayType;
+			String dayWorkTime = dateStr + workTime;
+
+			String userOrderNum = "1";
+			for (int m = 0; m < ordertotalList.size(); m++)
 			{
-				Map subMap = (Map) subList.get(n);
-				String doctorName = StringUtil.getMapKeyVal(subMap, "name");
-				String teamName = StringUtil.getMapKeyVal(subMap, "teamName");
-				String teamId = StringUtil.getMapKeyVal(subMap, "teamId");
-				String fee = StringUtil.getMapKeyVal(subMap, "registerFee");
-				String registerNum = StringUtil.getMapKeyVal(subMap, "registerNum");
-				String dayType = StringUtil.getMapKeyVal(subMap, "dayType");
-				String registerId = StringUtil.getMapKeyVal(subMap, "registerId");
-				String day = DateUtils.CHN_DATE_FORMAT.format(dateT);
-				String workTime = "星期" + weekStr + dayType;
-				String dayWorkTime = day + workTime;
-
-				String userOrderNum = "1";
-				for (int m = 0; m < ordertotalList.size(); m++)
+				Map mapT = (Map) ordertotalList.get(m);
+				String idT = StringUtil.getMapKeyVal(mapT, "registerId");
+				
+				String dayT = StringUtil.getMapKeyVal(mapT, "registerTime");
+				dayT = dayT.replaceAll(" ", "");
+				if (registerId.equals(idT) && dayWorkTime.equals(dayT))
 				{
-					Map mapT = (Map) ordertotalList.get(m);
-					String idT = StringUtil.getMapKeyVal(mapT, "registerId");
-					;
-					String dayT = StringUtil.getMapKeyVal(mapT, "registerTime");
-					dayT = dayT.replaceAll(" ", "");
-					if (registerId.equals(idT) && dayWorkTime.equals(dayT))
-					{
-						userOrderNum = StringUtil.getMapKeyVal(mapT, "orderNum");
-						break;
-					}
+					userOrderNum = StringUtil.getMapKeyVal(mapT, "orderNum");
+					break;
 				}
-
-				Map newMap = new HashMap();
-				newMap.put("registerId", registerId);
-				newMap.put("teamName", teamName);
-				newMap.put("userOrderNum", userOrderNum);// 预约号码
-				newMap.put("doctorId", doctorId);
-				newMap.put("teamId", teamId);
-				newMap.put("fee", fee);
-				newMap.put("registerNum", registerNum);
-				newMap.put("day", DateUtils.CHN_DATE_FORMAT.format(dateT));
-				newMap.put("workTime", " 星期" + weekStr + " " + dayType);
-				list.add(newMap);
 			}
+
+			Map newMap = new HashMap();
+			newMap.put("registerId", registerId);
+			newMap.put("teamName", teamName);
+			newMap.put("userOrderNum", userOrderNum);// 预约号码
+			newMap.put("doctorId", doctorId);
+			newMap.put("teamId", teamId);
+			newMap.put("fee", fee);
+			newMap.put("registerNum", registerNum);
+			newMap.put("day",dateStr);
+			newMap.put("workTime", " 星期" + weekStr + " " + dayType);
+			list.add(newMap);
 		}
+	
 		JSONObject obj = new JSONObject();
 		obj.element("orders", list);
 		return obj;
@@ -257,7 +251,7 @@ public class DigitalHealthService
 	public JSONArray getUserQuestions(String doctorId) throws JsonException
 	{
 		List list = userQustionDao.qryQuestionTs(doctorId);
-		JSONArray jsonArray = JsonUtils.fromArray(list);
+		JSONArray jsonArray = JsonUtils.fromArrayTimestamp(list);
 		return jsonArray;
 	}
 	
@@ -355,9 +349,9 @@ public class DigitalHealthService
 	}
 
 	@ServiceType(value = "BUS20016")
-	public JSONArray getQuestionTsByIds(String userId, String doctorId) throws QryException
+	public JSONArray getQuestionTsByIds(String questionId) throws QryException
 	{
-		List list = userQustionDao.qryQuestionTsByIds(userId, doctorId);
+		List list = userQustionDao.qryQuestionTsByIds(questionId);
 		JSONArray jsonArray = JsonUtils.fromArrayTimestamp(list);
 		return jsonArray;
 	}
