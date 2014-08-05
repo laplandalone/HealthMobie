@@ -22,36 +22,33 @@ $(document).ready(function(){
 	
 	var teamId = $("#selTeamId").val();
 	$("#teamId option[value='" + teamId + "']").attr("selected", true);
-	if(teamId != "" && teamId != null && teamId != undefined)
-	{
-		$.getJSON("/mobile.htm?method=qryDoctorList",{"teamId":teamId, "hospitalId":hospitalId},function(data){
-			var options = "";
-			var doctorId = $("#selDoctorId").val();
-			if(doctorId == "")
-			{
-				options += "<option value='' selected='selected'>---请选择---</option>"; 
-			}
-			else
-			{
-				options += "<option value=''>---请选择---</option>"; 
-			}
-			if(data.length > 0)
-			{
-				for(var i = 0; i < data.length; i++)
-				{ 
-					if(doctorId == data[i].doctorId)
-					{
-						options += "<option value='"+data[i].doctorId+"' selected='selected'>"+data[i].name+"</option>"; 
-					}
-					else
-					{
-						options += "<option value='"+data[i].doctorId+"'>"+data[i].name+"</option>"; 
-					}
+	$.getJSON("/mobile.htm?method=qryDoctorList",{"teamId":teamId, "hospitalId":hospitalId},function(data){
+		var options = "";
+		var doctorId = $("#selDoctorId").val();
+		if(doctorId == "")
+		{
+			options += "<option value='' selected='selected'>---请选择---</option>"; 
+		}
+		else
+		{
+			options += "<option value=''>---请选择---</option>"; 
+		}
+		if(data.length > 0)
+		{
+			for(var i = 0; i < data.length; i++)
+			{ 
+				if(doctorId == data[i].doctorId)
+				{
+					options += "<option value='"+data[i].doctorId+"' selected='selected'>"+data[i].name+"</option>"; 
+				}
+				else
+				{
+					options += "<option value='"+data[i].doctorId+"'>"+data[i].name+"</option>"; 
 				}
 			}
-			$("#doctorId").html(options);
-		});
-	}
+		}
+		$("#doctorId").html(options);
+	});
 	var state = $("#selState").val();
 	$("#state option[value='" + state + "']").attr("selected", true);
 	var startTime = $("#selStartTime").val();
@@ -106,7 +103,7 @@ function option(orderId, optionFlag)
 		success:function(data)
 		{
 			$.dialog.alert('操作成功',function(){
-				window.location.href = "/mobile.htm?method=qryRegisterOrder";
+				window.location.reload();
 			});
 		},
 		error:function(stata)

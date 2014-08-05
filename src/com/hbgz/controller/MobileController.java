@@ -20,7 +20,6 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.json.MappingJacksonJsonView;
 
-import com.hbgz.pub.exception.QryException;
 import com.hbgz.pub.util.ObjectCensor;
 import com.hbgz.pub.util.StringUtil;
 import com.hbgz.service.DigitalHealthService;
@@ -461,7 +460,7 @@ public class MobileController
 	public ModelAndView qryRegisterOrder(HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		ModelAndView model = new ModelAndView("registerOrderList");
-		HttpSession session = request.getSession();
+		HttpSession session = request.getSession(false);
 		String hospitalId = (String) session.getAttribute("hospitalId");
 		String teamId = request.getParameter("teamId");
 		String doctorId = request.getParameter("doctorId");
