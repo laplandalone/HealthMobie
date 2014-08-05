@@ -126,22 +126,23 @@
 						$.each(data, function(i, obj){
 							var recordType = obj.recordType;
 							var direction = "left";
-							var title = "提问";
+							var title = "<img src='/images/ask.png' height='25' width='30'/>";
 							if("ans" == recordType)
 							{
-								direction = "right";
-								title = "回复";
+								direction = "left";
+								title = "<img src='/images/ans.png' height='25' width='30'/>";
 							}
 							content += "<fieldset style='width:350px; margin-top: 4px auto; margin-bottom: 10px; text-align: "+direction+";'>";
-							var msg = obj.createDate + "</br>";
+							var msg = "</br>";
 							if("ask" == recordType)
 							{
-								msg += title + "：" + obj.content;
+								msg += title +  obj.content;
 							}
 							else
 							{
-								msg += obj.content + "：" + title;
+								msg += title+ obj.content;
 							}
+							msg += "</br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+obj.createDate ;
 							content += "<legend align='"+direction+"'><font color='gray'></font></legend>"+msg+"</fieldset>";
 						});
 						content += "</table>";
