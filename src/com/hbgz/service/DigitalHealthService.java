@@ -255,26 +255,25 @@ public class DigitalHealthService
 		return jsonArray;
 	}
 	
-	public JSONArray getUserQuestionsByDoctorId(String doctorId,String hospitalId) throws JsonException, QryException
+	public JSONArray getUserQuestionsByDoctorId(String doctorId, String hospitalId, String startTime, String endTime) throws JsonException, QryException
 	{
-		List<UserQuestionT> list = userQustionDao.qryQuestionTs(doctorId);
-		
-		JSONArray jsonArray = JsonUtils.fromArrayTimestamp(list);
+		List list = userQustionDao.qryQuestionList(doctorId, startTime, endTime);
+		JSONArray jsonArray = JSONArray.fromObject(list);
 		CacheManager cacheManager = (CacheManager) BeanFactoryHelper.getBean("cacheManager");
 		String imgIp = cacheManager.getImgIp(hospitalId);
-		
-		for (int i = 0; i < jsonArray.size(); i++)
+
+		for (int i = 0; i < jsonArray.size(); i++) 
 		{
 			JSONObject jsonObject = jsonArray.getJSONObject(i);
-			String imgT=jsonObject.getString("imgUrl");
+			String imgT = jsonObject.getString("imgUrl");
 			String[] imgs = imgT.split(",");
-			if(imgs!=null && imgs.length>0)
+			if (imgs != null && imgs.length > 0) 
 			{
-				for(int n=0;n<imgs.length;n++)
+				for (int n = 0; n < imgs.length; n++) 
 				{
-					if(ObjectCensor.isStrRegular(imgs[n]))
+					if (ObjectCensor.isStrRegular(imgs[n])) 
 					{
-						jsonObject.put("imgUrl"+n, imgIp+imgs[n]);
+						jsonObject.put("imgUrl" + n, imgIp + imgs[n]);
 					}
 				}
 			}
@@ -657,5 +656,15 @@ public class DigitalHealthService
 	public List qryDoctorList(String hospitalId, String teamId) throws QryException 
 	{
 		return doctorDao.qryDoctorList(hospitalId, teamId);
+	}
+
+	public JSONArray qryQuesList(String doctorId, String questionId) throws QryException 
+	{
+		if(ObjectCensor.isStrRegular(doctorId, questionId))
+		{
+			List sList = userQustionDao.qryQuesList(doctorId, questionId);
+			return JSONArray.fromObject(sList);
+		}
+		return null;
 	}
 }
