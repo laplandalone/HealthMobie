@@ -82,7 +82,7 @@ public class DigitalHealthService
 	@ServiceType(value = "BUS2003")
 	public JSONObject getOrderById(String teamId) throws QryException
 	{
-		int orderDayLen = 5;
+		int orderDayLen = 10;
 		List orderList = digitalHealthDao.getOrderByTeamId(teamId);
 		List list = new ArrayList();
 		Date date = new Date();
@@ -95,9 +95,9 @@ public class DigitalHealthService
 				Map mapComp = new HashMap();
 				mapComp.put("registerWeek", weekStr);
 				List subList = StringUtil.getSubMapList(orderList, mapComp);
-				for (int n = 0; n < orderList.size(); n++)
+				for (int n = 0; n < subList.size(); n++)
 				{
-					Map subMap = (Map) orderList.get(n);
+					Map subMap = (Map) subList.get(n);
 					String doctorName = StringUtil.getMapKeyVal(subMap, "name");
 					String teamName = StringUtil.getMapKeyVal(subMap, "teamName");
 					String doctorId = StringUtil.getMapKeyVal(subMap, "doctorId");
@@ -113,6 +113,13 @@ public class DigitalHealthService
 					newMap.put("post", post);
 					newMap.put("week",weekStr);
 					newMap.put("day", DateUtils.CHN_DATE_FORMAT.format(dateT));
+					if(n == 0)
+					{
+						newMap.put("display","Y");
+					}else
+					{
+						newMap.put("display","N");
+					}
 					
 					if(list.contains(newMap))
 					{
