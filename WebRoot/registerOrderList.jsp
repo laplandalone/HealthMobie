@@ -4,8 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%
 	String path = request.getContextPath();
-	HttpSession session = request.getSession();
-	String hospitalId = (String) session.getAttribute("hospitalId");
+	String hospitalId = (String) request.getAttribute("hospitalId");
 	List teamList = PubData.qryTeamList(hospitalId);
 	List doctorList = PubData.qryDoctorList(hospitalId);	
 %>
