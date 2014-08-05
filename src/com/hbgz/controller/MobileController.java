@@ -461,9 +461,8 @@ public class MobileController
 	public ModelAndView qryRegisterOrder(HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		ModelAndView model = new ModelAndView("registerOrderList");
-//		HttpSession session = request.getSession();
-//		String hospitalId = (String) session.getAttribute("hospitalId");
-		String hospitalId = "101";
+		HttpSession session = request.getSession();
+		String hospitalId = (String) session.getAttribute("hospitalId");
 		String teamId = request.getParameter("teamId");
 		String doctorId = request.getParameter("doctorId");
 		String startTime = (String) request.getParameter("startTime");
