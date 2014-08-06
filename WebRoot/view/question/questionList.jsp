@@ -3,8 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%
 	String path = request.getContextPath();
-//	String doctorId = request.getParameter("doctorId");
-	String doctorId = "GH00351";
+	String doctorId = request.getParameter("doctorId");
 %>
 
 
@@ -125,15 +124,13 @@
 						var content = "<table border='0' cellspacing='10' width='100%' style='font-family: 微软雅黑; font-size: 14px;'>";
 						$.each(data, function(i, obj){
 							var recordType = obj.recordType;
-							var direction = "left";
 							var title = "<img src='/images/ask.png' height='25' width='30'/>";
 							if("ans" == recordType)
 							{
-								direction = "left";
 								title = "<img src='/images/ans.png' height='25' width='30'/>";
 							}
-							content += "<tr><td>";
-							content += "<fieldset style='width:350px; margin-top: 4px auto; margin-bottom: 10px; text-align: "+direction+";'>";
+							content += "<tr><td style='word-break:break-all;'>";
+							content += "<fieldset style='width:350px; margin-top: 4px auto; margin-bottom: 10px; text-align: left;'>";
 							var msg = "</br>";
 							if("ask" == recordType)
 							{
@@ -143,8 +140,8 @@
 							{
 								msg += title+ obj.content;
 							}
-							msg += "</br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+obj.createDate ;
-							content += "<legend align='"+direction+"'><font color='gray'></font></legend>"+msg+"</fieldset>";
+							msg += "</br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+obj.createDate ;
+							content += "<legend align='left'><font color='gray'></font></legend>"+msg+"</fieldset>";
 							content += "</td></tr>";
 						});
 						content += "</table>";
