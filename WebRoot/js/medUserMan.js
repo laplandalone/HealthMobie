@@ -1,52 +1,54 @@
 var gUserObj = null
 
-function addUser()
+function addUser() 
 {
 	window.location.href = "/mobile.htm?method=getUserById";
 }
 
-function delUserFunc()
+function delUserFunc() 
 {
-	if(gUserObj == null)
+	if (gUserObj == null) 
 	{
-		alert("请选择您要删除的用户!");
-	}
-	else
+		$.dialog.alert("请选择您要删除的用户!", function(){return true;});
+	} 
+	else 
 	{
 		$.ajax({
-			url:"/mobile.htm?method=delUser",
-			type:"post",
-			data:"userId="+gUserObj.value,
-			success:function(data){
-				alert("用户删除成功!");
+			url : "/mobile.htm?method=delUser",
+			type : "post",
+			data : "userId=" + gUserObj.value,
+			success : function(data) 
+			{
+				$.dialog.alert("用户删除成功!", function(){return true;});
 				window.location.href = "/mobile.htm?method=showUser";
 			},
-			failure:function(data){
-				alert("用户删除失败!");
+			failure : function(data) 
+			{
+				$.dialog.alert("用户删除失败!", function(){return true;});
 			}
 		})
 	}
 }
 
-function updateUser()
+function updateUser() 
 {
-	if(gUserObj == null)
+	if (gUserObj == null) 
 	{
-		alert("请选择您要修改的用户!");
-	}
-	else
+		$.dialog.alert("请选择您要修改的用户!", function(){return true;});
+	} 
+	else 
 	{
-		window.location.href = "/mobile.htm?method=getUserById&userId="+gUserObj.value;
+		window.location.href = "/mobile.htm?method=getUserById&userId=" + gUserObj.value;
 	}
 }
 
-function chkClick(obj)
+function chkClick(obj) 
 {
-	if(gUserObj == null)
+	if (gUserObj == null) 
 	{
 		gUserObj = obj;
-	}
-	else
+	} 
+	else 
 	{
 		gUserObj.checked = false;
 		gUserObj = obj;
