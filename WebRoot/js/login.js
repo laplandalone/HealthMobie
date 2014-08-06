@@ -1,22 +1,20 @@
-function commit()
+function commit() 
 {
 	var username = $("#username");
-	var userpass= $("#userpass");
+	var userpass = $("#userpass");
 	username.val($.trim(username.val()));
 	userpass.val($.trim(userpass.val()));
-	if(username.val() == "")
+	if (username.val() == "") 
 	{
-		alertDialog("用户名不能为空");
-		username.focus();
+		$.dialog.alert("用户名不能为空", function(){username.focus(); return true;});
 		return false;
-	}
-	else if(userpass.val() == "")
+	} 
+	else if (userpass.val() == "") 
 	{
-		alertDialog("密码不能为空");
-		userpass.focus();
+		$.dialog.alert("密码不能为空", function(){userpass.focus(); return true;});
 		return false;
-	}
-	else
+	} 
+	else 
 	{
 		return true;
 	}
