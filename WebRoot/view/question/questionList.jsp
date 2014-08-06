@@ -41,7 +41,7 @@
     				},
     				error:function(stata)
     				{
-    					alert(stata.statusText);
+    					$.dialog.alert(stata.statusText, function(){return true;});
     				}
 				});
 			}
@@ -61,28 +61,30 @@
 				            name: '确定',
 				            callback: function()
 				            {
-				            	var privateType=document.getElementById("private");
-				            	var publicType=document.getElementById("public");
-				            	var authType="";
+				            	var privateType = document.getElementById("private");
+				            	var publicType = document.getElementById("public");
+				            	var authType = "";
 				            	if(privateType.checked)
 				            	{
-				            		authType="private";
-				            	}else if(publicType.checked)
+				            		authType = "private";
+				            	}
+				            	else if(publicType.checked)
 				            	{
-				            		authType="public";
-				            	}else
+				            		authType = "public";
+				            	}
+				            	else
 				            	{
-				            		alert("请选择可见范围");
+				            		$.dialog.alert("请选择可见范围", function(){return true;});
 				            		return false;
 				            	}
 				            	if(privateType.checked && publicType.checked)
 				            	{
-				            		alert("可见范围选择有误，请选择可见或者不可见");
+				            		$.dialog.alert("可见范围选择有误，请选择可见或者不可见", function(){return true;});
 				            		return false;
 				            	}
-				            	if($("#content").val()=="")
+				            	if($("#content").val() == "")
 				            	{
-				            		alert("回复内容为空");
+				            		$.dialog.alert("回复内容为空", function(){return true;});
 				            		return false;
 				            	}
 				                refundAjax(doctorId,questionId,userId,telephone,$("#content").val(),authType)
@@ -150,7 +152,7 @@
 					},
 					error:function(stata)
     				{
-    					alert(stata.statusText);
+    					$.dialog.alert(stata.statusText, function(){return true;});
     				}
 				});
 			}
