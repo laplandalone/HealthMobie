@@ -20,7 +20,7 @@
 	  			var remark = $("#remark");
 	  			if(storename != null && $.trim(storename.value) == "")
 	  			{
-	  				alert("药店名称不能为空!");
+	  				$.dialog.alert("药店名称不能为空!", function(){return true;});
 	  				storename.focus();
 	  			}
 	  			else
