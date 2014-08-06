@@ -69,7 +69,7 @@ public class HospitalUserT implements java.io.Serializable {
 		this.userId = userId;
 	}
 
-	@Column(name = "USER_NAME", length = 20)
+	@Column(name = "USER_NAME", length = 60)
 	public String getUserName() {
 		return this.userName;
 	}
