@@ -83,9 +83,9 @@ a{
 
 /* layout */
 .top{
-	height:69px;
+	height:70px;
 	width:100%;
-	background-image: url('/pub/img/topbak.png');
+	background-image: url('/pub/img/top_bak.jpg');
 	background-repeat: repeat-x;
 	margin:0 auto;
 	padding:0 0;
@@ -94,7 +94,7 @@ a{
 }
 
 .logo{
-	height:57px;
+	height:65px;
 	width:100%;
 	background-image: url('/pub/img/logo.jpg');
 	margin-left:20px;

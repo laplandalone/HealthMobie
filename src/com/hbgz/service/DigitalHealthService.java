@@ -138,7 +138,7 @@ public class DigitalHealthService
 	@ServiceType(value = "BUS2004")
 	public JSONObject getOrderByDoctorId(String doctorId,String weekStr,String dateStr) throws QryException
 	{
-		
+
 		List orderList = digitalHealthDao.getOrderByWeekId(weekStr,doctorId);
 		List ordertotalList = digitalHealthDao.qryOrderTotalNum(doctorId);
 		List list = new ArrayList();
