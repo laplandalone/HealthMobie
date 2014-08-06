@@ -6,12 +6,12 @@
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-	<head>userOper.jsp
-		<title>Insert title here</title>
-		<script type="text/javascript" src="pub/js/jquery-1.9.1.min.js"></script>
+	<head>
+		<title></title>
 		<link href="<%=path%>/pub/css/sub.css" rel="stylesheet" type="text/css" />
 		<link rel="stylesheet" href="/pub/css/bankList.css" type="text/css"></link>
 	  	<link rel="stylesheet" href="/pub/css/manPage.css" type="text/css"></link>
+		<script type="text/javascript" src="pub/js/jquery-1.9.1.min.js"></script>
 	  	<script type="text/javascript" src="pub/dialog/lhgdialog.min.js?skin=idialog"></script>
 	  	<script language="javascript">
 	  		function enterClick()
@@ -21,25 +21,23 @@
 	  			var userrepass = $("#userrepass");
 	  			if(username != null && $.trim(username.value) == "")
 	  			{
-	  				alert("用户账户不能为空!");
-	  				username.focus();
+	  				$.dialog.alert("用户账户不能为空!", function(){username.focus(); return true;});
+	  				return;
 	  			}
 	  			else if($.trim(userpass.val()) == "")
 	  			{
-	  				alert("用户密码不能为空!");
-	  				userpass.focus();
+	  				$.dialog.alert("用户密码不能为空!", function(){userpass.focus(); return true;});
+					return;	  				
 	  			}
 	  			else if($.trim(userrepass.val()) == "")
 	  			{
-	  				alert("确认密码不能为空!");
-	  				userrepass.focus();
+	  				$.dialog.alert("确认密码不能为空!", function(){userrepass.focus(); return true;});
+	  				return;	
 	  			}
 	  			else if($.trim(userpass.val()) != $.trim(userrepass.val()))
 	  			{
-	  				alert("用户密码与确认密码不一致!");
-	  				userpass.val("");
-	  				userrepass.val("");
-	  				userpass.focus();
+	  				$.dialog.alert("用户密码与确认密码不一致!", function(){userpass.val(""); userrepass.val(""); userpass.focus(); return true;});
+	  				return;	
 	  			}
 	  			else
 	  			{
