@@ -108,7 +108,7 @@ function option(orderId, optionFlag)
 		},
 		error:function(stata)
 		{
-			alert(stata.statusText);
+			$.dialog.alert(stata.statusText, function(){return true;});
 		}
 	});
 }
