@@ -132,6 +132,7 @@
 								direction = "left";
 								title = "<img src='/images/ans.png' height='25' width='30'/>";
 							}
+							content += "<tr><td>";
 							content += "<fieldset style='width:350px; margin-top: 4px auto; margin-bottom: 10px; text-align: "+direction+";'>";
 							var msg = "</br>";
 							if("ask" == recordType)
@@ -144,6 +145,7 @@
 							}
 							msg += "</br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+obj.createDate ;
 							content += "<legend align='"+direction+"'><font color='gray'></font></legend>"+msg+"</fieldset>";
+							content += "</td></tr>";
 						});
 						content += "</table>";
 						lockScreen();
