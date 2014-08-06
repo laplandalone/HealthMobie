@@ -1,11 +1,10 @@
-
 function submitClick()
 {
 	var formit = $("#formit");
 	var checkname = getObjValueByName("bankId");
-	if(checkname=="")
+	if(checkname == "")
 	{
-		alert("您还没有选择您要支付的银行！");
+		$.dialog.alert("您还没有选择您要支付的银行！", function(){return true;});
 	}
 	else
 	{
@@ -13,44 +12,44 @@ function submitClick()
 	}
 }
 
-//function submitFunc()
-//{
-//	var checkname = getObjValueByName("bankId");
-//	if(checkname=="")
-//	{
-//		alert("您还没有选择您要支付的银行！");
-//		return false;
-//	}
-//	else
-//	{
-//		var submitBtn = document.getElementById("submitBtn");
-//		submitBtn.style.backgroundImage="url(/pub/img/bd.gif)";
-//		submitBtn.disabled = true;
-//		art.dialog({
-//			content:"订单提交成功",
-//			icon: 'succeed',
-//			title:"消息",
-//			lock:true,
-//			button:[
-//				{
-//					name:"支付完成",
-//					focus: true,
-//					callback:function(){
-//						window.close();
-//					}
-//				},
-//				{
-//					name:"未完成支付",
-//					callback:function(){
-//						window.history.go(-1);
-//					}
-//				}
-//			]
-//		});
-//		window.open('about:blank',"payBank");
-//		return true;
-//	}
-//}
+// function submitFunc()
+// {
+// var checkname = getObjValueByName("bankId");
+// if(checkname=="")
+// {
+// alert("您还没有选择您要支付的银行！");
+// return false;
+// }
+// else
+// {
+// var submitBtn = document.getElementById("submitBtn");
+// submitBtn.style.backgroundImage="url(/pub/img/bd.gif)";
+// submitBtn.disabled = true;
+// art.dialog({
+// content:"订单提交成功",
+// icon: 'succeed',
+// title:"消息",
+// lock:true,
+// button:[
+// {
+// name:"支付完成",
+// focus: true,
+// callback:function(){
+// window.close();
+// }
+// },
+// {
+// name:"未完成支付",
+// callback:function(){
+// window.history.go(-1);
+// }
+// }
+// ]
+// });
+// window.open('about:blank',"payBank");
+// return true;
+// }
+// }
 
 function chaCard(obj)
 {
@@ -71,8 +70,7 @@ function chaCard(obj)
 /**
  * @author : tiankang
  * @param name
- * @return
- * 获取Radio或checkbox的值
+ * @return 获取Radio或checkbox的值
  */
 function getObjValueByName(name)
 {
@@ -99,7 +97,7 @@ function getObjValueByName(name)
 }
 
 /**
- * @author : tiankang 
+ * @author : tiankang
  * @param obj
  * @return
  */
