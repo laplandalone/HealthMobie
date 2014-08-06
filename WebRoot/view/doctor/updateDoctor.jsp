@@ -102,7 +102,7 @@ function refundAjax()
 </script>
 </head>
 <body>
-	
+		<div id="template" style="height:500px;overflow:auto">
 		<table width="50%" border="0" cellspacing="0" cellpadding="0" align='center'
 			class="maintable1">
 			<br/>
@@ -198,6 +198,6 @@ function refundAjax()
 			
 		</table>
 
-
+</div>
 </body>
 </html>
