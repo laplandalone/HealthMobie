@@ -19,8 +19,8 @@ function delUserFunc()
 			data : "userId=" + gUserObj.value,
 			success : function(data) 
 			{
-				$.dialog.alert("用户删除成功!", function(){return true;});
-				window.location.href = "/mobile.htm?method=showUser";
+				$.dialog.alert("用户删除成功!", function(){window.location.href = "/mobile.htm?method=showUser"; return true;});
+				
 			},
 			failure : function(data) 
 			{
