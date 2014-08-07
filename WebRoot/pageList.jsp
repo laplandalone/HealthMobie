@@ -12,10 +12,10 @@
 		<link href="<%=path%>/pub/css/sub.css" rel="stylesheet" type="text/css" />
 		<link rel="stylesheet" href="/pub/css/bankList.css" type="text/css"></link>
 		<link rel="stylesheet" href="/pub/css/manPage.css" type="text/css"></link>
-		<script type="text/javascript" src="pub/js/jquery-1.9.1.min.js"></script>
-		<script type="text/javascript" src="pub/dialog/lhgdialog.min.js?skin=idialog"></script>
-		<script type="text/javascript" src="pub/js/calendar.js"></script>
-		<script type="text/javascript" src="pub/js/date.js"></script>
+		<script type="text/javascript" src="<%=path%>pub/js/jquery-1.9.1.min.js"></script>
+		<script type="text/javascript" src="<%=path%>/pub/dialog/lhgdialog.min.js?skin=idialog"></script>
+		<script type="text/javascript" src="<%=path%>/pub/js/calendar.js"></script>
+		<script type="text/javascript" src="<%=path%>/pub/js/date.js"></script>
 		<script type="text/javascript">
 			function refundAjax(fileId,state,comments)
 			{
