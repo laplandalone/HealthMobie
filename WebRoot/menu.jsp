@@ -83,12 +83,6 @@
 							<a href="/doctor.htm?method=queryPre&doctorId=<%=doctorId%>" target="main">医生信息管理</a>
 						</li>
 					</c:if>
-					<!-- 
-            		<li><img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; <a href="/mobile.htm?method=queryPre" target="main">电子处方管理</a></li>
-           	 		<li><img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; <a href="/mobile.htm?method=showUser" target="main">系统用户管理</a></li>
-           			<li><img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; <a href="/mobile.htm?method=showStore" target="main">药店资料管理</a></li>
-           			<li><img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; <a href="/mobile.htm?method=showUser" target="main">药店用户管理</a></li>
-          	 		-->
 				</ul>
 			</div>
 		</div>
