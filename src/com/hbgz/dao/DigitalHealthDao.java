@@ -183,6 +183,27 @@ public class DigitalHealthDao
 		lstParam.add(doctorId);
 		return itzcQryCenter.executeSqlByMapListWithTrans(sql.toString(), lstParam);
 	}
+	
+	/**
+	 * 查询专家可预约号
+	 * @param doctorId
+	 * @return
+	 * @throws QryException
+	 */
+	public List qryUserOrderByPhone(String userId) throws QryException
+	{
+		if (!ObjectCensor.isStrRegular(userId))
+		{
+			return null;
+		}
+		StringBuffer sql = new StringBuffer();
+		sql.append(" select  user_id,doctor_id,register_id,replace(register_time,' ','')register_time from register_order_t ");
+		sql.append(" where (order_state = '000' or order_state = '00A')and state = '00A'");
+		sql.append(" and user_id=?");
+		ArrayList lstParam = new ArrayList();
+		lstParam.add(userId);
+		return itzcQryCenter.executeSqlByMapListWithTrans(sql.toString(), lstParam);
+	}
    /**
     * 查询普通预约号
     * @param teamId

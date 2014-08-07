@@ -138,9 +138,10 @@ public class DigitalHealthService
 	@ServiceType(value = "BUS2004")
 	public JSONObject getOrderByDoctorId(String doctorId,String weekStr,String dateStr) throws QryException
 	{
-
+		String userId="10806";
 		List orderList = digitalHealthDao.getOrderByWeekId(weekStr,doctorId);
 		List ordertotalList = digitalHealthDao.qryOrderTotalNum(doctorId);
+		List userOrderList = digitalHealthDao.qryUserOrderByPhone(userId);
 		List list = new ArrayList();
 		
 		Map mapComp = new HashMap();
@@ -175,6 +176,21 @@ public class DigitalHealthService
 				}
 			}
 
+			String userFlag="N";
+			for(int i=0;i<userOrderList.size();i++)
+			{
+				Map userOrder= (Map) userOrderList.get(i);
+				String registerIdT=StringUtil.getMapKeyVal(userOrder, "registerId");
+				String registerTimeT=StringUtil.getMapKeyVal(userOrder, "registerTime");
+				String userIdT=StringUtil.getMapKeyVal(userOrder, "userId");
+				String doctorIdT=StringUtil.getMapKeyVal(userOrder, "doctorId");
+				if(registerIdT.equals(registerId)&& registerTimeT.equals(dayWorkTime)&&userIdT.equals(userId)&&doctorIdT.equals(doctorId))
+				{
+					userFlag="Y";
+					break;
+				}
+			}
+			
 			Map newMap = new HashMap();
 			newMap.put("registerId", registerId);
 			newMap.put("teamName", teamName);
@@ -185,6 +201,7 @@ public class DigitalHealthService
 			newMap.put("registerNum", registerNum);
 			newMap.put("day",dateStr);
 			newMap.put("workTime", " ÐÇÆÚ" + weekStr + " " + dayType);
+			newMap.put("userFlag", userFlag);
 			list.add(newMap);
 		}
 	
