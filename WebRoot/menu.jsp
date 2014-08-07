@@ -50,11 +50,7 @@
 				line-height: 2.8;
 			}
 		</style>
-		<script type="text/javascript">
-			function change() {
-				alert("1");
-			}
-		</script>
+		
 	</head>
 
 	<body>
@@ -70,7 +66,7 @@
 					<c:if test="${sessionScope.userPrivs=='2'}">
 						<li>
 							<img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; 
-							<a href="/view/question/questionList.jsp?&doctorId=<%=doctorId%>" target="main" onclick="change()">用户提问管理</a>
+							<a href="/view/question/questionList.jsp?&doctorId=<%=doctorId%>" target="main" >用户提问管理</a>
 						</li>
 						<li>
 							<img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; 
