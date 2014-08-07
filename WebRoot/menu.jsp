@@ -83,6 +83,20 @@
 							<a href="/doctor.htm?method=queryPre&doctorId=<%=doctorId%>" target="main">医生信息管理</a>
 						</li>
 					</c:if>
+						<c:if test="${sessionScope.userPrivs=='4'}">
+						<li>
+							<img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; 
+							<a href="/view/question/questionList.jsp?&doctorId=<%=doctorId%>" target="main" >用户提问管理</a>
+						</li>
+						<li>
+							<img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; 
+							<a href="/registerOrderList.jsp" target="main">预约挂号管理</a>
+						</li>
+						<li>
+							<img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; 
+							<a href="/doctor.htm?method=queryPre&doctorId=<%=doctorId%>" target="main">医生信息管理</a>
+						</li>
+					</c:if>
 				</ul>
 			</div>
 		</div>
