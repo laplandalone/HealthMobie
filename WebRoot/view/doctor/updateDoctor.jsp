@@ -11,7 +11,7 @@
 		<title></title>
 		<link href="<%=path%>/pub/css/sub.css" rel="stylesheet" type="text/css" />
 		<script type="text/javascript" src="<%=path%>/pub/js/jquery-1.9.1.min.js"></script>
-		<script type="text/javascript" src="<%=path%>pub/dialog/lhgdialog.min.js?skin=idialog"></script>
+		<script type="text/javascript" src="<%=path%>/pub/dialog/lhgdialog.min.js?skin=idialog"></script>
 		<script type="text/javascript" src="<%=path%>/pub/js/calendar.js"></script>
 		<script type="text/javascript" src="<%=path%>/pub/js/date.js"></script>
 		<script type="text/javascript" src="<%=path%>/js/comm.js"></script>
