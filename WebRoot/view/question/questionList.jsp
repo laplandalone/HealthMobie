@@ -27,7 +27,70 @@
 					$("#endTime").val(endTime);
 				}
 			});
-			function refundAjax(doctorId,questionId,userId,telephone,content,authType)
+			
+			var demoDG1 = null;
+			function verifyFunc(doctorId, questionId, userId, telephone, id)
+			{
+				var val = $("#"+id);
+				lockScreen();
+				demoDG1 = $.dialog({
+					title:"操作", 
+					content:"url:/view/question/replyQuestion.jsp?telephone="+telephone+"&question="+val.html()+"&doctorId="+doctorId+"&questionId="+questionId+"&userId="+userId, 
+					min:false, 
+					max:false, 
+					lock:true, 
+					close:function(){unlockScreen();},
+					button: [
+						{
+							name: '确定',
+							callback: function()
+							{
+								reply(doctorId, questionId, userId, telephone);
+							},
+							focus: true
+						},
+						{
+							name: '取消',
+				            callback: function()
+				            {
+				            	unlockScreen();
+				            }
+						}
+					]});
+			}
+			
+			function reply(doctorId, questionId, userId, telephone)
+			{
+				var replyContent = demoDG1.content.document.getElementById("replyContent").value;
+				if($("#replyContent").val() == "")
+				{
+					$.dialog.alert("回复内容为空", function(){return true;});
+				    return false;
+				}
+				else
+				{
+					var authType = "";
+					var array = demoDG1.content.document.getElementsByName("authType");
+					for(var i = 0, len = array.length; i < len; i++)
+					{
+						if(array[i].checked) 
+						{
+							authType = array[i].value;
+						}
+					}
+					if(authType == "")
+					{
+						$.dialog.alert("请选择可见范围", function(){return true;});
+				        return false;
+					}
+					else
+					{
+						refundAjax(doctorId, questionId, userId, telephone, replyContent, authType);
+					}
+				}
+			}
+			
+			function refundAjax(doctorId, questionId, userId, telephone, content, authType)
 			{
 				$.ajax({
 					url:"/ques.htm?method=updateQues",
@@ -35,71 +98,14 @@
 					data:"doctorId="+doctorId+"&questionId="+questionId+"&userId="+userId+"&telephone="+telephone+"&authType="+authType+"&content="+content,
 					success:function(data)
 					{
-						$.dialog.alert('操作成功',function(){
-							//window.location.href="/ques.htm?method=queryPre";
-						});
+						$.dialog.alert("操作成功",function(){return true});
     				},
     				error:function(stata)
     				{
     					$.dialog.alert(stata.statusText, function(){return true;});
     				}
 				});
-			}
-			
-			function verifyFunc(doctorId, questionId, userId, telephone, id)
-			{
-				var val= $("#"+id);
-				lockScreen();
-				$.dialog({
-				    id: 'testID',
-				    content: "<table border='0' cellspacing='10'><tr><td>"+telephone+":</td><td>"+val.html()+"</td></tr><tr><td valign='top'>回复:</td><td><textarea cols='40' rows='4' id='content'></textarea></td></tr><tr ><td>可见范围:</td><td>可见<input type='checkbox' id='public' value='public' checked='checked' /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;不可见<input type='checkbox' onclick=change() id='private' value='private' /></td></tr></table>",			   
-				    title:"操作",
-				    lock:true,
-				    close:function(){unlockScreen();},
-				    button: [
-				        {
-				            name: '确定',
-				            callback: function()
-				            {
-				            	var privateType = document.getElementById("private");
-				            	var publicType = document.getElementById("public");
-				            	var authType = "";
-				            	if(privateType.checked)
-				            	{
-				            		authType = "private";
-				            	}
-				            	else if(publicType.checked)
-				            	{
-				            		authType = "public";
-				            	}
-				            	else
-				            	{
-				            		$.dialog.alert("请选择可见范围", function(){return true;});
-				            		return false;
-				            	}
-				            	if(privateType.checked && publicType.checked)
-				            	{
-				            		$.dialog.alert("可见范围选择有误，请选择可见或者不可见", function(){return true;});
-				            		return false;
-				            	}
-				            	if($("#content").val() == "")
-				            	{
-				            		$.dialog.alert("回复内容为空", function(){return true;});
-				            		return false;
-				            	}
-				                refundAjax(doctorId,questionId,userId,telephone,$("#content").val(),authType)
-				            },
-				            focus: true
-				        },
-				        {
-				            name: '取消',
-				            callback: function()
-				            {
-				            	return;
-				            }
-				        }
-				    ]
-				});
+				unlockScreen();
 			}
 			
 			function queryMed()

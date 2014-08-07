@@ -8,21 +8,25 @@
 	<head>
 		<title>系统管理首页</title>
 		<link rel="stylesheet" href="/pub/css/bankList.css" type="text/css"></link>
+		<style type="text/css">
+        	#lockDiv{ display: none;  position: absolute;  top: 0%;  left: 0%;  width: 100%;  height: 100%;  background-color: #dce2f1;  z-index:1001;  -moz-opacity: 0.7;  opacity:.70;  filter: alpha(opacity=70);}
+		</style>
 	</head>
-	<div class="shadowlock" id="lockDiv" style="display: none;">
-		<frameset cols="*" rows="64,*" frameborder="0" framespacing="0">
-			<frame src="header.jsp" name="header" scrolling="no" /> 
-			<frameset cols="150, *" rows="*" id="frame_main" frameborder="0" framespacing="0"> 
-				<frame src="menu.jsp?&doctorId=${doctorId}" name="menu" /> 
-				<frame src="main.jsp" name="main" /> 
-			</frameset> 
-		</frameset>
-	</div>
-	<noframes>
-		<body>
-			<c:if test="${sessionScope.userId=='' && sessionScope.doctorId==''}">
-				<c:redirect url="/login.jsp" />
-			</c:if>
-		</body>
-	</noframes>
+	<body>
+		<div id="lockDiv"></div>
+		<div id="container" style="position:fixed; height:100%; width:100%; background-color: white;">
+			<div id="header" style="margin:0 auto;">
+				<iframe src="header.jsp" name="header" frameborder="0" scrolling="no" width="100%" height="64px"></iframe>
+			</div>
+			<div id="frame_main" style="margin-top: 0px;">
+				<div id="main_left" style="float:left;">
+					<iframe src="menu.jsp?&doctorId=${doctorId}" name="menu" frameborder="0" id="menuIframe" width="150px" height="900px"></iframe>
+				</div>
+				<div id="main_right" style="float:left;">
+					<iframe src="main.jsp" name="main" frameborder="0" id="mainIframe" width="1100px" height="900px"></iframe>
+				</div>
+			</div>
+			<div style="clear:both;"></div>
+		</div>
+	</body>
 </html>
