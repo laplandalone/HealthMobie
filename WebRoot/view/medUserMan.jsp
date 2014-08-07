@@ -9,11 +9,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<title>无标题文档</title>
-		<script type="text/javascript" src="pub/js/jquery-1.9.1.min.js"></script>
 		<link href="<%=path%>/pub/css/sub.css" rel="stylesheet" type="text/css" />
 		<link rel="stylesheet" href="/pub/css/bankList.css" type="text/css"></link>
 	  	<link rel="stylesheet" href="/pub/css/manPage.css" type="text/css"></link>
 	  	<link rel="stylesheet" href="../pub/css/medUserMan.css" type="text/css" />
+		<script type="text/javascript" src="pub/js/jquery-1.9.1.min.js"></script>
+		<script type="text/javascript" src="<%=path%>/pub/dialog/lhgdialog.min.js?skin=idialog"></script>
 		<script type="text/javascript" src="../js/medUserMan.js"></script>
 	</head>
 	<body>

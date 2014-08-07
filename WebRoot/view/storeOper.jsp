@@ -8,11 +8,11 @@
 <html>
 	<head>
 		<title>Insert title here</title>
-		<script type="text/javascript" src="pub/js/jquery-1.9.1.min.js"></script>
 		<link href="<%=path%>/pub/css/sub.css" rel="stylesheet" type="text/css" />
 		<link rel="stylesheet" href="/pub/css/bankList.css" type="text/css"></link>
 	  	<link rel="stylesheet" href="/pub/css/manPage.css" type="text/css"></link>
-	  	<script type="text/javascript" src="pub/dialog/lhgdialog.min.js?skin=idialog"></script>
+		<script type="text/javascript" src="<%=path%>/pub/js/jquery-1.9.1.min.js"></script>
+	  	<script type="text/javascript" src="<%=path%>/pub/dialog/lhgdialog.min.js?skin=idialog"></script>
 	  	<script language="javascript">
 	  		function enterClick()
 	  		{
