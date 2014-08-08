@@ -376,4 +376,35 @@ public class DigitalHealthDao
 		lstParam.add(password);
 		return itzcQryCenter.executeSqlByMapList(sql, lstParam);
 	}
+
+	public List qryNewsList(String hospitalId, String startTime, String endTime, String newsType, String typeId, String state) throws Exception 
+	{
+		StringBuffer query = new StringBuffer();
+		query.append("select a.news_id, a.news_title, decode(a.news_type, 'NEWS', '新闻', 'BAIKE', '百科') news_type, decode(a.state, '00A', '正常', '00X', '作废') state, to_char(a.create_date, 'yyyy-MM-dd hh24:mi:ss') create_date, b.hospital_name, ");
+		query.append("(select config_val from hospital_config_t where state = '00A' and hospital_id = ? and config_type = 'HOSPITALNEWS' and config_name = a.news_type and config_id = a.type_id) type_id ");
+		query.append("from hospital_news_t a, hospital_t b where a.hospital_id = b.hospital_id and b.state = '00A' and a.hospital_id = ? ");
+		query.append("and a.create_date between to_date(?, 'yyyy-MM-dd hh24:mi:ss') and to_date(?, 'yyyy-MM-dd hh24:mi:ss') ");
+		ArrayList lstParam = new ArrayList();
+		lstParam.add(hospitalId);
+		lstParam.add(hospitalId);
+		lstParam.add(startTime);
+		lstParam.add(endTime + " 23:59:59");
+		if(ObjectCensor.isStrRegular(newsType))
+		{
+			query.append("and a.news_type = ? ");
+			lstParam.add(newsType);
+		}
+		if(ObjectCensor.isStrRegular(typeId))
+		{
+			query.append("and a.type_id = ? ");
+			lstParam.add(typeId);
+		}
+		if(ObjectCensor.isStrRegular(state))
+		{
+			query.append("and a.state = ? ");
+			lstParam.add(state);
+		}
+		query.append("order by a.create_date desc ");
+		return itzcQryCenter.executeSqlByMapListWithTrans(query.toString(), lstParam);
+	}
 }

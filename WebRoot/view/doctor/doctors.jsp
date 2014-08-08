@@ -58,28 +58,27 @@
 						name: '确定',
 					    callback: function()
 					    {
-					    	alert($("#private").prop("checked"));
-//					    	var privateType = document.getElementById("private");
-//							var publicType = document.getElementById("public");
-//							var authType = "";
-//							if(privateType.checked)
-//							{
-//								authType = "private";
-//							}
-//							else if(publicType.checked)
-//							{
-//								authType = "public";
-//							}
-//							else
-//							{
-//								$.dialog.alert("请选择可见范围", function(){return true;});
-//								return false;
-//							}
-//							if(privateType.checked && publicType.checked)
-//							{
-//								$.dialog.alert("可见范围选择有误，请选择可见或者不可见", function(){return true;});
-//								return false;
-//							}
+					    	var privateType = document.getElementById("private");
+							var publicType = document.getElementById("public");
+							var authType = "";
+							if(privateType.checked)
+							{
+								authType = "private";
+							}
+							else if(publicType.checked)
+							{
+								authType = "public";
+							}
+							else
+							{
+								$.dialog.alert("请选择可见范围", function(){return true;});
+								return false;
+							}
+							if(privateType.checked && publicType.checked)
+							{
+								$.dialog.alert("可见范围选择有误，请选择可见或者不可见", function(){return true;});
+								return false;
+							}
 					        if($("#content").val()=="")
 					        {
 					        	$.dialog.alert("回复内容为空", function(){return true;});

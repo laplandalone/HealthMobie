@@ -82,6 +82,10 @@
 							<img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; 
 							<a href="/doctor.htm?method=queryPre&doctorId=<%=doctorId%>" target="main">医生信息管理</a>
 						</li>
+						<li>
+							<img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; 
+							<a href="/view/news/newsList.jsp?&doctorId=<%=doctorId%>" target="main">信息发布管理</a>
+						</li>
 					</c:if>
 						<c:if test="${sessionScope.userPrivs=='4'}">
 						<li>

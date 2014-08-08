@@ -472,10 +472,14 @@ public class DigitalHealthService
 	@ServiceType(value = "BUS20020")
 	public JSONArray getNewsType(String hospitalId, String type) throws QryException
 	{
+		JSONArray array = new JSONArray();
 		CacheManager cacheManager = (CacheManager) BeanFactoryHelper.getBean("cacheManager");
 		List list = cacheManager.getNewsType(hospitalId, type, "HOSPITALNEWS");
-		JSONArray jsonArray = JsonUtils.fromArray(list);
-		return jsonArray;
+		if(ObjectCensor.checkListIsNull(list))
+		{
+			array = JsonUtils.fromArray(list);
+		}
+		return array;
 	}
 
 	@ServiceType(value = "BUS20021")
@@ -712,11 +716,26 @@ public class DigitalHealthService
 
 	public JSONArray qryQuesList(String doctorId, String questionId) throws QryException 
 	{
+		JSONArray array = new JSONArray();
 		if(ObjectCensor.isStrRegular(doctorId, questionId))
 		{
 			List sList = userQustionDao.qryQuesList(doctorId, questionId);
-			return JSONArray.fromObject(sList);
+			array = JSONArray.fromObject(sList);
 		}
-		return null;
+		return array;
+	}
+
+	public JSONArray qryNewsList(String hospitalId, String startTime, String endTime, String newsType, String typeId, String state) throws Exception 
+	{
+		JSONArray array = new JSONArray();
+		if(ObjectCensor.isStrRegular(hospitalId, startTime, endTime))
+		{
+			List sList = digitalHealthDao.qryNewsList(hospitalId, startTime, endTime, newsType, typeId, state);
+			if(ObjectCensor.checkListIsNull(sList))
+			{
+				array = JsonUtils.fromArray(sList);
+			}
+		}
+		return array;
 	}
 }
