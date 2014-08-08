@@ -440,7 +440,7 @@ public class DigitalHealthService
 			}
 			hospitalNewsT.setNewsContent(null);
 		}
-		JSONArray jsonArray = JsonUtils.fromArray(list);
+		JSONArray jsonArray = JsonUtils.fromArrayTimestamp(list);
 		return jsonArray;
 	}
 
@@ -688,7 +688,7 @@ public class DigitalHealthService
 			partFile.transferTo(localFile);
 			InputStream is = new FileInputStream(localFile);
 			HospitalNewsT hospitalNewsT = new HospitalNewsT();
-			hospitalNewsT.setCreateDate(new Date());
+			hospitalNewsT.setCreateDate(SysDate.getSysDate());
 			hospitalNewsT.setHospitalId("101");
 			hospitalNewsT.setNewsId("11111");
 			hospitalNewsT.setNewsTitle(newsTitle);

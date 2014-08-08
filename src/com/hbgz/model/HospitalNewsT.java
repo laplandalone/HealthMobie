@@ -1,5 +1,6 @@
 package com.hbgz.model;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 import javax.persistence.Basic;
@@ -29,16 +30,35 @@ public class HospitalNewsT implements java.io.Serializable
 	private byte[] newsContent;
 	private String newsImages;
 	private String state;
-	private Date createDate;
+	private Timestamp createDate;
 	private String newsType;
 	private String content;
 	private String typeId;
-
+	private Timestamp effDate;
+	private Timestamp expDate;
 	// Constructors
 
 	/** default constructor */
 	public HospitalNewsT()
 	{
+	}
+
+	@Column(name = "EFF_DATE")
+	public Timestamp getEffDate() {
+		return this.effDate;
+	}
+
+	public void setEffDate(Timestamp effDate) {
+		this.effDate = effDate;
+	}
+
+	@Column(name = "EXP_DATE")
+	public Timestamp getExpDate() {
+		return this.expDate;
+	}
+
+	public void setExpDate(Timestamp expDate) {
+		this.expDate = expDate;
 	}
 
 	/** minimal constructor */
@@ -52,7 +72,7 @@ public class HospitalNewsT implements java.io.Serializable
 
 	/** full constructor */
 	public HospitalNewsT(String newsId, String hospitalId, String newsTitle, byte[] newsContent,
-			String newsImages, String state, Date createDate, String newsType, String typeId)
+			String newsImages, String state, Timestamp createDate, String newsType, String typeId,Timestamp effDate,Timestamp expDate)
 	{
 		this.newsId = newsId;
 		this.hospitalId = hospitalId;
@@ -63,6 +83,8 @@ public class HospitalNewsT implements java.io.Serializable
 		this.createDate = createDate;
 		this.newsType = newsType;
 		this.typeId = typeId;
+		this.effDate=effDate;
+		this.expDate=expDate;
 	}
 
 	// Property accessors
@@ -146,14 +168,13 @@ public class HospitalNewsT implements java.io.Serializable
 		this.state = state;
 	}
 
-	@Temporal(TemporalType.DATE)
 	@Column(name = "CREATE_DATE", length = 7)
-	public Date getCreateDate()
+	public Timestamp getCreateDate()
 	{
 		return this.createDate;
 	}
 
-	public void setCreateDate(Date createDate)
+	public void setCreateDate(Timestamp createDate)
 	{
 		this.createDate = createDate;
 	}

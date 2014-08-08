@@ -31,7 +31,7 @@
 			<input type="hidden" id="selDoctorId" value="${doctorId }"/>
 			<input type="hidden" id="selState" value="${state }"/>
 			<tr>
-				<td align="right" width="10%">预约时间：</td>
+				<td align="right" width="12%">预约时间：</td>
 				<td align="center" width="8%">
 					<table class="inputtable" cellspacing="0" cellpadding="0">
 						<tr>
@@ -61,7 +61,7 @@
 						</tr>
 					</table>
 				</td>
-				<td width="10%" align="right">科室名称：</td>
+				<td width="14%" align="right">科室名称：</td>
 				<td width="8%">
 					<c:set var="teamList" value="<%=teamList %>"></c:set>
 					<select id="teamId" name="teamId" class="subselect">
@@ -71,7 +71,7 @@
 						</c:forEach>
 					</select>
 				</td>
-				<td width="10%" align="right">医生名称：</td>
+				<td width="12%" align="right">医生名称：</td>
 				<td width="8%">
 					<c:set var="doctorList" value="<%=doctorList %>"></c:set>
 					<select id="doctorId" name="doctorId" class="subselect">
@@ -81,7 +81,7 @@
 						</c:forEach>
 					</select>
 				</td>
-				<td width="10%" align="right">订单状态：</td>
+				<td width="12%" align="right">订单状态：</td>
 				<td width="8%">
 					<select id="state" name="state" class="subselect">
 						<option value="">---请选择---</option>
@@ -90,7 +90,7 @@
 						<option value="00X">已作废</option>
 					</select>
 				</td>
-				<td width="15%" align="right">
+				<td width="12%" align="right">
 					<input type="button" onclick="qryRegisterOrder()" style="background-image:url('/pub/images/btn1_r1_c2.png');width:80px;height:28px;border:none;cursor:pointer" value="查询" />
 				</td>
 			</tr>

@@ -45,8 +45,7 @@ public class HibernateObjectDao extends BaseDao
 			return null;
 		}
 		String hql = "from RegisterOrderT as model where model.orderState='000' and model.state='00A' and model.userId=?";
-		return this.find(hql, new String[]
-		{ userId });
+		return this.find(hql, new String[]{ userId });
 	}
 
 	public List<TeamT> qryteamTs(String hospitalId)
@@ -56,8 +55,7 @@ public class HibernateObjectDao extends BaseDao
 			return null;
 		}
 		String hql = "from TeamT as model where  model.state='00A' and model.hospitalId=?";
-		return this.find(hql, new String[]
-		{ hospitalId });
+		return this.find(hql, new String[]{ hospitalId });
 	}
 
 	public List<HospitalNewsT> qryHospitalNews(String hospitalId,String type,String typeId)
