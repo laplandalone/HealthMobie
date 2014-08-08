@@ -15,6 +15,10 @@
 		<script type="text/javascript">
 			$(document).ready(function(){
 				var width = document.body.scrollWidth;// 获取浏览器内容宽度
+				if(width == 0)
+				{
+					width = document.documentElement.scrollWidth;
+				}
 				// 获取浏览器内容高度
 				var height = document.body.scrollHeight;
 				if(height == 0)
@@ -28,6 +32,28 @@
 				var main = document.getElementById("mainIframe");
 				main.style.height = (height - 64) + "px";// 设置iframe的高度
 				main.style.width = (width - 150) + "px";
+			
+				//调用函数
+				var menuStyle = function() {
+					var height = $(window).height();
+					var menuIframe = $("#menuIframe");
+					menuIframe.height(height - 64);
+				}
+				
+				var mainStyle = function()
+				{
+					var width = $(window).width();
+					var height = $(window).height();
+					var mainIframe = $("#mainIframe");
+					mainIframe.height(height - 64);
+					mainIframe.width(width - 150);
+				}
+				//注册加载事件 
+				$("#menuIframe").load(menuStyle); 
+				$("#mainIframe").load(menuStyle); 
+				//注册窗体改变大小事件 
+				$(window).resize(menuStyle);
+				$(window).resize(mainStyle);
 			});
 		</script>
 	</head>
@@ -35,7 +61,7 @@
 		<div id="lockDiv"></div>
 		<div id="container" style="position:fixed; height:100%; width:100%; background-color: white;">
 			<div id="header" style="margin:0 auto;">
-				<iframe src="header.jsp" name="header" frameborder="0" scrolling="no" width="100%" height="64px"></iframe>
+				<iframe src="header.jsp" name="header" id="headerIframe" frameborder="0" scrolling="no" width="100%" height="64px"></iframe>
 			</div>
 			<div id="frame_main" style="margin-top: 0px; width: 100%; ">
 				<div id="main_left" style="float:left; width: 150px">
