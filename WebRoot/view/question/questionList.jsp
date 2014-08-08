@@ -56,7 +56,8 @@
 				            	unlockScreen();
 				            }
 						}
-					]});
+					]
+				});
 			}
 			
 			function reply(doctorId, questionId, userId, telephone)
