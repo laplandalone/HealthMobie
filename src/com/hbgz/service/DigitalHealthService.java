@@ -136,14 +136,26 @@ public class DigitalHealthService
 	}
 
 	@ServiceType(value = "BUS2004")
-	public JSONObject getOrderByDoctorId(String doctorId,String weekStr,String dateStr) throws QryException
+	public JSONObject getOrderByDoctorId(String userId,String orderTeamId,String doctorId,String weekStr,String dateStr) throws QryException
 	{
-		String userId="10806";
+//		String userId="10806";
+//		String orderTeamId="10";
 		List orderList = digitalHealthDao.getOrderByWeekId(weekStr,doctorId);
 		List ordertotalList = digitalHealthDao.qryOrderTotalNum(doctorId);
 		List userOrderList = digitalHealthDao.qryUserOrderByPhone(userId);
 		List list = new ArrayList();
 		
+		/*用户预约科室总数统计*/
+		Map teamComp = new HashMap();
+		teamComp.put("teamId", orderTeamId);
+		List teamList = StringUtil.getSubMapList(userOrderList, teamComp);
+		String orderTeamCount="0";
+		if(ObjectCensor.checkListIsNull(teamList))
+		{
+			orderTeamCount=teamList.size()+"";
+		}
+		
+		/*医生可预约时间*/
 		Map mapComp = new HashMap();
 		mapComp.put("registerWeek", weekStr);
 		List subList = StringUtil.getSubMapList(orderList, mapComp);
@@ -176,6 +188,7 @@ public class DigitalHealthService
 				}
 			}
 
+			/*用户是否已预约该时间*/
 			String userFlag="N";
 			for(int i=0;i<userOrderList.size();i++)
 			{
@@ -184,10 +197,23 @@ public class DigitalHealthService
 				String registerTimeT=StringUtil.getMapKeyVal(userOrder, "registerTime");
 				String userIdT=StringUtil.getMapKeyVal(userOrder, "userId");
 				String doctorIdT=StringUtil.getMapKeyVal(userOrder, "doctorId");
-				if(registerIdT.equals(registerId)&& registerTimeT.equals(dayWorkTime)&&userIdT.equals(userId)&&doctorIdT.equals(doctorId))
+				if(registerTimeT.equals(dayWorkTime)&&userIdT.equals(userId)&&doctorIdT.equals(doctorId))
 				{
 					userFlag="Y";
 					break;
+				}
+			}
+			
+			/*医生挂号是否已满*/
+			String numMax="false";
+			if(ObjectCensor.isStrRegular(registerNum,userOrderNum))
+			{
+				int registerNumInt=Integer.parseInt(registerNum);
+				int userOrderNumInt=Integer.parseInt(userOrderNum);
+				if(userOrderNumInt>registerNumInt)
+				{
+					numMax="true";
+					userOrderNum=registerNum;
 				}
 			}
 			
@@ -202,6 +228,8 @@ public class DigitalHealthService
 			newMap.put("day",dateStr);
 			newMap.put("workTime", " 星期" + weekStr + " " + dayType);
 			newMap.put("userFlag", userFlag);
+			newMap.put("orderTeamCount",orderTeamCount);
+			newMap.put("numMax",numMax);
 			list.add(newMap);
 		}
 	

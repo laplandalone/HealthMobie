@@ -197,7 +197,7 @@ public class DigitalHealthDao
 			return null;
 		}
 		StringBuffer sql = new StringBuffer();
-		sql.append(" select  user_id,doctor_id,register_id,replace(register_time,' ','')register_time from register_order_t ");
+		sql.append(" select  team_id,user_id,doctor_id,register_id,replace(register_time,' ','')register_time from register_order_t ");
 		sql.append(" where (order_state = '000' or order_state = '00A')and state = '00A'");
 		sql.append(" and user_id=?");
 		ArrayList lstParam = new ArrayList();
