@@ -8,9 +8,28 @@
 	<head>
 		<title>系统管理首页</title>
 		<link rel="stylesheet" href="/pub/css/bankList.css" type="text/css"></link>
+		<script type="text/javascript" src="<%=path%>/pub/js/jquery-1.9.1.min.js"></script>
 		<style type="text/css">
         	#lockDiv{ display: none;  position: absolute;  top: 0%;  left: 0%;  width: 100%;  height: 100%;  background-color: #dce2f1;  z-index:1001;  -moz-opacity: 0.7;  opacity:.70;  filter: alpha(opacity=70);}
 		</style>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				var width = document.body.scrollWidth;// 获取浏览器内容宽度
+				// 获取浏览器内容高度
+				var height = document.body.scrollHeight;
+				if(height == 0)
+				{
+					height = document.documentElement.scrollHeight;
+				}
+				
+				var menu = document.getElementById("menuIframe");
+				menu.style.height = (height - 64) + "px";// 设置iframe的高度
+				
+				var main = document.getElementById("mainIframe");
+				main.style.height = (height - 64) + "px";// 设置iframe的高度
+				main.style.width = (width - 150) + "px";
+			});
+		</script>
 	</head>
 	<body>
 		<div id="lockDiv"></div>
@@ -18,12 +37,12 @@
 			<div id="header" style="margin:0 auto;">
 				<iframe src="header.jsp" name="header" frameborder="0" scrolling="no" width="100%" height="64px"></iframe>
 			</div>
-			<div id="frame_main" style="margin-top: 0px;">
-				<div id="main_left" style="float:left;">
-					<iframe src="menu.jsp?&doctorId=${doctorId}" name="menu" frameborder="0" id="menuIframe" width="150px" height="900px"></iframe>
+			<div id="frame_main" style="margin-top: 0px; width: 100%; ">
+				<div id="main_left" style="float:left; width: 150px">
+					<iframe src="menu.jsp?&doctorId=${doctorId}" name="menu" frameborder="0" id="menuIframe" width="150px"></iframe>
 				</div>
 				<div id="main_right" style="float:left;">
-					<iframe src="main.jsp" name="main" frameborder="0" id="mainIframe" width="1100px" height="900px"></iframe>
+					<iframe src="main.jsp" name="main" frameborder="0" id="mainIframe"></iframe>
 				</div>
 			</div>
 			<div style="clear:both;"></div>
