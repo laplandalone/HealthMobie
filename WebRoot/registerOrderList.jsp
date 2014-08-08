@@ -90,13 +90,8 @@
 						<option value="00X">已作废</option>
 					</select>
 				</td>
-<<<<<<< OURS
-				<td width="12%" align="right">
-					<input type="button" onclick="qryRegisterOrder()" style="background-image:url('/pub/images/btn1_r1_c2.png');width:80px;height:28px;border:none;cursor:pointer" value="查询" />
-=======
 				<td width="15%" align="right">
 					<input type="button" onclick="qryRegisterOrder()" class="button3" value="查询" />
->>>>>>> THEIRS
 				</td>
 			</tr>
 		</table>
