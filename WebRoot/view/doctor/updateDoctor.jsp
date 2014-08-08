@@ -145,9 +145,7 @@
 			<table width="50%" border="0" cellspacing="0" cellpadding="0" align='center' class="maintable1">
 				<br />
 				<tr align='center'>
-					<input type="button" align='center' onclick="refundAjax()"
-						style="background-image:url('/pub/images/btn1_r1_c2.png');width:80px;height:28px;border:none;cursor:pointer"
-						value="修改信息" />
+					<input type="button" align='center' onclick="refundAjax()" class="button3" value="修改信息" />
 				</tr>
 			</table>
 			<br />
@@ -186,9 +184,7 @@
 			<table width="50%" border="0" cellspacing="0" cellpadding="0" align='center' class="maintable1">
 				<br />
 				<tr align='center'>
-					<input type="button" align='center' onclick="updateOrder()"
-						style="background-image:url('/pub/images/btn1_r1_c2.png');width:80px;height:28px;border:none;cursor:pointer"
-						value="预约排班" />&nbsp;&nbsp;
+					<input type="button" align='center' onclick="updateOrder()" class="button1" value="预约排班" />&nbsp;&nbsp;
 				</tr>
 			</table>
 		</div>

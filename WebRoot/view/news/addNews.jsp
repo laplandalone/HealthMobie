@@ -56,7 +56,7 @@
 				<br />
 				<tr align='center'>
 					<td>
-						<input type="submit" style="background-image:url('/pub/images/btn1_r1_c2.png');width:80px;height:28px;border:none;cursor:pointer" value="提交" />
+						<input type="submit" class="button3" value="提交" />
 					</td>
 				</tr>
 			</table>

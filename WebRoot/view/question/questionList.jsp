@@ -201,7 +201,7 @@
 						</table>
 					</td>
 					<td>
-						<input type="button" onclick="queryMed()" style="background-image:url('/pub/images/btn1_r1_c2.png');width:80px;height:28px;border:none;cursor:pointer" value="查询" />
+						<input type="button" onclick="queryMed()" class="button3" value="查询" />
 					</td>
 				</tr>
 			</table>

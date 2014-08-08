@@ -17,6 +17,47 @@ $(document).ready(function(){
 			}
 		});
 	});
+	
+	var newsType = $("#selNewsType").val();
+	$("#newsType option[value='" + newsType + "']").attr("selected", true);
+	
+	$.getJSON("/news.htm?method=qryNewsTypeList", {"newsType":newsType}, function(data){
+		var options = "";
+		var typeId = $("#selTypeId").val();
+		if(typeId == "")
+		{
+			options += "<option value='' selected='selected'>内容分类</option>"; 
+		}
+		else
+		{
+			options += "<option value=''>内容分类</option>"; 
+		}
+		if(data.length > 0)
+		{
+			for(var i = 0; i < data.length; i++)
+			{
+				if(typeId == data[i].configId)
+				{
+					options += "<option value='"+data[i].configId+"' selected='selected'>"+data[i].configVal+"</option>"; 
+				}
+				else
+				{
+					options += "<option value='"+data[i].configId+"'>"+data[i].configVal+"</option>"; 
+				}
+			}
+		}
+	});
+	
+	var state = $("#selState").val();
+	$("#state option[value='" + state + "']").attr("selected", true);
+	
+	var startTime = $("#selStartTime").val();
+	var endTime = $("#selEndTime").val();
+	if(startTime != "" && endTime != "")
+	{
+		$("#startTime").val(startTime);
+		$("#endTime").val(endTime);
+	}
 });
 
 function qryNewsList()

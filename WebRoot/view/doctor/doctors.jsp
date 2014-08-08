@@ -144,8 +144,8 @@
 				<td width="8%">
 					<input type="text" id="doctorName" name="doctorName" class="subtext" onkeydown="enterQry('queryMed')"/>
 				</td>
-				<td align="right">
-					<input type="button" style="background-image:url('/pub/images/btn1_r1_c2.png');width:80px;height:28px;border:none;cursor:pointer" value="查询" onclick="queryMed()"/>
+				<td align="left">
+					<input type="button" class="button3" value="查询" onclick="queryMed()"/>
 				</td>
 				<td width="10%">&nbsp;</td>
 			</tr>

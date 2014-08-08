@@ -90,8 +90,13 @@
 						<option value="00X">已作废</option>
 					</select>
 				</td>
+<<<<<<< OURS
 				<td width="12%" align="right">
 					<input type="button" onclick="qryRegisterOrder()" style="background-image:url('/pub/images/btn1_r1_c2.png');width:80px;height:28px;border:none;cursor:pointer" value="查询" />
+=======
+				<td width="15%" align="right">
+					<input type="button" onclick="qryRegisterOrder()" class="button3" value="查询" />
+>>>>>>> THEIRS
 				</td>
 			</tr>
 		</table>
@@ -130,20 +135,22 @@
 					<td>${registerOrder.registerTime }</td>
 					<td><fmt:formatDate value="${registerOrder.createDate }" pattern="yyyy-MM-dd HH:mm:ss"/></td>
 					<td>${registerOrder.orderState }</td>
-					<td style="text-align:center !important"><c:choose>
-						<c:when test="${registerOrder.orderState == '未处理' }">
-							<a href="javascript:void(0)" class="linkmore"
-								onclick="appointment('${registerOrder.name }', ${registerOrder.orderId })">预约</a>
-									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-									<a href="javascript:void(0)" class="linkmore"
-								onclick="invalid('${registerOrder.name }', ${registerOrder.orderId })">作废</a>
-						</c:when>
-						<c:otherwise>
-							<a href="javascript:void(0)" style="color:#cccccc">预约</a>
-									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-									<a href="javascript:void(0)" style="color:#cccccc">作废</a>
-						</c:otherwise>
-					</c:choose></td>
+					<td style="text-align:center !important">
+						<c:choose>
+							<c:when test="${registerOrder.orderState == '未处理' }">
+								<a href="javascript:void(0)" class="linkmore"
+									onclick="appointment('${registerOrder.name }', ${registerOrder.orderId })">预约</a>
+										&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+										<a href="javascript:void(0)" class="linkmore"
+									onclick="invalid('${registerOrder.name }', ${registerOrder.orderId })">作废</a>
+							</c:when>
+							<c:otherwise>
+								<a href="javascript:void(0)" style="color:#cccccc">预约</a>
+										&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+										<a href="javascript:void(0)" style="color:#cccccc">作废</a>
+							</c:otherwise>
+						</c:choose>
+					</td>
 				</tr>
 			</c:forEach>
 		</table>

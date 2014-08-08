@@ -37,9 +37,9 @@
 			</table>
 		</div>
 		<div class="ctrl">
-			<input type="button" onclick="addStore()" style="background-image:url('/pub/images/btn1_r1_c2.png');width:80px;height:28px;border:none;cursor:pointer" value="新增" />&nbsp;&nbsp;
-			<input type="button" onclick="delStoreFunc()" style="background-image:url('/pub/images/btn1_r1_c2.png');width:80px;height:28px;border:none;cursor:pointer" value="删除" />&nbsp;&nbsp;
-			<input type="button" onclick="updateStore()" style="background-image:url('/pub/images/btn1_r1_c2.png');width:80px;height:28px;border:none;cursor:pointer" value="修改" />
+			<input type="button" onclick="addStore()" class="button3" value="新增" />&nbsp;&nbsp;
+			<input type="button" onclick="delStoreFunc()" class="button1" value="删除" />&nbsp;&nbsp;
+			<input type="button" onclick="updateStore()" class="button1" value="修改" />
 		</div>
 	</body>
 </html>

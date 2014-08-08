@@ -191,8 +191,8 @@
 			<table width="50%" border="0" cellspacing="0" cellpadding="0" align='center' class="maintable1">
 				<br/>
 				<tr align='center'>
-					<input type="button" onclick="registerTime()" style="background-image:url('/pub/images/btn1_r1_c2.png');width:80px;height:28px;border:none;cursor:pointer" value="确定" />&nbsp;&nbsp;
-					<input type="button" onclick="registerTime()" style="background-image:url('/pub/images/btn1_r1_c2.png');width:80px;height:28px;border:none;cursor:pointer" value="取消" />
+					<input type="button" onclick="registerTime()" class="button3" value="确定" />&nbsp;&nbsp;
+					<input type="button" onclick="registerTime()" class="button1" value="取消" />
 				</tr>
 			</table>
 		</div>
