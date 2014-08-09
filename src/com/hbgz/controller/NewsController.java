@@ -63,7 +63,6 @@ public class NewsController
 			String typeId = request.getParameter("typeId");
 			String state = request.getParameter("state");
 			JSONArray array = digitalHealthService.qryNewsList(hospitalId, startTime, endTime, newsType, typeId, state);
-			log.error(array);
 			model.addObject("newsList", array);
 			model.addObject("startTime", startTime);
 			model.addObject("endTime", endTime);
