@@ -40,55 +40,38 @@
 					max:false, 
 					lock:true, 
 					close:function(){unlockScreen();},
-					button: [
+					ok: function()
+					{
+						var replyContent = demoDG1.content.document.getElementById("replyContent").value;
+						if($.trim(replyContent) == "")
 						{
-							name: '确定',
-							callback: function()
+							$.dialog.alert("回复内容为空", function(){return true;});
+						    return false;
+						}
+						else
+						{
+							var authType = "";
+							var array = demoDG1.content.document.getElementsByName("authType");
+							for(var i = 0, len = array.length; i < len; i++)
 							{
-								reply(doctorId, questionId, userId, telephone);
-							},
-							focus: true
-						},
-						{
-							name: '取消',
-				            callback: function()
-				            {
-				            	unlockScreen();
-				            }
+								if(array[i].checked) 
+								{
+									authType = array[i].value;
+								}
+							}
+							if(authType == "")
+							{
+								$.dialog.alert("请选择可见范围", function(){return true;});
+						        return false;
+							}
+							else
+							{
+								refundAjax(doctorId, questionId, userId, telephone, replyContent, authType);
+							}
 						}
-					]
+					},
+					cancel: true
 				});
-			}
-			
-			function reply(doctorId, questionId, userId, telephone)
-			{
-				var replyContent = demoDG1.content.document.getElementById("replyContent").value;
-				if($("#replyContent").val() == "")
-				{
-					$.dialog.alert("回复内容为空", function(){return true;});
-				    return false;
-				}
-				else
-				{
-					var authType = "";
-					var array = demoDG1.content.document.getElementsByName("authType");
-					for(var i = 0, len = array.length; i < len; i++)
-					{
-						if(array[i].checked) 
-						{
-							authType = array[i].value;
-						}
-					}
-					if(authType == "")
-					{
-						$.dialog.alert("请选择可见范围", function(){return true;});
-				        return false;
-					}
-					else
-					{
-						refundAjax(doctorId, questionId, userId, telephone, replyContent, authType);
-					}
-				}
 			}
 			
 			function refundAjax(doctorId, questionId, userId, telephone, content, authType)

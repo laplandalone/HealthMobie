@@ -21,88 +21,19 @@
 		<script type="text/javascript" src="<%=path%>/js/comm.js"></script>
 		<script type="text/javascript" src="<%=path%>/js/json2.js"></script>
 		<script type="text/javascript">
-		$(document).ready(function(){
-			var teamId = $("#selTeamId").val();
-			$("#teamId option[value='" + teamId + "']").attr("selected", true);
-			var name = $("#selName").val();
-			$("#doctorName").val(name);
-		});
-		function refundAjax(doctorId, questionId, userId, telephone, content, authType)
-		{
-			$.ajax({
-				url:"/ques.htm?method=updateQues",
-				type:"POST",
-				data:"doctorId="+doctorId+"&questionId="+questionId+"&userId="+userId+"&telephone="+telephone+"&authType="+authType+"&content="+content,
-				success:function(data)
-				{
-					$.dialog.alert('操作成功',function(){
-						//window.location.href="/ques.htm?method=queryPre";
-					});
-    			},
-    			error:function(stata)
-    			{
-    				$.dialog.alert(stata.statusText, function(){return true;});
-    			}
+			$(document).ready(function(){
+				var teamId = $("#selTeamId").val();
+				$("#teamId option[value='" + teamId + "']").attr("selected", true);
+				var name = $("#selName").val();
+				$("#doctorName").val(name);
 			});
-		}
-			
-		function verifyFunc(doctorId,questionId,userId,telephone,val)
-		{
-			lockScreen();	
-			$.dialog({
-				id: 'testID',
-				content: "<table border='0' cellspacing='10'><tr><td>"+telephone+":</td><td>"+val+"</td></tr><tr><td valign='top'>回复:</td><td><textarea cols='40' rows='4' id='content'></textarea></td></tr><tr ><td>可见范围:</td><td>可见<input type='checkbox' id='public' value='public' checked='checked' /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;不可见<input type='checkbox' onclick=change() id='private' value='private' /></td></tr></table>",			   
-				title:"操作",
-				button: 
-					[{
-						name: '确定',
-					    callback: function()
-					    {
-					    	var privateType = document.getElementById("private");
-							var publicType = document.getElementById("public");
-							var authType = "";
-							if(privateType.checked)
-							{
-								authType = "private";
-							}
-							else if(publicType.checked)
-							{
-								authType = "public";
-							}
-							else
-							{
-								$.dialog.alert("请选择可见范围", function(){return true;});
-								return false;
-							}
-							if(privateType.checked && publicType.checked)
-							{
-								$.dialog.alert("可见范围选择有误，请选择可见或者不可见", function(){return true;});
-								return false;
-							}
-					        if($("#content").val()=="")
-					        {
-					        	$.dialog.alert("回复内容为空", function(){return true;});
-								return false;
-							}
-							refundAjax(doctorId,questionId,userId,telephone,$("#content").val(),authType)
-						},
-						focus: true
-					},
-					{
-						name: '取消',
-						callback: function()
-						{
-							return;
-						}
-				    }]
-				});
-			}
 			
 			function queryMed()
 			{
 				var doctorId='<%= doctorId%>';
 				var teamId = $("#teamId").val();
 				var docotrName = $("#doctorName").val();
+				docotrName = $.trim(docotrName);
 				window.location.href = "/doctor.htm?method=queryPre&doctorId="+doctorId+"&teamId="+teamId+"&doctorName="+docotrName;
 			}
 
@@ -167,9 +98,9 @@
 	
 						<td align="center"><c:out value="${doctor.sex }" />
 						<td align="center"><c:out value="${doctor.team_name}" /></td>
-						<td style="text-align:center !important"><a
-							href="javascript:void(0)" class="linkmore"
-							onclick="queryDoctor('${doctor.doctor_id}')">管理</a></td>
+						<td style="text-align:center !important">
+							<a href="javascript:void(0)" class="linkmore" onclick="queryDoctor('${doctor.doctor_id}')">管理</a>
+						</td>
 					</tr>
 				</c:forEach>
 			</table>

@@ -21,9 +21,9 @@ $(document).ready(function(){
 	var newsType = $("#selNewsType").val();
 	$("#newsType option[value='" + newsType + "']").attr("selected", true);
 	
+	var typeId = $("#selTypeId").val();
 	$.getJSON("/news.htm?method=qryNewsTypeList", {"newsType":newsType}, function(data){
 		var options = "";
-		var typeId = $("#selTypeId").val();
 		if(typeId == "")
 		{
 			options += "<option value='' selected='selected'>内容分类</option>"; 
@@ -46,6 +46,7 @@ $(document).ready(function(){
 				}
 			}
 		}
+		$("#typeId").html(options);
 	});
 	
 	var state = $("#selState").val();
@@ -68,4 +69,82 @@ function qryNewsList()
 	var typeId = $("#typeId").val();
 	var state = $("#state").val();
 	window.location.href = "/news.htm?method=qryNewsList&startTime="+startTime+"&endTime="+endTime+"&newsType="+newsType+"&typeId="+typeId+"&state="+state;
+}
+
+var demoDG1 = null;
+
+function updateNews(newsId)
+{
+	lockScreen();
+	demoDG1 = $.dialog({
+		title:"修改",
+		content:"url:/news.htm?method=getNewsById&newsId="+newsId,
+		min:false, 
+		max:false, 
+		lock:true, 
+		close:function(){unlockScreen();},
+		ok: function()
+		{
+			
+		},
+		cancel: true
+	});
+}
+
+function addNews()
+{
+	lockScreen();
+	demoDG1 = $.dialog({
+		title:"信息发布",
+		content:"url:/view/news/addNews.jsp",
+		min:false, 
+		max:false, 
+		lock:true, 
+		close:function(){unlockScreen();},
+		ok: function()
+		{
+			
+		},
+		cancel: true
+	});
+}
+
+function addNewsType()
+{
+	lockScreen();
+	demoDG1 = $.dialog({
+		title:"新增分类",
+		content:"url:/view/news/addNewsType.jsp",
+		min:false, 
+		max:false, 
+		lock:true, 
+		close:function(){unlockScreen();},
+		ok: function()
+		{
+			var typeName = demoDG1.content.document.getElementById("typeName").value;
+			if($.trim(typeName) == "")
+			{
+				$.dialog.alert("分类名称为空", function(){return true;});
+			    return false;
+			}
+			else
+			{
+				var newsTypeId = demoDG1.content.document.getElementById("newsTypeId").value;
+				$.ajax({
+					type:"POST",
+					url:"/news.htm?method=addNewsType",
+					data:"newsTypeId="+newsTypeId+"&newsTypeName="+typeName,
+					success:function(data)
+					{
+						$.dialog({title:false, width:"150px", esc:false, height:"60px", zIndex:2000, icon:'succ.png', lock:true, content:'成功解锁!', ok:function() {return true;}});
+    				},
+    				error:function(stata)
+    				{
+    					$.dialog.alert(stata.statusText, function(){return true;});
+    				}
+				});
+			}
+		},
+		cancel: true
+	});
 }

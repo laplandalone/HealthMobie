@@ -1,10 +1,12 @@
 package com.hbgz.pub.util;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -20,6 +22,8 @@ import java.util.regex.Pattern;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+
+import oracle.sql.BLOB;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
@@ -1152,5 +1156,25 @@ public class StringUtil
 			query.setLength(0);
 			query.append(temp);
 		}
+	}
+	
+	public static String getBytes(BLOB blob) 
+	{
+		String res = "";
+		try 
+		{
+			InputStream ins = blob.getBinaryStream();
+			byte[] b = new byte[1024];  
+			int num = 0;  
+			while ((num = ins.read(b)) != -1) 
+			{  
+				res += new String(b, 0, num);
+			}
+		}
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+		} 
+		return res;
 	}
 }

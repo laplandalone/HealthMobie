@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -70,6 +71,28 @@ public class NewsController
 			model.addObject("typeId", typeId);
 			model.addObject("state", state);
 			model.setViewName("/view/news/newsList");
+		}
+		else
+		{
+			model.addObject("result", "error");
+			model.setViewName("login");
+		}
+		return model;
+	}
+	
+	@RequestMapping(params = "method=getNewsById")
+	public ModelAndView getNewsById(HttpServletRequest request, HttpServletResponse response) throws Exception
+	{
+		ModelAndView model = new ModelAndView("updateNews");
+		String newsId = request.getParameter("newsId");
+		HttpSession session = request.getSession();
+		String hospitalId= (String)session.getAttribute("hospitalId");
+		if(ObjectCensor.isStrRegular(newsId, hospitalId))
+		{
+			JSONObject obj = digitalHealthService.getNewsById(newsId, hospitalId);
+			log.error(obj);
+			model.addObject("news", obj);
+			model.setViewName("/view/news/updateNews");
 		}
 		else
 		{

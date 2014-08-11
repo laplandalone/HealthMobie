@@ -4,13 +4,13 @@
 	String path = request.getContextPath();
 %>
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
   	<head>
     	<title>信息发布管理</title>
     	<link href="<%=path%>/pub/css/sub.css" rel="stylesheet" type="text/css" />
 		<script type="text/javascript" src="<%=path%>/pub/js/jquery-1.9.1.min.js"></script>
-		<script type="text/javascript" src="<%=path%>pub/dialog/lhgdialog.min.js?skin=idialog"></script>
+		<script type="text/javascript" src="<%=path%>/pub/dialog/lhgdialog.min.js?skin=idialog"></script>
 		<script type="text/javascript" src="<%=path%>/pub/js/calendar.js"></script>
 		<script type="text/javascript" src="<%=path%>/pub/js/date.js"></script>
 		<script type="text/javascript" src="<%=path%>/js/comm.js"></script>
@@ -78,10 +78,10 @@
 					<input type="button" onclick="qryNewsList()" class="button3" value="查询" />
 				</td>
 				<td width="12%" align="center">
-					<input type="button" onclick="" class="button1" value="发布新信息" />
+					<input type="button" onclick="addNews()" class="button1" value="发布新信息" />
 				</td>
 				<td width="12%" align="center">
-					<input type="button" onclick="" class="button1" value="新增分类" />
+					<input type="button" onclick="addNewsType()" class="button1" value="新增分类" />
 				</td>
   			</tr>
   		</table>

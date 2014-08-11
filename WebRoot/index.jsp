@@ -50,7 +50,7 @@
 				}
 				//注册加载事件 
 				$("#menuIframe").load(menuStyle); 
-				$("#mainIframe").load(menuStyle); 
+				$("#mainIframe").load(mainStyle); 
 				//注册窗体改变大小事件 
 				$(window).resize(menuStyle);
 				$(window).resize(mainStyle);

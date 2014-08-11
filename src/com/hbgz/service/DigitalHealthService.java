@@ -738,4 +738,37 @@ public class DigitalHealthService
 		}
 		return array;
 	}
+
+	public JSONObject getNewsById(String newsId, String hospitalId) throws Exception 
+	{
+		JSONObject obj = new JSONObject();
+		if(ObjectCensor.isStrRegular(newsId))
+		{
+			List<HospitalNewsT> sList = hibernateObjectDao.getNewsById(hospitalId, newsId);
+			if(ObjectCensor.checkListIsNull(sList))
+			{
+				CacheManager cacheManager = (CacheManager) BeanFactoryHelper.getBean("cacheManager");
+				String imgIp = cacheManager.getImgIp(hospitalId);
+				HospitalNewsT hospitalNewsT = sList.get(0);
+				byte[] contentT = hospitalNewsT.getNewsContent();
+				if (contentT != null)
+				{
+					hospitalNewsT.setContent(new String(contentT, "gb2312"));
+					String newsImg = hospitalNewsT.getNewsImages();
+					if(ObjectCensor.isStrRegular(newsImg))
+					{
+						hospitalNewsT.setNewsImages(imgIp + hospitalNewsT.getNewsImages());
+					}
+				}
+				else
+				{
+					hospitalNewsT.setNewsContent(null);
+				}
+				obj = JsonUtils.fromObject(hospitalNewsT);
+				obj.remove("newsContent");
+				obj = JSONObject.fromObject(obj.toString().replaceAll("null", "\"\""));
+			}
+		}
+		return obj;
+	}
 }
