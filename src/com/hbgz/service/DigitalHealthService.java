@@ -159,6 +159,9 @@ public class DigitalHealthService
 		Map mapComp = new HashMap();
 		mapComp.put("registerWeek", weekStr);
 		List subList = StringUtil.getSubMapList(orderList, mapComp);
+		if(ObjectCensor.checkListIsNull(subList))
+		{
+			
 		
 		for (int n = 0; n < subList.size(); n++)
 		{
@@ -174,6 +177,8 @@ public class DigitalHealthService
 			String dayWorkTime = dateStr + workTime;
 
 			String userOrderNum = "1";
+			if(ObjectCensor.checkListIsNull(ordertotalList))
+			{
 			for (int m = 0; m < ordertotalList.size(); m++)
 			{
 				Map mapT = (Map) ordertotalList.get(m);
@@ -187,9 +192,11 @@ public class DigitalHealthService
 					break;
 				}
 			}
-
+			}
 			/*用户是否已预约该时间*/
 			String userFlag="N";
+			if(ObjectCensor.checkListIsNull(userOrderList))
+			{
 			for(int i=0;i<userOrderList.size();i++)
 			{
 				Map userOrder= (Map) userOrderList.get(i);
@@ -202,6 +209,7 @@ public class DigitalHealthService
 					userFlag="Y";
 					break;
 				}
+			}
 			}
 			
 			/*医生挂号是否已满*/
@@ -232,7 +240,7 @@ public class DigitalHealthService
 			newMap.put("numMax",numMax);
 			list.add(newMap);
 		}
-	
+		}
 		JSONObject obj = new JSONObject();
 		obj.element("orders", list);
 		return obj;
