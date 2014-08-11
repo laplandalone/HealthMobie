@@ -100,12 +100,59 @@ function addNews()
 		min:false, 
 		max:false, 
 		lock:true, 
-		close:function(){unlockScreen();},
-		ok: function()
-		{
-			
-		},
-		cancel: true
+		close:function(){unlockScreen();}
+//		ok: function()
+//		{
+//			var newsTitle = demoDG1.content.document.getElementById("newsTitle").value;
+//			if($.trim(newsTitle) == "")
+//			{
+//				$.dialog.alert("消息标题为空", function(){return true;});
+//				return false;
+//			}
+//			else
+//			{
+//				var effDate = demoDG1.content.document.getElementById("effDate").value;
+//				if(effDate == "" || effDate == null || effDate ==  undefined)
+//				{
+//					$.dialog.alert("生效时间为空", function(){return true;});
+//					return false;
+//				}
+//				else
+//				{
+//					var expDate = demoDG1.content.document.getElementById("expDate").value;
+//					if(expDate == "" || expDate == null || expDate ==  undefined)
+//					{
+//						$.dialog.alert("生效时间为空", function(){return true;});
+//						return false;
+//					}
+//					else
+//					{
+//						var newsContent = demoDG1.content.document.getElementById("newsContent").value;
+//						if($.trim(newsContent) == "")
+//						{
+//							$.dialog.alert("文章内容为空", function(){return true;});
+//							return false;
+//						}
+//						else
+//						{
+//							var newsImage = demoDG1.content.document.getElementById("newsImage").value;
+//							var type = newsImage.substring(newsImage.lastIndexOf(".") + 1, newsImage.length).toLowerCase();
+//							if(type != "jpg" && type != "bmp" && type != "gif" && type != "png")
+//							{
+//								$.dialog.alert("请上传正确的图片格式", function(){return true;});
+//								return false;
+//							}
+//							else
+//							{
+//								demoDG1.content.submitClick();
+//								return false;
+//							}
+//						}
+//					}
+//				}
+//			}
+//		},
+//		cancel: true
 	});
 }
 
@@ -136,7 +183,15 @@ function addNewsType()
 					data:"newsTypeId="+newsTypeId+"&newsTypeName="+typeName,
 					success:function(data)
 					{
-						$.dialog({title:false, width:"150px", esc:false, height:"60px", zIndex:2000, icon:'succ.png', lock:true, content:'成功解锁!', ok:function() {return true;}});
+						if(data == "true")
+						{
+							$.dialog({title:false, width:"150px", esc:false, height:"60px", zIndex:2000, icon:'succ.png', lock:true, content:'成功新增分类信息!', ok:function() {return true;}});
+						}
+						else
+						{
+							$.dialog( { title:false, width:"150px", esc:false, height:"60px", zIndex:2000, icon:'fail.png', lock:true, content:'新增分类信息失败!', ok:function() {return true;}});
+						}
+						
     				},
     				error:function(stata)
     				{

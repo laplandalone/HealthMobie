@@ -14,6 +14,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.hbgz.pub.util.ObjectCensor;
@@ -100,5 +101,49 @@ public class NewsController
 			model.setViewName("login");
 		}
 		return model;
+	}
+	
+	@RequestMapping(params = "method=addNewsType")
+	public void addNewsType(HttpServletRequest request, HttpServletResponse response)
+	{
+		try 
+		{
+			response.setCharacterEncoding("UTF-8");
+			HttpSession session = request.getSession();
+			String hospitalId= (String)session.getAttribute("hospitalId");
+			String newsTypeId = request.getParameter("newsTypeId");
+			String newsTypeName = request.getParameter("newsTypeName");
+			boolean flag = digitalHealthService.addNewsType(hospitalId, newsTypeId, newsTypeName, "HOSPITALNEWS");
+			log.error(flag);
+			PrintWriter out = response.getWriter();
+			out.print(flag);
+			out.close();
+		} 
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	@RequestMapping(params = "method=addNews")
+	public void addNews(MultipartHttpServletRequest request, HttpServletResponse response)
+	{
+		response.setCharacterEncoding("UTF-8");
+		PrintWriter out = null ;
+		try 
+		{
+			out = response.getWriter();
+			String retVal = digitalHealthService.addNews(request);
+			String rtn = "{returnCode:"+retVal+"}";
+			out.println(rtn);
+			out.close();
+		} 
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+			String rtn = "{returnCode:1}";
+			out.println(rtn);
+			out.close();
+		}
 	}
 }

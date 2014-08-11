@@ -72,16 +72,16 @@ public class MobileController
 		try 
 		{
 			out = response.getWriter();
-			String retVal =digitalHealthService.addNewsFile(request);
+			String retVal = digitalHealthService.addNewsFile(request);
 			
-			String rtn="{returnCode:"+retVal+"}";
+			String rtn = "{returnCode:"+retVal+"}";
 			out.println(rtn);
 			out.close();
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();
-			String rtn="{returnCode:1}";
+			String rtn = "{returnCode:1}";
 			out.println(rtn);
 			out.close();
 		}

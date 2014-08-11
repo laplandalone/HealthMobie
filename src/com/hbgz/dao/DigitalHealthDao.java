@@ -1,6 +1,7 @@
 package com.hbgz.dao;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -294,20 +295,22 @@ public class DigitalHealthDao
 		{
 			e.printStackTrace();
 			flag = false;
-		} finally
+		} 
+		finally
 		{
 			try
 			{
 				stmt.close();
 				conn.close();
 
-			} catch (Exception e)
+			}
+			catch (Exception e)
 			{
 				e.printStackTrace();
 				flag = false;
 			}
-			return flag;
 		}
+		return flag;
 	}
 
 	/**
@@ -415,5 +418,44 @@ public class DigitalHealthDao
 		ArrayList lstParam = new ArrayList();
 		lstParam.add(newsId);
 		return itzcQryCenter.executeSqlByMapListWithTrans(query.toString(), lstParam);
+	}
+	
+	public boolean addNewsType(String hospitalId, String configId, String newsTypeId, String newsTypeName, String configType)
+	{
+		boolean flag = false;
+		Connection conn = null;
+		Statement stmt = null;
+		try 
+		{
+			StringBuffer sql = new StringBuffer();
+			sql.append("insert into hospital_config_t(hospital_id, config_id, config_name, config_val, config_type, state) ");
+			sql.append("values('"+hospitalId+"', '"+configId+"', '"+newsTypeId+"', '"+newsTypeName+"', '"+configType+"', '00A') ");
+			conn = itzcQryCenter.getDataSource().getConnection();
+			stmt = conn.createStatement();
+			int i = stmt.executeUpdate(sql.toString());
+			if(i > 0)
+			{
+				flag = true;
+			}
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			try
+			{
+				stmt.close();
+				conn.close();
+
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+				flag = false;
+			}
+		}
+		return flag;
 	}
 }

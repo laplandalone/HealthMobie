@@ -89,4 +89,9 @@ public class CacheManager
 	{
 		return sysCacheDao.qryDoctorList(hospitalId);
 	}
+	
+	public void delConfigCache()
+	{
+		sysCacheDao.delConfigCache();
+	}
 }

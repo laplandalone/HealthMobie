@@ -55,11 +55,11 @@
   	<body>
     	<form action="">
     		<input type="hidden" id="selTypeId" value="${news.typeId }"/>
-    		<table width="600px" border="0" cellspacing="10" cellpadding="0" align='center'>
+    		<table width="630px" border="0" cellspacing="10" cellpadding="0" align='center'>
     			<tr>
     				<td width="12%" align="right">文章类型</td>
-    				<td width="30%">
-    					<select id="newsType" class="subselect" style="width: 150px">
+    				<td width="15%">
+    					<select id="newsType" class="subselect" style="width: 140px">
     						<c:if test="${news.newsType == 'NEWS' }">
 	    						<option value="NEWS" selected="selected">患教中心</option>
 								<option value="BAIKE">健康百科</option>
@@ -71,16 +71,17 @@
     					</select>
     				</td>
     				<td width="12%" align="right">标题类型</td>
-					<td width="30%">
-						<select id="typeId" class="subselect" style="width: 150px">
+					<td width="15%">
+						<select id="typeId" class="subselect" style="width: 140px">
 							
 						</select>
 					</td>
+					<td colspan="2">&nbsp;</td>
     			</tr>
     			<tr>
     				<td width="12%" align="right">消息标题</td>
-    				<td colspan="3">
-    					<input id="newsTitle" class="subtext" type="text" style="width: 86%; height: 20px;" value="${news.newsTitle }"/>
+    				<td colspan="5">
+    					<input id="newsTitle" class="subtext" type="text" style="width: 99%; height: 20px;" value="${news.newsTitle }"/>
     				</td>
     			</tr>
     			<tr>
@@ -89,7 +90,7 @@
 						<table class="inputtable" cellspacing="0" cellpadding="0">
 							<tr>
 								<td>
-									<input type="text" id="effDate" name="effDate" style="border:0;height:20px;width:130px;font-size:12px" readonly value="${news.effDate }"/>
+									<input type="text" id="effDate" name="effDate" style="border:0;height:20px;width:100px;font-size:12px" readonly value="${news.effDate }"/>
 								</td>
 								<td>
 									<a href="javascript:void(0);" onclick="showDate(document.getElementById('effDate'))"> 
@@ -104,7 +105,7 @@
 						<table class="inputtable" cellspacing="0" cellpadding="0">
 							<tr>
 								<td>
-									<input type="text" id="expDate" name="expDate" style="border:0;height:20px;width:130px;font-size:12px" readonly value="${news.expDate }"/>
+									<input type="text" id="expDate" name="expDate" style="border:0;height:20px;width:100px;font-size:12px" readonly value="${news.expDate }"/>
 								</td>
 								<td>
 									<a href="javascript:void(0);" onclick="showDate(document.getElementById('expDate'))"> 
@@ -114,20 +115,35 @@
 							</tr>
 						</table>
 					</td>
+					<td width="6%">状态</td>
+					<td>
+						<select id="state" class="subselect">
+							<c:if test="${news.state == '00A' }">
+								<option value="00A" selected="selected">正常</option>
+								<option value="00X">作废</option>
+							</c:if>
+							<c:if test="${news.state == '00X' }">
+								<option value="00A">正常</option>
+								<option value="00X" selected="selected">作废</option>
+							</c:if>
+						</select>
+					</td>
     			</tr>
     			<tr>
     				<td width="12%" align="right">文章内容</td>
-					<td colspan="3">
-						<textarea rows="10" cols="77" style="border:1px solid #C0DC56;background:#fff;margin-bottom: 10px">${news.content }</textarea>
+					<td colspan="5">
+						<textarea rows="10" cols="83" style="border:1px solid #C0DC56;background:#fff;margin-bottom: 10px">${news.content }</textarea>
 						</br>
+						<!--  
 						<input type="file" id="newsContent" size="80" class="ifile" onchange="newsContentFileName.value=this.value; "/>
 						<input name="newsContentFileName" type="text" class="subtext2" id="txtfilename" size="80" readonly style="height: 20px;" />  
-						<img src="<%=path %>/pub/images/document_small_upload.png" width="20px" height="20px" align="absmiddle" onclick="newsContent.click();" style="z-index: 999;" />  
+						<img src="<%=path %>/pub/images/document_small_upload.png" width="20px" height="20px" align="absmiddle" onclick="newsContent.click();" style="z-index: 999;" /> 
+						--> 
 					</td>
     			</tr>
     			<tr>
     				<td width="12%" align="right">标题配图</td>
-    				<td colspan="3">
+    				<td colspan="5">
     					<c:choose>
     						<c:when test="${news.newsImages != ''}">
     							<a href="${news.newsImages }" target="_blank" style="margin-bottom: 10px;">

@@ -75,6 +75,20 @@ public final class SysDate
 		return null;
     }
     
+    public static Timestamp getSysDate(String dateStr, String format)
+    {
+    	SimpleDateFormat df = new SimpleDateFormat(format);
+		try 
+		{
+		    return new Timestamp(df.parse(dateStr).getTime());
+		}
+		catch (ParseException e) 
+		{
+		    e.printStackTrace();
+		}
+		return null;
+    }
+    
     public static String getDate()
     {
 		Date date = Calendar.getInstance().getTime();

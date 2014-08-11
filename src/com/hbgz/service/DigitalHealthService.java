@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -36,17 +38,17 @@ import com.hbgz.pub.exception.QryException;
 import com.hbgz.pub.resolver.BeanFactoryHelper;
 import com.hbgz.pub.sequence.SysId;
 import com.hbgz.pub.util.DateUtils;
+import com.hbgz.pub.util.FileUtils;
 import com.hbgz.pub.util.HttpUtil;
 import com.hbgz.pub.util.JsonUtils;
 import com.hbgz.pub.util.ObjectCensor;
 import com.hbgz.pub.util.StringUtil;
 
-
 @Service(value = "BUS200")
 public class DigitalHealthService
 {
 	@Autowired
-	public DigitalHealthDao digitalHealthDao;
+	private DigitalHealthDao digitalHealthDao;
 
 	@Autowired
 	private SysId sysId;
@@ -59,6 +61,11 @@ public class DigitalHealthService
 
 	@Autowired
 	private HibernateObjectDao hibernateObjectDao;
+	
+	@Autowired
+	private CacheManager cacheManager;
+	
+	private String projectPath = System.getProperty("user.dir");
 
 	@ServiceType(value = "BUS2001")
 	public JSONObject getDoctorList(String expertType, String onLineType, String teamId)
@@ -778,5 +785,70 @@ public class DigitalHealthService
 			}
 		}
 		return obj;
+	}
+
+	public boolean addNewsType(String hospitalId, String newsTypeId, String newsTypeName, String configType) 
+	{
+		String configId = sysId.getId() + "";
+		boolean flag = digitalHealthDao.addNewsType(hospitalId, configId, newsTypeId, newsTypeName, configType);
+		if(flag)
+		{
+			cacheManager.delConfigCache();
+		}
+		return flag;
+	}
+
+	public String addNews(MultipartHttpServletRequest request) throws Exception 
+	{
+		String newsId = sysId.getId() + "";
+		String newsType = request.getParameter("newsType");
+		String typeId = request.getParameter("typeId");
+		String newsTitle = request.getParameter("newsTitle");
+		String effDate = request.getParameter("effDate");
+		String expDate = request.getParameter("expDate");
+		String newsContent = request.getParameter("newsContent");
+		HospitalNewsT hospitalNewsT = new HospitalNewsT();
+		hospitalNewsT.setNewsId(newsId);
+		hospitalNewsT.setNewsType(newsType);
+		hospitalNewsT.setTypeId(typeId);
+		hospitalNewsT.setCreateDate(SysDate.getSysDate());
+		hospitalNewsT.setNewsTitle(newsTitle);
+		hospitalNewsT.setEffDate(SysDate.getSysDate(effDate, "yyyy-MM-dd"));
+		hospitalNewsT.setExpDate(SysDate.getSysDate(expDate, "yyyy-MM-dd"));
+		hospitalNewsT.setNewsContent(newsContent.getBytes());
+		hospitalNewsT.setState("00A");
+		Map<String, MultipartFile> map = request.getFileMap();
+		if(!ObjectCensor.checkObjectIsNull(map))
+		{
+			HttpSession session = request.getSession();
+			String hospitalId = (String)session.getAttribute("hospitalId");
+			hospitalNewsT.setHospitalId(hospitalId);
+			String uploadType = newsType + "_IMG_PATH";
+			String path = cacheManager.getUplodPathByType(hospitalId, uploadType);
+			String imageUrl = "";
+			for (Map.Entry<String, MultipartFile> entity : map.entrySet())
+			{
+				MultipartFile partFile = entity.getValue();
+				String fileName = partFile.getOriginalFilename();
+				System.err.println(fileName);
+				String type = fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length()).toLowerCase();
+				if("jpg".equals(type) || "bmp".equals(type) || "gif".equals(type) || "png".equals(type))
+				{
+					File localFile = new File(fileName);
+					InputStream is = new FileInputStream(localFile);
+					System.err.println(fileName);
+					fileName = newsId + fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length());
+					System.err.println(fileName);
+					String fullPath = projectPath + path;
+					double fileSize = FileUtils.create(fullPath, fileName, is);
+					imageUrl += path + fileName + ",";
+					is.close();
+				}
+			}
+			imageUrl = imageUrl.substring(0, imageUrl.length() - 1);
+			hospitalNewsT.setNewsImages(imageUrl);
+		}
+		hibernateObjectDao.save(hospitalNewsT);
+		return "0";
 	}
 }

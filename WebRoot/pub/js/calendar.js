@@ -259,37 +259,33 @@ Calendar.prototype.bindData = function() {
 					var expDate = $("#expDate").val();
 					if(effDate!=""&&expDate=="")
 					{
-						var neweffDate=new Date(effDate.replace(/-/g,"/"));
-						var effDates =neweffDate.format("yyyy-MM-dd");	
-						if(effDates<sysDate)
+						var neweffDate = new Date(effDate.replace(/-/g,"/"));
+						var effDates = neweffDate.format("yyyy-MM-dd");	
+						if(effDates < sysDate)
 						{
-							$.dialog.alert('不能选择过去的时间!', function(){return true;}, api);
-							$("#effDate").val("");
+							W.$.dialog.alert('不能选择过去的时间!', function(){$("#effDate").val(""); return true;}, api);
 							return false;
 						}
 					}
-					else if(effDate==""&&expDate!="")
+					else if(effDate == "" && expDate != "")
 					{
-						var newexpDate=new Date(expDate.replace(/-/g,"/"));
-						var expDates =newexpDate.format("yyyy-MM-dd");	
-						if(expDates<sysDate)
+						var newexpDate = new Date(expDate.replace(/-/g,"/"));
+						var expDates = newexpDate.format("yyyy-MM-dd");	
+						if(expDates < sysDate)
 						{
-							$.dialog.alert('不能选择过去的时间!', function(){return true;}, api);
-							$("#expDate").val("");
+							W.$.dialog.alert('不能选择过去的时间!', function(){$("#expDate").val(""); return true;}, api);
 							return false;
 						}
 					}
 					else
 					{
-						var neweffDate=new Date(effDate.replace(/-/g,"/"));
-						var effDates =neweffDate.format("yyyy-MM-dd");	
-						var newexpDate=new Date(expDate.replace(/-/g,"/"));
-						var expDates =newexpDate.format("yyyy-MM-dd");
+						var neweffDate = new Date(effDate.replace(/-/g,"/"));
+						var effDates = neweffDate.format("yyyy-MM-dd");	
+						var newexpDate = new Date(expDate.replace(/-/g,"/"));
+						var expDates = newexpDate.format("yyyy-MM-dd");
 						if(expDates<effDates)
 						{
-							$.dialog.alert('失效时间不能小于生效时间!', function(){return true;}, api);
-							$("#effDate").val("");
-							$("#expDate").val("");
+							W.$.dialog.alert('失效时间不能小于生效时间!', function(){$("#effDate").val(""); $("#expDate").val(""); return true;}, api);
 							return false;
 						}	
 					}	

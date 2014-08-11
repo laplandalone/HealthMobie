@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.googlecode.ehcache.annotations.Cacheable;
+import com.googlecode.ehcache.annotations.TriggersRemove;
 import com.hbgz.pub.base.BaseDao;
 import com.hbgz.pub.exception.QryException;
 import com.hbgz.pub.qry.QryCenter;
@@ -73,4 +74,7 @@ public class SysCacheDao extends BaseDao
 		lstParam.add(hospitalId);
 		return itzcQryCenter.executeSqlByMapListWithTrans(sql.toString(), lstParam);
 	}
+	
+	@TriggersRemove(cacheName="HospitalConfig",removeAll=true) 
+	public void delConfigCache(){}
 }
