@@ -410,7 +410,7 @@ public class DigitalHealthService
 	public JSONArray getQuestionTsByUserId(String userId) throws QryException
 	{
 		List list = userQustionDao.qryQuestionTsByUserId(userId);
-		JSONArray jsonArray = JsonUtils.fromArrayTimestamp(list);
+		JSONArray jsonArray = JsonUtils.fromArray(list);
 		return jsonArray;
 	}
 
