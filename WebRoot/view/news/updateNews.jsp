@@ -328,7 +328,7 @@
     		<table width="100%" cellspacing="0" cellpadding="0" align='center'>
 				<tr align='center'>
 					<td>
-						<input type="button" id="updateNewsBtn" value="修改" class="button2" onclick="updateNews()"/>
+						<input type="button" id="updateNewsBtn" value="修改" class="button3" onclick="updateNews()"/>
 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<input type="button" id="cancelBtn" value="取消" class="button" onclick="cancel()"/>
 					</td>

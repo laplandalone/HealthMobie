@@ -78,10 +78,10 @@
 					<input type="button" onclick="qryNewsList()" class="button3" value="查询" />
 				</td>
 				<td width="12%" align="center">
-					<input type="button" onclick="addNews()" class="button1" value="发布新信息" />
+					<input type="button" onclick="addNews()" class="button3" value="发布新信息" />
 				</td>
 				<td width="12%" align="center">
-					<input type="button" onclick="addNewsType()" class="button1" value="新增分类" />
+					<input type="button" onclick="addNewsType()" class="button3" value="新增分类" />
 				</td>
   			</tr>
   		</table>
