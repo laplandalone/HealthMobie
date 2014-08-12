@@ -110,6 +110,11 @@ public final class SysDate
 		return dateT;
     }
     
+    public static String getFormatDate(Date date, String format) 
+    {
+    	SimpleDateFormat df = new SimpleDateFormat(format);
+    	return df.format(date);
+    }
     /**
      * @author tk
      * @return

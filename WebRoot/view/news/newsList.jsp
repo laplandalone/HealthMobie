@@ -106,14 +106,17 @@
 					<td>${news.stateVal }</td>
 					<td>${news.createDate }</td>
 					<td style="text-align:center !important">
+						<a href="javascript:void(0)" class="linkmore" onclick="updateNews('${news.newsId }')">修改</a>
+						<!--  
 						<c:choose>
 							<c:when test="${news.state == '00A' }">
-								<a href="javascript:void(0)" class="linkmore" onclick="updateNews('${news.newsId }')">修改</a>
+								
 							</c:when>
 							<c:otherwise>
 								<a href="javascript:void(0)" style="color:#cccccc">修改</a>
 							</c:otherwise>
 						</c:choose>
+						-->
 					</td>
 				</tr>
 			</c:forEach>

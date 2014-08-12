@@ -8,12 +8,15 @@
 		<title>上传文件</title>
 		<link href="<%=path%>/pub/css/sub.css" rel="stylesheet" type="text/css" />
 		<link href="<%=path%>/pub/css/uploadify.css" rel="stylesheet" type="text/css" />
+		<link href="<%=path%>/pub/css/upload.css" rel="stylesheet" type="text/css" />
 		<script type="text/javascript" src="<%=path%>/pub/js/jquery-1.9.1.min.js"></script>
 		<script type="text/javascript" src="<%=path%>/pub/dialog/lhgdialog.min.js?skin=idialog"></script>
 		<script type="text/javascript" src="<%=path%>/pub/js/jquery.uploadify-3.1.js"></script>
 		<script type="text/javascript" src="<%=path%>/pub/js/calendar.js"></script>
 		<script type="text/javascript" src="<%=path%>/pub/js/date.js"></script>
 		<script type="text/javascript" src="<%=path%>/js/comm.js"></script>
+		<script type="text/javascript" src="<%=path%>/js/json.js"></script>
+		<script type="text/javascript" src="<%=path%>/js/json2.js"></script>
 		<script type="text/javascript" src="<%=path%>/js/news.js"></script>
 		<style type="text/css">
 			.ifile {  
@@ -40,15 +43,133 @@
 						}
 					}
 					$("#typeId").html(options);
+				});
 					
-					
-					
+				$("#fileName").uploadify({ 
+					"method" : "post",  //提交方式Post 或Get 
+					"width" : 16,  //设置浏览按钮的宽度
+		    		"height" : 16,  //设置浏览按钮的高度
+					"swf" : "/pub/swf/uploadify.swf",  //uploadify.swf 文件的相对路径
+					"uploader" : "/news.htm?method=uploadFile",  //后台处理程序的相对路径
+					"buttonText" : "",  //浏览按钮的文本
+					"buttonClass" : "btnsUpload",
+					"buttonImage" : "/pub/images/document_small_upload.png",  //浏览按钮的图片的路径
+					"auto" : false, //是否立即上传
+					"multi" : false, //是否支持多文件上传
+					"fileTypeExts" : "*.jpg;*.gif;*.png;*.bmp;*.jpeg;", //限制文件类型   
+					"queueID" : "foo" ,  //文件队列的ID，该ID与存放文件队列的div的ID一致
+					"cancelImage" : "/pub/images/uploadify-cancel.png",  //选择文件到文件队列中后的每一个文件上的关闭按钮图标
+					"onUploadSuccess" : function(file, data, response)
+					{
+	    			 	var obj = JSON.parse(data);
+	    			 	$("#newsId").val(obj.newsId);
+	    			 	$("#newsImageUrl").val(obj.imageUrl);
+	    		 	},
+					"onQueueComplete" : function()
+					{
+	    		 		realAddNews();
+					}
 				});
 			});
+			
+			function addNews()
+			{
+				if(!checkPara())
+		    	{
+					return;
+		    	}
+				else
+				{
+					if($.trim($("#foo").html()) == "")
+					{
+						realAddNews();
+					}
+					else
+					{
+						$("#addNewsBtn").attr("disabled", "disabled");
+						$("#cancelBtn").attr("disabled", "disabled");
+						
+						var newsType = $("#newsType").val();
+						$("#fileName").uploadify("settings" , "formData" ,{"newsType" : newsType});
+						$('#fileName').uploadify("upload", "*");
+					}
+				}
+			}
+			
+			function realAddNews()
+			{
+				var newsId = $("#newsId").val();
+				var newsType = $("#newsType").val();
+				var typeId = $("#typeId").val();
+				var newsTitle = $("#newsTitle").val();
+				var effDate = $("#effDate").val();
+				var expDate = $("#expDate").val();
+				var newsContent = $("#newsContent").val();
+				var newsImageUrl = $("#newsImageUrl").val();
+				$.ajax({
+					type:"POST",
+					url:"/news.htm?method=addNews",
+					data:"newsId="+newsId+"&newsType="+newsType+"&typeId="+typeId+"&newsTitle="+newsTitle+"&effDate="+effDate+"&expDate="+expDate+"&newsContent="+newsContent+"&newsImageUrl="+newsImageUrl,
+					success:function(data)
+					{
+						if(data)
+						{
+							W.$.dialog({parent:api, title:false, width:"150px", esc:false, height:"60px", zIndex:2000, icon:'succ.png', lock:true, content:'成功发布信息!', ok:function() {W.qryNewsList(); api.close(); return true;}});
+						}
+						else
+						{
+							W.$.dialog({parent:api, title:false, width:"150px", esc:false, height:"60px", zIndex:2000, icon:'fail.png', lock:true, content:'发布信息失败!', ok:function() {api.close(); return true;}});
+						}
+					},
+					error:function(stata)
+    				{
+    					W.$.dialog.alert(stata.statusText, function(){api.close(); return true;}, api);
+    				}
+				});
+			}
+			
+			function cancel()
+			{
+				if($("#fileName").val()!= null && $("#fileName").val()!= undefined && $("#fileName").val() != "")
+		    	{
+		    		$("#fileName").uploadify("cancel", "*");
+		    	}
+    			api.close();
+			}
+			
+			function checkPara()
+			{
+				var newsTitle = $("#newsTitle").val();
+				if($.trim(newsTitle) == "" || $.trim(newsTitle) == null || $.trim(newsTitle) == undefined)
+				{
+					W.$.dialog.alert("消息标题为空", function(){return true;}, api);
+					return false;
+				}
+				var effDate = $("#effDate").val();
+				if(effDate == "" || effDate == null || effDate ==  undefined)
+				{
+					W.$.dialog.alert("生效时间为空", function(){return true;}, api);
+					return false;
+				}
+				var expDate = $("#expDate").val();
+				if(expDate == "" || expDate == null || expDate ==  undefined)
+				{
+					W.$.dialog.alert("失效时间为空", function(){return true;}, api);
+					return false;
+				}
+				var newsContent = $("#newsContent").val();
+				if($.trim(newsContent) == "" || $.trim(newsContent) == null || $.trim(newsContent) ==  undefined)
+				{
+					W.$.dialog.alert("文章内容为空", function(){return true;}, api);
+					return false;
+				}
+				return true;
+			}
 		</script>
 	</head>
 	<body>
-		<form id="addNewsForm" action="/news.htm?method=addNews" method="post" enctype="multipart/form-data">
+		<form action="">
+			<input type="hidden" id="newsId"/>
 			<input type="hidden" id="creditValueType" value="1"/>
 			<table width="600px" border="0" cellspacing="10" cellpadding="0" align='center'>
 				<tr>
@@ -118,18 +239,29 @@
     			</tr>
     			<tr>
     				<td width="12%" align="right">标题配图</td>
-    				<td colspan="3">
+    				<td colspan="3" style="position:relative;">
+    					<!--  
 						<input type="file" class="ifile" id="newsImage" name="newsImage" size="80" onchange="newsImageFileName.value=this.value; "/>
 						<input name="newsImageFileName" type="text" class="subtext2" id="newsImageFileName" size="80" readonly style="height: 20px;" />  
-						<img src="<%=path %>/pub/images/document_small_upload.png" width="20px" height="20px" align="absmiddle" onclick="newsImage.click();" style="z-index: 999;" />  
+						<img src="<%=path %>/pub/images/document_small_upload.png" width="20px" height="20px" align="absmiddle" onclick="newsImage.click();" style="z-index: 999;" />
+						-->
+						<input type="file" id="fileName" name="fileName" style="border:0;font-size:12px" />
+						<input type="hidden" id="newsImageUrl" name="newsImageUrl"/>
 					</td>
     			</tr>
+    			<tr>
+    				<td width="12%"></td>
+					<td colspan="3">
+						<div id="foo"></div>
+					</td>
+				</tr>
 			</table>
-			<table width="50%" cellspacing="0" cellpadding="0" align='center'>
-				<br />
+			<table width="100%" cellspacing="0" cellpadding="0" align='center'>
 				<tr align='center'>
 					<td>
-						<input type="submit" class="button3" value="提交" />
+						<input type="button" id="addNewsBtn" value="发布" class="button2" onclick="addNews()"/>
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="button" id="cancelBtn" value="取消" class="button" onclick="cancel()"/>
 					</td>
 				</tr>
 			</table>

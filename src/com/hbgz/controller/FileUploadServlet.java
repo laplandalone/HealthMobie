@@ -20,13 +20,12 @@ import org.apache.commons.logging.LogFactory;
 
 import com.hbgz.model.UserQuestionT;
 import com.hbgz.pub.cache.CacheManager;
-import com.hbgz.pub.file.FileBiz;
 import com.hbgz.pub.invoke.ServiceEngine;
 import com.hbgz.pub.resolver.BeanFactoryHelper;
 import com.hbgz.pub.util.FileUtils;
 import com.hbgz.pub.util.JsonUtils;
 
-public class FileUploadServlet extends HttpServlet
+public class FileUploadServlet extends HttpServlet 
 {
 	private static final long serialVersionUID = 1L;
 
@@ -34,12 +33,12 @@ public class FileUploadServlet extends HttpServlet
 
 	private String projectPath = System.getProperty("user.dir");
 
-	public void doGet(HttpServletRequest request, HttpServletResponse response)
+	public void doGet(HttpServletRequest request, HttpServletResponse response) 
 	{
 		doPost(request, response);
 	}
 
-	public void doPost(HttpServletRequest request, HttpServletResponse response)
+	public void doPost(HttpServletRequest request, HttpServletResponse response) 
 	{
 		CacheManager cacheManager = (CacheManager) BeanFactoryHelper.getBean("cacheManager");
 
@@ -50,7 +49,7 @@ public class FileUploadServlet extends HttpServlet
 		ServletFileUpload sfu = new ServletFileUpload(factory);
 		// 解析保存在request中的数据并返回list集合
 		List items;
-		try
+		try 
 		{
 			String path = "";
 			items = sfu.parseRequest(request);
@@ -58,24 +57,25 @@ public class FileUploadServlet extends HttpServlet
 			Iterator itr = items.iterator();
 			JSONObject object = new JSONObject();
 			String imgages = "";
-			
-			while (itr.hasNext())
+
+			while (itr.hasNext()) 
 			{
 				FileItem item = (FileItem) itr.next();
-				if (item.isFormField())
+				if (item.isFormField()) 
 				{
 					object.element(item.getFieldName(), item.getString("UTF-8"));
-				} else
+				} 
+				else 
 				{
 					File tempFile = new File(item.getName());
 					String fileName = tempFile.getName();
 					InputStream is = item.getInputStream();
-					String hospitalId=object.getString("hospitalId");
-					String uploadType=object.getString("uploadType");
-					path=cacheManager.getUplodPathByType(hospitalId, uploadType);
-					log.error("projectPath:"+projectPath);
-					String fullPath = projectPath+ path;
-					log.error("upland_fullpath:"+fullPath);
+					String hospitalId = object.getString("hospitalId");
+					String uploadType = object.getString("uploadType");
+					path = cacheManager.getUplodPathByType(hospitalId, uploadType);
+					log.error("projectPath:" + projectPath);
+					String fullPath = projectPath + path;
+					log.error("upland_fullpath:" + fullPath);
 					double fileSize = FileUtils.create(fullPath, fileName, is);
 					String imgUrl = path + fileName;
 					is.close();
@@ -83,8 +83,7 @@ public class FileUploadServlet extends HttpServlet
 				}
 			}
 			String questionTs = object.getString("questionT");
-			UserQuestionT questionT = (UserQuestionT) JsonUtils.toBean(questionTs,
-					UserQuestionT.class);
+			UserQuestionT questionT = (UserQuestionT) JsonUtils.toBean(questionTs, UserQuestionT.class);
 			questionT.setImgUrl(imgages);
 			JSONObject str = JSONObject.fromObject(questionT);
 			String param = "{channel:\"Q\",channelType:\"Android\",serviceType:\"BUS2007\",securityCode:\"0000000000\",params:{'userQestion':'"
@@ -94,11 +93,10 @@ public class FileUploadServlet extends HttpServlet
 			PrintWriter out = response.getWriter();
 			out.println(retVal);
 			out.close();
-		} catch (Exception e)
+		} 
+		catch (Exception e) 
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 	}
 }

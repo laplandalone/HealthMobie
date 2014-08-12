@@ -126,24 +126,79 @@ public class NewsController
 	}
 	
 	@RequestMapping(params = "method=addNews")
-	public void addNews(MultipartHttpServletRequest request, HttpServletResponse response)
+	public void addNews(HttpServletRequest request, HttpServletResponse response)
 	{
 		response.setCharacterEncoding("UTF-8");
-		PrintWriter out = null ;
 		try 
 		{
-			out = response.getWriter();
-			String retVal = digitalHealthService.addNews(request);
-			String rtn = "{returnCode:"+retVal+"}";
-			out.println(rtn);
+			HttpSession session = request.getSession();
+			String hospitalId = (String) session.getAttribute("hospitalId");
+			String newsId = request.getParameter("newsId");
+			String newsType = request.getParameter("newsType");
+			String typeId = request.getParameter("typeId");
+			String newsTitle = request.getParameter("newsTitle");
+			String effDate = request.getParameter("effDate");
+			String expDate = request.getParameter("expDate");
+			String newsContent = request.getParameter("newsContent");
+			String newsImageUrl = request.getParameter("newsImageUrl");
+			String retVal = digitalHealthService.addNews(hospitalId, newsId, newsType, typeId, newsTitle, effDate, expDate, newsContent, newsImageUrl);
+			PrintWriter out = response.getWriter();
+			log.error(retVal);
+			out.println(retVal);
 			out.close();
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();
-			String rtn = "{returnCode:1}";
-			out.println(rtn);
+		}
+	}
+	
+	@RequestMapping(params = "method=updateNews")
+	public void updateNews(HttpServletRequest request, HttpServletResponse response)
+	{
+		response.setCharacterEncoding("UTF-8");
+		try 
+		{
+			HttpSession session = request.getSession();
+			String hospitalId = (String) session.getAttribute("hospitalId");
+			String newsId = request.getParameter("newsId");
+			String newsType = request.getParameter("newsType");
+			String typeId = request.getParameter("typeId");
+			String newsTitle = request.getParameter("newsTitle");
+			String effDate = request.getParameter("effDate");
+			String expDate = request.getParameter("expDate");
+			String newsContent = request.getParameter("newsContent");
+			String newsImageUrl = request.getParameter("newsImageUrl");
+			String state = request.getParameter("state");
+			String oldNewsId = request.getParameter("oldNewsId");
+			log.error(oldNewsId);
+			String retVal = digitalHealthService.updateNews(hospitalId, newsId, newsType, typeId, newsTitle, effDate, expDate, newsContent, newsImageUrl, state, oldNewsId);
+			PrintWriter out = response.getWriter();
+			log.error(retVal);
+			out.println(retVal);
 			out.close();
+		} 
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	@RequestMapping(params = "method=uploadFile")
+	public void uploadFile(MultipartHttpServletRequest request, HttpServletResponse response)
+	{
+		try 
+		{
+			response.setCharacterEncoding("UTF-8");
+		    String newsType = request.getParameter("newsType");
+		    PrintWriter out = response.getWriter();
+		    String msg = digitalHealthService.uploadFile(request, newsType);
+		    out.println(msg);
+		    out.close();
+		}
+		catch (Exception e) 
+		{
+		    e.printStackTrace();
 		}
 	}
 }

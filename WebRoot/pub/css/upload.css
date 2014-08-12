@@ -1,0 +1,70 @@
+@charset "utf-8";
+.titlecentre{ 
+	width:75%; 
+}
+#upLoadProgress{
+	position:fixed;
+	left:280px;
+	top:150px;
+	height:130px;
+	width:300px;
+}
+
+#upLoadProgress .uploadify-queue-item .cancel a{
+	background-image:url("/pub/images/uploadify-cancel.png");
+}
+
+#foo .uploadify-queue-item .cancel a{
+	background-image:url("/pub/images/uploadify-cancel.png");
+}
+
+.uploadify-queue-item{
+	max-width : 450px;
+	height : 10px;
+}
+
+#foo .uploadify-progress{
+	display : none;
+}
+
+#btnsUpload{
+	background-color:#ffffff;
+	width:20px;
+	height:20px;
+	background-image:url("/pub/images/document_small_upload.png");
+}
+
+#btnbUpload{
+	background-color:#ffffff;
+	width:82px;
+	height:28px;
+	background-image:url("/pub/images/btn_im.png");
+}
+
+.uploadify-button {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+}
+.uploadify:hover .uploadify-button {
+    background-color: transparent;
+}
+
+.uploadify{
+	position:absolute;
+	top:2px;
+	left:3px;
+}
+
+#export1{
+	position:absolute;
+	top:0px;
+	left:0px;
+}
+
+.linkCha{
+	color:#0099ff;
+}
+.linkCha:hover{
+	color:#ff0000;
+}
