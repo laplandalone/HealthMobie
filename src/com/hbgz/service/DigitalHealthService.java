@@ -826,7 +826,7 @@ public class DigitalHealthService
 		hospitalNewsT.setNewsTitle(newsTitle);
 		hospitalNewsT.setEffDate(SysDate.getSysDate(effDate, "yyyy-MM-dd"));
 		hospitalNewsT.setExpDate(SysDate.getSysDate(expDate, "yyyy-MM-dd"));
-		hospitalNewsT.setNewsContent(newsContent.getBytes());
+		hospitalNewsT.setNewsContent(newsContent.getBytes("GBK"));
 		hospitalNewsT.setState("00A");
 		hospitalNewsT.setNewsImages(imageUrl);
 		hibernateObjectDao.save(hospitalNewsT);
@@ -868,7 +868,7 @@ public class DigitalHealthService
 	public String updateNews(String hospitalId, String newsId, String newsType,
 			String typeId, String newsTitle, String effDate, String expDate,
 			String newsContent, String newsImageUrl, String state,
-			String oldNewsId) 
+			String oldNewsId) throws UnsupportedEncodingException 
 	{
 		List<HospitalNewsT> sList = hibernateObjectDao.getNewsById(hospitalId, oldNewsId);
 		if(ObjectCensor.checkListIsNull(sList))
@@ -891,7 +891,7 @@ public class DigitalHealthService
 			newHospitalNewsT.setNewsTitle(newsTitle);
 			newHospitalNewsT.setEffDate(SysDate.getSysDate(effDate, "yyyy-MM-dd"));
 			newHospitalNewsT.setExpDate(SysDate.getSysDate(expDate, "yyyy-MM-dd"));
-			newHospitalNewsT.setNewsContent(newsContent.getBytes());
+			newHospitalNewsT.setNewsContent(newsContent.getBytes("GBK"));
 			newHospitalNewsT.setState(state);
 			if(ObjectCensor.isStrRegular(imageUrl))
 			{

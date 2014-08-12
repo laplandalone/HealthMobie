@@ -108,7 +108,7 @@ public class NewsController
 	{
 		try 
 		{
-			response.setCharacterEncoding("UTF-8");
+			response.setCharacterEncoding("GBK");
 			HttpSession session = request.getSession();
 			String hospitalId= (String)session.getAttribute("hospitalId");
 			String newsTypeId = request.getParameter("newsTypeId");
@@ -128,7 +128,7 @@ public class NewsController
 	@RequestMapping(params = "method=addNews")
 	public void addNews(HttpServletRequest request, HttpServletResponse response)
 	{
-		response.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("GBK");
 		try 
 		{
 			HttpSession session = request.getSession();
@@ -156,7 +156,7 @@ public class NewsController
 	@RequestMapping(params = "method=updateNews")
 	public void updateNews(HttpServletRequest request, HttpServletResponse response)
 	{
-		response.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("GBK");
 		try 
 		{
 			HttpSession session = request.getSession();
