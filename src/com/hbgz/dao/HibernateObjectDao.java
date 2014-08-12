@@ -64,7 +64,7 @@ public class HibernateObjectDao extends BaseDao
 		{
 			return null;
 		}
-		String hql = "from HospitalNewsT as model where  model.state='00A' and model.hospitalId=? and model.typeId=? and model.newsType=? ";
+		String hql = "from HospitalNewsT as model where  model.state='00A' and model.effDate<=sysdate and model.expDate>=sysdate and model.hospitalId=? and model.typeId=? and model.newsType=? ";
 		return this.find(hql, new String[]{ hospitalId, typeId, type });
 	}
 	
@@ -72,7 +72,7 @@ public class HibernateObjectDao extends BaseDao
 	{
 		if(ObjectCensor.isStrRegular(hospitalId, newsId))
 		{
-			String hql = "from HospitalNewsT as model where model.hospitalId = ? and model.newsId = ? ";
+			String hql = "from HospitalNewsT as model where and model.effDate<=sysdate and model.expDate>=sysdate and model.hospitalId = ? and model.newsId = ? ";
 			return this.find(hql, new String[]{ hospitalId, newsId});
 		}
 		return null;
