@@ -58,8 +58,8 @@
   				<td align="center" width="14%">
   					<select id="newsType" name="newsType" class="subselect">
   						<option value="">信息类型</option>
-  						<option value="NEWS">新闻</option>
-  						<option value="BAIKE">百科</option>
+  						<option value="NEWS">患教中心</option>
+  						<option value="BAIKE">健康百科</option>
   					</select>
   				</td>
   				<td align="center" width="14%">

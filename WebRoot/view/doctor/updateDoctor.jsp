@@ -92,12 +92,14 @@
 	</head>
 	<body>
 		<div id="template" style="height:500px;overflow:auto">
-			<table width="50%" border="0" cellspacing="0" cellpadding="0" align='center' class="maintable1">
+			<table width="50%" border="0" cellspacing="0" cellpadding="0" align='center' >
 				<br />
 				<tr align='left'>
+				<td>
 					<div class="titleba">
 						<h3>医生基本信息</h3>
 					</div>
+					</td>
 				</tr>
 			</table>
 			<table width="50%" border="1" cellspacing="0" cellpadding="0" align='center' class="maintable1">
@@ -142,19 +144,23 @@
 					</td>
 				</tr>
 			</table>
-			<table width="50%" border="0" cellspacing="0" cellpadding="0" align='center' class="maintable1">
+			<table width="50%" border="0" cellspacing="0" cellpadding="0" align='center' >
 				<br />
 				<tr align='center'>
+				<td>
 					<input type="button" align='center' onclick="refundAjax()" class="button3" value="修改信息" />
+					</td>
 				</tr>
 			</table>
 			<br />
-			<table width="50%" border="0" cellspacing="0" cellpadding="0" align='center' class="maintable1">
+			<table width="50%" border="0" cellspacing="0" cellpadding="0" align='center'>
 				<br />
 				<tr align='left'>
+				<td>
 					<div class="titleba">
 						<h3>医生预约时间</h3>
 					</div>
+					</td>
 				</tr>
 			</table>
 			<table width="50%" border="1" cellspacing="0" cellpadding="0" align='center' class="maintable1">
@@ -181,10 +187,13 @@
 					</tr>
 				</c:forEach>
 			</table>
-			<table width="50%" border="0" cellspacing="0" cellpadding="0" align='center' class="maintable1">
+			<table width="50%" border="0" cellspacing="0" cellpadding="0" align='center' >
 				<br />
+				
 				<tr align='center'>
+				<td>
 					<input type="button" align='center' onclick="updateOrder()" class="button3" value="预约排班" />&nbsp;&nbsp;
+					</td>
 				</tr>
 			</table>
 		</div>
