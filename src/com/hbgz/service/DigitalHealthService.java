@@ -149,17 +149,17 @@ public class DigitalHealthService
 //		String orderTeamId="10";
 		List orderList = digitalHealthDao.getOrderByWeekId(weekStr,doctorId);
 		List ordertotalList = digitalHealthDao.qryOrderTotalNum(doctorId);
-		List userOrderList = digitalHealthDao.qryUserOrderByPhone(userId);
+		List userOrderList = digitalHealthDao.qryUserOrderByPhone(userId,dateStr);
 		List list = new ArrayList();
 		
 		/*用户预约科室总数统计*/
-		Map teamComp = new HashMap();
-		teamComp.put("teamId", orderTeamId);
-		List teamList = StringUtil.getSubMapList(userOrderList, teamComp);
+//		Map teamComp = new HashMap();
+//		teamComp.put("teamId", orderTeamId);
+//		List teamList = StringUtil.getSubMapList(userOrderList, teamComp);
 		String orderTeamCount="0";
-		if(ObjectCensor.checkListIsNull(teamList))
+		if(ObjectCensor.checkListIsNull(userOrderList))
 		{
-			orderTeamCount=teamList.size()+"";
+			orderTeamCount=userOrderList.size()+"";
 		}
 		
 		/*医生可预约时间*/

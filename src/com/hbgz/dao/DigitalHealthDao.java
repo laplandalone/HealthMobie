@@ -191,17 +191,18 @@ public class DigitalHealthDao
 	 * @return
 	 * @throws QryException
 	 */
-	public List qryUserOrderByPhone(String userId) throws QryException
+	public List qryUserOrderByPhone(String userId,String dateStr) throws QryException
 	{
-		if (!ObjectCensor.isStrRegular(userId))
+		if (!ObjectCensor.isStrRegular(userId,dateStr))
 		{
 			return null;
 		}
 		StringBuffer sql = new StringBuffer();
 		sql.append(" select  team_id,user_id,doctor_id,register_id,replace(register_time,' ','')register_time from register_order_t ");
 		sql.append(" where (order_state = '000' or order_state = '00A')and state = '00A'");
-		sql.append(" and user_id=?");
+		sql.append(" and substr(register_time, 1, 10) =? and user_id=?");
 		ArrayList lstParam = new ArrayList();
+		lstParam.add(dateStr);
 		lstParam.add(userId);
 		return itzcQryCenter.executeSqlByMapListWithTrans(sql.toString(), lstParam);
 	}
