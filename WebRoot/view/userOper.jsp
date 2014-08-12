@@ -116,8 +116,8 @@
 					</tr>
 					<tr>
 						<td colspan="2" align="center">
-							<input style="width: 80px; height: 28px; border-top-color: currentColor; border-right-color: currentColor; border-bottom-color: currentColor; border-left-color: currentColor; border-top-width: medium; border-right-width: medium; border-bottom-width: medium; border-left-width: medium; border-top-style: none; border-right-style: none; border-bottom-style: none; border-left-style: none; cursor: pointer; background-image: url(/pub/images/btn1_r1_c2.png);" onclick="enterClick()" type="button" value="确定"/>&nbsp;&nbsp;
-							<input style="width: 80px; height: 28px; border-top-color: currentColor; border-right-color: currentColor; border-bottom-color: currentColor; border-left-color: currentColor; border-top-width: medium; border-right-width: medium; border-bottom-width: medium; border-left-width: medium; border-top-style: none; border-right-style: none; border-bottom-style: none; border-left-style: none; cursor: pointer; background-image: url(/pub/images/btn1_r1_c2.png);" onclick="cancelClick()" type="button" value="取消"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							<input class="button3" onclick="enterClick()" type="button" value="确定"/>&nbsp;&nbsp;
+							<input class="button1" onclick="cancelClick()" type="button" value="取消"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						</td>
 					</tr>
 				</table>

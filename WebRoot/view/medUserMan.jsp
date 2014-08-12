@@ -45,8 +45,8 @@
 		</div>
 		<div class="ctrl">
 			<input type="button" onclick="addUser()" class="button3" value="新增" />&nbsp;&nbsp;
-			<input type="button" onclick="delUserFunc()" class="button1" value="删除" />&nbsp;&nbsp;
-			<input type="button" onclick="updateUser()" class="button1" value="修改" />
+			<input type="button" onclick="delUserFunc()" class="button3" value="删除" />&nbsp;&nbsp;
+			<input type="button" onclick="updateUser()" class="button3" value="修改" />
 		</div>
 	</body>
 </html>
