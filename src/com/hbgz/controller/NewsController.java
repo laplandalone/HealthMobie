@@ -34,7 +34,7 @@ public class NewsController
 	{
 		try 
 		{
-			response.setCharacterEncoding("UTF-8");
+			response.setCharacterEncoding("GBK");
 			String newsType = request.getParameter("newsType");
 			log.error(newsType);
 			HttpSession session = request.getSession();
