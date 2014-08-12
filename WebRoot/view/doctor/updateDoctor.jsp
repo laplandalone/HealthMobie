@@ -184,7 +184,7 @@
 			<table width="50%" border="0" cellspacing="0" cellpadding="0" align='center' class="maintable1">
 				<br />
 				<tr align='center'>
-					<input type="button" align='center' onclick="updateOrder()" class="button1" value="预约排班" />&nbsp;&nbsp;
+					<input type="button" align='center' onclick="updateOrder()" class="button3" value="预约排班" />&nbsp;&nbsp;
 				</tr>
 			</table>
 		</div>
