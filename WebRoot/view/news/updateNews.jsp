@@ -74,8 +74,8 @@
 				
 				$("#fileName").uploadify({ 
 					"method" : "post",  //提交方式Post 或Get 
-					"width" : 16,  //设置浏览按钮的宽度
-		    		"height" : 16,  //设置浏览按钮的高度
+					"width" : 20,  //设置浏览按钮的宽度
+		    		"height" : 20,  //设置浏览按钮的高度
 					"swf" : "/pub/swf/uploadify.swf",  //uploadify.swf 文件的相对路径
 					"uploader" : "/news.htm?method=uploadFile",  //后台处理程序的相对路径
 					"buttonText" : "",  //浏览按钮的文本
@@ -289,23 +289,27 @@
 						--> 
 					</td>
     			</tr>
+    			<c:choose>
+    				<c:when test="${news.newsImages != ''}">
+    					<tr>
+    						<td width="12%">文章配图</td>
+    						<td colspan="5">
+	    						<a href="${news.newsImages }" target="_blank">
+	    							<img src="${news.newsImages }" width="60" height="60" onclick="" style="margin-bottom: 10px;">
+	    						</a>
+    						</td>
+    					</tr>
+    				</c:when>
+    			</c:choose>
     			<tr>
-    				<td width="12%" align="right">标题配图</td>
+    				<td width="12%" align="right">选择图片</td>
     				<td colspan="5" style="position:relative;">
-    					<c:choose>
-    						<c:when test="${news.newsImages != ''}">
-    							<a href="${news.newsImages }" target="_blank" style="margin-bottom: 10px;">
-    								<img src="${news.newsImages }" width="60" height="60" onclick="" style="margin-bottom: 10px;">
-    							</a>
-    							</br>
-    						</c:when>
-    					</c:choose>
     					<!--  
 						<input type="file" class="ifile" id="newsImage" size="80" onchange="newsImageFileName.value=this.value; "/>
 						<input name="newsImageFileName" type="text" class="subtext2" id="txtfilename" size="80" readonly style="height: 20px;" />  
 						<img src="<%=path %>/pub/images/document_small_upload.png" width="20px" height="20px" align="absmiddle" onclick="newsImage.click();" style="z-index: 999;" /> 
 						-->
-						<input type="file" id="fileName" name="fileName" style="border:0;font-size:12px" />
+						<input type="file" id="fileName" name="fileName" style="border:0;font-size:12px; margin-bottom: 20px" />
 						<input type="hidden" id="newsImageUrl" name="newsImageUrl"/>
 					</td>
     			</tr>
@@ -313,6 +317,11 @@
     				<td width="12%"></td>
 					<td colspan="5">
 						<div id="foo"></div>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="6">
+						<font color="red">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注：您上传的图片必须符合图片大小为：300 × 299，或者相等比例</font>
 					</td>
 				</tr>
     		</table>
