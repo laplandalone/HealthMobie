@@ -64,8 +64,8 @@
 					
 				$("#fileName").uploadify({ 
 					"method" : "post",  //提交方式Post 或Get 
-					"width" : 16,  //设置浏览按钮的宽度
-		    		"height" : 16,  //设置浏览按钮的高度
+					"width" : 20,  //设置浏览按钮的宽度
+		    		"height" : 20,  //设置浏览按钮的高度
 					"swf" : "/pub/swf/uploadify.swf",  //uploadify.swf 文件的相对路径
 					"uploader" : "/news.htm?method=uploadFile",  //后台处理程序的相对路径
 					"buttonText" : "",  //浏览按钮的文本
