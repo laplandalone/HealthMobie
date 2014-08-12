@@ -56,6 +56,22 @@
 					$("#typeId").html(options);
 				});
 				
+				$("#newsType").change(function(){
+					var newsType = $("#newsType").val();
+					$.getJSON("/news.htm?method=qryNewsTypeList", {"newsType":newsType}, function(data){ 
+						var options = "";
+						$("#typeId").html(options);
+						if(data.length > 0)
+						{
+							for(var i = 0; i < data.length; i++)
+							{
+								options += "<option value='"+data[i].configId+"'>"+data[i].configVal+"</option>"; 
+							}
+						}
+						$("#typeId").html(options);
+					});
+				});
+				
 				$("#fileName").uploadify({ 
 					"method" : "post",  //提交方式Post 或Get 
 					"width" : 16,  //设置浏览按钮的宽度
