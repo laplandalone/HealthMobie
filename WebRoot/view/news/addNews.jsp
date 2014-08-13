@@ -34,7 +34,7 @@
 			$(document).ready(function()
 			{
 				var newsType = $("#newsType").val();
-				$.getJSON("/news.htm?method=qryNewsTypeList", {"newsType":newsType}, function(data){
+				$.getJSON("/news.htm?method=qryNewsTypeList", {"newsType":newsType,"random":Math.random()}, function(data){
 					var options = "";
 					$("#typeId").html(options);
 					if(data.length > 0)
