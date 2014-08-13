@@ -76,15 +76,30 @@
 					url:"/doctor.htm?method=updateDoctor",
 					type:"POST",
 					data:"name="+name.val()+"&password="+psw.val()+"&confimPassword="+confimPsw.val()+"&doctorId="+'${doctor.doctor_id}'+"&fee="+fee.val(),
+					
 					success:function(data)
 					{
-						$.dialog.alert('操作成功',function(){
+						if(data=='success')
+						{
+							$.dialog.alert('操作成功',function()
+							{
+								//window.location.href="/ques.htm?method=queryPre";
+							});
+						}else
+						{
+							$.dialog.alert('操作失败',function()
+									{
+										//window.location.href="/ques.htm?method=queryPre";
+									});
+						}
+						
+					},
+					error:function(tata)
+					{
+						$.dialog.alert('操作失败',function()
+								{
 							//window.location.href="/ques.htm?method=queryPre";
 						});
-					},
-					error:function(stata)
-					{
-					 
 					}
 				});
 			}

@@ -1,5 +1,6 @@
 package com.hbgz.controller;
 
+import java.io.Writer;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.hbgz.pub.exception.QryException;
 import com.hbgz.pub.util.ObjectCensor;
 import com.hbgz.pub.util.StringUtil;
 import com.hbgz.service.DigitalHealthService;
@@ -58,8 +60,7 @@ public class DoctorController
 		} 
 		else
 		{
-			model.addObject("result", "error");
-			model.setViewName("login");
+			model.setViewName("error");
 		}
 		return model;
 	}
@@ -91,14 +92,13 @@ public class DoctorController
 		}
 		else
 		{
-			model.addObject("result", "error");
-			model.setViewName("login");
+			model.setViewName("error");
 		}
 		return model;
 	}
 	
 	@RequestMapping(params = "method=updateDoctor")
-	public ModelAndView updateDoctor(HttpServletResponse response , HttpServletRequest request) throws Exception
+	public void updateDoctor(HttpServletResponse response , HttpServletRequest request) throws Exception
 	{
 		ModelAndView model = new ModelAndView("updateDoctor");
 		HttpSession session = request.getSession();
@@ -109,19 +109,27 @@ public class DoctorController
 		String password = (String)request.getParameter("password");
 		String fee = (String)request.getParameter("fee"); 
 		
+		Writer wr = response.getWriter();
 		if(ObjectCensor.isStrRegular(doctorId,hospitalId,name,password) )
 		{
-			digitalHealthService.updateHospitalMananger(hospitalId, doctorId, name, password);
-			digitalHealthService.updateDoctor(doctorId, fee);
-			model.addObject("reslut", "success");
-			model.setViewName("/view/doctor/updateDoctor");
+			try {
+				digitalHealthService.updateHospitalMananger(hospitalId, doctorId, name, password);
+				digitalHealthService.updateDoctor(doctorId, fee);
+			} catch (Exception e) 
+			{
+				e.printStackTrace();
+				wr.write("error");
+				return;
+			}
 		}
 		else
 		{
-			model.addObject("reslut", "error");
-			model.setViewName("/view/doctor/updateDoctor");
+			wr.write("error");
+			return;
 		}
-		return model;
+		wr.write("success");
+		wr.close();
+		
 	}
 	
 	@RequestMapping(params = "method=updateRegisterTime")
@@ -138,13 +146,11 @@ public class DoctorController
 		
 		if(ObjectCensor.isStrRegular(doctorId,hospitalId) )
 		{
-			model.addObject("reslut", "success");
 			return new ModelAndView(new RedirectView("/doctor.htm?method=getDoctor&doctorId="+doctorId));
 		}
 		else
 		{
-			model.addObject("result", "error");
-			model.setViewName("login");
+			model.setViewName("error");
 		}
 		return model;
 	}

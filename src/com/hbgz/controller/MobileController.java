@@ -187,7 +187,7 @@ public class MobileController
 		else
 		{
 			model.addObject("result", "error");
-			model.setViewName("login");
+			model.setViewName("error");
 		}
 		return model;
 	}
@@ -207,7 +207,7 @@ public class MobileController
 		else
 		{
 			model.addObject("result", "error");
-			model.setViewName("login");
+			model.setViewName("error");
 		}
 		return model;
 	}
@@ -247,7 +247,7 @@ public class MobileController
 		else
 		{
 			model.addObject("result", "error");
-			model.setViewName("login");
+			model.setViewName("error");
 		}
 		return model;
 	}
@@ -267,7 +267,7 @@ public class MobileController
 		else
 		{
 			model.addObject("result", "error");
-			model.setViewName("login");
+			model.setViewName("error");
 		}
 		return model;
 	}
@@ -303,7 +303,7 @@ public class MobileController
 		else
 		{
 			model.addObject("result", "error");
-			model.setViewName("login");
+			model.setViewName("error");
 		}
 		return model;
 	}
@@ -355,7 +355,7 @@ public class MobileController
 		if("".equals(model.getViewName()))
 		{
 			model.addObject("result", "error");
-			model.setViewName("login");
+			model.setViewName("error");
 		}
 		return model;
 	}
@@ -417,7 +417,7 @@ public class MobileController
 		if("".equals(model.getViewName()))
 		{
 			model.addObject("result", "error");
-			model.setViewName("login");
+			model.setViewName("error");
 		}
 		return model;
 	}

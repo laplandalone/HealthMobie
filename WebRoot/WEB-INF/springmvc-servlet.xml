@@ -46,8 +46,8 @@
 		<property name="defaultErrorView" value="error"/>
 		<property name="exceptionMappings">
 			<props>
-				<prop key="com.hbgz.pay.pub.exception.ArgumentsException">view/error</prop>
-            	<prop key="java.lang.Exception">view/error</prop>
+				<prop key="com.hbgz.pay.pub.exception.ArgumentsException">error</prop>
+            	<prop key="java.lang.Exception">error</prop>
 			</props>
 		</property>
 	</bean>

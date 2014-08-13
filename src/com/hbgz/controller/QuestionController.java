@@ -57,7 +57,7 @@ public class QuestionController
 		else
 		{
 			model.addObject("result", "error");
-			model.setViewName("login");
+			model.setViewName("error");
 		}
 		return model;
 	}
@@ -115,7 +115,7 @@ public class QuestionController
 		else
 		{
 			model.addObject("result", "error");
-			model.setViewName("login");
+			model.setViewName("error");
 		}
 		return model;
 	}
