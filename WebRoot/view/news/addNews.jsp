@@ -31,7 +31,8 @@
 		</style>
 		<script type="text/javascript">
 			var api = frameElement.api, W = api.opener;
-			$(document).ready(function(){
+			$(document).ready(function()
+			{
 				var newsType = $("#newsType").val();
 				$.getJSON("/news.htm?method=qryNewsTypeList", {"newsType":newsType}, function(data){
 					var options = "";
@@ -48,7 +49,7 @@
 				
 				$("#newsType").change(function(){
 					var newsType = $("#newsType").val();
-					$.getJSON("/news.htm?method=qryNewsTypeList", {"newsType":newsType}, function(data){ 
+					$.getJSON("/news.htm?method=qryNewsTypeList", {"newsType":newsType,"random":Math.random()}, function(data){ 
 						var options = "";
 						$("#typeId").html(options);
 						if(data.length > 0)
