@@ -97,9 +97,11 @@
 	<body>
 		<div id="template" style="height:700px;overflow:auto">
 			<br/>
-			<table width="50%" border="1" cellspacing="0" cellpadding="0" align='center' class="maintable1">
+			<table width="50%" border="0" cellspacing="0" cellpadding="0" align='center'>
 				<tr>
+				<td>
 					<div class="titleba"><h3>医生预约时间</h3></div>	
+					</td>
 				</tr>
 			</table>
 			<table width="50%" border="1" cellspacing="0" cellpadding="0" align="center" class="maintable1">
@@ -182,17 +184,21 @@
 				</tr>		
 			</table>
 			<br/>
-			<table width="50%" border="1" cellspacing="0" cellpadding="0" align='center' class="maintable1">
+			<table width="50%" border="0" cellspacing="0" cellpadding="0" align='center' >
 				<tr align='center'>
+				<td>
 				预约费:<input type='text'  id='fee' value="<%=fee%>" size=1/>
 			               预约数量:<input type='text' id='num'  value="<%=num%>" size=1 />
+			               </td>
 			    </tr>
 			</table>
-			<table width="50%" border="0" cellspacing="0" cellpadding="0" align='center' class="maintable1">
+			<table width="50%" border="0" cellspacing="0" cellpadding="0" align='center'>
 				<br/>
 				<tr align='center'>
+				<td>
 					<input type="button" onclick="registerTime()" class="button3" value="确定" />&nbsp;&nbsp;
 					<input type="button" onclick="registerTime()" class="button1" value="取消" />
+					</td>
 				</tr>
 			</table>
 		</div>
