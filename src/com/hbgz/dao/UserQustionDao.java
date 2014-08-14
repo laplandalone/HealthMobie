@@ -84,12 +84,23 @@ public class UserQustionDao extends BaseDao
 		if(ObjectCensor.isStrRegular(doctorId, questionId))
 		{
 			StringBuffer sql = new StringBuffer();
-			sql.append("select user_telephone, record_type, auth_type, content, to_char(create_date, 'yyyy-MM-dd hh24:mi:ss') create_date ");
+			sql.append("select id, user_telephone, record_type, auth_type, content, to_char(create_date, 'yyyy-MM-dd hh24:mi:ss') create_date ");
 			sql.append("from user_question_t where state = '00A' and doctor_id = ? and question_id = ? order by create_date ");
 			ArrayList lstParam = new ArrayList();
 			lstParam.add(doctorId);
 			lstParam.add(questionId);
 			return itzcQryCenter.executeSqlByMapListWithTrans(sql.toString(), lstParam);
+		}
+		return null;
+	}
+
+
+	public List<UserQuestionT> qryUserQuestionById(String id) 
+	{
+		if(ObjectCensor.isStrRegular(id))
+		{
+			String sql = "from UserQuestionT as model where model.id = ?";
+			return this.find(sql, new String[]{id});
 		}
 		return null;
 	}

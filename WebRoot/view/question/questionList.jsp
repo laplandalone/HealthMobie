@@ -107,45 +107,15 @@
 			
 			function viewContent(doctorId, questionId)
 			{
-				$.ajax({
-					url : "/ques.htm?method=qryQuesList",
-					type : "POST",
-					data : "doctorId="+doctorId+"&questionId="+questionId,
-					dataType : "json",
-					success: function(data) 
-					{
-						var content = "<table border='0' cellspacing='10' width='100%' style='font-family: 微软雅黑; font-size: 14px;'>";
-						$.each(data, function(i, obj){
-							var recordType = obj.recordType;
-							var title = "<img src='/images/ask.png' height='25' width='30'/>";
-							if("ans" == recordType)
-							{
-								title = "<img src='/images/ans.png' height='25' width='30'/>";
-							}
-							content += "<tr><td style='word-break:break-all;'>";
-							content += "<fieldset style='width:350px; margin-top: 4px auto; margin-bottom: 10px; text-align: left;'>";
-							var msg = "</br>";
-							if("ask" == recordType)
-							{
-								msg += title +  obj.content;
-							}
-							else
-							{
-								msg += title+ obj.content;
-							}
-							msg += "</br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+obj.createDate ;
-							content += "<legend align='left'><font color='gray'></font></legend>"+msg+"</fieldset>";
-							content += "</td></tr>";
-						});
-						content += "</table>";
-						lockScreen();
-						$.dialog({width:"400px", esc:false, title:"所有内容", content:content, min:false, max:false, lock:true, close:function(){unlockScreen();}});
-					},
-					error:function(stata)
-    				{
-    					$.dialog.alert(stata.statusText, function(){return true;});
-    				}
-				});
+				lockScreen();
+				$.dialog({width:"400px", esc:false, title:"所有内容", content:"url:/ques.htm?method=qryQuesList&doctorId="+doctorId+"&questionId="+questionId, min:false, max:false, lock:true, close:function(){window.location.reload(); unlockScreen();}});
+			}
+			
+			function edit(questionId)
+			{
+				document.getElementById("content" + questionId).style.border = "1px solid #d2d2d2";
+				$("#editBtn" + questionId).css("display", "none");
+				$("#submitBtn" + questionId).css("display", "block");
 			}
 		</script>
 	</head>

@@ -63,23 +63,24 @@ public class QuestionController
 	}
 	
 	@RequestMapping(params = "method=qryQuesList")
-	public void qryQuesList(HttpServletRequest request, HttpServletResponse response)
+	public ModelAndView qryQuesList(HttpServletRequest request, HttpServletResponse response)
 	{
+		ModelAndView model = new ModelAndView("viewContent");
 		try 
 		{
-			response.setCharacterEncoding("UTF-8");
 			String doctorId = request.getParameter("doctorId");
 			String questionId = request.getParameter("questionId");
 			JSONArray array = digitalHealthService.qryQuesList(doctorId, questionId);
 			log.error(array);
-			PrintWriter out = response.getWriter();
-			out.print(array);
-			out.close();
+			model.setViewName("/view/question/viewContent");
+			model.addObject("quesList", array);
 		} 
 		catch (Exception e) 
 		{
-			e.printStackTrace();
+			model.addObject("result", "error");
+			model.setViewName("error");
 		}
+		return model;
 	}
 	
 	@RequestMapping(params = "method=updateQues")
@@ -120,4 +121,22 @@ public class QuestionController
 		return model;
 	}
 	
+	@RequestMapping(params = "method=updateAns")
+	public void updateAns(HttpServletResponse response , HttpServletRequest request)
+	{
+		response.setCharacterEncoding("UTF-8");
+		try 
+		{
+			String id = request.getParameter("id");
+			String content = request.getParameter("content");
+			String retVal = digitalHealthService.updateAns(id, content);
+			PrintWriter out = response.getWriter();
+			out.println(retVal);
+			out.close();
+		} 
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+	}
 }
