@@ -3,9 +3,6 @@
 	String path = request.getContextPath();
 	String telephone = request.getParameter("telephone");
 	String question = request.getParameter("question");
-	String doctorId = request.getParameter("doctorId");
-	String questionId = request.getParameter("questionId");
-	String userId = request.getParameter("userId");
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">

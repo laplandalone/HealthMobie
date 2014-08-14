@@ -36,7 +36,7 @@
 			var api = frameElement.api, W = api.opener;
 			$(document).ready(function(){
 				var newsType = $("#newsType").val();
-				$.getJSON("/news.htm?method=qryNewsTypeList", {"newsType":newsType}, function(data){
+				$.getJSON("/news.htm?method=qryNewsTypeList", {"newsType":newsType, "random":Math.random()}, function(data){
 					var options = "";
 					var typeId = $("#selTypeId").val();
 					if(data.length > 0)
@@ -58,7 +58,7 @@
 				
 				$("#newsType").change(function(){
 					var newsType = $("#newsType").val();
-					$.getJSON("/news.htm?method=qryNewsTypeList", {"newsType":newsType}, function(data){ 
+					$.getJSON("/news.htm?method=qryNewsTypeList", {"newsType":newsType, "random":Math.random()}, function(data){ 
 						var options = "";
 						$("#typeId").html(options);
 						if(data.length > 0)

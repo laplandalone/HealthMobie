@@ -1,7 +1,7 @@
 $(document).ready(function(){
 	$("#newsType").change(function(){
 		var newsType = $("#newsType").val();
-		$.getJSON("/news.htm?method=qryNewsTypeList", {"newsType":newsType}, function(data){ 
+		$.getJSON("/news.htm?method=qryNewsTypeList", {"newsType":newsType, "random":Math.random()}, function(data){ 
 			var obj = document.getElementById("typeId");
 			for(var j = obj.options.length - 1; j > 0; j--)
 			{
@@ -22,7 +22,7 @@ $(document).ready(function(){
 	$("#newsType option[value='" + newsType + "']").attr("selected", true);
 	
 	var typeId = $("#selTypeId").val();
-	$.getJSON("/news.htm?method=qryNewsTypeList", {"newsType":newsType}, function(data){
+	$.getJSON("/news.htm?method=qryNewsTypeList", {"newsType":newsType, "random":Math.random()}, function(data){
 		var options = "";
 		if(typeId == "")
 		{

@@ -31,11 +31,12 @@
 			var demoDG1 = null;
 			function verifyFunc(doctorId, questionId, userId, telephone, id)
 			{
-				var val = $("#"+id);
+				var val = $("#"+id).html();
+				val = encodeURI(val);
 				lockScreen();
 				demoDG1 = $.dialog({
 					title:"操作", 
-					content:"url:/view/question/replyQuestion.jsp?telephone="+telephone+"&question="+val.html()+"&doctorId="+doctorId+"&questionId="+questionId+"&userId="+userId, 
+					content:"url:/view/question/replyQuestion.jsp?telephone="+telephone+"&question="+val+"&doctorId="+doctorId+"&questionId="+questionId+"&userId="+userId, 
 					min:false, 
 					max:false, 
 					lock:true, 
