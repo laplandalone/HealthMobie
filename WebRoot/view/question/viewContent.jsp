@@ -22,6 +22,7 @@
 				document.getElementById("content" + id).style.border = "1px solid #d2d2d2";
 				$("#editBtn" + id).css("display", "none");
 				$("#submitBtn" + id).css("display", "block");
+				$("#content" + id).removeAttr("readonly");
 			}
 			
 			function renew(id)
@@ -29,6 +30,7 @@
 				document.getElementById("content" + id).style.border = "0";
 				$("#editBtn" + id).css("display", "block");
 				$("#submitBtn" + id).css("display", "none");
+				$("#content" + id).attr("readonly","readonly");
 			}
 			
 			function updateAns(id, oldContent)
@@ -77,7 +79,7 @@
 								<c:if test="${ques.recordType == 'ans' }">
 									<div align='right' id='editBtn${ques.id }' style='margin-top: 5px;margin-right: 5px'><a href='javascript:void(0)' class='linkmore' onclick="edit(${ques.id })">编辑</a></div>
 									<div align='right' id='submitBtn${ques.id }' style='margin-top: 5px;margin-right: 5px;display: none;'><a href='javascript:void(0)' class='linkmore' onclick="updateAns(${ques.id }, '${ques.content }')">提交</a></div>
-									<img src='/images/ans.png' height='25' width='30' style='vertical-align: top;margin-top: 5px'/>&nbsp;&nbsp;<textarea id='content${ques.id }' rows='4' cols='51' style='border: 0;height:50px;overflow:auto;margin-top: 5px'>${ques.content }</textarea>
+									<img src='/images/ans.png' height='25' width='30' style='vertical-align: top;margin-top: 5px'/>&nbsp;&nbsp;<textarea id='content${ques.id }' rows='4' cols='51' style='border: 0;height:50px;overflow:auto;margin-top: 5px' readonly="readonly">${ques.content }</textarea>
 								</c:if>
 								<c:if test="${ques.recordType == 'ask' || ques.recordType == 'copy' }">
 									<img src='/images/ask.png' height='25' width='30' style='vertical-align: top;margin-top: 5px'/>&nbsp;&nbsp;<input style="margin-top: 5px;border-style: none;" value="${ques.content }"/>
