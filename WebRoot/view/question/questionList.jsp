@@ -108,14 +108,7 @@
 			function viewContent(doctorId, questionId)
 			{
 				lockScreen();
-				$.dialog({width:"400px", esc:false, title:"所有内容", content:"url:/ques.htm?method=qryQuesList&doctorId="+doctorId+"&questionId="+questionId, min:false, max:false, lock:true, close:function(){window.location.reload(); unlockScreen();}});
-			}
-			
-			function edit(questionId)
-			{
-				document.getElementById("content" + questionId).style.border = "1px solid #d2d2d2";
-				$("#editBtn" + questionId).css("display", "none");
-				$("#submitBtn" + questionId).css("display", "block");
+				$.dialog({id:"viewDemo", width:"450px", esc:false, title:"所有内容", content:"url:/ques.htm?method=qryQuesList&doctorId="+doctorId+"&questionId="+questionId, min:false, max:false, lock:true, close:function(){window.location.reload(); unlockScreen();}});
 			}
 		</script>
 	</head>
