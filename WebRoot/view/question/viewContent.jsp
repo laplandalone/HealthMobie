@@ -82,7 +82,7 @@
 									<img src='/images/ans.png' height='25' width='30' style='vertical-align: top;margin-top: 5px'/>&nbsp;&nbsp;<textarea id='content${ques.id }' rows='4' cols='51' style='border: 0;height:50px;overflow:auto;margin-top: 5px' readonly="readonly">${ques.content }</textarea>
 								</c:if>
 								<c:if test="${ques.recordType == 'ask' || ques.recordType == 'copy' }">
-									<img src='/images/ask.png' height='25' width='30' style='vertical-align: top;margin-top: 5px'/>&nbsp;&nbsp;<input style="margin-top: 5px;border-style: none;" value="${ques.content }"/>
+									<img src='/images/ask.png' height='25' width='30' style='vertical-align: top;margin-top: 5px'/>&nbsp;&nbsp;<input style="margin-top: 5px;border-style: none;" value="${ques.content }" readonly="readonly"/>
 								</c:if>
 								<div align='right' style='margin-bottom: 5xp;margin-right: 5px;margin-top: 5px'>
 									${ques.createDate }
