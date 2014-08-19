@@ -25,7 +25,7 @@
 			var allFlag = "0";
 			$("document").ready(function(){
     			$("#all").click(function(){
-     				if(allFlag == 0)
+     				if(allFlag == "0")
      				{
 			    	  	$("[name='checkbox']").prop("checked", true);//全选
 			    	  	allFlag = "1";
@@ -109,7 +109,7 @@
 					<td align="center">工作日</td>
 					<td align="center" width="20%">上午/下午</td>
 					<td align="center" width="20%">选择
-						<input type='checkbox' name="all"  id='all'  />
+						<input type='checkbox' name="checkbox"  id='all'  />
 					</td>
 				</tr>
 				<tr>
