@@ -37,8 +37,8 @@
 		name="AuthCode"
 		maxElementsInMemory="10000"
 		eternal="false"
-		timeToIdleSeconds="60"
-		timeToLiveSeconds="60"
+		timeToIdleSeconds="600"
+		timeToLiveSeconds="600"
 		overflowToDisk="true"
 		diskPersistent="false" />
 	
