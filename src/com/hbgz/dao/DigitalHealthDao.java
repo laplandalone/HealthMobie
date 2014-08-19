@@ -366,10 +366,12 @@ public class DigitalHealthDao
 	
 	public List getDoctorRegister(String doctorId) throws QryException
 	{
-		String sql = "select  * from doctor_register_t where state='00A' and doctor_id=?";
+		StringBuffer sql = new StringBuffer();
+		sql.append("select * from (select a.*, decode(a.register_week, '一', '1', '二', '2', '三', '3', '四', '4', '五', '5') sort_time ");
+		sql.append("from doctor_register_t a where a.state = '00A' and a.doctor_id = ?) order by sort_time, day_type ");
 		ArrayList lstParam = new ArrayList();
 		lstParam.add(doctorId);
-		return itzcQryCenter.executeSqlByMapList(sql, lstParam);
+		return itzcQryCenter.executeSqlByMapList(sql.toString(), lstParam);
 	}
 	
 	public List getHospitalManager(String userName, String password) throws QryException

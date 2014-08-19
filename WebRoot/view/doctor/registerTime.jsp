@@ -27,12 +27,12 @@
     			$("#all").click(function(){
      				if(allFlag == 0)
      				{
-			    	  	$("[name='checkbox']").attr("checked", 'true');//全选
+			    	  	$("[name='checkbox']").prop("checked", true);//全选
 			    	  	allFlag = "1";
      				}
      				else
     				{
-    	  				$("[name='checkbox']").removeAttr("checked");//取消全选 
+    	  				$("[name='checkbox']").prop("checked", false);//取消全选 
     	  				allFlag = "0";
    	 				}
 		    	});
