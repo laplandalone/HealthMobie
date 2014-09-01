@@ -44,7 +44,7 @@ public class HibernateObjectDao extends BaseDao
 		{
 			return null;
 		}
-		String hql = "from RegisterOrderT as model where model.orderState='000' and model.state='00A' and model.userId=? order by subStr(register_time,0,10) asc";
+		String hql = "from RegisterOrderT as model where model.orderState='000' and model.state='00A' and model.userId=? order by subStr(register_time,0,10) desc";
 		return this.find(hql, new String[]{ userId });
 	}
 

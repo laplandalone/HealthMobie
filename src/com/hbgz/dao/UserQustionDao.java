@@ -24,7 +24,7 @@ public class UserQustionDao extends BaseDao
 		{
 			return null;
 		}
-		List list =this.find("from UserQuestionT as model where model.recordType='ask' and  model.doctorId=? order by createDate desc", new String[] { doctorId });
+		List list =this.find("from UserQuestionT as model where model.recordType='ask' and model.authType='public' and  model.doctorId=? order by createDate desc", new String[] { doctorId });
 		return list;
 	}
 	
@@ -58,7 +58,7 @@ public class UserQustionDao extends BaseDao
 		{
 			return null;
 		}
-		List list =this.find("from UserQuestionT as model where model.questionId=? order by createDate asc", new String[] {questionId});
+		List list =this.find("from UserQuestionT as model where model.questionId=? order by createDate ", new String[] {questionId});
 		return list;
 	}
 
@@ -69,11 +69,11 @@ public class UserQustionDao extends BaseDao
 			StringBuffer sql = new StringBuffer();
 			sql.append("select question_id, user_id, doctor_id, user_telephone, auth_type, content, to_char(create_date, 'yyyy-MM-dd hh24:mi:ss') create_date, img_url ");
 			sql.append("from user_question_t where state = '00A' and record_type = 'ask' and doctor_id = ? ");
-			sql.append("and create_date between to_date(?, 'yyyy-MM-dd hh24:mi:ss') and to_date(?, 'yyyy-MM-dd hh24:mi:ss')");
+			sql.append("and create_date between to_date(?, 'yyyy-MM-dd hh24:mi:ss') and to_date(?, 'yyyy-MM-dd hh24:mi:ss')  order by create_date desc");
 			ArrayList lstParam = new ArrayList();
 			lstParam.add(doctorId);
 			lstParam.add(startTime);
-			lstParam.add(endTime + " 23:59:59");
+			lstParam.add(endTime + " 23:59:59 ");
 			return itzcQryCenter.executeSqlByMapListWithTrans(sql.toString(), lstParam);
 		}
 		return null;
@@ -85,7 +85,7 @@ public class UserQustionDao extends BaseDao
 		{
 			StringBuffer sql = new StringBuffer();
 			sql.append("select id, user_telephone, record_type, auth_type, content, to_char(create_date, 'yyyy-MM-dd hh24:mi:ss') create_date ");
-			sql.append("from user_question_t where state = '00A' and doctor_id = ? and question_id = ? order by create_date ");
+			sql.append("from user_question_t where state = '00A' and doctor_id = ? and question_id = ? order by create_date desc ");
 			ArrayList lstParam = new ArrayList();
 			lstParam.add(doctorId);
 			lstParam.add(questionId);

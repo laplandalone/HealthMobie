@@ -352,7 +352,7 @@ public class DigitalHealthDao
 			query.append("and a.order_state = ? ");
 			lstParam.add(state);
 		}
-		query.append("order by a.create_date ");
+		query.append("order by a.create_date desc");
 		return itzcQryCenter.executeSqlByMapListWithTrans(query.toString(), lstParam);
 	}
 	
