@@ -525,8 +525,6 @@ public class DigitalHealthService
 			return msgRst;
 		}else if(ObjectCensor.checkListIsNull(userList) && "NEW_USER".equals(type))//用户已注册
 		{
-			JSONObject object = new JSONObject();
-			
 			return "\"{\"status\":000}\"";
 		}
 		else if(ObjectCensor.checkListIsNull(userList) && "set_psw".equals(type))//重置密码
@@ -541,6 +539,9 @@ public class DigitalHealthService
 				hibernateObjectDao.update(user);
 			}
 			return msgRst;
+		}else if(!ObjectCensor.checkListIsNull(userList) && "set_psw".equals(type))//重置密码(用户未注册)
+		{
+			return "\"{\"status\":001}\"";
 		}
 		
 		return null;
