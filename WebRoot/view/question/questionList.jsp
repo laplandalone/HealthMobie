@@ -108,12 +108,12 @@
 			function viewContent(doctorId, questionId)
 			{
 				lockScreen();
-				$.dialog({id:"viewDemo", width:"450px", esc:false, title:"所有内容", content:"url:/ques.htm?method=qryQuesList&doctorId="+doctorId+"&questionId="+questionId, min:false, max:false, lock:true, close:function(){window.location.reload(); unlockScreen();}});
+				$.dialog({id:"viewDemo", width:"450px", esc:false, title:"所有内容", content:"url:/ques.htm?method=qryQuesList&doctorId="+doctorId+"&questionId="+questionId, min:false, max:false, lock:true, close:function(){unlockScreen();}});
 			}
 		</script>
 	</head>
 	<body>
-		<div id="template" style="width:95%;height:700px;overflow:auto" align="center">
+		<div id="template" style="width:95%;height:100%;overflow:auto" align="center">
 			<table width="100%">
 				<input type="hidden" id="selStartTime" value="${startTime }"/>
 				<input type="hidden" id="selEndTime" value="${endTime }"/>
