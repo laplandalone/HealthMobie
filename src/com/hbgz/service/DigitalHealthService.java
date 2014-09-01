@@ -281,6 +281,21 @@ public class DigitalHealthService
 				orderNum = StringUtil.getMapKeyVal(orderMap, "num");
 			}
 		}
+		List userList = hibernateObjectDao.findByProperty("HospitalUserT", "userId",userId);
+		if(ObjectCensor.checkListIsNull(userList))
+		{
+			HospitalUserT hospitalUserT = (HospitalUserT) userList.get(0);
+			String userNameT=hospitalUserT.getUserName();
+			String userNoT=hospitalUserT.getUserNo();
+			if(StringUtil.isNull(userNameT) || StringUtil.isNull(userNoT))
+			{
+				hospitalUserT.setUserName(userName);
+				hospitalUserT.setUserNo(userNo);
+				hibernateObjectDao.update(hospitalUserT);
+			}
+		}
+		
+		
 		return digitalHealthDao.addRegisterOrder(orderId, userId, registerId, doctorId, doctorName,
 				orderNum, orderFee, registerTime, userName, userNo, userTelephone, sex, teamId,
 				teamName);
