@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Collection;
 
 /**
- * ï¿½ï¿½ï¿½ï¿½Îªobjectï¿½ï¿½ï¿½ï¿½à£¬ï¿½ï¿½ï¿½objectï¿½Ç·ï¿½Îªï¿½Õ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½Îªï¿½ï¿½ï¿½ï¿½ï¿½Þ¶ï¿½ï¿½ï¿½Ä£Ê½
+ * ´ËÀàÎªobject¼ì²éÀà£¬¼ì²éobjectÊÇ·ñÎª¿Õ£¬´ËÀàËùÓÃÄ£Ê½ÎªÎÞÉÏÏÞ¶àÀýÄ£Ê½
  */
 public class ObjectCensor
 {
@@ -15,9 +15,9 @@ public class ObjectCensor
 
 
     /**
-     * ï¿½ï¿½ï¿½objectï¿½Ç·ï¿½Îªnull
-     * @param Object obj - ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½0bject
-     * @return boolean -true(0bjectÎªï¿½ï¿½) -false(objectï¿½ï¿½Îªï¿½ï¿½)
+     * ¼ì²éobjectÊÇ·ñÎªnull
+     * @param Object obj - ÐèÒª¼ì²éµÄ0bject
+     * @return boolean -true(0bjectÎª¿Õ) -false(object²»Îª¿Õ)
      */
     public static boolean checkObjectIsNull( Object obj )
     {
@@ -51,9 +51,9 @@ public class ObjectCensor
     }
 
     /**
-     * ï¿½ï¿½ï¿½ï¿½Ö·ï¿½ï¿½Ç·ï¿½Îª""
-     * @param String str - ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½Ö·ï¿½
-     * @return boolean -true(ï¿½Ö·ï¿½Îª"") -false(ï¿½Ö·ï¿½Îª"")
+     * ¼ì²é×Ö·û´®ÊÇ·ñÎª""
+     * @param String str - ÐèÒª¼ì²éµÄ×Ö·û´®
+     * @return boolean -true(×Ö·û´®Îª"") -false(×Ö·û´®²»Îª"")
      */
     private static boolean checkStringIsNull( String str )
     {
@@ -68,9 +68,9 @@ public class ObjectCensor
     }
 
     /**
-     * ï¿½ï¿½ï¿½Mapï¿½ï¿½sizeï¿½Ç·ï¿½Îª0
+     * ¼ì²éMapµÄsizeÊÇ·ñÎª0
      * @param Map map - Map
-     * @return boolean -true(Mapï¿½ï¿½sizeÎª0) -false(Mapï¿½ï¿½sizeï¿½ï¿½Îª0)
+     * @return boolean -true(MapµÄsizeÎª0) -false(MapµÄsize²»Îª0)
      */
     private static boolean checkMapIsNull( Map map )
     {
@@ -82,9 +82,9 @@ public class ObjectCensor
     }
 
     /**
-     * ï¿½ï¿½ï¿½Collectionï¿½ï¿½sizeï¿½Ç·ï¿½Îª0
-     * @param Collection collection - ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½Collection
-     * @return boolean -true(Collectionï¿½ï¿½sizeÎª0) -false(Collectionï¿½ï¿½sizeï¿½ï¿½Îª0)
+     * ¼ì²éCollectionµÄsizeÊÇ·ñÎª0
+     * @param Collection collection - ÐèÒª¼ì²éµÄCollection
+     * @return boolean -true(CollectionµÄsizeÎª0) -false(CollectionµÄsize²»Îª0)
      */
     private static boolean checkCollectionIsNull( Collection collection )
     {
@@ -96,9 +96,9 @@ public class ObjectCensor
      }
 
     /**
-     * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½lengthï¿½Ç·ï¿½Îª0ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½Îªnull
-     * @param Object[] obj - ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½0bject
-     * @return boolean -true(0bject[]Îªï¿½ï¿½) -false(object[]ï¿½ï¿½Îªï¿½ï¿½)
+     * ¼ì²éÊý×éµÄlengthÊÇ·ñÎª0£¬¼ì²éÊý×éÀïµÄÊý¾ÝÊÇ·ñ¶¼Îªnull
+     * @param Object[] obj - ÐèÒª¼ì²éµÄ0bject
+     * @return boolean -true(0bject[]Îª¿Õ) -false(object[]²»Îª¿Õ)
      */
     private static boolean checkArrayIsNull( Object[] obj )
     {
@@ -120,11 +120,17 @@ public class ObjectCensor
         }
     }
     
+    /**
+     * @author : tiankang
+     * @param str £º ±ä³¤×Ö·û´®Êý×é
+     * @return
+     * ¼ì²é×Ö·û´®Êý×éÖÐ¸÷ÔªËØÊÇ·ñÎª¿ÕÊÇ·ñÎª¿Õ´®
+     */
     public static boolean isStrRegular(String... str)
     {
     	for(int i=0,n=str.length;i<n;i++)
     	{
-    		if(str[i]==null||"".equals(str[i]) ||"null".equals(str[i]))
+    		if(str[i]==null||"".equals(str[i]) || "null".equals(str[i]))
     		{
     			return false;
     		}
@@ -134,9 +140,9 @@ public class ObjectCensor
     
     /**
      * @author : tiankang
-     * @param list : Òªï¿½ï¿½ï¿½ï¿½Listï¿½ï¿½ï¿½ï¿½
+     * @param list : Òª¼ì²éµÄList¼¯ºÏ
      * @return
-     * ï¿½ï¿½ï¿½Listï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½Îªï¿½ï¿½ï¿½Ç·ñ³¤¶ï¿½Îªï¿½ï¿½
+     * ¼ì²éList¼¯ºÏÊÇ·ñÎª¿ÕÊÇ·ñ³¤¶ÈÎªÁã
      */
     public static boolean checkListIsNull(List list)
     {
@@ -149,4 +155,5 @@ public class ObjectCensor
     		return false;
     	}
     }
+    
 }
