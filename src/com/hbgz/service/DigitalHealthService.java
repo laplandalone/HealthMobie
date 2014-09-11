@@ -372,7 +372,9 @@ public class DigitalHealthService
 	@ServiceType(value = "BUS20010")
 	public List getHospitals(String hospitalId) throws JsonException
 	{
-		return hibernateObjectDao.qryHospitalTs(hospitalId);
+		List list =hibernateObjectDao.qryHospitalTs();
+		JSONArray jsonArray = JsonUtils.fromArray(list);
+		return jsonArray;
 	}
 
 	@ServiceType(value = "BUS20011")

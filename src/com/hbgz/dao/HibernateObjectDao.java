@@ -27,15 +27,10 @@ public class HibernateObjectDao extends BaseDao
 		return list;
 	}
 
-	public List<HospitalT> qryHospitalTs(String hospitalId)
+	public List<HospitalT> qryHospitalTs()
 	{
-		if (!ObjectCensor.isStrRegular(hospitalId))
-		{
-			return null;
-		}
-		String hql = "from HospitalT as model where model.state='00A' and model.parentId=?";
-		return this.find(hql, new String[]
-		{ hospitalId });
+		String hql = "from HospitalT as model where model.state='00A' ";
+		return this.find(hql);
 	}
 
 	public List<RegisterOrderT> qryRegisterOrderTs(String userId)
@@ -54,7 +49,7 @@ public class HibernateObjectDao extends BaseDao
 		{
 			return null;
 		}
-		String hql = "from TeamT as model where  model.state='00A' and model.hospitalId=?";
+		String hql = "from TeamT as model where  model.state='00A' and (model.teamType='1' or model.teamType='0') and model.hospitalId=?";
 		return this.find(hql, new String[]{ hospitalId });
 	}
 

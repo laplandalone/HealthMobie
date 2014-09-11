@@ -56,7 +56,7 @@ public class DigitalHealthDao
 	{
 		StringBuffer sql = new StringBuffer();
 		ArrayList lstParam = new ArrayList();
-		sql.append("select t.team_id,t.team_name,t.introduce,(select t.config_val  from hospital_config_t t where config_name='imgip' and config_type='IMGWEB' and t.state='00A')||img_url img_url from team_t t where state='00A' ");
+		sql.append("select t.team_id,t.team_name,t.introduce,(select t.config_val  from hospital_config_t t where config_name='imgip' and config_type='IMGWEB' and t.state='00A')||img_url img_url from team_t t where (t.team_type='1' or t.team_type='2')  and  state='00A' ");
 
 		if (ObjectCensor.isStrRegular(expertType))
 		{
@@ -102,7 +102,7 @@ public class DigitalHealthDao
 		{
 			return null;
 		}
-		String sql = "select distinct (t.register_week),a.doctor_id,a.name ,a.post,b.team_name,a.introduce from doctor_register_t t,doctor_t a,team_t b where t.state='00A' and a.doctor_id=t.doctor_id and b.team_id=t.team_id and t.team_id=?";
+		String sql = "select distinct (t.register_week),a.doctor_id,a.name ,a.post,b.team_name,a.introduce from doctor_register_t t,doctor_t a,team_t b where (b.team_type='1' or b.team_type='2') and t.state='00A' and a.doctor_id=t.doctor_id and b.team_id=t.team_id and t.team_id=?";
 		ArrayList lstParam = new ArrayList();
 		lstParam.add(teamId);
 		return itzcQryCenter.executeSqlByMapListWithTrans(sql.toString(), lstParam);
@@ -119,7 +119,7 @@ public class DigitalHealthDao
 		{
 			return null;
 		}
-		String sql = "select t.*,a.team_name from doctor_register_t t,team_T a where t.state='00A' and a.team_id=t.team_id and t.doctor_id=?";
+		String sql = "select t.*,a.team_name from doctor_register_t t,team_T a where (a.team_type='1' or a.team_type='2') and t.state='00A' and a.team_id=t.team_id and t.doctor_id=?";
 		ArrayList lstParam = new ArrayList();
 		lstParam.add(doctorId);
 		return itzcQryCenter.executeSqlByMapListWithTrans(sql.toString(), lstParam);
@@ -137,7 +137,7 @@ public class DigitalHealthDao
 		{
 			return null;
 		}
-		String sql = "select t.*,a.team_name from doctor_register_t t,team_T a where t.state='00A' and a.team_id=t.team_id and t.doctor_id=? and t.register_week=?";
+		String sql = "select t.*,a.team_name from doctor_register_t t,team_T a where (a.team_type='1' or a.team_type='2') and t.state='00A' and a.team_id=t.team_id and t.doctor_id=? and t.register_week=?";
 		ArrayList lstParam = new ArrayList();
 		lstParam.add(doctorId);
 		lstParam.add(weekId);
@@ -358,7 +358,7 @@ public class DigitalHealthDao
 	
 	public List getDoctorById(String doctorId) throws QryException
 	{
-		String sql = "select a.*,b.team_name,c.name manager_name,c.password from doctor_t a,team_t b,hospital_manager_t c where a.state='00A' and a.team_id=b.team_id and a.doctor_id=? and c.state(+)='00A' and c.doctor_id(+)=a.doctor_id";
+		String sql = "select a.*,b.team_name,c.name manager_name,c.password from doctor_t a,team_t b,hospital_manager_t c where (b.team_type='1' or b.team_type='2') and a.state='00A' and a.team_id=b.team_id and a.doctor_id=? and c.state(+)='00A' and c.doctor_id(+)=a.doctor_id";
 		ArrayList lstParam = new ArrayList();
 		lstParam.add(doctorId);
 		return itzcQryCenter.executeSqlByMapList(sql, lstParam);
