@@ -24,6 +24,7 @@ public class HospitalT implements java.io.Serializable {
 	private String imageUrl;
 	private Date createDate;
 	private String introduce;
+	private String webUrl;
 
 	// Constructors
 
@@ -38,7 +39,8 @@ public class HospitalT implements java.io.Serializable {
 
 	/** full constructor */
 	public HospitalT(String hospitalId, String hospitalName, String state,
-			String remark, String imageUrl, Date createDate, String introduce) {
+			String remark, String imageUrl, Date createDate, String introduce,
+			String webUrl) {
 		this.hospitalId = hospitalId;
 		this.hospitalName = hospitalName;
 		this.state = state;
@@ -46,6 +48,7 @@ public class HospitalT implements java.io.Serializable {
 		this.imageUrl = imageUrl;
 		this.createDate = createDate;
 		this.introduce = introduce;
+		this.webUrl = webUrl;
 	}
 
 	// Property accessors
@@ -105,13 +108,22 @@ public class HospitalT implements java.io.Serializable {
 		this.createDate = createDate;
 	}
 
-	@Column(name = "INTRODUCE", length = 500)
+	@Column(name = "INTRODUCE", length = 1000)
 	public String getIntroduce() {
 		return this.introduce;
 	}
 
 	public void setIntroduce(String introduce) {
 		this.introduce = introduce;
+	}
+
+	@Column(name = "WEB_URL", length = 50)
+	public String getWebUrl() {
+		return this.webUrl;
+	}
+
+	public void setWebUrl(String webUrl) {
+		this.webUrl = webUrl;
 	}
 
 }
