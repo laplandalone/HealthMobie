@@ -533,7 +533,7 @@ public class DigitalHealthService
 		params.put("pwd", "cb6fbeee3deb608f000a8f132531b738");
 		params.put("p", accNbr);
 		params.put("isUrlEncode", "no");
-	    params.put("msg","【海星通技术】尊敬的用户，您的"+pswType+"是"+StringUtil.getMapKeyVal(map, accNbr)+"。健康管家愿成为您健康的好帮手");
+	    params.put("msg","【海星通技术】尊敬的用户，您的"+pswType+"是"+StringUtil.getMapKeyVal(map, accNbr)+"。益健康愿成为您健康的好帮手");
 		
 		// 新用户注册
 		if(!ObjectCensor.checkListIsNull(userList) && "NEW_USER".equals(type))
