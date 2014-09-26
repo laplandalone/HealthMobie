@@ -63,6 +63,9 @@ public class DigitalHealthService
 	private HibernateObjectDao hibernateObjectDao;
 	
 	@Autowired
+	private SynHISService synHISService;
+	
+	@Autowired
 	private CacheManager cacheManager;
 	
 	private String projectPath = System.getProperty("user.dir");
@@ -86,11 +89,25 @@ public class DigitalHealthService
 		return obj;
 	}
 
-	@ServiceType(value = "BUS2003")
-	public JSONObject getOrderById(String teamId) throws QryException
+	public JSONObject getOrderHis(String teamIdT) throws Exception
 	{
+		List list = synHISService.synHisRegisterOrderService(teamIdT);
+		JSONObject obj = new JSONObject();
+		obj.element("orders", list);
+		return obj;
+	}
+	
+	@ServiceType(value = "BUS2003")
+	public JSONObject getOrderById(String hospitalId,String teamId) throws Exception
+	{
+		/*亚心医院*/
+		if("102".equals(hospitalId))
+		{
+			return getOrderHis(teamId);
+		}
+		
 		int orderDayLen = 10;
-		List orderList = digitalHealthDao.getOrderByTeamId(teamId);
+		List orderList = digitalHealthDao.getOrderByTeamId(hospitalId,teamId);
 		List list = new ArrayList();
 		Date date = new Date();
 		if (ObjectCensor.checkListIsNull(orderList))
@@ -143,17 +160,24 @@ public class DigitalHealthService
 	}
 
 	@ServiceType(value = "BUS2004")
-	public JSONObject getOrderByDoctorId(String userId,String orderTeamId,String doctorId,String weekStr,String dateStr) throws QryException
+	public JSONObject getOrderByDoctorId(String hospitalId,String userId,String orderTeamId,String doctorId,String weekStr,String dateStr) throws Exception
 	{
-//		String userId="10806";
-//		String orderTeamId="10";
+		/*亚心医院*/
+		if("102".equals(hospitalId))
+		{
+			List list = synHISService.getHisDoctorRegister(doctorId,userId,dateStr);
+			JSONObject obj = new JSONObject();
+			obj.element("orders", list);
+			return obj;
+		}
+		
 		List orderList = digitalHealthDao.getOrderByWeekId(weekStr,doctorId);
 		List ordertotalList = digitalHealthDao.qryOrderTotalNum(doctorId);
 		List userOrderList = digitalHealthDao.qryUserOrderByPhone(userId,dateStr);
 		List list = new ArrayList();
 		
 		/*用户预约科室总数统计*/
-//		Map teamComp = new HashMap();
+//		Map teamComp = new HashMap(); doctor_register_t
 //		teamComp.put("teamId", orderTeamId);
 //		List teamList = StringUtil.getSubMapList(userOrderList, teamComp);
 		String orderTeamCount="0";
@@ -168,85 +192,83 @@ public class DigitalHealthService
 		List subList = StringUtil.getSubMapList(orderList, mapComp);
 		if(ObjectCensor.checkListIsNull(subList))
 		{
-			
-		
-		for (int n = 0; n < subList.size(); n++)
-		{
-			Map subMap = (Map) subList.get(n);
-			String doctorName = StringUtil.getMapKeyVal(subMap, "name");
-			String teamName = StringUtil.getMapKeyVal(subMap, "teamName");
-			String teamId = StringUtil.getMapKeyVal(subMap, "teamId");
-			String fee = StringUtil.getMapKeyVal(subMap, "registerFee");
-			String registerNum = StringUtil.getMapKeyVal(subMap, "registerNum");
-			String dayType = StringUtil.getMapKeyVal(subMap, "dayType");
-			String registerId = StringUtil.getMapKeyVal(subMap, "registerId");
-			String workTime = "星期" + weekStr + dayType;
-			String dayWorkTime = dateStr + workTime;
-
-			String userOrderNum = "1";
-			if(ObjectCensor.checkListIsNull(ordertotalList))
+			for (int n = 0; n < subList.size(); n++)
 			{
-			for (int m = 0; m < ordertotalList.size(); m++)
-			{
-				Map mapT = (Map) ordertotalList.get(m);
-				String idT = StringUtil.getMapKeyVal(mapT, "registerId");
+				Map subMap = (Map) subList.get(n);
+				String doctorName = StringUtil.getMapKeyVal(subMap, "name");
+				String teamName = StringUtil.getMapKeyVal(subMap, "teamName");
+				String teamId = StringUtil.getMapKeyVal(subMap, "teamId");
+				String fee = StringUtil.getMapKeyVal(subMap, "registerFee");
+				String registerNum = StringUtil.getMapKeyVal(subMap, "registerNum");
+				String dayType = StringUtil.getMapKeyVal(subMap, "dayType");
+				String registerId = StringUtil.getMapKeyVal(subMap, "registerId");
+				String workTime = "星期" + weekStr + dayType;
+				String dayWorkTime = dateStr + workTime;
+	
+				String userOrderNum = "1";
+				if(ObjectCensor.checkListIsNull(ordertotalList))
+				{
+				for (int m = 0; m < ordertotalList.size(); m++)
+				{
+					Map mapT = (Map) ordertotalList.get(m);
+					String idT = StringUtil.getMapKeyVal(mapT, "registerId");
+					
+					String dayT = StringUtil.getMapKeyVal(mapT, "registerTime");
+					dayT = dayT.replaceAll(" ", "");
+					if (registerId.equals(idT) && dayWorkTime.equals(dayT))
+					{
+						userOrderNum = StringUtil.getMapKeyVal(mapT, "orderNum");
+						break;
+					}
+				}
+				}
+				/*用户是否已预约该时间*/
+				String userFlag="N";
+				if(ObjectCensor.checkListIsNull(userOrderList))
+				{
+					for(int i=0;i<userOrderList.size();i++)
+					{
+						Map userOrder= (Map) userOrderList.get(i);
+						String registerIdT=StringUtil.getMapKeyVal(userOrder, "registerId");
+						String registerTimeT=StringUtil.getMapKeyVal(userOrder, "registerTime");
+						String userIdT=StringUtil.getMapKeyVal(userOrder, "userId");
+						String doctorIdT=StringUtil.getMapKeyVal(userOrder, "doctorId");
+						if(registerTimeT.equals(dayWorkTime)&&userIdT.equals(userId)&&doctorIdT.equals(doctorId))
+						{
+							userFlag="Y";
+							break;
+						}
+					}
+				}
 				
-				String dayT = StringUtil.getMapKeyVal(mapT, "registerTime");
-				dayT = dayT.replaceAll(" ", "");
-				if (registerId.equals(idT) && dayWorkTime.equals(dayT))
+				/*医生挂号是否已满*/
+				String numMax="false";
+				if(ObjectCensor.isStrRegular(registerNum,userOrderNum))
 				{
-					userOrderNum = StringUtil.getMapKeyVal(mapT, "orderNum");
-					break;
+					int registerNumInt=Integer.parseInt(registerNum);
+					int userOrderNumInt=Integer.parseInt(userOrderNum);
+					if(userOrderNumInt>registerNumInt)
+					{
+						numMax="true";
+						userOrderNum=registerNum;
+					}
 				}
+				
+				Map newMap = new HashMap();
+				newMap.put("registerId", registerId);
+				newMap.put("teamName", teamName);
+				newMap.put("userOrderNum", userOrderNum);// 预约号码
+				newMap.put("doctorId", doctorId);
+				newMap.put("teamId", teamId);
+				newMap.put("fee", fee);
+				newMap.put("registerNum", registerNum);
+				newMap.put("day",dateStr);
+				newMap.put("workTime", " 星期" + weekStr + " " + dayType);
+				newMap.put("userFlag", userFlag);
+				newMap.put("orderTeamCount",orderTeamCount);
+				newMap.put("numMax",numMax);
+				list.add(newMap);
 			}
-			}
-			/*用户是否已预约该时间*/
-			String userFlag="N";
-			if(ObjectCensor.checkListIsNull(userOrderList))
-			{
-			for(int i=0;i<userOrderList.size();i++)
-			{
-				Map userOrder= (Map) userOrderList.get(i);
-				String registerIdT=StringUtil.getMapKeyVal(userOrder, "registerId");
-				String registerTimeT=StringUtil.getMapKeyVal(userOrder, "registerTime");
-				String userIdT=StringUtil.getMapKeyVal(userOrder, "userId");
-				String doctorIdT=StringUtil.getMapKeyVal(userOrder, "doctorId");
-				if(registerTimeT.equals(dayWorkTime)&&userIdT.equals(userId)&&doctorIdT.equals(doctorId))
-				{
-					userFlag="Y";
-					break;
-				}
-			}
-			}
-			
-			/*医生挂号是否已满*/
-			String numMax="false";
-			if(ObjectCensor.isStrRegular(registerNum,userOrderNum))
-			{
-				int registerNumInt=Integer.parseInt(registerNum);
-				int userOrderNumInt=Integer.parseInt(userOrderNum);
-				if(userOrderNumInt>registerNumInt)
-				{
-					numMax="true";
-					userOrderNum=registerNum;
-				}
-			}
-			
-			Map newMap = new HashMap();
-			newMap.put("registerId", registerId);
-			newMap.put("teamName", teamName);
-			newMap.put("userOrderNum", userOrderNum);// 预约号码
-			newMap.put("doctorId", doctorId);
-			newMap.put("teamId", teamId);
-			newMap.put("fee", fee);
-			newMap.put("registerNum", registerNum);
-			newMap.put("day",dateStr);
-			newMap.put("workTime", " 星期" + weekStr + " " + dayType);
-			newMap.put("userFlag", userFlag);
-			newMap.put("orderTeamCount",orderTeamCount);
-			newMap.put("numMax",numMax);
-			list.add(newMap);
-		}
 		}
 		JSONObject obj = new JSONObject();
 		obj.element("orders", list);
@@ -264,8 +286,26 @@ public class DigitalHealthService
 		return null;
 	}
 
+	/**
+	 * 用户预约挂号提交
+	 * @param userId
+	 * @param registerId
+	 * @param doctorId
+	 * @param doctorName
+	 * @param orderNum
+	 * @param orderFee
+	 * @param registerTime
+	 * @param userName
+	 * @param userNo
+	 * @param userTelephone
+	 * @param sex
+	 * @param teamId
+	 * @param teamName
+	 * @return
+	 * @throws QryException
+	 */
 	@ServiceType(value = "BUS2006")
-	public boolean addUserRegisgerOrder(String userId, String registerId, String doctorId,
+	public boolean addUserRegisgerOrder(String hospitalId,String userId, String registerId, String doctorId,
 			String doctorName, String orderNum, String orderFee, String registerTime,
 			String userName, String userNo, String userTelephone, String sex, String teamId,
 			String teamName) throws QryException
@@ -295,8 +335,7 @@ public class DigitalHealthService
 			}
 		}
 		
-		
-		return digitalHealthDao.addRegisterOrder(orderId, userId, registerId, doctorId, doctorName,
+		return digitalHealthDao.addRegisterOrder(hospitalId,orderId, userId, registerId, doctorId, doctorName,
 				orderNum, orderFee, registerTime, userName, userNo, userTelephone, sex, teamId,
 				teamName);
 	}

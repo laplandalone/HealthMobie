@@ -118,7 +118,7 @@ public class DoctorT implements java.io.Serializable {
 		this.name = name;
 	}
 
-	@Column(name = "SEX", nullable = false, length = 4)
+	@Column(name = "SEX",  length = 4)
 	public String getSex() {
 		return this.sex;
 	}
@@ -155,7 +155,7 @@ public class DoctorT implements java.io.Serializable {
 		this.createDate = createDate;
 	}
 
-	@Column(name = "POST", nullable = false, length = 20)
+	@Column(name = "POST",  length = 20)
 	public String getPost() {
 		return this.post;
 	}
@@ -164,7 +164,7 @@ public class DoctorT implements java.io.Serializable {
 		this.post = post;
 	}
 
-	@Column(name = "EXPERT_FLAG", nullable = false, length = 1)
+	@Column(name = "EXPERT_FLAG", length = 1)
 	public String getExpertFlag() {
 		return this.expertFlag;
 	}
@@ -173,7 +173,7 @@ public class DoctorT implements java.io.Serializable {
 		this.expertFlag = expertFlag;
 	}
 
-	@Column(name = "ONLINE_FLAG", nullable = false, length = 1)
+	@Column(name = "ONLINE_FLAG", length = 1)
 	public String getOnlineFlag() {
 		return this.onlineFlag;
 	}
@@ -218,7 +218,7 @@ public class DoctorT implements java.io.Serializable {
 		this.teamId = teamId;
 	}
 
-	@Column(name = "WORK_TIME", nullable = false, length = 40)
+	@Column(name = "WORK_TIME",length = 40)
 	public String getWorkTime() {
 		return this.workTime;
 	}
@@ -227,7 +227,7 @@ public class DoctorT implements java.io.Serializable {
 		this.workTime = workTime;
 	}
 
-	@Column(name = "WORK_ADDRESS", nullable = false, length = 400)
+	@Column(name = "WORK_ADDRESS",  length = 400)
 	public String getWorkAddress() {
 		return this.workAddress;
 	}

@@ -25,6 +25,7 @@ import com.hbgz.pub.util.StringUtil;
 import com.hbgz.service.DigitalHealthService;
 import com.hbgz.service.LoginService;
 import com.hbgz.service.MobileService;
+import com.hbgz.service.SynHISService;
 
 /**
  * 
@@ -46,9 +47,16 @@ public class MobileController
 	@Autowired
 	private DigitalHealthService digitalHealthService;
 	
+	@Autowired
+	private SynHISService synHISService;
+	
 	@RequestMapping(params = "method=axis")
 	public void axis(String param, HttpServletResponse response)
 	{
+		String sql1="<DS><SQL><str>select a.bzmc team_name,a.bzdm team_id,a.ysdm doctor_id,b.zgxm doctor_name,* from mz_bzdyb a, comm_zgdm b where a.ysdm=b.zgid  order by bzmc</str></SQL></DS>";
+		String sql2="<DS><SQL><str>select distinct  bzdm    from mz_bzdyb  </str></SQL></DS>";
+//		synHISService.synHisService(sql2);
+		
 		try 
 		{
 			String retVal = mobileService.axis(param);
@@ -64,6 +72,18 @@ public class MobileController
 		}
 	}
 
+	@RequestMapping(params = "method=synHis")
+    public void synHis(HttpServletResponse response) 
+	{
+		String sql1="<DS><SQL><str>select a.bzmc team_name,a.bzdm team_id,a.ysdm doctor_id,b.zgxm doctor_name,* from mz_bzdyb a, comm_zgdm b where a.ysdm=b.zgid  order by bzmc</str></SQL></DS>";
+
+		try {
+			synHISService.snHisTeamService();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	@RequestMapping(params = "method=addNewsFile")
     public void addNewsFile(MultipartHttpServletRequest request, HttpServletResponse response) 
 	{
