@@ -12,7 +12,7 @@ import javax.persistence.TemporalType;
  * RegisterOrderT entity. @author MyEclipse Persistence Tools
  */
 @Entity
-@Table(name = "REGISTER_ORDER_T")
+@Table(name = "REGISTER_ORDER_T", schema = "ORACLE")
 public class RegisterOrderT implements java.io.Serializable {
 
 	// Fields
@@ -34,6 +34,8 @@ public class RegisterOrderT implements java.io.Serializable {
 	private String teamName;
 	private String state;
 	private Date createDate;
+	private String hospitalId;
+	private String payState;
 
 	// Constructors
 
@@ -41,7 +43,6 @@ public class RegisterOrderT implements java.io.Serializable {
 	public RegisterOrderT() {
 	}
 
-	
 	/** minimal constructor */
 	public RegisterOrderT(String orderId, String userId, String registerId,
 			String orderState, String registerTime, String userName,
@@ -65,7 +66,8 @@ public class RegisterOrderT implements java.io.Serializable {
 			String doctorId, String doctorName, String orderNum,
 			String orderState, String orderFee, String registerTime,
 			String userName, String userNo, String userTelephone, String sex,
-			String teamId, String teamName, String state, Date createDate) {
+			String teamId, String teamName, String state, Date createDate,
+			String hospitalId, String payState) {
 		this.orderId = orderId;
 		this.userId = userId;
 		this.registerId = registerId;
@@ -83,6 +85,8 @@ public class RegisterOrderT implements java.io.Serializable {
 		this.teamName = teamName;
 		this.state = state;
 		this.createDate = createDate;
+		this.hospitalId = hospitalId;
+		this.payState = payState;
 	}
 
 	// Property accessors
@@ -213,7 +217,7 @@ public class RegisterOrderT implements java.io.Serializable {
 		this.teamId = teamId;
 	}
 
-	@Column(name = "TEAM_NAME", nullable = false, length = 20)
+	@Column(name = "TEAM_NAME", nullable = false, length = 50)
 	public String getTeamName() {
 		return this.teamName;
 	}
@@ -239,6 +243,24 @@ public class RegisterOrderT implements java.io.Serializable {
 
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
+	}
+
+	@Column(name = "HOSPITAL_ID", length = 20)
+	public String getHospitalId() {
+		return this.hospitalId;
+	}
+
+	public void setHospitalId(String hospitalId) {
+		this.hospitalId = hospitalId;
+	}
+
+	@Column(name = "PAY_STATE", length = 3)
+	public String getPayState() {
+		return this.payState;
+	}
+
+	public void setPayState(String payState) {
+		this.payState = payState;
 	}
 
 }

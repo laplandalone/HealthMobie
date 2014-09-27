@@ -305,7 +305,7 @@ public class DigitalHealthService
 	 * @throws QryException
 	 */
 	@ServiceType(value = "BUS2006")
-	public boolean addUserRegisgerOrder(String hospitalId,String userId, String registerId, String doctorId,
+	public String addUserRegisgerOrder(String hospitalId,String userId, String registerId, String doctorId,
 			String doctorName, String orderNum, String orderFee, String registerTime,
 			String userName, String userNo, String userTelephone, String sex, String teamId,
 			String teamName) throws QryException
@@ -335,9 +335,16 @@ public class DigitalHealthService
 			}
 		}
 		
-		return digitalHealthDao.addRegisterOrder(hospitalId,orderId, userId, registerId, doctorId, doctorName,
+		boolean flag= digitalHealthDao.addRegisterOrder(hospitalId,orderId, userId, registerId, doctorId, doctorName,
 				orderNum, orderFee, registerTime, userName, userNo, userTelephone, sex, teamId,
 				teamName);
+		
+		if(flag)
+		{
+			return orderId;
+		}
+		
+		return "";
 	}
 
 	@ServiceType(value = "BUS2007")
@@ -621,6 +628,30 @@ public class DigitalHealthService
 		}
 	}
 
+	/**
+	 * 更新支付状态，100，未支付，101，支付；102，取消支付
+	 * @param orderId
+	 * @param payState
+	 * @return
+	 * @throws Exception
+	 */
+	@ServiceType(value = "BUS20023")
+	public boolean orderPay(String orderId,String payState) throws  Exception
+	{
+		boolean flag=false;
+		if (ObjectCensor.isStrRegular(orderId, payState))
+		{
+			List<RegisterOrderT> sList = hibernateObjectDao.qryRegisterOrderT(orderId);
+			if (ObjectCensor.checkListIsNull(sList))
+			{
+				 RegisterOrderT registerOrder = sList.get(0);
+				 registerOrder.setPayState(payState);
+				 hibernateObjectDao.update(registerOrder);
+				 flag=true;
+			}
+		}
+		return flag;
+	}
 	// 查询用户的挂号订单
 	public List qryRegisterOrder(String hospitalId, String teamId, String doctorId,
 			String startTime, String endTime, String state) throws Exception

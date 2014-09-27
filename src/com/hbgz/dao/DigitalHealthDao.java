@@ -279,7 +279,7 @@ public class DigitalHealthDao
 		StringBuffer sql = new StringBuffer();
 		sql.append("insert into register_order_t(");
 		sql.append("hospital_id,order_id,user_id,register_id,doctor_id,doctor_name,order_num,order_state,order_fee,register_time,user_name,user_no,user_telephone,sex,team_id,team_name,state,create_date)");
-		sql.append("values ("+ hospitalId+" '" + orderId + "','" + userId + "','" + registerId + "', '"
+		sql.append("values ("+ hospitalId+", '" + orderId + "','" + userId + "','" + registerId + "', '"
 				+ doctorId + "','" + doctorName + "','" + orderNum + "','000', '" + orderFee
 				+ "', '" + registerTime + "','" + userName + "', '" + userNo + "', '"
 				+ userTelephone + "','" + sex + "','" + teamId + "', '" + teamName

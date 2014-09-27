@@ -79,8 +79,7 @@ public class HibernateObjectDao extends BaseDao
 		{
 			return null;
 		}
-		String hql = "from RegisterOrderT as model where model.orderState='000' and model.state='00A' and model.orderId=?";
-		return this.find(hql, new String[]
-		{ orderId });
+		String hql = "from RegisterOrderT as model where  model.orderId=?";
+		return this.find(hql, new String[]{ orderId });
 	}
 }
