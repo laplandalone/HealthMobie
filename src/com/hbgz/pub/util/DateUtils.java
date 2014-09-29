@@ -1,12 +1,11 @@
  package com.hbgz.pub.util;
  
- import java.io.PrintStream;
  import java.text.ParseException;
- import java.text.SimpleDateFormat;
- import java.util.Calendar;
- import java.util.Date;
- import java.util.HashMap;
- import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
  
  public class DateUtils
  {
@@ -497,9 +496,15 @@
    {
      return CHN_DATE_FORMAT.format(new Date());
    }
+   
+   public static String getORA_DATE_FORMAT()
+   {
+     return ORA_DATE_FORMAT.format(new Date());
+   }
+   
    public static String getWeekOfDate(Date date) { 
 	   String[] weekDaysName = { "星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六" }; 
-	   String[] weekDaysCode = { "七", "一", "二", "三", "四", "五", "六" }; 
+	   String[] weekDaysCode = { "日", "一", "二", "三", "四", "五", "六" }; 
 	   Calendar calendar = Calendar.getInstance(); 
 	   calendar.setTime(date); 
 	   int intWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1; 
@@ -545,9 +550,33 @@
    return date;
 
  } 
-   public static void main(String[] args) 
+ /**
+  * 几个小时，几分钟之后
+  * @param hour
+  * @param minute
+  * @return
+ * @throws ParseException 
+  */
+ public static Date afterNTime(String dateStr,int hour,int minute) throws ParseException 
+ {
+
+   Date registerDate = DateUtils.CHN_DATE_TIME_FORMAT.parse(dateStr+" 8:00:00");
+   
+   Calendar calendar = Calendar.getInstance();
+
+   calendar.setTime(registerDate);
+
+   calendar.add(Calendar.DATE, hour);
+
+   calendar.add(Calendar.MINUTE, minute);
+   
+   Date date = calendar.getTime();
+
+   return date;
+
+ } 
+   public static void main(String[] args) throws ParseException 
    {
-	//System.out.println(checkDate());
-	//System.out.println(getDayAdd(new Date()));
+	   System.out.println(DateUtils.afterNTime("2014-09-08", 1, 1));
    }
 }

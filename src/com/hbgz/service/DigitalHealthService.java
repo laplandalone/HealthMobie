@@ -37,6 +37,7 @@ import com.hbgz.pub.exception.JsonException;
 import com.hbgz.pub.exception.QryException;
 import com.hbgz.pub.resolver.BeanFactoryHelper;
 import com.hbgz.pub.sequence.SysId;
+import com.hbgz.pub.util.AlipaySign;
 import com.hbgz.pub.util.DateUtils;
 import com.hbgz.pub.util.FileUtils;
 import com.hbgz.pub.util.HttpUtil;
@@ -100,7 +101,7 @@ public class DigitalHealthService
 	@ServiceType(value = "BUS2003")
 	public JSONObject getOrderById(String hospitalId,String teamId) throws Exception
 	{
-		/*ÑÇĞÄÒ½Ôº*/
+		/*äºšå¿ƒåŒ»é™¢*/
 		if("102".equals(hospitalId))
 		{
 			return getOrderHis(teamId);
@@ -162,7 +163,7 @@ public class DigitalHealthService
 	@ServiceType(value = "BUS2004")
 	public JSONObject getOrderByDoctorId(String hospitalId,String userId,String orderTeamId,String doctorId,String weekStr,String dateStr) throws Exception
 	{
-		/*ÑÇĞÄÒ½Ôº*/
+		/*äºšå¿ƒåŒ»é™¢*/
 		if("102".equals(hospitalId))
 		{
 			List list = synHISService.getHisDoctorRegister(doctorId,userId,dateStr);
@@ -176,7 +177,7 @@ public class DigitalHealthService
 		List userOrderList = digitalHealthDao.qryUserOrderByPhone(userId,dateStr);
 		List list = new ArrayList();
 		
-		/*ÓÃ»§Ô¤Ô¼¿ÆÊÒ×ÜÊıÍ³¼Æ*/
+		/*ç”¨æˆ·é¢„çº¦ç§‘å®¤æ€»æ•°ç»Ÿè®¡*/
 //		Map teamComp = new HashMap(); doctor_register_t
 //		teamComp.put("teamId", orderTeamId);
 //		List teamList = StringUtil.getSubMapList(userOrderList, teamComp);
@@ -186,7 +187,7 @@ public class DigitalHealthService
 			orderTeamCount=userOrderList.size()+"";
 		}
 		
-		/*Ò½Éú¿ÉÔ¤Ô¼Ê±¼ä*/
+		/*åŒ»ç”Ÿå¯é¢„çº¦æ—¶é—´*/
 		Map mapComp = new HashMap();
 		mapComp.put("registerWeek", weekStr);
 		List subList = StringUtil.getSubMapList(orderList, mapComp);
@@ -202,7 +203,7 @@ public class DigitalHealthService
 				String registerNum = StringUtil.getMapKeyVal(subMap, "registerNum");
 				String dayType = StringUtil.getMapKeyVal(subMap, "dayType");
 				String registerId = StringUtil.getMapKeyVal(subMap, "registerId");
-				String workTime = "ĞÇÆÚ" + weekStr + dayType;
+				String workTime = "æ˜ŸæœŸ" + weekStr + dayType;
 				String dayWorkTime = dateStr + workTime;
 	
 				String userOrderNum = "1";
@@ -222,7 +223,7 @@ public class DigitalHealthService
 					}
 				}
 				}
-				/*ÓÃ»§ÊÇ·ñÒÑÔ¤Ô¼¸ÃÊ±¼ä*/
+				/*ç”¨æˆ·æ˜¯å¦å·²é¢„çº¦è¯¥æ—¶é—´*/
 				String userFlag="N";
 				if(ObjectCensor.checkListIsNull(userOrderList))
 				{
@@ -241,7 +242,7 @@ public class DigitalHealthService
 					}
 				}
 				
-				/*Ò½Éú¹ÒºÅÊÇ·ñÒÑÂú*/
+				/*åŒ»ç”ŸæŒ‚å·æ˜¯å¦å·²æ»¡*/
 				String numMax="false";
 				if(ObjectCensor.isStrRegular(registerNum,userOrderNum))
 				{
@@ -257,13 +258,13 @@ public class DigitalHealthService
 				Map newMap = new HashMap();
 				newMap.put("registerId", registerId);
 				newMap.put("teamName", teamName);
-				newMap.put("userOrderNum", userOrderNum);// Ô¤Ô¼ºÅÂë
+				newMap.put("userOrderNum", userOrderNum);// é¢„çº¦å·ç 
 				newMap.put("doctorId", doctorId);
 				newMap.put("teamId", teamId);
 				newMap.put("fee", fee);
 				newMap.put("registerNum", registerNum);
 				newMap.put("day",dateStr);
-				newMap.put("workTime", " ĞÇÆÚ" + weekStr + " " + dayType);
+				newMap.put("workTime", " æ˜ŸæœŸ" + weekStr + " " + dayType);
 				newMap.put("userFlag", userFlag);
 				newMap.put("orderTeamCount",orderTeamCount);
 				newMap.put("numMax",numMax);
@@ -287,7 +288,7 @@ public class DigitalHealthService
 	}
 
 	/**
-	 * ÓÃ»§Ô¤Ô¼¹ÒºÅÌá½»
+	 * ç”¨æˆ·é¢„çº¦æŒ‚å·æäº¤
 	 * @param userId
 	 * @param registerId
 	 * @param doctorId
@@ -302,16 +303,16 @@ public class DigitalHealthService
 	 * @param teamId
 	 * @param teamName
 	 * @return
-	 * @throws QryException
+	 * @throws Exception 
 	 */
 	@ServiceType(value = "BUS2006")
 	public String addUserRegisgerOrder(String hospitalId,String userId, String registerId, String doctorId,
 			String doctorName, String orderNum, String orderFee, String registerTime,
 			String userName, String userNo, String userTelephone, String sex, String teamId,
-			String teamName) throws QryException
+			String teamName) throws Exception
 	{
 		String orderId = sysId.getId() + "";
-		if ("0".equals(orderNum) && "0".equals(registerId))// ÆÕÍ¨¹ÒºÅ
+		if ("0".equals(orderNum) && "0".equals(registerId))// æ™®é€šæŒ‚å·
 		{
 			String registerTimeT = registerTime.replace(" ", "");
 			List list = digitalHealthDao.qryOrderNormalTotal(teamId, registerTimeT);
@@ -335,10 +336,17 @@ public class DigitalHealthService
 			}
 		}
 		
+		/*åŒæ­¥ä¿®æ”¹äºšå¿ƒåŒ»é™¢é¢„çº¦å·*/
+		if("102".equals(hospitalId))
+		{
+			orderNum=synHISService.hisRegisterOrder(registerId, registerTime);
+		}
+		
 		boolean flag= digitalHealthDao.addRegisterOrder(hospitalId,orderId, userId, registerId, doctorId, doctorName,
 				orderNum, orderFee, registerTime, userName, userNo, userTelephone, sex, teamId,
 				teamName);
 		
+		/*è¿”å›order_idï¼šç”¨ä¸æ”¯ä»˜*/
 		if(flag)
 		{
 			return orderId;
@@ -563,10 +571,10 @@ public class DigitalHealthService
 	@ServiceType(value = "BUS20021")
 	public String getAuthCode(String accNbr,String type) throws  Exception
 	{
-		String pswType="×¢²áÑéÖ¤Âë";
+		String pswType="æ³¨å†ŒéªŒè¯ç ";
 		if("set_psw".equals(type))
 		{
-			pswType="ĞÂÃÜÂë";
+			pswType="æ–°å¯†ç ";
 		}
 		
 		List userList = hibernateObjectDao.findByProperty("HospitalUserT", "telephone",accNbr);
@@ -579,30 +587,30 @@ public class DigitalHealthService
 		params.put("pwd", "cb6fbeee3deb608f000a8f132531b738");
 		params.put("p", accNbr);
 		params.put("isUrlEncode", "no");
-	    params.put("msg","¡¾º£ĞÇÍ¨¼¼Êõ¡¿×ğ¾´µÄÓÃ»§£¬ÄúµÄ"+pswType+"ÊÇ"+StringUtil.getMapKeyVal(map, accNbr)+"¡£Òæ½¡¿µÔ¸³ÉÎªÄú½¡¿µµÄºÃ°ïÊÖ");
+	    params.put("msg","ã€æµ·æ˜Ÿé€šæŠ€æœ¯ã€‘å°Šæ•¬çš„ç”¨æˆ·ï¼Œæ‚¨çš„"+pswType+"æ˜¯"+StringUtil.getMapKeyVal(map, accNbr)+"ã€‚ç›Šå¥åº·æ„¿æˆä¸ºæ‚¨å¥åº·çš„å¥½å¸®æ‰‹");
 		
-		// ĞÂÓÃ»§×¢²á
+		// æ–°ç”¨æˆ·æ³¨å†Œ
 		if(!ObjectCensor.checkListIsNull(userList) && "NEW_USER".equals(type))
 		{
 		    String msgRst= HttpUtil.http(url, params, "", "", "");
 			return msgRst;
-		}else if(ObjectCensor.checkListIsNull(userList) && "NEW_USER".equals(type))//ÓÃ»§ÒÑ×¢²á
+		}else if(ObjectCensor.checkListIsNull(userList) && "NEW_USER".equals(type))//ç”¨æˆ·å·²æ³¨å†Œ
 		{
 			return "\"{\"status\":000}\"";
 		}
-		else if(ObjectCensor.checkListIsNull(userList) && "set_psw".equals(type))//ÖØÖÃÃÜÂë
+		else if(ObjectCensor.checkListIsNull(userList) && "set_psw".equals(type))//é‡ç½®å¯†ç 
 		{
 			String msgRst= HttpUtil.http(url, params, "", "", "");
 			JSONObject jsonObject = JSONObject.fromObject(msgRst);
 			String status = jsonObject.getString("status");
-			if("100".equals(status))//·¢ËÍ¶ÌĞÅ³É¹¦
+			if("100".equals(status))//å‘é€çŸ­ä¿¡æˆåŠŸ
 			{
 				HospitalUserT user = (HospitalUserT) userList.get(0);
 				user.setPassword(StringUtil.getMapKeyVal(map, accNbr));
 				hibernateObjectDao.update(user);
 			}
 			return msgRst;
-		}else if(!ObjectCensor.checkListIsNull(userList) && "set_psw".equals(type))//ÖØÖÃÃÜÂë(ÓÃ»§Î´×¢²á)
+		}else if(!ObjectCensor.checkListIsNull(userList) && "set_psw".equals(type))//é‡ç½®å¯†ç (ç”¨æˆ·æœªæ³¨å†Œ)
 		{
 			return "\"{\"status\":001}\"";
 		}
@@ -629,7 +637,7 @@ public class DigitalHealthService
 	}
 
 	/**
-	 * ¸üĞÂÖ§¸¶×´Ì¬£¬100£¬Î´Ö§¸¶£¬101£¬Ö§¸¶£»102£¬È¡ÏûÖ§¸¶
+	 * æ›´æ–°æ”¯ä»˜çŠ¶æ€ï¼Œ100ï¼Œæœªæ”¯ä»˜åˆå§‹çŠ¶æ€ï¼Œ101ï¼Œæ”¯ä»˜æˆåŠŸï¼›102ï¼Œå–æ¶ˆæ”¯ä»˜æˆåŠŸ
 	 * @param orderId
 	 * @param payState
 	 * @return
@@ -639,20 +647,34 @@ public class DigitalHealthService
 	public boolean orderPay(String orderId,String payState) throws  Exception
 	{
 		boolean flag=false;
+		RegisterOrderT registerOrder=null;
 		if (ObjectCensor.isStrRegular(orderId, payState))
 		{
 			List<RegisterOrderT> sList = hibernateObjectDao.qryRegisterOrderT(orderId);
 			if (ObjectCensor.checkListIsNull(sList))
 			{
-				 RegisterOrderT registerOrder = sList.get(0);
+				 registerOrder = sList.get(0);
 				 registerOrder.setPayState(payState);
 				 hibernateObjectDao.update(registerOrder);
 				 flag=true;
 			}
 		}
+		if(flag && "101".equals(payState) && registerOrder!=null)
+		{
+			synHISService.addOrderPay(registerOrder);
+		}
 		return flag;
 	}
-	// ²éÑ¯ÓÃ»§µÄ¹ÒºÅ¶©µ¥
+	
+	@ServiceType(value = "BUS20024")
+	public JSONObject getTaobaoSign(String orderId)
+	{
+		JSONObject object = new JSONObject();
+		String sign = AlipaySign.sign("äºšå¿ƒåŒ»é™¢-" + "é¢„çº¦", "é¢„çº¦", "1", "CZ201409221610330088");
+		object.element("sign", sign);
+		return object;
+	}
+	// æŸ¥è¯¢ç”¨æˆ·çš„æŒ‚å·è®¢å•
 	public List qryRegisterOrder(String hospitalId, String teamId, String doctorId,
 			String startTime, String endTime, String state) throws Exception
 	{
@@ -660,7 +682,7 @@ public class DigitalHealthService
 		return registerOrderList;
 	}
 
-	// Ô¤Ô¼»òÈ¡Ïû¹ÒºÅ¶©µ¥
+	// é¢„çº¦æˆ–å–æ¶ˆæŒ‚å·è®¢å•
 	public boolean appointmentOrinvalidOrder(String orderId, String optionFlag)
 	{
 		boolean flag = false;
@@ -723,7 +745,7 @@ public class DigitalHealthService
 	}
 	
 	/**
-	 * »ñÈ¡Ò½ÉúÁĞ±í
+	 * è·å–åŒ»ç”Ÿåˆ—è¡¨
 	 * @param hospitalId
 	 * @return
 	 * @throws QryException

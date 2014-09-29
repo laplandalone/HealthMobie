@@ -20,6 +20,7 @@ import cn.ISH_Service.Service1Soap12Stub;
 import com.hbgz.dao.DigitalHealthDao;
 import com.hbgz.dao.HibernateObjectDao;
 import com.hbgz.model.DoctorT;
+import com.hbgz.model.RegisterOrderT;
 import com.hbgz.model.TeamT;
 import com.hbgz.pub.base.SysDate;
 import com.hbgz.pub.sequence.SysId;
@@ -59,12 +60,15 @@ public class SynHISService {
 		}
 		return "error";
 	}
+	/**
+	 * 科室同步
+	 * @throws Exception
+	 */
 	public void snHisTeamService() throws Exception
 	{
 		
 		String sql="<DS><SQL><str>select distinct  bzdm team_id ,bzmc team_name from mz_bzdyb  </str></SQL></DS>";
 		String ss = invokeFunc(sql);
-		System.out.println(ss);
 		Document doc = XMLComm.loadXMLString(ss);
 		Element root = doc.getRootElement();
 		List list = root.getChildren();
@@ -84,12 +88,15 @@ public class SynHISService {
 		}
 		
 	}
+	
+	/*
+	 * 医生同步
+	 */
 	public void synHisDoctorService() 
 	{
 		String sql="<DS><SQL><str>select a.bzmc team_name,a.bzdm team_id,a.ysdm doctor_id,b.zgxm doctor_name,* from mz_bzdyb a, comm_zgdm b where a.ysdm=b.zgid  order by bzmc</str></SQL></DS>";
 		try {
 			String ss = invokeFunc(sql);
-			System.out.println(ss);
 			Document doc = XMLComm.loadXMLString(ss);
 			Element root = doc.getRootElement();
 			List list = root.getChildren();
@@ -119,6 +126,12 @@ public class SynHISService {
 		}
 	}
 	
+	/**
+	 * 预约时间
+	 * @param teamIdT
+	 * @return
+	 * @throws Exception
+	 */
 	public List synHisRegisterOrderService(String teamIdT) throws Exception 
 	{
 		Date startDateT = DateUtils.afterNDate(1);
@@ -170,6 +183,15 @@ public class SynHISService {
 		}
 		return listHis;
 	}
+	
+	/**
+	 * 医生可预约时间
+	 * @param doctorIdT
+	 * @param userId
+	 * @param dateStr
+	 * @return
+	 * @throws Exception
+	 */
 	public List getHisDoctorRegister(String doctorIdT,String userId,String dateStr) throws Exception
 	{
 		String derq=dateStr.replace('-','.');
@@ -266,23 +288,137 @@ public class SynHISService {
 	}
 	
 	/**
-	 * 预约成功：更新上午-swyyrs ，下午-xwyyrs 字段，未付款之前
+	 * 预约成功：更新上午-swyyrs ，下午-c 字段，未付款之前
 	 * @param id-register_id
 	 * @throws Exception
 	 */
-	public void hisRegisterOrder(String id,String weekType) throws Exception
+	public String hisRegisterOrder(String id,String weekTypeT) throws Exception
 	{
-		StringBuffer sql=new StringBuffer();
-		sql.append("<DS>");
-		sql.append("<SQL><str>update mz_ghde set "+weekType+"  = "+weekType+"  where id = "+id+"</str></SQL>");
-		sql.append("<SQL><str>select "+weekType+"  + 1 from mz_ghde where id = "+id+"</str></SQL>");
-		sql.append("<SQL><str>update mz_ghde set "+weekType+"  = "+weekType+"  + 1 where id = "+id+"</str></SQL>");
-		sql.append("</DS>");
-		String ss =invokeFunc(sql.toString());
-		System.out.println(ss);
+		String weekType="";
+		String userRegisterNum="";
+		if(ObjectCensor.isStrRegular(id,weekTypeT))
+		{
+			String week=weekTypeT.substring(weekTypeT.length()-2,weekTypeT.length());
+			if("上午".equals(week))
+			{
+				weekType="swyyrs";
+			}
+			if("下午".equals(week))
+			{
+				weekType="xwyyrs";
+			}
+			StringBuffer sql=new StringBuffer();
+			sql.append("<DS>");
+			sql.append("<SQL><str>update mz_ghde set "+weekType+"  = "+weekType+"  where id = "+id+"</str></SQL>");
+			sql.append("<SQL><str>select "+weekType+"  + 1 user_register_num from mz_ghde where id = "+id+"</str></SQL>");
+			sql.append("<SQL><str>update mz_ghde set "+weekType+"  = "+weekType+"  + 1 where id = "+id+"</str></SQL>");
+			sql.append("</DS>");
+			String ss =invokeFunc(sql.toString());
+			Document doc = XMLComm.loadXMLString(ss);
+			Element root = doc.getRootElement();
+			List list = root.getChildren();
+			
+			for (int i = 0; i < list.size(); i++)
+			{
+				Element e = (Element) list.get(i);
+				userRegisterNum=e.getChildText("user_register_num");
+			}
+		}
+		return userRegisterNum;
+	
 	}
 	
-	
+	/**
+	 * 用户支付后，亚心医院添加记录，修改xh
+	 * @param orderT
+	 * @throws Exception
+	 */
+	public void addOrderPay(RegisterOrderT orderT) throws Exception
+	{
+		
+		/*重新分配序号*/
+		String delb =orderT.getRegisterId();
+		StringBuffer sqlxh=new StringBuffer();
+		sqlxh.append("<DS>");
+		sqlxh.append("<SQL><str>update mz_ghde set  xh   = xh   where id = "+delb+"</str></SQL>");
+		sqlxh.append("<SQL><str>select  xh+1 xh  from mz_ghde where id = "+delb +"</str></SQL>");
+		sqlxh.append("<SQL><str>update mz_ghde set xh   = xh    where id = "+delb+"</str></SQL>");
+		sqlxh.append("</DS>");
+		
+		String ss = new SynHISService().invokeFunc(sqlxh.toString());
+		
+		int xh=0; /*专家序号*/
+		Document doc = XMLComm.loadXMLString(ss);
+		Element root = doc.getRootElement();
+		List list = root.getChildren();
+		
+		String xhStr="";
+		for (int i = 0; i < list.size(); i++)
+		{
+			Element e = (Element) list.get(i);
+			 xhStr=e.getChildText("xh");
+		}
+		
+		if(ObjectCensor.isStrRegular(xhStr))
+		{
+			xh=Integer.parseInt(xhStr);
+		}
+		
+		String doctorId=orderT.getDoctorId();
+		String teamId=orderT.getTeamId();
+		
+		StringBuffer sqljzsc =new StringBuffer();
+		sqljzsc.append("<DS>");
+		sqljzsc.append("<SQL><str>select  jzsc from mz_bzdyb  where bzdm  = '"+ teamId +"' and ysdm ='"+doctorId+"'</str></SQL>");
+		sqljzsc.append("</DS>");
+		
+		String jzscRst =new SynHISService().invokeFunc(sqljzsc.toString());
+		Document docJzsc = XMLComm.loadXMLString(jzscRst);
+		Element rootJzsc  = docJzsc.getRootElement();
+		List listJzsc = rootJzsc.getChildren();
+		String jzsc="";
+		for (int n = 0; n < listJzsc.size(); n++)
+		{
+			Element e = (Element) listJzsc.get(n);
+			jzsc=e.getChildText("jzsc");
+		}
+		
+		int jzscInt=0;
+		if(ObjectCensor.isStrRegular(jzsc))
+		{
+			jzscInt=Integer.parseInt(jzsc);
+		}
+		jzscInt=jzscInt*xh;
+		
+		int afterHour=jzscInt/60;
+		int afterMinute=jzscInt%60;
+		String orderDay=orderT.getRegisterTime().substring(0,10);
+		Date registerDate=DateUtils.afterNTime(orderDay, afterHour, afterMinute);/*计算精确就诊时间*/
+		String registerTime=DateUtils.CHN_DATE_TIME_EXTENDED_FORMAT.format(registerDate);
+		
+		String currentDay=DateUtils.getORA_DATE_FORMAT();
+		String sysIdStr=sysId.getId()+"";
+		String id=currentDay+sysIdStr.substring(sysIdStr.length()-4,sysIdStr.length());
+		String sex="1";
+		if("男".equals(orderT.getSex()))
+		{
+			sex="1";
+		}
+		if("女".equals(orderT.getSex()))
+		{
+			sex="2";
+		}
+		String birthDay="";
+		String userAddress="无";
+		String czydm="";/*操作员*/
+		
+		StringBuffer sql=new StringBuffer("<DS><SQL><str>");
+		sql.append("insert into mz_yydj ");
+		sql.append("(yylsh,xm,xb,csrq,yysj,yyysdm,yyysxm,lxdz,dqsj,czydm,lxdh,yynr,xh,sfzh,sff) values ");
+		sql.append("('"+id+"','"+orderT.getUserName()+"','"+sex+"','"+birthDay+"','"+registerTime+"','"+orderT.getDoctorId().trim()+"','"+orderT.getDoctorName()+"','"+userAddress+"',GETDATE(),'"+czydm+"','"+orderT.getUserTelephone()+"','"+orderT.getTeamName()+"',"+xh+",'"+orderT.getUserNo()+"','Y')");
+		sql.append("</str></SQL></DS>");
+		String result =new SynHISService().invokeFunc(sql.toString());
+	}
 	
 	
 	public static void main(String[] args) throws Exception
@@ -290,15 +426,20 @@ public class SynHISService {
 //		String sql="<DS><SQL><str>select a.id,c.bzmc team_name,c.bzdm team_id,kszjdm doctor_id,derq day,swdes,ylrs,swyyrs ,swdes-ylrs-swyyrs am_num,xwdes-xwylrs-xwyyrs pm_num  from mz_ghde a, mz_bzdyb c where derq='2014.09.30' and a.kszjdm=c.ysdm and kszjdm='0629R' </str></SQL></DS>";
 //		String sql="<DS><SQL><str>select distinct bzmc  from mz_bzdyb c order by bzmc </str></SQL></DS>";
 //		String sql="<DS><SQL><str>select  yxf ,delb ,c.bzdm team_id,c.bzmc team_name,kszjdm doctor_id,b.zgxm doctor_name,derq day from mz_ghde a,comm_zgdm b,mz_bzdyb c where a.kszjdm=b.zgid and a.kszjdm=c.ysdm  and derq between  '2014.09.27' and '2014.10.01' order by derq  </str></SQL></DS>";
-
+		
 		StringBuffer sql=new StringBuffer("<DS>");
 //		sql.append("<SQL><str>update mz_ghde set swyyrs  = swyyrs  where id = 500011365</str></SQL>");
-		sql.append("<SQL><str>select swyyrs  + 1 from mz_ghde where id = 500011365</str></SQL>");
-//		sql.append("<SQL><str>update mz_ghde set swyyrs  = swyyrs  - 1 where id = 500011365</str></SQL>");
-		sql.append("</DS>");
+//		sql.append("<SQL><str>select xwyyrs   + 1 from mz_ghde where id = 201409285103</str></SQL>");
+//		sql.append("<SQL><str>update mz_ghde set xwyyrs   = xwyyrs   - 1 where id = 500011365</str></SQL>");
 		
+		sql.append("<SQL><str>select * from mz_yydj where yylsh  = '201409286104'</str></SQL>");
+		
+//		sql.append("<SQL><str>insert into mz_yydj(yylsh,xm,xb,csrq,yysj,yyysdm,yyysxm,lxdz,dqsj,czydm,lxdh,yynr,xh,sfzh,sff) values ");
+//		sql.append("('201409285000','haha','1','1984.08.01','2014.08.01','9999R','单纯开药','湖北省武汉市水厂一路4号4楼','2014.08.01','1178R','13808652241','开药',2,'422822198407311010','Y')</str></SQL>");
+		
+		sql.append("</DS>");
+		System.out.println(sql.toString());
 		String ss =new SynHISService().invokeFunc(sql.toString());
 		System.out.println(ss);
-	   
 	}
 }
