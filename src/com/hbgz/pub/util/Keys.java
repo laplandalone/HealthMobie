@@ -1,32 +1,37 @@
-ï»¿/*
+/*
  * Copyright (C) 2010 The MobileSecurePay Project
  * All right reserved.
  * author: shiqun.shi@alipay.com
  * 
- *  æç¤ºï¼šå¦‚ä½•è·å–å®‰å…¨æ ¡éªŒç å’Œåˆä½œèº«ä»½è€…id
- *  1.ç”¨æ‚¨çš„ç­¾çº¦æ”¯ä»˜å®è´¦å·ç™»å½•æ”¯ä»˜å®ç½‘ç«™(www.alipay.com)
- *  2.ç‚¹å‡»â€œå•†å®¶æœåŠ¡â€(https://b.alipay.com/order/myorder.htm)
- *  3.ç‚¹å‡»â€œæŸ¥è¯¢åˆä½œè€…èº«ä»½(pid)â€ã€â€œæŸ¥è¯¢å®‰å…¨æ ¡éªŒç (key)â€
+ *  ÌáÊ¾£ºÈçºÎ»ñÈ¡°²È«Ğ£ÑéÂëºÍºÏ×÷Éí·İÕßid
+ *  1.ÓÃÄúµÄÇ©Ô¼Ö§¸¶±¦ÕËºÅµÇÂ¼Ö§¸¶±¦ÍøÕ¾(www.alipay.com)
+ *  2.µã»÷¡°ÉÌ¼Ò·şÎñ¡±(https://b.alipay.com/order/myorder.htm)
+ *  3.µã»÷¡°²éÑ¯ºÏ×÷ÕßÉí·İ(pid)¡±¡¢¡°²éÑ¯°²È«Ğ£ÑéÂë(key)¡±
  */
 package com.hbgz.pub.util;
 //
-// è¯·å‚è€ƒ Androidå¹³å°å®‰å…¨æ”¯ä»˜æœåŠ¡(msp)åº”ç”¨å¼€å‘æ¥å£(4.2 RSAç®—æ³•ç­¾å)éƒ¨åˆ†ï¼Œå¹¶ä½¿ç”¨å‹ç¼©åŒ…ä¸­çš„openssl RSAå¯†é’¥ç”Ÿæˆå·¥å…·ï¼Œç”Ÿæˆä¸€å¥—RSAå…¬ç§é’¥ã€‚
-// è¿™é‡Œç­¾åæ—¶ï¼Œåªéœ€è¦ä½¿ç”¨ç”Ÿæˆçš„RSAç§é’¥ã€‚
-// Note: ä¸ºå®‰å…¨èµ·è§ï¼Œä½¿ç”¨RSAç§é’¥è¿›è¡Œç­¾åçš„æ“ä½œè¿‡ç¨‹ï¼Œåº”è¯¥å°½é‡æ”¾åˆ°å•†å®¶æœåŠ¡å™¨ç«¯å»è¿›è¡Œã€‚
+// Çë²Î¿¼ AndroidÆ½Ì¨°²È«Ö§¸¶·şÎñ(msp)Ó¦ÓÃ¿ª·¢½Ó¿Ú(4.2 RSAËã·¨Ç©Ãû)²¿·Ö£¬²¢Ê¹ÓÃÑ¹Ëõ°üÖĞµÄopenssl RSAÃÜÔ¿Éú³É¹¤¾ß£¬Éú³ÉÒ»Ì×RSA¹«Ë½Ô¿¡£
+// ÕâÀïÇ©ÃûÊ±£¬Ö»ĞèÒªÊ¹ÓÃÉú³ÉµÄRSAË½Ô¿¡£
+// Note: Îª°²È«Æğ¼û£¬Ê¹ÓÃRSAË½Ô¿½øĞĞÇ©ÃûµÄ²Ù×÷¹ı³Ì£¬Ó¦¸Ã¾¡Á¿·Åµ½ÉÌ¼Ò·şÎñÆ÷¶ËÈ¥½øĞĞ¡£
 public final class Keys {
 	
-	public static final String APP_ID = "2088411973102512";
+//	ºÏ×÷ÕßÉí·İ£¨PID£©2088901022394613 
+//	°²È«Ğ£ÑéÂë£¨Key£©£º 1afffck50krd32ao0w4zppejvqridi2l
+//	Ö§¸¶±¦ÕËºÅ£º1848881936@qq.com
+	
+//	public static final String APP_ID = "2088411973102512";
+//	public static final String APP_ID = "2088901022394613";
+	//ºÏ×÷Éí·İÕßid£¬ÒÔ2088¿ªÍ·µÄ16Î»´¿Êı×Ö
+//	public static final String DEFAULT_PARTNER = "2088411973102512";
+	public static final String DEFAULT_PARTNER = "2088901022394613";
+	//ÊÕ¿îÖ§¸¶±¦ÕËºÅ
+//	public static final String DEFAULT_SELLER = "18907181680@189.cn";
+	public static final String DEFAULT_SELLER = "1848881936@qq.com";
+	//ÉÌ»§Ë½Ô¿£¬×ÔÖúÉú³É
+//	public static final String PRIVATE = "MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAOEt5vsnyRgDk87yChRTASb3iFDVTkmMGRPUw23lyi46W9rqHgSB3q5Q74wr1qNReQ3ix1xfaGkZbnCUV2RLRYYLhUlIjmk+XsBelo/Yvc8K8R/iFjqXgWY31IXqlpHFyAmVVtRewsR0LWTY6brJL+dkg7wgHo9lZPxr+RJV7zkzAgMBAAECgYBFtE7fCjbOrzTPB8+k8PjXViKlWxJL5AlTQTZpy4slej066+P04zrKXRV6H4vmrG67pKqv5nzMo+mzAch3rHFNc47SicVlg/U496ZH/S0EQEahhpPE+RM4ZIdxJBWFamgX5L6P+ocqgocClWv01PUM25JA7QRz0sz3axhCm8y7OQJBAPV++AxrszD7fP26FAu41sMlyiRWr6z7pccJZMhCPYaL0pPR8lFEkXIVeqCn7he0zSvoyo0COAVejBTuittONC8CQQDq0GU9s387Mp5C7RHFXBKmebsbObZKDtAAvVQYY9TY6iM78Fyhub9Y14gj26iq2EUuQZ7kXyxQ74Hq2b+LS1Y9AkAE0TcA12Quw+CSAgK+sCPWtHkg+Wp9FHsOSsrlexdF+pxpNidxHM1V1cIQQPtVD8Eu6WSAG9kJke9hwcSLxR8VAkEAi/3yXfbFw+VJtVzhW2ipNdcdVf3yT/TEzawSlvftzeTJXNLQZxr2mWDmKXqr9C88D3fP4xdatGYWbo2jRMiFgQJANpfeTLCVAYOwIbXkfwNSdzgCWRnNCUXIz5MteDvz06Tklg3eh4Vz4iG4Y4oXMxHEqQmkRaAFAz2QjJUWiMR1HQ==";
+	public static final String PRIVATE =
+			"MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBAKummTo1qlmqwPexCi4d2YJz399aipL6ERyfx0BYdjgyt/sL6xmzLr5rTTxh59uI4Wh6AK0lspr/5Hj9r2TRwmGK4EdMpStobNW5EteiuIh0EJUiVnQkNX9/qzJDlI6C9DUGBYnKHzkb4X6ACWSPa8UB4WXnPetO1iP/rHHF7Nt3AgMBAAECgYB0cR28+S7IiSdCX90SD7m/3y9dayRaND1rd5BJPDlmQjHAogMoef8Zudy5O4l3ydFveGQBEXOp5jFtSlqzQABl4eU5lhORZHWnWMtDS63gNaHPdhieLL/FFYrBhGmGy31dbAdWkuCTv22RPKm7pdOG0x7J7MJiTkrAAsRWlrf0AQJBAOMyvxIQ9OT0r3bea0uurcL+WHUVvhTQggaweJxGbuhC8WTr8IVMXEu0LQU5OPmGc20W5zFKT/Fj3XAUjHQCfncCQQDBaSxatAwtxOV8wEdmtKfrF1gTNTFwnfOeURe/fsv0REo4YE503SSnK7ayYtqdmuU4ByVy9VnsqMr95XCj7ssBAkABfLqNdrjzqrpfT9Np+mm+xgV0NsE4x6iiPJN9imR9drq3y2eWp8pO4I4O47IAyCWHSEgZJYBidyHi8u98buu/AkEAvfL46KvjOiAh8f81IJ1UPQLUMSkQwTWfSWEDHcL9s4xOCEgtRYDauoOoDlIfuqGhdQEvulNUWaT8l5Z6pcWkAQJBAMekMMILHx6Shz9iJLAsmXNdX8xTk2I4AQqYroqGGU7bG6IH/T88NGegCVigyRlOrG/YHBpvBBep+beX3D144WQ=";
+//	public static final String PUBLIC = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDhLeb7J8kYA5PO8goUUwEm94hQ1U5JjBkT1MNt5couOlva6h4Egd6uUO+MK9ajUXkN4sdcX2hpGW5wlFdkS0WGC4VJSI5pPl7AXpaP2L3PCvEf4hY6l4FmN9SF6paRxcgJlVbUXsLEdC1k2Om6yS/nZIO8IB6PZWT8a/kSVe85MwIDAQAB";
 
-	//åˆä½œèº«ä»½è€…idï¼Œä»¥2088å¼€å¤´çš„16ä½çº¯æ•°å­—
-	public static final String DEFAULT_PARTNER = "2088411973102512";
-
-	//æ”¶æ¬¾æ”¯ä»˜å®è´¦å·
-	public static final String DEFAULT_SELLER = "18907181680@189.cn";
-
-	//å•†æˆ·ç§é’¥ï¼Œè‡ªåŠ©ç”Ÿæˆ
-	public static final String PRIVATE = "MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAOEt5vsnyRgDk87yChRTASb3iFDVTkmMGRPUw23lyi46W9rqHgSB3q5Q74wr1qNReQ3ix1xfaGkZbnCUV2RLRYYLhUlIjmk+XsBelo/Yvc8K8R/iFjqXgWY31IXqlpHFyAmVVtRewsR0LWTY6brJL+dkg7wgHo9lZPxr+RJV7zkzAgMBAAECgYBFtE7fCjbOrzTPB8+k8PjXViKlWxJL5AlTQTZpy4slej066+P04zrKXRV6H4vmrG67pKqv5nzMo+mzAch3rHFNc47SicVlg/U496ZH/S0EQEahhpPE+RM4ZIdxJBWFamgX5L6P+ocqgocClWv01PUM25JA7QRz0sz3axhCm8y7OQJBAPV++AxrszD7fP26FAu41sMlyiRWr6z7pccJZMhCPYaL0pPR8lFEkXIVeqCn7he0zSvoyo0COAVejBTuittONC8CQQDq0GU9s387Mp5C7RHFXBKmebsbObZKDtAAvVQYY9TY6iM78Fyhub9Y14gj26iq2EUuQZ7kXyxQ74Hq2b+LS1Y9AkAE0TcA12Quw+CSAgK+sCPWtHkg+Wp9FHsOSsrlexdF+pxpNidxHM1V1cIQQPtVD8Eu6WSAG9kJke9hwcSLxR8VAkEAi/3yXfbFw+VJtVzhW2ipNdcdVf3yT/TEzawSlvftzeTJXNLQZxr2mWDmKXqr9C88D3fP4xdatGYWbo2jRMiFgQJANpfeTLCVAYOwIbXkfwNSdzgCWRnNCUXIz5MteDvz06Tklg3eh4Vz4iG4Y4oXMxHEqQmkRaAFAz2QjJUWiMR1HQ==";
-
-	public static final String PUBLIC = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDhLeb7J8kYA5PO8goUUwEm94hQ1U5JjBkT1MNt5couOlva6h4Egd6uUO+MK9ajUXkN4sdcX2hpGW5wlFdkS0WGC4VJSI5pPl7AXpaP2L3PCvEf4hY6l4FmN9SF6paRxcgJlVbUXsLEdC1k2Om6yS/nZIO8IB6PZWT8a/kSVe85MwIDAQAB";
-
-	public static final String URL = "https://openapi.alipaydev.com/gateway.do";
+	public static final String URL  = "https://openapi.alipaydev.com/gateway.do";
 }

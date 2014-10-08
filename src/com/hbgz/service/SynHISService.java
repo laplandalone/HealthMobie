@@ -288,11 +288,11 @@ public class SynHISService {
 	}
 	
 	/**
-	 * 预约成功：更新上午-swyyrs ，下午-c 字段，未付款之前
+	 * 预约成功：更新上午-swyyrs ，下午-xwyyrs 字段，未付款之前
 	 * @param id-register_id
 	 * @throws Exception
 	 */
-	public String hisRegisterOrder(String id,String weekTypeT) throws Exception
+	public String hisRegisterOrder(String id,String weekTypeT,String orderType) throws Exception
 	{
 		String weekType="";
 		String userRegisterNum="";
@@ -310,8 +310,8 @@ public class SynHISService {
 			StringBuffer sql=new StringBuffer();
 			sql.append("<DS>");
 			sql.append("<SQL><str>update mz_ghde set "+weekType+"  = "+weekType+"  where id = "+id+"</str></SQL>");
-			sql.append("<SQL><str>select "+weekType+"  + 1 user_register_num from mz_ghde where id = "+id+"</str></SQL>");
-			sql.append("<SQL><str>update mz_ghde set "+weekType+"  = "+weekType+"  + 1 where id = "+id+"</str></SQL>");
+			sql.append("<SQL><str>select "+weekType+" "+orderType+" 1 user_register_num from mz_ghde where id = "+id+"</str></SQL>");
+			sql.append("<SQL><str>update mz_ghde set "+weekType+"  = "+weekType+" "+orderType+" 1 where id = "+id+"</str></SQL>");
 			sql.append("</DS>");
 			String ss =invokeFunc(sql.toString());
 			Document doc = XMLComm.loadXMLString(ss);
@@ -432,7 +432,7 @@ public class SynHISService {
 //		sql.append("<SQL><str>select xwyyrs   + 1 from mz_ghde where id = 201409285103</str></SQL>");
 //		sql.append("<SQL><str>update mz_ghde set xwyyrs   = xwyyrs   - 1 where id = 500011365</str></SQL>");
 		
-		sql.append("<SQL><str>select * from mz_yydj where yylsh  = '201409286104'</str></SQL>");
+		sql.append("<SQL><str>select * from mz_ghde where id  = 500011337</str></SQL>");
 		
 //		sql.append("<SQL><str>insert into mz_yydj(yylsh,xm,xb,csrq,yysj,yyysdm,yyysxm,lxdz,dqsj,czydm,lxdh,yynr,xh,sfzh,sff) values ");
 //		sql.append("('201409285000','haha','1','1984.08.01','2014.08.01','9999R','单纯开药','湖北省武汉市水厂一路4号4楼','2014.08.01','1178R','13808652241','开药',2,'422822198407311010','Y')</str></SQL>");

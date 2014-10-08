@@ -31,14 +31,14 @@ public class DigitalHealthDao
 	{
 		StringBuffer sql = new StringBuffer();
 		ArrayList lstParam = new ArrayList();
-		sql.append("select t.doctor_id,t.hospital_id,t.name,decode(t.sex,'0','ÄÐ','1','Å®')sex,t.telephone,to_char(t.create_date,'yyyy-MM-dd HH24:mm:ss')create_date,t.post,t.expert_flag,t.online_flag,t.introduce,t.skill,t.team_id,work_time,t.register_num,(select t.config_val  from hospital_config_t t where config_name='imgip' and config_type='IMGWEB' and t.state='00A')||t.photo_url photo_url,t.register_fee,t.work_address from doctor_t t where state='00A' ");
+		sql.append("select t.doctor_id,t.hospital_id,t.name,decode(t.sex,'0','ÄÐ','1','Å®')sex,t.telephone,to_char(t.create_date,'yyyy-MM-dd HH24:mm:ss')create_date,t.post,t.expert_flag,t.online_flag,t.introduce,t.skill,t.team_id,work_time,t.register_num,(select t.config_val  from hospital_config_t t where config_name='imgip' and config_type='IMGWEB' and t.state='00A')||t.photo_url photo_url,t.register_fee,t.work_address from doctor_t t,team_t a where a.team_id=t.team_id and t.state='00A' ");
 
 		if (ObjectCensor.isStrRegular(expertType))
 		{
-			sql.append(" and t.expert_flag=?");
+			sql.append(" and a.expert_flag=?");
 			lstParam.add(expertType);
 		}
-		if (ObjectCensor.isStrRegular(expertType))
+		if (ObjectCensor.isStrRegular(onLineType))
 		{
 			sql.append(" and t.online_flag=?");
 			lstParam.add(onLineType);
@@ -60,13 +60,13 @@ public class DigitalHealthDao
 
 		if (ObjectCensor.isStrRegular(expertType))
 		{
-			sql.append(" and t.expert_flag=?");
+			sql.append(" and t.expert_flag= ? ");
 			lstParam.add(expertType);
 		}
 
 		if (ObjectCensor.isStrRegular(hospitalId))
 		{
-			sql.append(" and t.hospital_id=?");
+			sql.append(" and t.hospital_id=?  order by team_id ");
 			lstParam.add(hospitalId);
 		}
 		return itzcQryCenter.executeSqlByMapListWithTrans(sql.toString(), lstParam);

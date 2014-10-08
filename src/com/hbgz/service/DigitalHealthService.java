@@ -75,7 +75,7 @@ public class DigitalHealthService
 	public JSONObject getDoctorList(String expertType, String onLineType, String teamId)
 			throws QryException
 	{
-		List doctorList = digitalHealthDao.getDoctorByType(null, null, teamId);
+		List doctorList = digitalHealthDao.getDoctorByType(expertType, onLineType, teamId);
 		JSONObject obj = new JSONObject();
 		obj.element("doctors", doctorList);
 		return obj;
@@ -312,7 +312,9 @@ public class DigitalHealthService
 			String teamName) throws Exception
 	{
 		String orderId = sysId.getId() + "";
-		if ("0".equals(orderNum) && "0".equals(registerId))// 普通挂号
+		
+		/*普通挂号,默认取自定义预约号码*/ 
+		if ("0".equals(orderNum) && "0".equals(registerId))
 		{
 			String registerTimeT = registerTime.replace(" ", "");
 			List list = digitalHealthDao.qryOrderNormalTotal(teamId, registerTimeT);
@@ -322,6 +324,8 @@ public class DigitalHealthService
 				orderNum = StringUtil.getMapKeyVal(orderMap, "num");
 			}
 		}
+		
+		/*同步客户资料*/
 		List userList = hibernateObjectDao.findByProperty("HospitalUserT", "userId",userId);
 		if(ObjectCensor.checkListIsNull(userList))
 		{
@@ -339,7 +343,17 @@ public class DigitalHealthService
 		/*同步修改亚心医院预约号*/
 		if("102".equals(hospitalId))
 		{
-			orderNum=synHISService.hisRegisterOrder(registerId, registerTime);
+//			/*为空是为普通挂号，需要重新取*/
+//			if(!ObjectCensor.isStrRegular(registerId))
+//			{
+//				List normalList=synHISService.synHisRegisterOrderService(teamId);
+//				if(ObjectCensor.checkListIsNull(normalList))
+//				{
+//					Map normalMap=(Map) normalList.get(0);
+//					String docId = StringUtil.getMapKeyVal(normalMap", "doctorId");
+//				}
+//			}
+			orderNum=synHISService.hisRegisterOrder(registerId, registerTime,"+");
 		}
 		
 		boolean flag= digitalHealthDao.addRegisterOrder(hospitalId,orderId, userId, registerId, doctorId, doctorName,
@@ -638,30 +652,50 @@ public class DigitalHealthService
 
 	/**
 	 * 更新支付状态，100，未支付初始状态，101，支付成功；102，取消支付成功
+	 * PAY_STATE,000初始状态，00A已处理，00X取消
 	 * @param orderId
 	 * @param payState
 	 * @return
 	 * @throws Exception
 	 */
 	@ServiceType(value = "BUS20023")
-	public boolean orderPay(String orderId,String payState) throws  Exception
+	public boolean orderPay(String orderId,String orderState) throws  Exception
 	{
 		boolean flag=false;
+		String payState="";
 		RegisterOrderT registerOrder=null;
-		if (ObjectCensor.isStrRegular(orderId, payState))
+		if (ObjectCensor.isStrRegular(orderId, orderState))
 		{
 			List<RegisterOrderT> sList = hibernateObjectDao.qryRegisterOrderT(orderId);
 			if (ObjectCensor.checkListIsNull(sList))
 			{
 				 registerOrder = sList.get(0);
+				
+				 if("00X".equals(orderState))
+				 {
+					 payState="102";
+				 }else if("00A".equals(orderState))
+				 {
+					 payState="101";
+				 }
+				 registerOrder.setOrderState(orderState);
 				 registerOrder.setPayState(payState);
 				 hibernateObjectDao.update(registerOrder);
 				 flag=true;
 			}
 		}
+		 
 		if(flag && "101".equals(payState) && registerOrder!=null)
 		{
 			synHISService.addOrderPay(registerOrder);
+		}else 
+		
+		/*取消预约*/
+		if(flag && "102".equals(payState) && registerOrder!=null)
+		{
+			String id=registerOrder.getRegisterId();
+			String weekTypeT=registerOrder.getRegisterTime();
+			synHISService.hisRegisterOrder(id, weekTypeT, "-");
 		}
 		return flag;
 	}

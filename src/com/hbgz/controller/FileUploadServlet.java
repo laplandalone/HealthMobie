@@ -86,6 +86,7 @@ public class FileUploadServlet extends HttpServlet
 			UserQuestionT questionT = (UserQuestionT) JsonUtils.toBean(questionTs, UserQuestionT.class);
 			questionT.setImgUrl(imgages);
 			JSONObject str = JSONObject.fromObject(questionT);
+			System.out.println("FileUpload:"+str);
 			String param = "{channel:\"Q\",channelType:\"Android\",serviceType:\"BUS2007\",securityCode:\"0000000000\",params:{'userQestion':'"
 					+ str.toString() + "'},rtnDataFormatType:\"JSONObject\"}";
 			retVal = ServiceEngine.invokeService(param);
