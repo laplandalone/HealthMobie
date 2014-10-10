@@ -334,7 +334,7 @@ public class DigitalHealthDao
 		query.append("select a.order_num,a.order_id, a.register_id, a.order_fee,a.doctor_name, a.register_time, a.create_date, a.team_name,a.user_name,a.user_telephone, b.hospital_name, ");
 		query.append("decode(a.order_state, '000', '未处理', '00A', '已预约', '00X', '已作废') order_state ");
 		query.append("from register_order_t a,  hospital_t b ");
-		query.append("where a.state = '00A' and b.state = '00A'  and b.hospital_id = ? ");
+		query.append("where a.state = '00A' and b.state = '00A' and  a.hospital_id=b.hospital_id  and b.hospital_id = ? ");
 		query.append("and to_date(substr(a.register_time, 0, 10), 'yyyy-mm-dd') between to_date(?,'yyyy-mm-dd') and to_date(?,'yyyy-mm-dd') ");
 		ArrayList lstParam = new ArrayList();
 		lstParam.add(hospitalId);
