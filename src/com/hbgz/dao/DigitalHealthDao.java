@@ -31,7 +31,9 @@ public class DigitalHealthDao
 	{
 		StringBuffer sql = new StringBuffer();
 		ArrayList lstParam = new ArrayList();
-		sql.append("select t.doctor_id,t.hospital_id,t.name,decode(t.sex,'0','ÄÐ','1','Å®')sex,t.telephone,to_char(t.create_date,'yyyy-MM-dd HH24:mm:ss')create_date,t.post,t.expert_flag,t.online_flag,t.introduce,t.skill,t.team_id,work_time,t.register_num,(select t.config_val  from hospital_config_t t where config_name='imgip' and config_type='IMGWEB' and t.state='00A')||t.photo_url photo_url,t.register_fee,t.work_address from doctor_t t,team_t a where a.team_id=t.team_id and t.state='00A' ");
+		sql.append("select t.doctor_id,t.hospital_id,t.name,decode(t.sex,'0','ÄÐ','1','Å®')sex,t.telephone,to_char(t.create_date,'yyyy-MM-dd HH24:mm:ss')create_date,t.post,t.expert_flag,t.online_flag,t.introduce,t.skill,t.team_id,work_time,t.register_num,(select t.config_val  from hospital_config_t t where config_name='imgip' and config_type='IMGWEB' and t.state='00A')||t.photo_url photo_url,t.register_fee,t.work_address ");
+		
+		sql.append(" from doctor_t t,team_t a where a.team_id=t.team_id and t.state='00A' ");
 
 		if (ObjectCensor.isStrRegular(expertType))
 		{
@@ -359,7 +361,7 @@ public class DigitalHealthDao
 	
 	public List getDoctorById(String doctorId) throws QryException
 	{
-		String sql = "select a.*,b.team_name,c.name manager_name,c.password from doctor_t a,team_t b,hospital_manager_t c where (b.team_type='1' or b.team_type='2') and a.state='00A' and a.team_id=b.team_id and a.doctor_id=? and c.state(+)='00A' and c.doctor_id(+)=a.doctor_id";
+		String sql = "select a.*,b.team_name,c.name manager_name,c.password,(select t.config_val  from hospital_config_t t where config_name='imgip' and config_type='IMGWEB' and t.state='00A')||photo_url img_url from doctor_t a,team_t b,hospital_manager_t c where (b.team_type='1' or b.team_type='2') and a.state='00A' and a.team_id=b.team_id and a.doctor_id=? and c.state(+)='00A' and c.doctor_id(+)=a.doctor_id";
 		ArrayList lstParam = new ArrayList();
 		lstParam.add(doctorId);
 		return itzcQryCenter.executeSqlByMapList(sql, lstParam);

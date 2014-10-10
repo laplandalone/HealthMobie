@@ -29,18 +29,18 @@ public class HibernateObjectDao extends BaseDao
 
 	public List<HospitalT> qryHospitalTs()
 	{
-		String hql = "from HospitalT as model where model.state='00A' ";
+		String hql = "from HospitalT as model where model.state='00A' order by hospital_id desc ";
 		return this.find(hql);
 	}
 
-	public List<RegisterOrderT> qryRegisterOrderTs(String userId)
+	public List<RegisterOrderT> qryRegisterOrderTs(String userId,String hospitalId)
 	{
-		if (!ObjectCensor.isStrRegular(userId))
+		if (!ObjectCensor.isStrRegular(userId,hospitalId))
 		{
 			return null;
 		}
-		String hql = "from RegisterOrderT as model where (model.orderState='000' or model.orderState='00A') and model.state='00A' and model.userId=? and to_date(substr(register_time, 0, 10)||' 23:59:59', 'yyyy-mm-dd hh24:mi:ss')>=sysdate order by subStr(register_time,0,10) desc";
-		return this.find(hql, new String[]{ userId });
+		String hql = "from RegisterOrderT as model where model.hospitalId=? and (model.orderState='000' or model.orderState='00A') and model.state='00A' and model.userId=? and to_date(substr(register_time, 0, 10)||' 23:59:59', 'yyyy-mm-dd hh24:mi:ss')>=sysdate order by subStr(register_time,0,10) desc";
+		return this.find(hql, new String[]{hospitalId,userId });
 	}
 
 	public List<TeamT> qryteamTs(String hospitalId)

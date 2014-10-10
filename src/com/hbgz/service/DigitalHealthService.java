@@ -484,17 +484,17 @@ public class DigitalHealthService
 	}
 
 	@ServiceType(value = "BUS20014")
-	public JSONArray getUserOrderById(String userId) throws QryException
+	public JSONArray getUserOrderById(String userId,String hospitalId) throws QryException
 	{
-		List list = hibernateObjectDao.qryRegisterOrderTs(userId);
+		List list = hibernateObjectDao.qryRegisterOrderTs(userId,hospitalId);
 		JSONArray jsonArray = JsonUtils.fromArray(list);
 		return jsonArray;
 	}
 
 	@ServiceType(value = "BUS20015")
-	public JSONArray getQuestionTsByUserId(String userId) throws QryException
+	public JSONArray getQuestionTsByUserId(String userId,String hospitalId) throws QryException
 	{
-		List list = userQustionDao.qryQuestionTsByUserId(userId);
+		List list = userQustionDao.qryQuestionTsByUserId(userId,hospitalId);
 		JSONArray jsonArray = JsonUtils.fromArray(list);
 		return jsonArray;
 	}

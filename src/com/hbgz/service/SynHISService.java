@@ -147,7 +147,9 @@ public class SynHISService {
 		List list = root.getChildren();
 		List listHis = new ArrayList();
 		String dayT="";
-		
+		if(ObjectCensor.checkListIsNull(list))
+		{
+			
 		for (int i = 0; i < list.size(); i++)
 		{
 			Element e = (Element) list.get(i);
@@ -164,7 +166,6 @@ public class SynHISService {
 			newMap.put("teamName", teamName);
 			newMap.put("doctorId", doctorId);
 			newMap.put("teamId", teamId);
-			newMap.put("introduce", "");
 			newMap.put("post", "");
 			newMap.put("week",weekStr);
 			newMap.put("day", day);
@@ -180,6 +181,7 @@ public class SynHISService {
 			
 			
 			listHis.add(newMap);
+		}
 		}
 		return listHis;
 	}
@@ -206,82 +208,97 @@ public class SynHISService {
 		List userOrderList = digitalHealthDao.qryUserOrderByPhone(userId,dateStr);
 		
 		String[] dayTypes=new String[]{"am","pm"};
-		
-		for(int m=0;m<dayTypes.length;m++)
+		List doctorList = digitalHealthDao.getDoctorById(doctorIdT.trim());
+		if(ObjectCensor.checkListIsNull(list))
 		{
-			String dayTypeMark=dayTypes[m];
-		
-			for (int i = 0; i < list.size(); i++)
+			Map mapComp = new HashMap();
+			mapComp.put("doctor_id", doctorIdT.trim());
+			List subList = StringUtil.getSubMapList(doctorList, mapComp);
+			Map doctor = null;
+			if(ObjectCensor.checkListIsNull(subList))
 			{
-				Element e = (Element) list.get(i);
-				String doctorId=e.getChildText("doctor_id");
-				String teamId=e.getChildText("team_id");
-				String teamName=e.getChildText("team_name");
-				String registerId=e.getChildText("id");
-				String registerNum=e.getChildText(dayTypeMark+"_num");/*可预约号数*/
-				String userOrderNum=e.getChildText(dayTypeMark+"_user_register_num");/*用户可预约号*/
-				String dayType="";
-				String numMax="false";
-				
-				if("am".startsWith(dayTypeMark))
-				{
-					dayType="上午";
-				}else
-				{
-					dayType="下午";
-				}
-				if("0".equals(registerNum))
-				{
-					numMax="true";
-					userOrderNum="0";
-				}
-				String day=e.getChildText("day");
-				day=day.replace('.','-');
-				Date dateT=DateUtils.CHN_DATE_FORMAT.parse(day);
-				String weekStr = DateUtils.getWeekOfDate(dateT);
-				String workTime = "星期" + weekStr + dayType;
-				String dayWorkTime = dateStr + workTime;
+				doctor=(Map) subList.get(0);
+			}
 			
-				String fee="5";
-				
-				String orderTeamCount="0";
-				if(ObjectCensor.checkListIsNull(userOrderList))
+			for(int m=0;m<dayTypes.length;m++)
+			{
+				String dayTypeMark=dayTypes[m];
+			
+				for (int i = 0; i < list.size(); i++)
 				{
-					orderTeamCount=userOrderList.size()+"";
-				}
-				
-				String userFlag="N";
-				if(ObjectCensor.checkListIsNull(userOrderList))
-				{
-					for(int n=0;n<userOrderList.size();n++)
+					Element e = (Element) list.get(i);
+					String doctorId=e.getChildText("doctor_id");
+					String teamId=e.getChildText("team_id");
+					String teamName=e.getChildText("team_name");
+					String registerId=e.getChildText("id");
+					String registerNum=e.getChildText(dayTypeMark+"_num");/*可预约号数*/
+					String userOrderNum=e.getChildText(dayTypeMark+"_user_register_num");/*用户可预约号*/
+					String dayType="";
+					String numMax="false";
+					
+					if("am".startsWith(dayTypeMark))
 					{
-						Map userOrder= (Map) userOrderList.get(n);
-						String registerIdT=StringUtil.getMapKeyVal(userOrder, "registerId");
-						String registerTimeT=StringUtil.getMapKeyVal(userOrder, "registerTime");
-						String userIdT=StringUtil.getMapKeyVal(userOrder, "userId");
-						String regitsertdoctorIdT=StringUtil.getMapKeyVal(userOrder, "doctorId");
-						if(registerTimeT.equals(dayWorkTime)&&userIdT.equals(userId)&&regitsertdoctorIdT.equals(doctorId))
+						dayType="上午";
+					}else
+					{
+						dayType="下午";
+					}
+					if("0".equals(registerNum))
+					{
+						numMax="true";
+						userOrderNum="0";
+					}
+					String day=e.getChildText("day");
+					day=day.replace('.','-');
+					Date dateT=DateUtils.CHN_DATE_FORMAT.parse(day);
+					String weekStr = DateUtils.getWeekOfDate(dateT);
+					String workTime = "星期" + weekStr + dayType;
+					String dayWorkTime = dateStr + workTime;
+				
+					String fee="5";
+					
+					String orderTeamCount="0";
+					if(ObjectCensor.checkListIsNull(userOrderList))
+					{
+						orderTeamCount=userOrderList.size()+"";
+					}
+					
+					String userFlag="N";
+					if(ObjectCensor.checkListIsNull(userOrderList))
+					{
+						for(int n=0;n<userOrderList.size();n++)
 						{
-							userFlag="Y";
-							break;
+							Map userOrder= (Map) userOrderList.get(n);
+							String registerIdT=StringUtil.getMapKeyVal(userOrder, "registerId");
+							String registerTimeT=StringUtil.getMapKeyVal(userOrder, "registerTime");
+							String userIdT=StringUtil.getMapKeyVal(userOrder, "userId");
+							String regitsertdoctorIdT=StringUtil.getMapKeyVal(userOrder, "doctorId");
+							if(registerTimeT.equals(dayWorkTime)&&userIdT.equals(userId)&&regitsertdoctorIdT.equals(doctorId))
+							{
+								userFlag="Y";
+								break;
+							}
 						}
 					}
+					
+					Map newMap = new HashMap();
+					newMap.put("registerId", registerId);
+					newMap.put("teamName", teamName);
+					newMap.put("userOrderNum", userOrderNum);// 预约号码
+					newMap.put("doctorId", doctorId);
+					newMap.put("teamId", teamId);
+					newMap.put("fee", fee);
+					newMap.put("registerNum", registerNum);
+					newMap.put("day",day);
+					newMap.put("workTime", " 星期" + weekStr + " " + dayType);
+					newMap.put("userFlag", userFlag);
+					newMap.put("orderTeamCount",orderTeamCount);
+					newMap.put("numMax",numMax);
+					newMap.put("introduce",StringUtil.getMapKeyVal(doctor, "introduce"));
+					newMap.put("skill",StringUtil.getMapKeyVal(doctor, "skill"));
+					newMap.put("photoUrl", StringUtil.getMapKeyVal(doctor, "img_url"));
+					listHis.add(newMap);
 				}
-				
-				Map newMap = new HashMap();
-				newMap.put("registerId", registerId);
-				newMap.put("teamName", teamName);
-				newMap.put("userOrderNum", userOrderNum);// 预约号码
-				newMap.put("doctorId", doctorId);
-				newMap.put("teamId", teamId);
-				newMap.put("fee", fee);
-				newMap.put("registerNum", registerNum);
-				newMap.put("day",day);
-				newMap.put("workTime", " 星期" + weekStr + " " + dayType);
-				newMap.put("userFlag", userFlag);
-				newMap.put("orderTeamCount",orderTeamCount);
-				newMap.put("numMax",numMax);
-				listHis.add(newMap);
 			}
 		}
 		return listHis;
@@ -425,21 +442,21 @@ public class SynHISService {
 	{
 //		String sql="<DS><SQL><str>select a.id,c.bzmc team_name,c.bzdm team_id,kszjdm doctor_id,derq day,swdes,ylrs,swyyrs ,swdes-ylrs-swyyrs am_num,xwdes-xwylrs-xwyyrs pm_num  from mz_ghde a, mz_bzdyb c where derq='2014.09.30' and a.kszjdm=c.ysdm and kszjdm='0629R' </str></SQL></DS>";
 //		String sql="<DS><SQL><str>select distinct bzmc  from mz_bzdyb c order by bzmc </str></SQL></DS>";
-//		String sql="<DS><SQL><str>select  yxf ,delb ,c.bzdm team_id,c.bzmc team_name,kszjdm doctor_id,b.zgxm doctor_name,derq day from mz_ghde a,comm_zgdm b,mz_bzdyb c where a.kszjdm=b.zgid and a.kszjdm=c.ysdm  and derq between  '2014.09.27' and '2014.10.01' order by derq  </str></SQL></DS>";
+		String sql="<DS><SQL><str>select distinct  bzdm team_id ,bzmc team_name from mz_bzdyb  </str></SQL></DS>";
+//		String sql="<DS><SQL><str>select  yxf ,delb ,c.bzdm team_id,c.bzmc team_name,kszjdm doctor_id,b.zgxm doctor_name,derq day from mz_ghde a,comm_zgdm b,mz_bzdyb c where a.kszjdm=b.zgid and a.kszjdm=c.ysdm  and derq between  '2014.10.10' and '2014.10.16' order by c.bzdm  </str></SQL></DS>";
 		
-		StringBuffer sql=new StringBuffer("<DS>");
+//		StringBuffer sql=new StringBuffer("<DS>");
 //		sql.append("<SQL><str>update mz_ghde set swyyrs  = swyyrs  where id = 500011365</str></SQL>");
 //		sql.append("<SQL><str>select xwyyrs   + 1 from mz_ghde where id = 201409285103</str></SQL>");
 //		sql.append("<SQL><str>update mz_ghde set xwyyrs   = xwyyrs   - 1 where id = 500011365</str></SQL>");
 		
-		sql.append("<SQL><str>select * from mz_ghde where id  = 500011337</str></SQL>");
+//		sql.append("<SQL><str>select * from mz_ghde where id  = 500011337</str></SQL>");
 		
 //		sql.append("<SQL><str>insert into mz_yydj(yylsh,xm,xb,csrq,yysj,yyysdm,yyysxm,lxdz,dqsj,czydm,lxdh,yynr,xh,sfzh,sff) values ");
 //		sql.append("('201409285000','haha','1','1984.08.01','2014.08.01','9999R','单纯开药','湖北省武汉市水厂一路4号4楼','2014.08.01','1178R','13808652241','开药',2,'422822198407311010','Y')</str></SQL>");
 		
-		sql.append("</DS>");
-		System.out.println(sql.toString());
-		String ss =new SynHISService().invokeFunc(sql.toString());
-		System.out.println(ss);
+//		sql.append("</DS>");
+		new SynHISService().snHisTeamService();
+	
 	}
 }

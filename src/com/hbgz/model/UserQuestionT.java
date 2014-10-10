@@ -28,7 +28,17 @@ public class UserQuestionT implements java.io.Serializable {
 	private Timestamp createDate;
 	private String imgUrl;
 	private String teamId;
+	private String hospitalId;
 	// Constructors
+
+	@Column(name = "HOSPITAL_ID", nullable = true, length = 20)
+	public String getHospitalId() {
+		return hospitalId;
+	}
+
+	public void setHospitalId(String hospitalId) {
+		this.hospitalId = hospitalId;
+	}
 
 	/** default constructor */
 	public UserQuestionT() {
@@ -45,7 +55,7 @@ public class UserQuestionT implements java.io.Serializable {
 	public UserQuestionT(String id, String questionId, String userId,
 			String doctorId, String userTelephone, String recordType,
 			String authType, String content, String state, Timestamp createDate,
-			String imgUrl,String teamId) {
+			String imgUrl,String teamId,String hospitalId) {
 		this.id = id;
 		this.questionId = questionId;
 		this.userId = userId;
@@ -58,6 +68,7 @@ public class UserQuestionT implements java.io.Serializable {
 		this.createDate = createDate;
 		this.imgUrl = imgUrl;
 		this.teamId=teamId;
+		this.hospitalId=hospitalId;
 	}
 
 	@Column(name = "TEAM_ID", nullable = true, length = 20)

@@ -29,15 +29,16 @@ public class UserQustionDao extends BaseDao
 	}
 	
 	
-	public List qryQuestionTsByUserId(String userId) throws QryException
+	public List qryQuestionTsByUserId(String userId,String hospitalId) throws QryException
 	{
-		String sql="select a.question_id,a.user_id,a.doctor_id,a.user_telephone,a.content,to_char(a.create_date, 'yyyy-MM-dd hh24:mi:ss') create_date,b.name from user_question_t a ,doctor_t b where a.state='00A' and a.record_type='ask' and a.doctor_id=b.doctor_id and a.team_id=b.team_id and user_id=?";
-		if (!ObjectCensor.isStrRegular(userId))
+		String sql="select a.question_id,a.user_id,a.doctor_id,a.user_telephone,a.content,to_char(a.create_date, 'yyyy-MM-dd hh24:mi:ss') create_date,b.name from user_question_t a ,doctor_t b where a.state='00A' and a.record_type='ask' and a.doctor_id=b.doctor_id and a.team_id=b.team_id and user_id=? and a.hospital_Id=? ";
+		if (!ObjectCensor.isStrRegular(userId,hospitalId))
 		{
 			return null;
 		}
 		ArrayList lstParam = new ArrayList();
 		lstParam.add(userId);
+		lstParam.add(hospitalId);
 		return itzcQryCenter.executeSqlByMapListWithTrans(sql, lstParam);
 	}
 	

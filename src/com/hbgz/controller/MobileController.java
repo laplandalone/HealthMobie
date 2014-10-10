@@ -75,9 +75,8 @@ public class MobileController
 	@RequestMapping(params = "method=synHis")
     public void synHis(HttpServletResponse response) 
 	{
-		String sql1="<DS><SQL><str>select a.bzmc team_name,a.bzdm team_id,a.ysdm doctor_id,b.zgxm doctor_name,* from mz_bzdyb a, comm_zgdm b where a.ysdm=b.zgid  order by bzmc</str></SQL></DS>";
-
-		try {
+		try
+		{
 			synHISService.snHisTeamService();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -544,5 +543,15 @@ public class MobileController
 		{
 			out.close();
 		}
+	}
+	
+	public static void main(String[] args)
+	{
+		float a = 123434;
+		float b = 543233;
+		float i = a/b;
+		System.out.println(i);
+		
+			System.out.println(Math.round(i*100));
 	}
 }
