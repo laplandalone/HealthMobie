@@ -91,7 +91,7 @@ public class DoctorT implements java.io.Serializable {
 
 	// Property accessors
 	@Id
-	@Column(name = "DOCTOR_ID", unique = true, nullable = false, length = 40)
+	@Column(name = "DOCTOR_ID",  nullable = false, length = 40)
 	public String getDoctorId() {
 		return this.doctorId;
 	}

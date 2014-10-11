@@ -108,13 +108,15 @@ public class DoctorController
 		String name = (String)request.getParameter("name");
 		String password = (String)request.getParameter("password");
 		String fee = (String)request.getParameter("fee"); 
+		String introduce=request.getParameter("introduce");
+		String skill=request.getParameter("skill");
 		
 		Writer wr = response.getWriter();
 		if(ObjectCensor.isStrRegular(doctorId,hospitalId,name,password) )
 		{
 			try {
 				digitalHealthService.updateHospitalMananger(hospitalId, doctorId, name, password);
-				digitalHealthService.updateDoctor(doctorId, fee);
+				digitalHealthService.updateDoctor(hospitalId,doctorId, fee,introduce,skill);
 			} catch (Exception e) 
 			{
 				e.printStackTrace();

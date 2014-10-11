@@ -210,11 +210,11 @@
     					<select id="newsType" class="subselect" style="width: 110px">
     						<c:if test="${news.newsType == 'NEWS' }">
 	    						<option value="NEWS" selected="selected">患教中心</option>
-								<option value="BAIKE">健康百科</option>
+								<option value="BAIKE">就医帮助</option>
     						</c:if>
     						<c:if test="${news.newsType == 'BAIKE' }">
     							<option value="NEWS">患教中心</option>
-								<option value="BAIKE" selected="selected">健康百科</option>
+								<option value="BAIKE" selected="selected">就医帮助</option>
     						</c:if>
     					</select>
     				</td>

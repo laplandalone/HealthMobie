@@ -195,7 +195,7 @@
 					<td width="30%">
 						<select id="newsType" name="newsType" class="subselect" style="width: 150px">
 							<option value="NEWS" selected="selected">患教中心</option>
-							<option value="BAIKE">健康百科</option>
+							<option value="BAIKE">就医帮助</option>
 						</select>
 					</td>
 					<td width="12%" align="right">标题类型</td>

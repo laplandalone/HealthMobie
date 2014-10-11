@@ -105,4 +105,44 @@ public class DoctorDao extends BaseDao
 		}
 	}
 	
+	/**
+	 * 更新用户名，密码
+	 * @param hospitalId
+	 * @param doctorId
+	 * @param name
+	 * @param password
+	 * @return
+	 * @throws QryException
+	 */
+	public boolean updateDoctor(String hospitalId,String doctorId,String fee,String introduce,String skill) throws QryException
+	{
+		String sql = "update doctor_T set  register_fee='"+fee+"', introduce='"+introduce+"',skill='"+skill+"' where state='00A' and  hospital_id='"+hospitalId+"' and doctor_id='"+doctorId+"'";
+		
+		Connection conn = null;
+		Statement stmt = null;
+		boolean flag = true;
+		try
+		{
+			conn = itzcQryCenter.getDataSource().getConnection();
+			stmt = conn.createStatement();
+			stmt.execute(sql.toString());
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+			flag = false;
+		} finally
+		{
+			try
+			{
+				stmt.close();
+				conn.close();
+
+			} catch (Exception e)
+			{
+				e.printStackTrace();
+				flag = false;
+			}
+			return flag;
+		}
+	}
 }

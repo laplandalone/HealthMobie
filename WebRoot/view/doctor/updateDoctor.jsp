@@ -54,6 +54,9 @@
 				var name = $("#name");
 				var psw = $("#password");
 				var confimPsw = $("#confimPassword");
+				var introduce=$("#introduce");
+				var skill=$("#skill");
+				
 			    var fee = $("#fee");
 				if(name.val() == '')
 				{
@@ -75,7 +78,7 @@
 				$.ajax({
 					url:"/doctor.htm?method=updateDoctor",
 					type:"POST",
-					data:"name="+name.val()+"&password="+psw.val()+"&confimPassword="+confimPsw.val()+"&doctorId="+'${doctor.doctor_id}'+"&fee="+fee.val(),
+					data:"introduce="+introduce.val()+"&skill="+skill.val()+"&name="+name.val()+"&password="+psw.val()+"&confimPassword="+confimPsw.val()+"&doctorId="+'${doctor.doctor_id}'+"&fee="+fee.val(),
 					
 					success:function(data)
 					{
@@ -156,6 +159,18 @@
 					<td align="center" width='30%'>确认密码</td>
 					<td align="center">
 						<input type="password" class="subtext" id="confimPassword" value='${doctor.password}'>
+					</td>
+				</tr>
+				<tr>
+					<td align="center" width='30%'>医生简介</td>
+					<td align="center">
+						<textarea rows='4' cols="40" class="textarea" id="introduce" ><c:out value="${doctor.introduce}" /></textarea>
+					</td>
+				</tr>
+				<tr>
+					<td align="center" width='30%'>擅长</td>
+					<td align="center">
+						<textarea rows='4' cols="40" class="textarea" id="skill" ><c:out value="${doctor.skill}" /></textarea>
 					</td>
 				</tr>
 			</table>

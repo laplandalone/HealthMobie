@@ -803,17 +803,11 @@ public class DigitalHealthService
 		return false;
 	}
 	
-	public boolean updateDoctor(String doctorId,String fee) throws QryException
+	public boolean updateDoctor(String hospitalId,String doctorId,String fee,String introduce,String skill) throws QryException
 	{
-		if (ObjectCensor.isStrRegular(doctorId,fee))
+		if (ObjectCensor.isStrRegular(hospitalId,doctorId))
 		{
-			List<DoctorT> doctorTs=doctorDao.findByProperty("DoctorT", "doctorId", doctorId);
-			if(ObjectCensor.checkListIsNull(doctorTs))
-			{
-				DoctorT doctorT = doctorTs.get(0);
-				doctorT.setRegisterFee(fee);
-				hibernateObjectDao.update(doctorT);
-			}
+			return doctorDao.updateDoctor(hospitalId, doctorId, fee, introduce, skill);
 		}
 		return false;
 	}
