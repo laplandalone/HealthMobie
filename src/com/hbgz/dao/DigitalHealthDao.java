@@ -50,6 +50,7 @@ public class DigitalHealthDao
 			sql.append(" and t.team_id=?");
 			lstParam.add(teamId);
 		}
+		sql.append(" order by order_num ");
 		return itzcQryCenter.executeSqlByMapListWithTrans(sql.toString(), lstParam);
 	}
 

@@ -132,7 +132,7 @@ public class SynHISService {
 	 * @return
 	 * @throws Exception
 	 */
-	public List synHisRegisterOrderService(String teamIdT) throws Exception 
+	public List synHisRegisterOrderService(String teamIdT,String doctorIdT) throws Exception 
 	{
 		Date startDateT = DateUtils.afterNDate(1);
 		Date endDateT = DateUtils.afterNDate(7);
@@ -154,6 +154,13 @@ public class SynHISService {
 		{
 			Element e = (Element) list.get(i);
 			String doctorId=e.getChildText("doctor_id");
+			if(ObjectCensor.isStrRegular(doctorIdT))
+			{
+				if(!doctorId.equals(doctorIdT))
+				{
+					continue;
+				}
+			}
 			String doctorName=e.getChildText("doctor_name");
 			String teamId=e.getChildText("team_id");
 			String teamName=e.getChildText("team_name");
@@ -287,7 +294,7 @@ public class SynHISService {
 					newMap.put("userOrderNum", userOrderNum);// Ô¤Ô¼ºÅÂë
 					newMap.put("doctorId", doctorId);
 					newMap.put("teamId", teamId);
-					newMap.put("fee", fee);
+					newMap.put("fee", StringUtil.getMapKeyVal(doctor, "register_fee"));
 					newMap.put("registerNum", registerNum);
 					newMap.put("day",day);
 					newMap.put("workTime", " ÐÇÆÚ" + weekStr + " " + dayType);
@@ -297,6 +304,7 @@ public class SynHISService {
 					newMap.put("introduce",StringUtil.getMapKeyVal(doctor, "introduce"));
 					newMap.put("skill",StringUtil.getMapKeyVal(doctor, "skill"));
 					newMap.put("photoUrl", StringUtil.getMapKeyVal(doctor, "img_url"));
+					newMap.put("post", StringUtil.getMapKeyVal(doctor, "post"));
 					listHis.add(newMap);
 				}
 			}

@@ -29,7 +29,7 @@ public class HibernateObjectDao extends BaseDao
 
 	public List<HospitalT> qryHospitalTs()
 	{
-		String hql = "from HospitalT as model where model.state='00A' order by hospital_id desc ";
+		String hql = "from HospitalT as model where model.hospitalId!='102' and model.state='00A' order by hospital_id desc ";
 		return this.find(hql);
 	}
 

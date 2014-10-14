@@ -90,21 +90,21 @@ public class DigitalHealthService
 		return obj;
 	}
 
-	public JSONObject getOrderHis(String teamIdT) throws Exception
+	public JSONObject getOrderHis(String teamIdT,String doctorIdT) throws Exception
 	{
-		List list = synHISService.synHisRegisterOrderService(teamIdT);
+		List list = synHISService.synHisRegisterOrderService(teamIdT,doctorIdT);
 		JSONObject obj = new JSONObject();
 		obj.element("orders", list);
 		return obj;
 	}
 	
 	@ServiceType(value = "BUS2003")
-	public JSONObject getOrderById(String hospitalId,String teamId) throws Exception
+	public JSONObject getOrderById(String hospitalId,String teamId,String doctorIdT) throws Exception
 	{
 		/*亚心医院*/
 		if("102".equals(hospitalId))
 		{
-			return getOrderHis(teamId);
+			return getOrderHis(teamId, doctorIdT);
 		}
 		
 		int orderDayLen = 10;
@@ -405,32 +405,6 @@ public class DigitalHealthService
 		return jsonArray;
 	}
 	
-	public JSONArray getUserQuestionsByDoctorId(String doctorId, String hospitalId, String startTime, String endTime) throws JsonException, QryException
-	{
-		List list = userQustionDao.qryQuestionList(doctorId, startTime, endTime);
-		JSONArray jsonArray = JSONArray.fromObject(list);
-		CacheManager cacheManager = (CacheManager) BeanFactoryHelper.getBean("cacheManager");
-		String imgIp = cacheManager.getImgIp(hospitalId);
-
-		for (int i = 0; i < jsonArray.size(); i++) 
-		{
-			JSONObject jsonObject = jsonArray.getJSONObject(i);
-			String imgT = jsonObject.getString("imgUrl");
-			String[] imgs = imgT.split(",");
-			if (imgs != null && imgs.length > 0) 
-			{
-				for (int n = 0; n < imgs.length; n++) 
-				{
-					if (ObjectCensor.isStrRegular(imgs[n])) 
-					{
-						jsonObject.put("imgUrl" + n, imgIp + imgs[n]);
-					}
-				}
-			}
-		}
-		return jsonArray;
-	}
-
 	@ServiceType(value = "BUS2009")
 	public List getUserHospitalId(String userId) throws JsonException
 	{
@@ -552,9 +526,12 @@ public class DigitalHealthService
 		String applicationType = jsonObject.getString("applicationType");
 		String applicationVersionCode = jsonObject.getString("applicationVersionCode");
 		String deviceType = jsonObject.getString("deviceType");
-		// String hospitalId=jsonObject.getString("hospitalId");
-
-		List versionList = digitalHealthDao.getVerstion("101", "VERSION");
+		String hospitalId=jsonObject.getString("hospitalId");
+		if(!ObjectCensor.isStrRegular(hospitalId))
+		{
+			hospitalId="101";
+		}
+		List versionList = digitalHealthDao.getVerstion(hospitalId, "VERSION");
 
 		if (ObjectCensor.checkListIsNull(versionList))
 		{
@@ -708,6 +685,35 @@ public class DigitalHealthService
 		object.element("sign", sign);
 		return object;
 	}
+	
+	@ServiceType(value = "BUS20025")
+	public JSONArray getUserQuestionsByDoctorId(String doctorId, String hospitalId, String startTime, String endTime) throws JsonException, QryException
+	{
+		List list = userQustionDao.qryQuestionList(doctorId, startTime, endTime);
+		JSONArray jsonArray = JSONArray.fromObject(list);
+		CacheManager cacheManager = (CacheManager) BeanFactoryHelper.getBean("cacheManager");
+		String imgIp = cacheManager.getImgIp(hospitalId);
+
+		for (int i = 0; i < jsonArray.size(); i++) 
+		{
+			JSONObject jsonObject = jsonArray.getJSONObject(i);
+			String imgT = jsonObject.getString("imgUrl");
+			String[] imgs = imgT.split(",");
+			if (imgs != null && imgs.length > 0) 
+			{
+				for (int n = 0; n < imgs.length; n++) 
+				{
+					if (ObjectCensor.isStrRegular(imgs[n])) 
+					{
+						jsonObject.put("imgUrl" + n, imgIp + imgs[n]);
+					}
+				}
+			}
+		}
+		return jsonArray;
+	}
+
+	
 	// 查询用户的挂号订单
 	public List qryRegisterOrder(String hospitalId, String teamId, String doctorId,
 			String startTime, String endTime, String state) throws Exception
