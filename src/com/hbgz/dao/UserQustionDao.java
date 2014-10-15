@@ -28,10 +28,20 @@ public class UserQustionDao extends BaseDao
 		return list;
 	}
 	
+	public List<UserQuestionT> qryDoctorQues(String doctorId)
+	{
+		if (!ObjectCensor.isStrRegular(doctorId))
+		{
+			return null;
+		}
+		List list =this.find("from UserQuestionT as model where model.recordType='ask' and  model.doctorId=? order by createDate desc", new String[] { doctorId });
+		return list;
+	}
+	
 	
 	public List qryQuestionTsByUserId(String userId,String hospitalId) throws QryException
 	{
-		String sql="select a.question_id,a.user_id,a.doctor_id,a.user_telephone,a.content,to_char(a.create_date, 'yyyy-MM-dd hh24:mi:ss') create_date,b.name from user_question_t a ,doctor_t b where a.state='00A' and a.record_type='ask' and a.doctor_id=b.doctor_id and a.team_id=b.team_id and user_id=? and a.hospital_Id=? ";
+		String sql="select a.question_id,a.user_id,a.doctor_id,a.user_telephone,a.content,to_char(a.create_date, 'yyyy-MM-dd hh24:mi:ss') create_date,b.name from user_question_t a ,doctor_t b where a.state='00A' and a.record_type='ask' and a.doctor_id=b.doctor_id and a.team_id=b.team_id and user_id=? and a.hospital_Id=? order by create_date desc ";
 		if (!ObjectCensor.isStrRegular(userId,hospitalId))
 		{
 			return null;

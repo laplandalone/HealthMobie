@@ -25,7 +25,6 @@ import com.hbgz.dao.DoctorDao;
 import com.hbgz.dao.HibernateObjectDao;
 import com.hbgz.dao.UserQustionDao;
 import com.hbgz.model.DoctorRegisterT;
-import com.hbgz.model.DoctorT;
 import com.hbgz.model.HospitalNewsT;
 import com.hbgz.model.HospitalUserT;
 import com.hbgz.model.RegisterOrderT;
@@ -661,7 +660,8 @@ public class DigitalHealthService
 				 flag=true;
 			}
 		}
-		 
+		
+		
 		if(flag && "101".equals(payState) && registerOrder!=null)
 		{
 			synHISService.addOrderPay(registerOrder);
@@ -713,6 +713,28 @@ public class DigitalHealthService
 		return jsonArray;
 	}
 
+	@ServiceType(value = "BUS20026")
+	public JSONArray getDoctorQuestions(String doctorId) throws JsonException
+	{
+		List list = userQustionDao.qryDoctorQues(doctorId);
+		JSONArray jsonArray = JsonUtils.fromArrayTimestamp(list);
+		return jsonArray;
+	}
+	
+	@ServiceType(value = "BUS20027")
+	public Map getUserWeb(String userName, String password) throws Exception
+	{
+		if (ObjectCensor.isStrRegular(userName, password))
+		{
+			List userLst = digitalHealthDao.getHospitalManager(userName, password);
+
+			if (userLst != null && userLst.size() != 0)
+			{
+				return (Map) userLst.get(0);
+			}
+		}
+		return null;
+	}
 	
 	// 查询用户的挂号订单
 	public List qryRegisterOrder(String hospitalId, String teamId, String doctorId,
@@ -746,19 +768,6 @@ public class DigitalHealthService
 		return flag;
 	}
 	
-	public Map getUserWeb(String userName, String password) throws Exception
-	{
-		if (ObjectCensor.isStrRegular(userName, password))
-		{
-			List userLst = digitalHealthDao.getHospitalManager(userName, password);
-
-			if (userLst != null && userLst.size() != 0)
-			{
-				return (Map) userLst.get(0);
-			}
-		}
-		return null;
-	}
 	
 	public Map getDoctor(String doctorId) throws Exception
 	{
