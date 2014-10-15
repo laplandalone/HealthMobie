@@ -3,7 +3,6 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%
 	String path = request.getContextPath();
-	String doctorId = request.getParameter("doctorId");
 %>
 
 
@@ -95,7 +94,7 @@
 			
 			function queryMed()
 			{
-			    var doctorId='<%=doctorId%>';
+			    var doctorId = $("#doctorId").val();
 				if (doctorId != "") 
 				{
 					var startTime = $("#startTime").val();
@@ -117,6 +116,7 @@
 			<table width="100%">
 				<input type="hidden" id="selStartTime" value="${startTime }"/>
 				<input type="hidden" id="selEndTime" value="${endTime }"/>
+				<input type="hidden" id="doctorId" value="${doctorId }"/>
 				<tr>
 					<td align="right" width='10%'>创建时间：</td>
 					<td align="center" width='15%'>

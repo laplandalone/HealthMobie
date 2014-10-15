@@ -66,7 +66,7 @@
 					<c:if test="${sessionScope.userPrivs=='2'}">
 						<li>
 							<img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; 
-							<a href="/view/question/questionList.jsp?&doctorId=<%=doctorId%>" target="main" >用户提问管理</a>
+							<a href="/ques.htm?method=queryPre&doctorId=<%=doctorId%>&startTime=&endTime=" target="main" >用户提问管理</a>
 						</li>
 						<li>
 							<img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; 
@@ -86,7 +86,7 @@
 						<c:if test="${sessionScope.userPrivs=='4'}">
 						<li>
 							<img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; 
-							<a href="/view/question/questionList.jsp?&doctorId=<%=doctorId%>" target="main" >用户提问管理</a>
+							<a href="/ques.htm?method=queryPre&doctorId=<%=doctorId%>&startTime=&endTime=" target="main" >用户提问管理</a>
 						</li>
 						<li>
 							<img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; 

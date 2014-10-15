@@ -52,6 +52,7 @@ public class QuestionController
 			model.addObject("quesLst", userFileLst);
 			model.addObject("startTime", startTime);
 			model.addObject("endTime", endTime);
+			model.addObject("doctorId", doctorId);
 			model.setViewName("/view/question/questionList");
 		}
 		else

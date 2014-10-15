@@ -70,15 +70,15 @@ public class UserQustionDao extends BaseDao
 			StringBuffer sql = new StringBuffer();
 			sql.append("select question_id, user_id, doctor_id, user_telephone, auth_type, content, to_char(create_date, 'yyyy-MM-dd hh24:mi:ss') create_date, img_url ");
 			sql.append("from user_question_t where state = '00A' and record_type = 'ask' and doctor_id = ? ");
-			
 			ArrayList lstParam = new ArrayList();
 			lstParam.add(doctorId);
 			if(ObjectCensor.isStrRegular(startTime, endTime))
 			{ 
-				sql.append("and create_date between to_date(?, 'yyyy-MM-dd hh24:mi:ss') and to_date(?, 'yyyy-MM-dd hh24:mi:ss')  order by create_date desc");
+				sql.append("and create_date between to_date(?, 'yyyy-MM-dd hh24:mi:ss') and to_date(?, 'yyyy-MM-dd hh24:mi:ss') ");
 				lstParam.add(startTime);
-				lstParam.add(endTime + " 23:59:59 ");
+				lstParam.add(endTime + " 23:59:59");
 			}
+			sql.append("order by create_date desc");
 			return itzcQryCenter.executeSqlByMapListWithTrans(sql.toString(), lstParam);
 		}
 		return null;
