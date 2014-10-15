@@ -69,7 +69,7 @@ public class DigitalHealthDao
 
 		if (ObjectCensor.isStrRegular(hospitalId))
 		{
-			sql.append(" and t.hospital_id=?  order by team_id ");
+			sql.append(" and t.hospital_id=?  order by team_order ");
 			lstParam.add(hospitalId);
 		}
 		return itzcQryCenter.executeSqlByMapListWithTrans(sql.toString(), lstParam);
