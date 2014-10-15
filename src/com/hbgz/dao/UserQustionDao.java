@@ -78,7 +78,7 @@ public class UserQustionDao extends BaseDao
 		if(ObjectCensor.isStrRegular(doctorId))
 		{
 			StringBuffer sql = new StringBuffer();
-			sql.append("select question_id, user_id, doctor_id, user_telephone, auth_type, content, to_char(create_date, 'yyyy-MM-dd hh24:mi:ss') create_date, img_url ");
+			sql.append("select id, question_id, user_id, doctor_id, user_telephone, auth_type, content, to_char(create_date, 'yyyy-MM-dd hh24:mi:ss') create_date, img_url ");
 			sql.append("from user_question_t where state = '00A' and record_type = 'ask' and doctor_id = ? ");
 			ArrayList lstParam = new ArrayList();
 			lstParam.add(doctorId);

@@ -1109,4 +1109,26 @@ public class DigitalHealthService
 		}
 		return retVal;
 	}
+
+	public String updateAuth(String id, String authType) 
+	{
+		String retVal = "false";
+		if(ObjectCensor.isStrRegular(id, authType))
+		{
+			List<UserQuestionT> sList = userQustionDao.qryUserQuestionById(id);
+			if(ObjectCensor.checkListIsNull(sList))
+			{
+				UserQuestionT ques = sList.get(0);
+				String newAuthType = "public";
+				if("public".equals(authType))
+				{
+					newAuthType = "private";
+				}
+				ques.setAuthType(newAuthType);
+				userQustionDao.update(ques);
+				retVal = "true";
+			}
+		}
+		return retVal;
+	}
 }

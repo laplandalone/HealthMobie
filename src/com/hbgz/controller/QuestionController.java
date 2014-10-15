@@ -158,4 +158,23 @@ public class QuestionController
 			e.printStackTrace();
 		}
 	}
+	
+	@RequestMapping(params = "method=updateAuth")
+	public void updateAuth(HttpServletRequest request, HttpServletResponse response)
+	{
+		response.setCharacterEncoding("UTF-8");
+		try 
+		{
+			String id = request.getParameter("id");
+			String authType = request.getParameter("authType");
+			String retVal = digitalHealthService.updateAuth(id, authType);
+			PrintWriter out = response.getWriter();
+			out.println(retVal);
+			out.close();
+		} 
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+	}
 }

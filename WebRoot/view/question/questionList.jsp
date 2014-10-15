@@ -109,6 +109,27 @@
 				lockScreen();
 				$.dialog({id:"viewDemo", width:"450px", esc:false, title:"所有内容", content:"url:/ques.htm?method=qryQuesList&doctorId="+doctorId+"&questionId="+questionId, min:false, max:false, lock:true, close:function(){unlockScreen();}});
 			}
+			
+			function updateAuth(authType, id)
+			{
+				$.dialog.confirm("确定修改可见范围?",
+					function(){
+						$.ajax({
+							type:"POST",
+							url:"/ques.htm?method=updateAuth",
+							data:"authType="+authType+"&id="+id,
+							success:function(data)
+							{
+								if(data)
+								{
+									queryMed();
+								}
+							}
+						});
+					},
+					function(){return true;}
+				);
+			}
 		</script>
 	</head>
 	<body>
@@ -199,10 +220,10 @@
 						<td align="center">
 							<c:choose>
 								<c:when test="${ques.authType == 'private'}">
-									不可见
+									<input type="button" class="button1" value="不可见" onclick="updateAuth('${ques.authType }', '${ques.id}')"/>
 								</c:when>
 								<c:otherwise>
-									可见
+									<input type="button" class="button3" value="可见" onclick="updateAuth('${ques.authType }', '${ques.id}')"/>
 								</c:otherwise>
 							</c:choose>
 						</td>
