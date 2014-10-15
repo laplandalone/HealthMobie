@@ -140,4 +140,22 @@ public class QuestionController
 			e.printStackTrace();
 		}
 	}
+	
+	@RequestMapping(params = "method=deleteAns")
+	public void deleteAns(HttpServletResponse response , HttpServletRequest request)
+	{
+		response.setCharacterEncoding("UTF-8");
+		try 
+		{
+			String questionId = request.getParameter("questionId");
+			String retVal = digitalHealthService.deleteAns(questionId);
+			PrintWriter out = response.getWriter();
+			out.println(retVal);
+			out.close();
+		} 
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+	}
 }

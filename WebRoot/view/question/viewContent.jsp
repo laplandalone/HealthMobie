@@ -21,6 +21,7 @@
 			{
 				document.getElementById("content" + id).style.border = "1px solid #d2d2d2";
 				$("#editBtn" + id).css("display", "none");
+				$("#deleteBtn" + id).css("display", "none");
 				$("#submitBtn" + id).css("display", "block");
 				$("#content" + id).removeAttr("readonly");
 			}
@@ -29,6 +30,7 @@
 			{
 				document.getElementById("content" + id).style.border = "0";
 				$("#editBtn" + id).css("display", "block");
+				$("#deleteBtn" + id).css("display", "block");
 				$("#submitBtn" + id).css("display", "none");
 				$("#content" + id).attr("readonly","readonly");
 			}
@@ -65,6 +67,30 @@
 					});
 				}
 			}
+			
+			function deleteAns(questionId)
+			{
+				$.ajax({
+					type:"POST",
+					url:"/ques.htm?method=deleteAns",
+					data:"questionId="+questionId,
+					success:function(data)
+					{
+						if(data)
+						{
+							$.dialog({parent:this, title:false, width:"160px", esc:false, height:"60px", zIndex:2000, icon:"succ.png", lock:true, content:"成功删除回复信息!", ok:function() {renew(questionId); api.reload(api.get("viewDemo"));}});
+						}
+						else
+						{
+							$.dialog({parent:this, title:false, width:"160px", esc:false, height:"60px", zIndex:2000, icon:"fail.png", lock:true, content:"删除回复信息失败!", ok:function() {renew(questionId); api.reload(api.get("viewDemo"));}});
+						}
+					},
+					error:function(stata)
+	    			{
+	    				$.dialog.alert(stata.statusText, function(){return true;}, this);
+	    			}
+				});
+			}
 		</script>
 	</head>
 
@@ -77,7 +103,9 @@
 							<fieldset style='width:380px; margin-top: 4px auto; margin-bottom: 10px; text-align: left;'>
 								<legend align='left'><font color='gray'></font></legend>
 								<c:if test="${ques.recordType == 'ans' }">
-									<div align='right' id='editBtn${ques.id }' style='margin-top: 5px;margin-right: 5px'><a href='javascript:void(0)' class='linkmore' onclick="edit(${ques.id })">编辑</a></div>
+									<div align='right' id='deleteBtn${ques.id }' style='margin-top: 5px;margin-right: 5px;float: right;'><a href='javascript:void(0)' class='linkmore' onclick="deleteAns(${ques.id })">删除</a></div>
+									<div align='right' id='editBtn${ques.id }' style='margin-top: 5px;margin-right: 5px;float: right;'><a href='javascript:void(0)' class='linkmore' onclick="edit(${ques.id })">编辑</a></div>
+									<div style="clear:both;"></div>
 									<div align='right' id='submitBtn${ques.id }' style='margin-top: 5px;margin-right: 5px;display: none;'><a href='javascript:void(0)' class='linkmore' onclick="updateAns(${ques.id }, '${ques.content }')">提交</a></div>
 									<img src='/images/ans.png' height='25' width='30' style='vertical-align: top;margin-top: 5px'/>&nbsp;&nbsp;<textarea id='content${ques.id }' rows='4' cols='51' style='border: 0;height:50px;overflow:auto;margin-top: 5px' readonly="readonly">${ques.content }</textarea>
 								</c:if>

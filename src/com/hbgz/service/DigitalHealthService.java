@@ -1083,4 +1083,21 @@ public class DigitalHealthService
 		}
 		return retVal;
 	}
+
+	public String deleteAns(String questionId) 
+	{
+		String retVal = "false";
+		if(ObjectCensor.isStrRegular(questionId))
+		{
+			List<UserQuestionT> sList = userQustionDao.qryUserQuestionById(questionId);
+			if(ObjectCensor.checkListIsNull(sList))
+			{
+				UserQuestionT ques = sList.get(0);
+				ques.setState("00X");
+				userQustionDao.update(ques);
+				retVal = "true";
+			}
+		}
+		return retVal;
+	}
 }
