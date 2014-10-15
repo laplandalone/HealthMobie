@@ -160,8 +160,16 @@
 				var newsTitle = $("#newsTitle").val();
 				if($.trim(newsTitle) == "" || $.trim(newsTitle) == null || $.trim(newsTitle) == undefined)
 				{
-					W.$.dialog.alert("消息标题为空", function(){return true;}, api);
+					W.$.dialog.alert("消息标题为空!", function(){return true;}, api);
 					return false;
+				}
+				else
+				{
+					if($.trim(newsTitle).length > 30)
+					{
+						W.$.dialog.alert("消息标题的长度请不要超过30个字!", function(){return true;}, api);
+						return false;
+					}
 				}
 				var effDate = $("#effDate").val();
 				if(effDate == "" || effDate == null || effDate ==  undefined)

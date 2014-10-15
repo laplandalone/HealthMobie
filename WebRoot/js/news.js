@@ -104,32 +104,40 @@ function addNewsType()
 			var typeName = demoDG1.content.document.getElementById("typeName").value;
 			if($.trim(typeName) == "")
 			{
-				$.dialog.alert("分类名称为空", function(){return true;});
+				$.dialog.alert("分类名称为空!", function(){return true;});
 			    return false;
 			}
 			else
 			{
-				var newsTypeId = demoDG1.content.document.getElementById("newsTypeId").value;
-				$.ajax({
-					type:"POST",
-					url:"/news.htm?method=addNewsType",
-					data:"newsTypeId="+newsTypeId+"&newsTypeName="+typeName,
-					success:function(data)
-					{
-						if(data == "true")
+				if($.trim(typeName).length > 30)
+				{
+					$.dialog.alert("分类名称的长度请不要超过30个字!", function(){return true;});
+				    return false;
+				}
+				else
+				{
+					var newsTypeId = demoDG1.content.document.getElementById("newsTypeId").value;
+					$.ajax({
+						type:"POST",
+						url:"/news.htm?method=addNewsType",
+						data:"newsTypeId="+newsTypeId+"&newsTypeName="+typeName,
+						success:function(data)
 						{
-							$.dialog({title:false, width:"150px", esc:false, height:"60px", zIndex:2000, icon:'succ.png', lock:true, content:'成功新增分类信息!', ok:function() {return true;}});
-						}
-						else
+							if(data == "true")
+							{
+								$.dialog({title:false, width:"150px", esc:false, height:"60px", zIndex:2000, icon:'succ.png', lock:true, content:'成功新增分类信息!', ok:function() {return true;}});
+							}
+							else
+							{
+								$.dialog( { title:false, width:"150px", esc:false, height:"60px", zIndex:2000, icon:'fail.png', lock:true, content:'新增分类信息失败!', ok:function() {return true;}});
+							}
+						},
+						error:function(stata)
 						{
-							$.dialog( { title:false, width:"150px", esc:false, height:"60px", zIndex:2000, icon:'fail.png', lock:true, content:'新增分类信息失败!', ok:function() {return true;}});
+							$.dialog.alert(stata.statusText, function(){return true;});
 						}
-    				},
-    				error:function(stata)
-    				{
-    					$.dialog.alert(stata.statusText, function(){return true;});
-    				}
-				});
+					});
+				}
 			}
 		},
 		cancel: true
