@@ -736,6 +736,14 @@ public class DigitalHealthService
 		return null;
 	}
 	
+	@ServiceType(value = "BUS20028")
+	public JSONArray getDoctorQuestionsByType(String doctorId,String type) throws Exception
+	{
+		List list = userQustionDao.qryQuestionNoAns(doctorId);
+		JSONArray jsonArray = JsonUtils.fromArrayTimestamp(list);
+		return jsonArray;
+	}
+	
 	// 查询用户的挂号订单
 	public List qryRegisterOrder(String hospitalId, String teamId, String doctorId,
 			String startTime, String endTime, String state) throws Exception

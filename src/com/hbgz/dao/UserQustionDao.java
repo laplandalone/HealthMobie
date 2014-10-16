@@ -38,6 +38,19 @@ public class UserQustionDao extends BaseDao
 		return list;
 	}
 	
+	public List qryQuestionNoAns(String doctorId) throws QryException
+	{
+		StringBuffer sql = new StringBuffer("select * from user_question_t where state='00A' and record_type='ask' and doctor_id =? and question_id not in ( ");
+		sql.append("select question_id from user_question_t t where state='00A' and doctor_id = ? and record_type='ans')");
+		
+		ArrayList lstParam = new ArrayList();
+		if (!ObjectCensor.isStrRegular(doctorId))
+		{
+			lstParam.add(doctorId);
+			lstParam.add(doctorId);
+		}
+		return itzcQryCenter.executeSqlByMapListWithTrans(sql.toString(), lstParam);
+	}
 	
 	public List qryQuestionTsByUserId(String userId,String hospitalId) throws QryException
 	{
