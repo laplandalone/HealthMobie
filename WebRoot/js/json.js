@@ -20,7 +20,7 @@ $.fn.serializeObject = function()
 }
 
 function string2Json(s) 
-{ 
+{   
 	var newstr = "";
 	if(s.length > 0)
 	{
@@ -55,7 +55,7 @@ function string2Json(s)
 				break;   
 			case '+':
 				newstr += "%2B";   
-				break;
+				break; 
 			case '&':
 				newstr += "%26";   
 				break;
@@ -70,7 +70,7 @@ function string2Json(s)
 				break;
 			case "'":
 				newstr += "‘"; 
-				break;			
+				break;	
 			default:     
 				newstr += c;     
 			}
@@ -94,51 +94,3 @@ Array.prototype.remove = function(dx)
 　	}
 　	this.length-=1
 }
-
-function NumbersOnly()
-{
-    if(!((event.keyCode >= 48 && event.keyCode <= 57) || event.keyCode == 46))
-    {
-    	event.returnValue = false;
-    }
-}
-
-
-//释放号码
-//function releaseNum(_this)
-//{
-//	if(_this == "")
-//	{
-//		$("input[name='source']").each(function(i,node){
-//			var productName = $(this).val();
-//			var accNbr = productName.substring(productName.indexOf(",")+1);
-//			if(accNbr != "" && accNbr != undefined)
-//			{
-//				realReleaseNum(accNbr);
-//			}
-//		})
-//	}
-//	else
-//	{
-//		realReleaseNum(_this);
-//	}
-//}
-//
-//function realReleaseNum(accNbr)
-//{
-//	if(accNbr != "" && accNbr != undefined)
-//	{
-//		var regionId = $("#localNetId",parent.parent.document).val();
-//		var staffId = $("#staffId",parent.parent.document).val();
-//		$.ajax({
-//			type : "POST",
-//			url : "/orderManage/phoneNumber.htm?method=subscribePhoneNumberByCertificateNo",
-//			data : "localNetId="+regionId+"&staffId="+staffId+"&phoneNbr="+accNbr+"&actType=1&certificateNo=&funcNodeId=",
-//			async : false,
-//			success : function(msg)
-//			{
-//				
-//			}
-//		});
-//	}
-//}

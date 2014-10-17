@@ -79,11 +79,10 @@ a:hover {color:#F00;}
 .main1{ width: 99%; height:auto; margin-left:5px; margin-top:5px; }
 .title{ background:url(../images/noticebg.png) 0 0 repeat-x; width:99%; height:28px; line-height:28px;border-left:1px solid #d2d2d2;border-right:1px solid #d2d2d2;}
 .titleleft {background:  url(../images/title.png) 0 0 no-repeat; width:5px; height: 27px; float:left;}
-.titlecentre{ height:28px; float:left;}
+.titlecentre{width:80%; height:28px; float:left;}
 .titleright {  height:28px; width:50px; float:right; background:url(../images/upArrows.png) 90% 45% no-repeat;  }
-.titleright1 {  height:28px; width:50px; float:right; background:url(../images/downArrows.png) 90% 45% no-repeat;  }
-.titleba h3 {color:#4D920A; display: inline; height:28px; line-height:28px; margin-left:10px;margin-top:0px;}
-.titleBase a {color:#4D920A;;height:28px; line-height:28px;}
+.title h3 {color:#4D920A; display: inline; height:28px; line-height:28px; margin-left:10px;margin-top:0px;}
+.title a {color:#4D920A;;height:28px; line-height:28px;}
 .title a:hover{color:#F00;}
 .box{height:auto; width:99%;; margin-top:3px;border:1px solid #d2d2d2; background-color:#FFF;}
 .box1{height:270px; width:99%; margin-top:3px;border:1px solid #d2d2d2; background-color:#FFF;}
@@ -245,7 +244,7 @@ input.subtext3{width:70px;border:1px solid #C0DC56;background:#fff;}
 	margin:0 5px;
 }
 #goto{
-	background:url('/orderManage/pub/images/submit-bg.png');
+	background:url('/pub/images/submit-bg.png');
 	height:23px;
 	width:56px;
 	border:none;

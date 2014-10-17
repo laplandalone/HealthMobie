@@ -1,5 +1,7 @@
 package com.hbgz.controller;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.List;
 import java.util.Map;
@@ -8,15 +10,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
-import com.hbgz.pub.exception.QryException;
 import com.hbgz.pub.util.ObjectCensor;
 import com.hbgz.pub.util.StringUtil;
 import com.hbgz.service.DigitalHealthService;
@@ -131,7 +136,6 @@ public class DoctorController
 		}
 		wr.write("success");
 		wr.close();
-		
 	}
 	
 	@RequestMapping(params = "method=updateRegisterTime")
@@ -157,4 +161,78 @@ public class DoctorController
 		return model;
 	}
 	
+	@RequestMapping(params = "method=qryTeamList")
+	public void qryTeamList(HttpServletRequest request, HttpServletResponse response) throws IOException
+	{
+		response.setCharacterEncoding("UTF-8");
+		PrintWriter wr = response.getWriter();
+		HttpSession session = request.getSession();
+		String hospitalId = (String) session.getAttribute("hospitalId");
+		if(ObjectCensor.isStrRegular(hospitalId))
+		{
+			try 
+			{
+				JSONArray teamArray = digitalHealthService.qryTeamList(hospitalId);
+				log.error(teamArray);
+				wr.println(teamArray);
+			}
+			catch (Exception e) 
+			{
+				wr.println("error");
+			}
+		}
+		else
+		{
+			wr.println("error");
+		}
+		wr.close();
+	}
+	
+	@RequestMapping(params = "method=qryOnlineDortorList")
+	public void qryOnlineDortorList(@RequestBody JSONObject obj ,HttpServletRequest request, HttpServletResponse response)
+	{
+		try 
+		{
+			response.setCharacterEncoding("UTF-8");
+			HttpSession session = request.getSession();
+			String hospitalId = (String) session.getAttribute("hospitalId");
+			PrintWriter pw = response.getWriter();
+			if(ObjectCensor.isStrRegular(hospitalId))
+			{
+				int pageNum = Integer.parseInt(StringUtil.getJSONObjectKeyVal(obj, "curId"));
+				int pageSize = Integer.parseInt(StringUtil.getJSONObjectKeyVal(obj, "pageNum"));
+				String teamId = StringUtil.getJSONObjectKeyVal(obj, "teamId");
+				JSONObject object = digitalHealthService.qryOnlineDortorList(pageNum, pageSize, hospitalId, teamId);
+				log.error(object);
+				pw.println(object);
+			}
+			else
+			{
+				pw.println("error");
+			}
+			pw.close();
+		}
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	@RequestMapping(params = "method=updateOnlineState")
+	public void updateOnlineState(HttpServletRequest request, HttpServletResponse response)
+	{
+		try 
+		{
+			response.setCharacterEncoding("UTF-8");
+			String doctorId = request.getParameter("doctorId");
+			String operatorType = request.getParameter("operatorType");
+			boolean flag = digitalHealthService.updateOnlineState(doctorId, operatorType);
+			PrintWriter pw = response.getWriter();
+			pw.println(flag);
+			pw.close();
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
 }

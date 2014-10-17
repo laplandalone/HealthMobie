@@ -1140,4 +1140,40 @@ public class DigitalHealthService
 		}
 		return retVal;
 	}
+
+	public JSONArray qryTeamList(String hospitalId) throws Exception 
+	{
+		JSONArray array = new JSONArray();
+		if(ObjectCensor.isStrRegular(hospitalId))
+		{
+			List sList = digitalHealthDao.qryTeamList(hospitalId);
+			if(ObjectCensor.checkListIsNull(sList))
+			{
+				array = JSONArray.fromObject(sList);
+			}
+		}
+		return array;
+	}
+
+	public JSONObject qryOnlineDortorList(int pageNum, int pageSize, String hospitalId, String teamId) throws Exception 
+	{
+		JSONObject obj = new JSONObject();
+		if(ObjectCensor.isStrRegular(hospitalId))
+		{
+			List sList = digitalHealthDao.qryOnlineDortorList(pageNum, pageSize, hospitalId, teamId);
+			int count = 0;
+			if(ObjectCensor.checkListIsNull(sList))
+			{
+				obj.element("onlineDortorList", sList);
+				count = digitalHealthDao.qryOnlineDortorCount(hospitalId, teamId);
+			}
+			obj.element("count", count);
+		}
+		return obj;
+	}
+
+	public boolean updateOnlineState(String doctorId, String operatorType) 
+	{
+		return digitalHealthDao.updateOnlineState(doctorId, operatorType);
+	}
 }

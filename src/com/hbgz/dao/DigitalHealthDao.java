@@ -256,6 +256,20 @@ public class DigitalHealthDao
 		return itzcQryCenter.executeSqlByMapListWithTrans(sql.toString(), lstParam);
 	}
 	
+
+	public List qryTeamList(String hospitalId) throws Exception 
+	{
+		List sList = null;
+		if(ObjectCensor.isStrRegular(hospitalId))
+		{
+			String sql = "select t.*, t.rowid from team_t t where hospital_id = ? and expert_flag = '1' ";
+			ArrayList lstParam = new ArrayList();
+			lstParam.add(hospitalId);
+			sList = itzcQryCenter.executeSqlByMapListWithTrans(sql, lstParam);
+		}
+		return sList;
+	}
+	
     /**
      * 添加用户预约
      * @param orderId
@@ -439,6 +453,81 @@ public class DigitalHealthDao
 			sql.append("values('"+hospitalId+"', '"+configId+"', '"+newsTypeId+"', '"+newsTypeName+"', '"+configType+"', '00A') ");
 			conn = itzcQryCenter.getDataSource().getConnection();
 			stmt = conn.createStatement();
+			int i = stmt.executeUpdate(sql.toString());
+			if(i > 0)
+			{
+				flag = true;
+			}
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			try
+			{
+				stmt.close();
+				conn.close();
+
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+				flag = false;
+			}
+		}
+		return flag;
+	}
+
+	public List qryOnlineDortorList(int pageNum, int pageSize, String hospitalId, String teamId) throws Exception 
+	{
+		StringBuffer query = new StringBuffer();
+		query.append("SELECT * FROM (SELECT A.*, ROWNUM ROWNUMBER FROM (");
+		query.append("select a.*, b.team_name from doctor_t a, team_t b where a.team_id = b.team_id and a.hospital_id = ? ");
+		ArrayList lstParam = new ArrayList();
+		lstParam.add(hospitalId);
+		if(ObjectCensor.isStrRegular(teamId))
+		{
+			query.append("and a.team_id = ? ");
+			lstParam.add(teamId);
+		}
+		query.append("order by a.register_fee) A WHERE ROWNUM <= ?)  WHERE ROWNUMBER >= ? ");
+		lstParam.add(pageNum * pageSize);
+		lstParam.add((pageNum - 1) * pageSize + 1);
+		return itzcQryCenter.executeSqlByMapListWithTrans(query.toString(), lstParam);
+	}
+
+	public int qryOnlineDortorCount(String hospitalId, String teamId) throws Exception 
+	{
+		StringBuffer query = new StringBuffer();
+		query.append("select a.*, b.team_name from doctor_t a, team_t b where a.team_id = b.team_id and a.hospital_id = ? ");
+		ArrayList lstParam = new ArrayList();
+		lstParam.add(hospitalId);
+		if(ObjectCensor.isStrRegular(teamId))
+		{
+			query.append("and a.team_id = ? ");
+			lstParam.add(teamId);
+		}
+		return itzcQryCenter.getCount(query.toString(), lstParam);
+	}
+
+	public boolean updateOnlineState(String doctorId, String operatorType) 
+	{
+		boolean flag = false;
+		Connection conn = null;
+		Statement stmt = null;
+		try 
+		{
+			conn = itzcQryCenter.getDataSource().getConnection();
+			stmt = conn.createStatement();
+			StringBuffer sql = new StringBuffer();
+			String state = "00A";
+			if("offline".equals(operatorType))
+			{
+				state = "00X";
+			}
+			sql.append("update doctor_t set state = '"+state+"' where doctor_id in ("+doctorId+") ");
 			int i = stmt.executeUpdate(sql.toString());
 			if(i > 0)
 			{
