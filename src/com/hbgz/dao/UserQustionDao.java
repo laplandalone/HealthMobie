@@ -38,23 +38,30 @@ public class UserQustionDao extends BaseDao
 		return list;
 	}
 	
-	public List qryQuestionNoAns(String doctorId) throws QryException
+	public List qryQuestionNoAns(String doctorId,String type) throws QryException
 	{
-		StringBuffer sql = new StringBuffer("select * from user_question_t where state='00A' and record_type='ask' and doctor_id =? and question_id not in ( ");
-		sql.append("select question_id from user_question_t t where state='00A' and doctor_id = ? and record_type='ans')");
-		
-		ArrayList lstParam = new ArrayList();
 		if (!ObjectCensor.isStrRegular(doctorId))
 		{
-			lstParam.add(doctorId);
-			lstParam.add(doctorId);
+			return null;
 		}
+		StringBuffer sql = new StringBuffer("select QUESTION_ID,TEAM_ID,USER_ID,DOCTOR_ID,USER_TELEPHONE,HOSPITAL_ID,RECORD_TYPE,CONTENT,to_char(create_date, 'yyyy-MM-dd')create_date");
+	    sql.append(" from user_question_t where state='00A' and record_type='ask' and doctor_id ='"+doctorId+"' and question_id ");
+	   if("ans".equals(type))
+	   {
+		   sql.append("  in  ");
+	   }else 
+	   {
+		   sql.append(" not  in  ");
+	   }
+	    sql.append(" (select question_id from user_question_t t where state='00A' and doctor_id = '"+doctorId+"' and record_type='ans')");
+		ArrayList lstParam = new ArrayList();
+		
 		return itzcQryCenter.executeSqlByMapListWithTrans(sql.toString(), lstParam);
 	}
 	
 	public List qryQuestionTsByUserId(String userId,String hospitalId) throws QryException
 	{
-		String sql="select a.question_id,a.user_id,a.doctor_id,a.user_telephone,a.content,to_char(a.create_date, 'yyyy-MM-dd hh24:mi:ss') create_date,b.name from user_question_t a ,doctor_t b where a.state='00A' and a.record_type='ask' and a.doctor_id=b.doctor_id and a.team_id=b.team_id and user_id=? and a.hospital_Id=? order by create_date desc ";
+		String sql="select a.question_id,a.user_id,a.doctor_id,a.user_telephone,a.content,to_char(a.create_date, 'yyyy-MM-dd') create_date,b.name from user_question_t a ,doctor_t b where a.state='00A' and a.record_type='ask' and a.doctor_id=b.doctor_id and a.team_id=b.team_id and user_id=? and a.hospital_Id=? order by create_date desc ";
 		if (!ObjectCensor.isStrRegular(userId,hospitalId))
 		{
 			return null;

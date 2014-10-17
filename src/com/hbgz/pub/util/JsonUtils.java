@@ -115,7 +115,7 @@ public class JsonUtils
 				}
 				else 
 				{
-					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 					
 					return sdf.format(value);
 				}

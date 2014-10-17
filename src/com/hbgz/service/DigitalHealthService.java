@@ -739,9 +739,32 @@ public class DigitalHealthService
 	@ServiceType(value = "BUS20028")
 	public JSONArray getDoctorQuestionsByType(String doctorId,String type) throws Exception
 	{
-		List list = userQustionDao.qryQuestionNoAns(doctorId);
-		JSONArray jsonArray = JsonUtils.fromArrayTimestamp(list);
+		List list = userQustionDao.qryQuestionNoAns(doctorId,type);
+		JSONArray jsonArray = JsonUtils.fromArray(list);
 		return jsonArray;
+	}
+	
+	@ServiceType(value = "BUS20029")
+	public String updateAuth(String id, String authType) 
+	{
+		String retVal = "false";
+		if(ObjectCensor.isStrRegular(id, authType))
+		{
+			List<UserQuestionT> sList = userQustionDao.qryUserQuestionById(id);
+			if(ObjectCensor.checkListIsNull(sList))
+			{
+				UserQuestionT ques = sList.get(0);
+				String newAuthType = "public";
+				if("public".equals(authType))
+				{
+					newAuthType = "private";
+				}
+				ques.setAuthType(newAuthType);
+				userQustionDao.update(ques);
+				retVal = "true";
+			}
+		}
+		return retVal;
 	}
 	
 	// 查询用户的挂号订单
@@ -1111,28 +1134,6 @@ public class DigitalHealthService
 			{
 				UserQuestionT ques = sList.get(0);
 				ques.setState("00X");
-				userQustionDao.update(ques);
-				retVal = "true";
-			}
-		}
-		return retVal;
-	}
-
-	public String updateAuth(String id, String authType) 
-	{
-		String retVal = "false";
-		if(ObjectCensor.isStrRegular(id, authType))
-		{
-			List<UserQuestionT> sList = userQustionDao.qryUserQuestionById(id);
-			if(ObjectCensor.checkListIsNull(sList))
-			{
-				UserQuestionT ques = sList.get(0);
-				String newAuthType = "public";
-				if("public".equals(authType))
-				{
-					newAuthType = "private";
-				}
-				ques.setAuthType(newAuthType);
 				userQustionDao.update(ques);
 				retVal = "true";
 			}
