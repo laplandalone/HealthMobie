@@ -53,7 +53,7 @@ public class UserQustionDao extends BaseDao
 	   {
 		   sql.append(" not  in  ");
 	   }
-	    sql.append(" (select question_id from user_question_t t where state='00A' and doctor_id = '"+doctorId+"' and record_type='ans')");
+	    sql.append(" (select question_id from user_question_t t where state='00A' and doctor_id = '"+doctorId+"' and record_type='ans') order by create_date desc ");
 		ArrayList lstParam = new ArrayList();
 		
 		return itzcQryCenter.executeSqlByMapListWithTrans(sql.toString(), lstParam);
@@ -89,7 +89,7 @@ public class UserQustionDao extends BaseDao
 		{
 			return null;
 		}
-		List list =this.find("from UserQuestionT as model where model.questionId=? order by createDate ", new String[] {questionId});
+		List list =this.find("from UserQuestionT as model where model.state='00A' and model.questionId=? order by createDate ", new String[] {questionId});
 		return list;
 	}
 

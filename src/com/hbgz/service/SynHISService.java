@@ -132,6 +132,66 @@ public class SynHISService {
 	 * @return
 	 * @throws Exception
 	 */
+	public List synDoctorRegister(String doctorIdT) throws Exception 
+	{   
+		Date startDateT = DateUtils.afterNDate(1);
+		Date endDateT = DateUtils.afterNDate(14);
+		String startDate=DateUtils.CHN_DATE_FORMAT.format(startDateT);
+		String endDate=DateUtils.CHN_DATE_FORMAT.format(endDateT);
+		startDate=startDate.replace('-','.');
+		endDate=endDate.replace('-','.');
+		String sql="<DS><SQL><str>select delb ,c.bzdm team_id,c.bzmc team_name,kszjdm doctor_id,b.zgxm doctor_name,derq day from mz_ghde a,comm_zgdm b,mz_bzdyb c where a.kszjdm=b.zgid and a.kszjdm=c.ysdm and a.kszjdm='"+doctorIdT+"' and derq between  '"+startDate+"' and '"+endDate+"' order by derq  </str></SQL></DS>";
+		String ss =invokeFunc(sql);
+		Document doc = XMLComm.loadXMLString(ss);
+		Element root = doc.getRootElement();
+		List list = root.getChildren();
+		List listHis = new ArrayList();
+		String dayT="";
+		if(ObjectCensor.checkListIsNull(list))
+		{
+			
+		for (int i = 0; i < list.size(); i++)
+		{
+			Element e = (Element) list.get(i);
+			String doctorId=e.getChildText("doctor_id");
+			String doctorName=e.getChildText("doctor_name");
+			String teamId=e.getChildText("team_id");
+			String teamName=e.getChildText("team_name");
+			String day=e.getChildText("day");
+			day=day.replace('.','-');
+			Date dateT=DateUtils.CHN_DATE_FORMAT.parse(day);
+			String weekStr = DateUtils.getWeekOfDate(dateT);
+			Map newMap = new HashMap();
+			newMap.put("doctorName", doctorName);
+			newMap.put("teamName", teamName);
+			newMap.put("doctorId", doctorId);
+			newMap.put("teamId", teamId);
+			newMap.put("post", "");
+			newMap.put("week",weekStr);
+			newMap.put("day", day);
+			
+			if(!dayT.equals(day))
+			{
+				newMap.put("display","Y");
+				dayT=day;
+			}else
+			{
+				newMap.put("display","N");
+			}
+			
+			
+			listHis.add(newMap);
+		}
+		}
+		return listHis;
+	}
+	
+	/**
+	 * 预约时间
+	 * @param teamIdT
+	 * @return
+	 * @throws Exception
+	 */
 	public List synHisRegisterOrderService(String teamIdT,String doctorIdT) throws Exception 
 	{
 		Date startDateT = DateUtils.afterNDate(1);
@@ -464,7 +524,8 @@ public class SynHISService {
 //		sql.append("('201409285000','haha','1','1984.08.01','2014.08.01','9999R','单纯开药','湖北省武汉市水厂一路4号4楼','2014.08.01','1178R','13808652241','开药',2,'422822198407311010','Y')</str></SQL>");
 		
 //		sql.append("</DS>");
-		new SynHISService().snHisTeamService();
-	
+		String sqls="<DS><SQL><str>select top 10 delb ,c.bzdm team_id,c.bzmc team_name,kszjdm doctor_id,b.zgxm doctor_name,derq day from mz_ghde a,comm_zgdm b,mz_bzdyb c where a.kszjdm=b.zgid and a.kszjdm=c.ysdm and a.kszjdm='1405R' and derq > '2014.10.20' order by derq  </str></SQL></DS>";
+		String result =new SynHISService().invokeFunc(sqls);
+		System.out.println(result);
 	}
 }
