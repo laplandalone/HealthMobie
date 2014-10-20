@@ -22,8 +22,6 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.json.MappingJacksonJsonView;
 
-import sun.nio.cs.HistoricallyNamedCharset;
-
 import com.hbgz.pub.util.ObjectCensor;
 import com.hbgz.pub.util.StringUtil;
 import com.hbgz.service.DigitalHealthService;
@@ -82,8 +80,9 @@ public class MobileController
 		try
 		{
 			synHISService.snHisTeamService();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
+		} 
+		catch (Exception e) 
+		{
 			e.printStackTrace();
 		}
 	}

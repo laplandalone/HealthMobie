@@ -59,12 +59,6 @@ public class AndroidPushMsg
 	public static void main(String[] args)
 	{
 		//消息
-		pushMsg("1078586329118986050", "msg", "<user_id>72438</user_id><message>您有一个新的订单!</message><title>订单提醒</title><order_type>REPAST</order_type>", "");
-		
-//		pushMsg("706200416679787745", "msg", "\"custom_content\": {\"user_id\":\"value1\", \"title\":\"value2\"}", "");
-		//通知
-//		pushMsg("854319934071353822", "notice", "{\"title\":\"Notify_title_danbo\",\"description\":\"Notify_description_content\",\"open_type\":0,\"custom_content\":{\"user_id\":\"71189\",\"title\":\"Hello\"}}", "");
-		
-//		pushMsg("706200416679787745", "notice", "{\"title\":\"Notify_title_danbo\",\"description\":\"Notify_description_content\",\"custom_content\":{\"key1\":\"value1\",\"key2\":\"value2\"}}", "");
+		pushMsg("1078586329118986050", "msg", "测试", "");
 	}
 }
