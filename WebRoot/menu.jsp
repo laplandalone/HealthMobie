@@ -104,6 +104,10 @@
 							<img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; 
 							<a href="/view/doctor/onlineDocotrList.jsp" target="main">在线医生管理</a>
 						</li>
+						<li>
+							<img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; 
+							<a href="/view/wake/addWake.jsp" target="main">新增提醒管理</a>
+						</li>
 					</c:if>
 				</ul>
 			</div>

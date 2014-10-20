@@ -10,15 +10,19 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.json.MappingJacksonJsonView;
+
+import sun.nio.cs.HistoricallyNamedCharset;
 
 import com.hbgz.pub.util.ObjectCensor;
 import com.hbgz.pub.util.StringUtil;
@@ -534,6 +538,47 @@ public class MobileController
 			out = response.getWriter();
 			List sList = digitalHealthService.qryDoctorList(hospitalId, teamId);
 			out.println(JSONArray.fromObject(sList));
+		} 
+		catch (Exception e) 
+		{
+			
+		}
+		finally
+		{
+			out.close();
+		}
+	}
+	
+	@RequestMapping(params = "method=qryWakeTypeList")
+	public void qryWakeTypeList(HttpServletRequest request ,HttpServletResponse response)
+	{
+		try 
+		{
+			response.setCharacterEncoding("UTF-8");
+			HttpSession session = request.getSession();
+			String hospitalId= (String)session.getAttribute("hospitalId");
+			JSONArray array = digitalHealthService.qryWakeTypeList(hospitalId);
+			log.error(array);
+			PrintWriter out = response.getWriter();
+			out.print(array);
+			out.close();
+		} 
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	@RequestMapping(params = "method=addWake")
+	public void addWake(@RequestBody JSONObject obj, HttpServletResponse response)
+	{
+		PrintWriter out = null;
+		try 
+		{
+			response.setCharacterEncoding("UTF-8");
+			out = response.getWriter();
+			boolean retVal = digitalHealthService.addWake(obj);
+			out.println(retVal);
 		} 
 		catch (Exception e) 
 		{

@@ -68,7 +68,7 @@ function createTable(data, flagParam)
 			{
 				content += "<tr class='aaa' onmouseover='trColorChange(this,"+i+")' onmouseout='trColorChange(this,"+i+")'>";
 			}
-			content += "<td width='3%' style='text-align:center'><input type='checkbox' state='"+obj.state+"' name='box' doctorId='"+obj.doctorId+"' ";
+			content += "<td width='3%' style='text-align:center'><input type='checkbox' name='box' class='"+obj.state+"' id='"+obj.doctorId+"' value='"+obj.teamId+"' ";
 			if(obj.state == '00A')
 			{
 				content += "checked='checked' ";
@@ -142,20 +142,20 @@ function createTable(data, flagParam)
 //下线
 function doctorOffline()
 {
-	var doctorId = "";
+	var doctorId = "[";
 	var count = 0;
 	$("input[name='box']").each(function(){
-		if (!$(this).prop("checked") && ($(this).prop("state") == '00A')) 
+		if (!$(this).prop("checked") && ($(this).prop("class") == '00A')) 
 		{
 			count++;
-			doctorId += "'" + $(this).prop("doctorId") + "',";
+			doctorId += "{\"doctorId\":\"" + $(this).prop("id") + "\",\"teamId\":\"" + $(this).prop("value") + "\"},";
 	    }
 	});
 	if(count > 0)
 	{
 		$.dialog.confirm("选中的医生确定要下线?", 
 			function(){
-				doctorId = doctorId.substring(0, doctorId.length - 1);
+				doctorId = doctorId.substring(0, doctorId.length - 1) + "]";
 				$.ajax({
 					type : "POST",
 					url : "/doctor.htm?method=updateOnlineState",
@@ -189,20 +189,20 @@ function doctorOffline()
 //上线
 function doctorOnline()
 {
-	var doctorId = "";
+	var doctorId = "[";
 	var count = 0;
 	$("input[name='box']").each(function(){
-		if($(this).prop("checked") && ($(this).prop("state") == '00X'))
+		if($(this).prop("checked") && ($(this).prop("class") == '00X'))
 		{
 			count++;
-			doctorId += "'" + $(this).prop("doctorId") + "',";
+			doctorId += "{\"doctorId\":\"" + $(this).prop("id") + "\",\"teamId\":\"" + $(this).prop("value") + "\"},";
 		}
 	});
 	if(count > 0)
 	{
 		$.dialog.confirm("选中的医生确定要上线?", 
 			function(){
-				doctorId = doctorId.substring(0, doctorId.length - 1);
+				doctorId = doctorId.substring(0, doctorId.length - 1) + "]";
 				$.ajax({
 					type : "POST",
 					url : "/doctor.htm?method=updateOnlineState",

@@ -75,6 +75,20 @@ public class CacheManager
 		return null;
 	}
 	
+	public List getWakeType(String hospitalId, String configName) throws Exception
+	{
+		List list = sysCacheDao.getHospitalConfig();
+		HashMap mapComp = new HashMap();
+		mapComp.put("hospitalId",hospitalId);
+		mapComp.put("configName", configName);
+		List subList = StringUtil.getSubMapList(list, mapComp);
+		if(ObjectCensor.checkListIsNull(subList))
+		{
+			return subList;
+		}
+		return null;
+	}
+	
 	public Map getAuthCode(String accNbr)
 	{
 		return sysCacheDao.getAuthCode(accNbr);

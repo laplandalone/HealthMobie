@@ -6,12 +6,16 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.hbgz.pub.exception.QryException;
 import com.hbgz.pub.qry.QryCenter;
 import com.hbgz.pub.util.ObjectCensor;
+import com.hbgz.pub.util.StringUtil;
 
 @Repository
 public class DigitalHealthDao
@@ -484,7 +488,7 @@ public class DigitalHealthDao
 	{
 		StringBuffer query = new StringBuffer();
 		query.append("SELECT * FROM (SELECT A.*, ROWNUM ROWNUMBER FROM (");
-		query.append("select a.*, b.team_name from doctor_t a, team_t b where a.team_id = b.team_id and a.hospital_id = ? ");
+		query.append("select a.*, b.team_name from doctor_t a, team_t b where a.team_id = b.team_id and a.hospital_id = ? and b.expert_flag = '1' ");
 		ArrayList lstParam = new ArrayList();
 		lstParam.add(hospitalId);
 		if(ObjectCensor.isStrRegular(teamId))
@@ -501,7 +505,7 @@ public class DigitalHealthDao
 	public int qryOnlineDortorCount(String hospitalId, String teamId) throws Exception 
 	{
 		StringBuffer query = new StringBuffer();
-		query.append("select a.*, b.team_name from doctor_t a, team_t b where a.team_id = b.team_id and a.hospital_id = ? ");
+		query.append("select a.*, b.team_name from doctor_t a, team_t b where a.team_id = b.team_id and a.hospital_id = ? and b.expert_flag = '1' ");
 		ArrayList lstParam = new ArrayList();
 		lstParam.add(hospitalId);
 		if(ObjectCensor.isStrRegular(teamId))
@@ -514,6 +518,74 @@ public class DigitalHealthDao
 
 	public boolean updateOnlineState(String doctorId, String operatorType) 
 	{
+		boolean flag = true;
+		Connection conn = null;
+		Statement stmt = null;
+		try 
+		{
+			conn = itzcQryCenter.getDataSource().getConnection();
+			stmt = conn.createStatement();
+			
+			JSONArray array = JSONArray.fromObject(doctorId);
+			if(ObjectCensor.checkListIsNull(array))
+			{
+				String state = "00A";
+				if("offline".equals(operatorType))
+				{
+					state = "00X";
+				}
+				for(int i = 0, len = array.size(); i < len; i++)
+				{
+					JSONObject obj = array.getJSONObject(i);
+					doctorId = StringUtil.getJSONObjectKeyVal(obj, "doctorId");
+					String teamId = StringUtil.getJSONObjectKeyVal(obj, "teamId");
+					String sql = "update doctor_t set state = '"+state+"' where doctor_id = '"+doctorId+"' and team_id = '"+teamId+"' ";
+					stmt.addBatch(sql);
+				}
+			}
+			
+			int[] ints = stmt.executeBatch();
+			for(int i = 0, len = ints.length; i < len; i++)
+			{
+				if(ints[i] < 0)
+				{
+					flag = false;
+					break;
+				}
+			}
+			
+			if(flag)
+			{
+				conn.commit();
+			}
+			else
+			{
+				conn.rollback();
+			}
+		} 
+		catch (SQLException e) 
+		{
+			flag = false;
+			e.printStackTrace();
+		}
+		finally
+		{
+			try
+			{
+				stmt.close();
+				conn.close();
+			}
+			catch (Exception e)
+			{
+				flag = false;
+				e.printStackTrace();
+			}
+		}
+		return flag;
+	}
+
+	public boolean addWake(JSONObject obj, Long wakeId) 
+	{
 		boolean flag = false;
 		Connection conn = null;
 		Statement stmt = null;
@@ -522,12 +594,14 @@ public class DigitalHealthDao
 			conn = itzcQryCenter.getDataSource().getConnection();
 			stmt = conn.createStatement();
 			StringBuffer sql = new StringBuffer();
-			String state = "00A";
-			if("offline".equals(operatorType))
-			{
-				state = "00X";
-			}
-			sql.append("update doctor_t set state = '"+state+"' where doctor_id in ("+doctorId+") ");
+			
+			String wakeType = StringUtil.getJSONObjectKeyVal(obj, "wakeType");
+			String wakeValue = StringUtil.getJSONObjectKeyVal(obj, "wakeValue");
+			String wakeContent = StringUtil.getJSONObjectKeyVal(obj, "wakeContent");
+			String wakeDate = StringUtil.getJSONObjectKeyVal(obj, "wakeDate");
+			String wakeName = StringUtil.getJSONObjectKeyVal(obj, "wakeName");
+			sql.append("insert into wake_t(wake_id, wake_type, wake_value, wake_content, wake_date, create_date, state, wake_name) ");
+			sql.append("values('"+wakeId+"', '"+wakeType+"', '"+wakeValue+"', '"+wakeContent+"', to_date('"+wakeDate+"', 'yyyy-MM-dd hh24:mi:ss'), sysdate, '00A', '"+wakeName+"')");
 			int i = stmt.executeUpdate(sql.toString());
 			if(i > 0)
 			{
@@ -544,14 +618,20 @@ public class DigitalHealthDao
 			{
 				stmt.close();
 				conn.close();
-
 			}
 			catch (Exception e)
 			{
 				e.printStackTrace();
-				flag = false;
 			}
 		}
 		return flag;
+	}
+
+	public List qryWakeList(String wakeId) throws Exception 
+	{
+		String sql = "select * from wake_t where state = '00A' and wake_id = ? ";
+		ArrayList lstParam = new ArrayList();
+		lstParam.add(wakeId);
+		return itzcQryCenter.executeSqlByMapListWithTrans(sql, lstParam);
 	}
 }

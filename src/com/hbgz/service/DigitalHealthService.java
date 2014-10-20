@@ -32,6 +32,7 @@ import com.hbgz.model.UserQuestionT;
 import com.hbgz.pub.annotation.ServiceType;
 import com.hbgz.pub.base.SysDate;
 import com.hbgz.pub.cache.CacheManager;
+import com.hbgz.pub.cloudPush.AndroidPushMsg;
 import com.hbgz.pub.exception.JsonException;
 import com.hbgz.pub.exception.QryException;
 import com.hbgz.pub.resolver.BeanFactoryHelper;
@@ -767,6 +768,25 @@ public class DigitalHealthService
 		return retVal;
 	}
 	
+	//百度云推送消息
+	@ServiceType(value = "BUS20030")
+	public String sendMsg(String wakeId, String pushUserId, String pushChannelId) throws Exception
+	{
+		String retVal = "false";
+		if(ObjectCensor.isStrRegular(wakeId, pushUserId))
+		{
+			List sList = digitalHealthDao.qryWakeList(wakeId);
+			if(ObjectCensor.checkListIsNull(sList))
+			{
+				String wakeContent = StringUtil.getMapKeyVal((Map) sList.get(0), "wakeContent");
+				AndroidPushMsg.pushMsg(pushUserId, "msg", wakeContent, pushChannelId);
+				retVal = "true";
+			}
+		}
+		return retVal;
+	}
+	
+	
 	// 查询用户的挂号订单
 	public List qryRegisterOrder(String hospitalId, String teamId, String doctorId,
 			String startTime, String endTime, String state) throws Exception
@@ -1175,5 +1195,23 @@ public class DigitalHealthService
 	public boolean updateOnlineState(String doctorId, String operatorType) 
 	{
 		return digitalHealthDao.updateOnlineState(doctorId, operatorType);
+	}
+
+	public boolean addWake(JSONObject obj) 
+	{
+		Long wakeId = sysId.getId();
+		return digitalHealthDao.addWake(obj, wakeId);
+	}
+
+	public JSONArray qryWakeTypeList(String hospitalId) throws Exception 
+	{
+		JSONArray array = new JSONArray();
+		CacheManager cacheManager = (CacheManager) BeanFactoryHelper.getBean("cacheManager");
+		List list = cacheManager.getWakeType(hospitalId, "WAKE_TYPE");
+		if(ObjectCensor.checkListIsNull(list))
+		{
+			array = JsonUtils.fromArray(list);
+		}
+		return array;
 	}
 }
