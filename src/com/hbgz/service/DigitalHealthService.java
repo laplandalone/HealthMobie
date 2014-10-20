@@ -768,24 +768,67 @@ public class DigitalHealthService
 		return retVal;
 	}
 	
-	//百度云推送消息
 	@ServiceType(value = "BUS20030")
-	public String sendMsg(String wakeId, String pushUserId, String pushChannelId) throws Exception
+	public String updateAns(String id, String content) 
 	{
 		String retVal = "false";
-		if(ObjectCensor.isStrRegular(wakeId, pushUserId))
+		if(ObjectCensor.isStrRegular(id, content))
 		{
-			List sList = digitalHealthDao.qryWakeList(wakeId);
+			List<UserQuestionT> sList = userQustionDao.qryUserQuestionById(id);
 			if(ObjectCensor.checkListIsNull(sList))
 			{
-				String wakeContent = StringUtil.getMapKeyVal((Map) sList.get(0), "wakeContent");
-				AndroidPushMsg.pushMsg(pushUserId, "msg", wakeContent, pushChannelId);
+				UserQuestionT ques = sList.get(0);
+				ques.setContent(content);
+				userQustionDao.update(ques);
+				retVal = "true";
+			}
+		}
+		return retVal;
+	}
+
+	@ServiceType(value = "BUS20031")
+	public String deleteAns(String id) 
+	{
+		String retVal = "false";
+		if(ObjectCensor.isStrRegular(id))
+		{
+			List<UserQuestionT> sList = userQustionDao.qryUserQuestionById(id);
+			if(ObjectCensor.checkListIsNull(sList))
+			{
+				UserQuestionT ques = sList.get(0);
+				ques.setState("00X");
+				userQustionDao.update(ques);
 				retVal = "true";
 			}
 		}
 		return retVal;
 	}
 	
+	@ServiceType(value = "BUS20032")
+	public JSONObject doctorReigsterById(String doctorId) throws Exception 
+	{
+		List list = synHISService.synDoctorRegister(doctorId);
+		JSONObject obj = new JSONObject();
+		obj.element("orders", list);
+		return obj;
+	}
+	//百度云推送消息
+		@ServiceType(value = "BUS20033")
+		public String sendMsg(String wakeId, String pushUserId, String pushChannelId) throws Exception
+		{
+			String retVal = "false";
+			if(ObjectCensor.isStrRegular(wakeId, pushUserId))
+			{
+				List sList = digitalHealthDao.qryWakeList(wakeId);
+				if(ObjectCensor.checkListIsNull(sList))
+				{
+					String wakeContent = StringUtil.getMapKeyVal((Map) sList.get(0), "wakeContent");
+					AndroidPushMsg.pushMsg(pushUserId, "msg", wakeContent, pushChannelId);
+					retVal = "true";
+				}
+			}
+			return retVal;
+		}
 	
 	// 查询用户的挂号订单
 	public List qryRegisterOrder(String hospitalId, String teamId, String doctorId,
@@ -1127,39 +1170,7 @@ public class DigitalHealthService
 		return "true";
 	}
 
-	public String updateAns(String id, String content) 
-	{
-		String retVal = "false";
-		if(ObjectCensor.isStrRegular(id, content))
-		{
-			List<UserQuestionT> sList = userQustionDao.qryUserQuestionById(id);
-			if(ObjectCensor.checkListIsNull(sList))
-			{
-				UserQuestionT ques = sList.get(0);
-				ques.setContent(content);
-				userQustionDao.update(ques);
-				retVal = "true";
-			}
-		}
-		return retVal;
-	}
-
-	public String deleteAns(String questionId) 
-	{
-		String retVal = "false";
-		if(ObjectCensor.isStrRegular(questionId))
-		{
-			List<UserQuestionT> sList = userQustionDao.qryUserQuestionById(questionId);
-			if(ObjectCensor.checkListIsNull(sList))
-			{
-				UserQuestionT ques = sList.get(0);
-				ques.setState("00X");
-				userQustionDao.update(ques);
-				retVal = "true";
-			}
-		}
-		return retVal;
-	}
+	
 
 	public JSONArray qryTeamList(String hospitalId) throws Exception 
 	{
