@@ -44,7 +44,7 @@ public class UserQustionDao extends BaseDao
 		{
 			return null;
 		}
-		StringBuffer sql = new StringBuffer("select QUESTION_ID,TEAM_ID,USER_ID,DOCTOR_ID,USER_TELEPHONE,HOSPITAL_ID,RECORD_TYPE,CONTENT,to_char(create_date, 'yyyy-MM-dd')create_date");
+		StringBuffer sql = new StringBuffer("select ID,QUESTION_ID,TEAM_ID,USER_ID,DOCTOR_ID,USER_TELEPHONE,HOSPITAL_ID,RECORD_TYPE,CONTENT,to_char(create_date, 'yyyy-MM-dd')create_date");
 	    sql.append(" from user_question_t where state='00A' and record_type='ask' and doctor_id ='"+doctorId+"' and question_id ");
 	   if("ans".equals(type))
 	   {

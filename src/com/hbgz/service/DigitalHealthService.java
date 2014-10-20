@@ -731,7 +731,17 @@ public class DigitalHealthService
 
 			if (userLst != null && userLst.size() != 0)
 			{
-				return (Map) userLst.get(0);
+				Map map =(Map) userLst.get(0);
+				String doctorId=StringUtil.getMapKeyVal(map, "doctor_id");
+				List list = synHISService.synDoctorRegister(doctorId);
+				String registerNum=list.size()+"";
+				map.put("register_num", registerNum);
+				List lstQ=userQustionDao.qryQuestionNoAns(doctorId,"noans");
+				if(ObjectCensor.checkListIsNull(lstQ))
+				{
+					map.put("ques_num", lstQ.size());
+				}
+				return map;
 			}
 		}
 		return null;
