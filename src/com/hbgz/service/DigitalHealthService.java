@@ -741,6 +741,7 @@ public class DigitalHealthService
 				{
 					map.put("ques_num", lstQ.size());
 				}
+				System.out.println(map);
 				return map;
 			}
 		}

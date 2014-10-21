@@ -496,7 +496,7 @@ public class DigitalHealthDao
 			query.append("and a.team_id = ? ");
 			lstParam.add(teamId);
 		}
-		query.append("order by a.register_fee) A WHERE ROWNUM <= ?)  WHERE ROWNUMBER >= ? ");
+		query.append("order by a.order_num) A WHERE ROWNUM <= ?)  WHERE ROWNUMBER >= ? ");
 		lstParam.add(pageNum * pageSize);
 		lstParam.add((pageNum - 1) * pageSize + 1);
 		return itzcQryCenter.executeSqlByMapListWithTrans(query.toString(), lstParam);
