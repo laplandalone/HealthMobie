@@ -49,7 +49,7 @@ function qryOnlineDortor()
 function createTable(data, flagParam)
 {
 	var content = "<table id='table1' width='100%' border='1' cellspacing='0' cellpadding='0' class='maintable'>";
-	content += "<tr class='tabletop'><td width='3%'>在线</td><td width='7%'>医生名称</td><td width='7%'>职称</td><td width='3%'>性别</td><td width='8%'>科室</td><td width='6%'>挂号费</td><td width='7%'>医生照片</td><td width='20%'>医生介绍</td><td width='20%'>擅长领域</td></tr>";
+	content += "<tr class='tabletop'><td width='3%'>在线</td><td width='7%'>医生名称</td><td width='7%'>职称</td><td width='3%'>性别</td><td width='8%'>科室</td><td width='6%'>挂号费</td> <td width='20%'>医生介绍</td><td width='20%'>擅长领域</td></tr>";
 	if(data.count > 0)
 	{
 		$("#tab").css("display", "block");
@@ -80,7 +80,7 @@ function createTable(data, flagParam)
 				sex = "";
 			}
 			content += "/></td><td width='7%' style='text-align:center'>"+obj.name+"</td><td width='7%' style='text-align:center'>"+obj.post+"</td><td width='3%' style='text-align:center'>"+sex+"</td><td width='8%' style='text-align:center'>"+obj.teamName+"</td>";
-			content += "<td width='6%' style='text-align:center'>"+obj.registerFee+"</td><td width='7%' style='text-align:center'><a href='"+obj.photoUrl+"' target='_blank'><img src='"+obj.photoUrl+"' width='30' height='30' /></a></td>";
+			content += "<td width='6%' style='text-align:center'>"+obj.registerFee+"</td> ";
 			var introduce = obj.introduce;
 			if(introduce != "" && introduce != null && introduce != undefined)
 			{

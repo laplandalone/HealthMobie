@@ -529,17 +529,17 @@ public class DigitalHealthDao
 			JSONArray array = JSONArray.fromObject(doctorId);
 			if(ObjectCensor.checkListIsNull(array))
 			{
-				String state = "00A";
+				String state = "0";/*在线*/
 				if("offline".equals(operatorType))
 				{
-					state = "00X";
+					state = "1";/*下线*/
 				}
 				for(int i = 0, len = array.size(); i < len; i++)
 				{
 					JSONObject obj = array.getJSONObject(i);
 					doctorId = StringUtil.getJSONObjectKeyVal(obj, "doctorId");
 					String teamId = StringUtil.getJSONObjectKeyVal(obj, "teamId");
-					String sql = "update doctor_t set state = '"+state+"' where doctor_id = '"+doctorId+"' and team_id = '"+teamId+"' ";
+					String sql = "update doctor_t set online_flag = '"+state+"' where doctor_id = '"+doctorId+"' and team_id = '"+teamId+"' ";
 					stmt.addBatch(sql);
 				}
 			}
