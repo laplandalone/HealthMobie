@@ -69,7 +69,7 @@ function createTable(data, flagParam)
 				content += "<tr class='aaa' onmouseover='trColorChange(this,"+i+")' onmouseout='trColorChange(this,"+i+")'>";
 			}
 			content += "<td width='3%' style='text-align:center'><input type='checkbox' name='box' class='"+obj.state+"' id='"+obj.doctorId+"' value='"+obj.teamId+"' ";
-			if(obj.state == '00A')
+			if(obj.onlineFlag == '0')
 			{
 				content += "checked='checked' ";
 				onlineNum++;
