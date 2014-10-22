@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
@@ -43,7 +44,9 @@ import com.hbgz.pub.util.FileUtils;
 import com.hbgz.pub.util.HttpUtil;
 import com.hbgz.pub.util.JsonUtils;
 import com.hbgz.pub.util.ObjectCensor;
+import com.hbgz.pub.util.PinyinUtil;
 import com.hbgz.pub.util.StringUtil;
+import com.mysql.jdbc.PingTarget;
 
 @Service(value = "BUS200")
 public class DigitalHealthService
@@ -76,6 +79,17 @@ public class DigitalHealthService
 			throws QryException
 	{
 		List doctorList = digitalHealthDao.getDoctorByType(expertType, onLineType, teamId);
+		
+		if(ObjectCensor.checkListIsNull(doctorList))
+		{
+			for(int i=0;i<doctorList.size();i++)
+			{
+				Map map = (Map) doctorList.get(i);
+				String name = StringUtil.getMapKeyVal(map,"name");
+				String pinyin = PinyinUtil.spell(name);
+				map.put("pinYin", pinyin);
+			}
+		}
 		JSONObject obj = new JSONObject();
 		obj.element("doctors", doctorList);
 		return obj;
@@ -85,6 +99,16 @@ public class DigitalHealthService
 	public JSONObject getTeamList(String hospitalId, String expertType) throws QryException
 	{
 		List doctorList = digitalHealthDao.getTeamByType(hospitalId, expertType);
+		if(ObjectCensor.checkListIsNull(doctorList))
+		{
+			for(int i=0;i<doctorList.size();i++)
+			{
+				Map map = (Map) doctorList.get(i);
+				String name = StringUtil.getMapKeyVal(map,"teamName");
+				String pinyin = PinyinUtil.spell(name);
+				map.put("pinYin", pinyin);
+			}
+		}
 		JSONObject obj = new JSONObject();
 		obj.element("teams", doctorList);
 		return obj;
