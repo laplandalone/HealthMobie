@@ -9,7 +9,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
@@ -46,7 +45,6 @@ import com.hbgz.pub.util.JsonUtils;
 import com.hbgz.pub.util.ObjectCensor;
 import com.hbgz.pub.util.PinyinUtil;
 import com.hbgz.pub.util.StringUtil;
-import com.mysql.jdbc.PingTarget;
 
 @Service(value = "BUS200")
 public class DigitalHealthService
@@ -848,23 +846,70 @@ public class DigitalHealthService
 		return obj;
 	}
 	//百度云推送消息
-		@ServiceType(value = "BUS20033")
-		public String sendMsg(String wakeId, String pushUserId, String pushChannelId) throws Exception
+	@ServiceType(value = "BUS20033")
+	public String sendMsg(String wakeId, String pushUserId, String pushChannelId) throws Exception
+	{
+		String retVal = "false";
+		if(ObjectCensor.isStrRegular(wakeId, pushUserId))
 		{
-			String retVal = "false";
-			if(ObjectCensor.isStrRegular(wakeId, pushUserId))
+			List sList = digitalHealthDao.qryWakeList(wakeId);
+			if(ObjectCensor.checkListIsNull(sList))
 			{
-				List sList = digitalHealthDao.qryWakeList(wakeId);
-				if(ObjectCensor.checkListIsNull(sList))
+				String wakeContent = StringUtil.getMapKeyVal((Map) sList.get(0), "wakeContent");
+				AndroidPushMsg.pushMsg(pushUserId, "msg", wakeContent, pushChannelId);
+				retVal = "true";
+			}
+		}
+		return retVal;
+	}
+	
+	@ServiceType(value = "BUS20034")
+	public JSONObject getTimeRegister(String doctorName) throws Exception
+	{
+		List list =synHISService.synTimeRegister();
+		List doctorList = new ArrayList();
+		String pinYin=PinyinUtil.getPinyin(doctorName);
+		boolean firstFlag = PinyinUtil.checkFirstChar(doctorName);
+		if(ObjectCensor.checkListIsNull(list))
+		{
+			for(int i=0;i<list.size();i++)
+			{
+				Map map = (Map) list.get(i);
+				String name = StringUtil.getMapKeyVal(map,"doctorName");
+				String namePinYin = PinyinUtil.getPinyin(name);
+				if(firstFlag)
 				{
-					String wakeContent = StringUtil.getMapKeyVal((Map) sList.get(0), "wakeContent");
-					AndroidPushMsg.pushMsg(pushUserId, "msg", wakeContent, pushChannelId);
-					retVal = "true";
+					if(pinYin!=null && namePinYin.contains(pinYin))
+					{
+						doctorList.add(map);
+					}
+				}else
+				{
+					if(name!=null && name.contains(doctorName))
+					{
+						doctorList.add(map);
+					}
 				}
 			}
-			return retVal;
 		}
-	
+		String dayT="";
+		for(int n=0;n<doctorList.size();n++)
+		{
+			Map map = (Map) doctorList.get(n);
+			String day = StringUtil.getMapKeyVal(map,"day");
+			if(!dayT.equals(day))
+			{
+				map.put("display","Y");
+				dayT=day;
+			}else
+			{
+				map.put("display","N");
+			}
+		}
+		JSONObject obj = new JSONObject();
+		obj.element("orders", doctorList);
+		return obj;
+	}
 	// 查询用户的挂号订单
 	public List qryRegisterOrder(String hospitalId, String teamId, String doctorId,
 			String startTime, String endTime, String state) throws Exception
