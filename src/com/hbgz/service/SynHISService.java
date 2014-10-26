@@ -565,6 +565,7 @@ public class SynHISService {
 		sql.append("('"+id+"','"+orderT.getUserName()+"','"+sex+"','"+birthDay+"','"+registerTime+"','"+orderT.getDoctorId().trim()+"','"+orderT.getDoctorName()+"','"+userAddress+"',GETDATE(),'"+czydm+"','"+orderT.getUserTelephone()+"','"+orderT.getTeamName()+"',"+xh+",'"+orderT.getUserNo()+"','Y')");
 		sql.append("</str></SQL></DS>");
 		String result =new SynHISService().invokeFunc(sql.toString());
+		System.out.println(result);
 	}
 	
 	

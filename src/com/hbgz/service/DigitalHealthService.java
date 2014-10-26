@@ -704,7 +704,13 @@ public class DigitalHealthService
 	public JSONObject getTaobaoSign(String orderId)
 	{
 		JSONObject object = new JSONObject();
-		String sign = AlipaySign.sign("亚心医院-" + "预约", "预约", "1", "CZ201409221610330088");
+		List<RegisterOrderT> sList = hibernateObjectDao.qryRegisterOrderT(orderId);
+		RegisterOrderT registerOrder=null;
+		if (ObjectCensor.checkListIsNull(sList))
+		{
+			 registerOrder = sList.get(0);
+		}
+		String sign = AlipaySign.sign("亚心医院-" + "预约", "预约",registerOrder.getOrderFee(),registerOrder.getOrderId());
 		object.element("sign", sign);
 		return object;
 	}
@@ -870,6 +876,10 @@ public class DigitalHealthService
 		List doctorList = new ArrayList();
 		String pinYin=PinyinUtil.getPinyin(doctorName);
 		boolean firstFlag = PinyinUtil.checkFirstChar(doctorName);
+		if(firstFlag)
+		{
+			pinYin=pinYin.toLowerCase();
+		}
 		if(ObjectCensor.checkListIsNull(list))
 		{
 			for(int i=0;i<list.size();i++)
