@@ -46,7 +46,7 @@
 				<div id="template" class="box">
 					<table width="100%" border="1" cellspacing="0" cellpadding="0" class="maintable1">
 						<tr class="tabletop">
-							<td width="3%">在线</td>
+							<td width="3%">选择</td>
 							<td width="7%">医生名称</td>
 							<td width="7%">职称</td>
 							<td width="3%">性别</td>

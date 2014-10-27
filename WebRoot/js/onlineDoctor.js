@@ -48,9 +48,8 @@ function qryOnlineDortor()
 
 function createTable(data, flagParam)
 {
-	alert("1");
 	var content = "<table id='table1' width='100%' border='1' cellspacing='0' cellpadding='0' class='maintable'>";
-	content += "<tr class='tabletop'><td width='3%'>在线</td><td width='7%'>医生名称</td><td width='7%'>职称</td><td width='3%'>性别</td><td width='8%'>科室</td><td width='6%'>是否在线</td> <td width='20%'>医生介绍</td><td width='20%'>擅长领域</td></tr>";
+	content += "<tr class='tabletop'><td width='3%'>选择</td><td width='7%'>医生名称</td><td width='7%'>职称</td><td width='3%'>性别</td><td width='8%'>科室</td><td width='6%'>是否在线</td> <td width='20%'>医生介绍</td><td width='20%'>擅长领域</td></tr>";
 	if(data.count > 0)
 	{
 		$("#tab").css("display", "block");
@@ -121,6 +120,7 @@ function createTable(data, flagParam)
 		{
 			qryEndFunc(cnt);
 		}
+		/*
 		if(onlineNum == 0)
 		{
 			$("#offline").prop("disabled", "disabled");
@@ -133,7 +133,7 @@ function createTable(data, flagParam)
 		{
 			$("#offline").prop("disabled", "");
 			$("#online").prop("disabled", "");
-		}
+		}*/
 	}
 	else
 	{
@@ -155,7 +155,7 @@ function doctorOffline()
 	var doctorId = "[";
 	var count = 0;
 	$("input[name='box']").each(function(){
-		if (!$(this).prop("checked") && ($(this).prop("class") == '00A')) 
+		if ($(this).prop("checked")) 
 		{
 			count++;
 			doctorId += "{\"doctorId\":\"" + $(this).prop("id") + "\",\"teamId\":\"" + $(this).prop("value") + "\"},";
@@ -202,7 +202,7 @@ function doctorOnline()
 	var doctorId = "[";
 	var count = 0;
 	$("input[name='box']").each(function(){
-		if($(this).prop("checked") && ($(this).prop("class") == '00X'))
+		if($(this).prop("checked"))
 		{
 			count++;
 			doctorId += "{\"doctorId\":\"" + $(this).prop("id") + "\",\"teamId\":\"" + $(this).prop("value") + "\"},";
