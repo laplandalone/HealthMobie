@@ -57,7 +57,6 @@ public class MobileController
 	{
 		try 
 		{
-			digitalHealthService.addVisit();
 			String retVal = mobileService.axis(param);
 			log.error(retVal);
 			response.setCharacterEncoding("UTF-8");
