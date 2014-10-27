@@ -51,7 +51,7 @@
 							<td width="7%">职称</td>
 							<td width="3%">性别</td>
 							<td width="8%">科室</td>
-							<td width="6%">挂号费</td>
+							<td width="6%">是否在线</td>
 							<td width="20%">医生介绍</td>
 							<td width="20%">擅长领域</td>
 						</tr>
