@@ -108,6 +108,10 @@
 							<img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; 
 							<a href="/view/wake/addWake.jsp" target="main">新增提醒管理</a>
 						</li>
+						<li>
+							<img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; 
+							<a href="/view/visit/patientVisitList.jsp" target="main">随机回访查询</a>
+						</li>
 					</c:if>
 				</ul>
 			</div>
