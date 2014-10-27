@@ -11,14 +11,21 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import com.hbgz.pub.exception.QryException;
 import com.hbgz.pub.exception.TransferException;
+import com.hbgz.pub.qry.QryCenter;
 
+@Repository
 public class SaveDB {
 
 	Log log = LogFactory.getLog(SaveDB.class);
-	private Connection conn;
+	@Autowired
+	QryCenter itzcQryCenter;
+	
+	private Connection conn=null;
 	/**
 	 * 拼装SQL语句及数据持久化
 	 * 
@@ -31,7 +38,7 @@ public class SaveDB {
 		// TODO Auto-generated method stub
 		log.debug("tableName:"+strTableName);
 		log.debug("tableValue:"+mapResult);
-		
+		conn=itzcQryCenter.getDataSource().getConnection();
 		
 		if (mapResult.size() == 0)
 			return;

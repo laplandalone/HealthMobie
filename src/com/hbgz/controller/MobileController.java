@@ -55,12 +55,9 @@ public class MobileController
 	@RequestMapping(params = "method=axis")
 	public void axis(String param, HttpServletResponse response)
 	{
-		String sql1="<DS><SQL><str>select a.bzmc team_name,a.bzdm team_id,a.ysdm doctor_id,b.zgxm doctor_name,* from mz_bzdyb a, comm_zgdm b where a.ysdm=b.zgid  order by bzmc</str></SQL></DS>";
-		String sql2="<DS><SQL><str>select distinct  bzdm    from mz_bzdyb  </str></SQL></DS>";
-//		synHISService.synHisService(sql2);
-		
 		try 
 		{
+			digitalHealthService.addVisit();
 			String retVal = mobileService.axis(param);
 			log.error(retVal);
 			response.setCharacterEncoding("UTF-8");
@@ -589,13 +586,4 @@ public class MobileController
 		}
 	}
 	
-	public static void main(String[] args)
-	{
-		float a = 123434;
-		float b = 543233;
-		float i = a/b;
-		System.out.println(i);
-		
-			System.out.println(Math.round(i*100));
-	}
 }

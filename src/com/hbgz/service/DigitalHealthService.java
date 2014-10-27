@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -23,6 +24,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.hbgz.dao.DigitalHealthDao;
 import com.hbgz.dao.DoctorDao;
 import com.hbgz.dao.HibernateObjectDao;
+import com.hbgz.dao.SaveDB;
 import com.hbgz.dao.UserQustionDao;
 import com.hbgz.model.DoctorRegisterT;
 import com.hbgz.model.HospitalNewsT;
@@ -35,6 +37,7 @@ import com.hbgz.pub.cache.CacheManager;
 import com.hbgz.pub.cloudPush.AndroidPushMsg;
 import com.hbgz.pub.exception.JsonException;
 import com.hbgz.pub.exception.QryException;
+import com.hbgz.pub.exception.TransferException;
 import com.hbgz.pub.resolver.BeanFactoryHelper;
 import com.hbgz.pub.sequence.SysId;
 import com.hbgz.pub.util.AlipaySign;
@@ -60,6 +63,9 @@ public class DigitalHealthService
 	
 	@Autowired
 	private DoctorDao doctorDao;
+	
+	@Autowired
+	private SaveDB saveDB;
 
 	@Autowired
 	private HibernateObjectDao hibernateObjectDao;
@@ -920,6 +926,21 @@ public class DigitalHealthService
 		obj.element("orders", doctorList);
 		return obj;
 	}
+	
+	@ServiceType(value = "BUS20035")
+	public boolean addPatientVisit(String json) throws SQLException, QryException, TransferException
+	{
+		Map map = new HashMap();
+		map.put("visit_id", "10001");
+		map.put("visit_type", "asd");
+		map.put("patient_id", "10001");
+		map.put("card_id", "10001");
+		map.put("code_flag", "patient_recover");
+		map.put("code_val", "1");
+		saveDB.insertRecord("patient_visit_t", map);
+		return false;
+	}
+	
 	// 查询用户的挂号订单
 	public List qryRegisterOrder(String hospitalId, String teamId, String doctorId,
 			String startTime, String endTime, String state) throws Exception
@@ -1315,4 +1336,5 @@ public class DigitalHealthService
 		}
 		return array;
 	}
+	
 }
