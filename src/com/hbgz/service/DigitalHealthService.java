@@ -30,6 +30,7 @@ import com.hbgz.model.DoctorRegisterT;
 import com.hbgz.model.HospitalNewsT;
 import com.hbgz.model.HospitalUserT;
 import com.hbgz.model.RegisterOrderT;
+import com.hbgz.model.UserContactT;
 import com.hbgz.model.UserQuestionT;
 import com.hbgz.pub.annotation.ServiceType;
 import com.hbgz.pub.base.SysDate;
@@ -100,9 +101,9 @@ public class DigitalHealthService
 	}
 
 	@ServiceType(value = "BUS2002")
-	public JSONObject getTeamList(String hospitalId, String expertType) throws QryException
+	public JSONObject getTeamList(String hospitalId, String expertType,String parentId) throws QryException
 	{
-		List doctorList = digitalHealthDao.getTeamByType(hospitalId, expertType);
+		List doctorList = digitalHealthDao.getTeamByType(hospitalId, expertType,parentId);
 		if(ObjectCensor.checkListIsNull(doctorList))
 		{
 			for(int i=0;i<doctorList.size();i++)
@@ -525,7 +526,7 @@ public class DigitalHealthService
 		List<HospitalNewsT> list = hibernateObjectDao.qryHospitalNews(hospitalId, type, typeId);
 		
 		CacheManager cacheManager = (CacheManager) BeanFactoryHelper.getBean("cacheManager");
-		String imgIp = cacheManager.getImgIp(hospitalId);
+		String imgIp = cacheManager.getImgIp("10");
 		
 		for (HospitalNewsT hospitalNewsT : list)
 		{
@@ -930,6 +931,7 @@ public class DigitalHealthService
 	@ServiceType(value = "BUS20035")
 	public boolean addPatientVisit(String json) throws SQLException, QryException, TransferException
 	{
+		System.out.println(json);
 		Map map = new HashMap();
 		map.put("visit_id", "10001");
 		map.put("visit_type", "asd");
@@ -939,6 +941,15 @@ public class DigitalHealthService
 		map.put("code_val", "1");
 		saveDB.insertRecord("patient_visit_t", map);
 		return false;
+	}
+	
+
+	@ServiceType(value = "BUS20036")
+	public boolean addUserContact(String user) throws   JsonException
+	{
+		UserContactT contactT = (UserContactT) JsonUtils.toBean(user, UserContactT.class);
+		hibernateObjectDao.save(contactT);
+		return true;
 	}
 	
 	// 查询用户的挂号订单
@@ -1251,10 +1262,10 @@ public class DigitalHealthService
 			newHospitalNewsT.setExpDate(SysDate.getSysDate(expDate, "yyyy-MM-dd"));
 			newHospitalNewsT.setNewsContent(newsContent.getBytes("GBK"));
 			newHospitalNewsT.setState(state);
-			if(ObjectCensor.isStrRegular(imageUrl))
-			{
-				newsImageUrl += "," + imageUrl;
-			}
+//			if(ObjectCensor.isStrRegular(imageUrl))
+//			{
+//				newsImageUrl += "," + imageUrl;
+//			}
 			newHospitalNewsT.setNewsImages(newsImageUrl);
 			hibernateObjectDao.save(newHospitalNewsT);
 //			if("00X".equals(state) && !state.equals(hospitalNewsT.getState()))

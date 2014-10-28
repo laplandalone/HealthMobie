@@ -59,7 +59,7 @@ public class DigitalHealthDao
 	}
 
 	// 根据类型获取科室列表
-	public List getTeamByType(String hospitalId, String expertType) throws QryException
+	public List getTeamByType(String hospitalId, String expertType,String parentId) throws QryException
 	{
 		StringBuffer sql = new StringBuffer();
 		ArrayList lstParam = new ArrayList();
@@ -71,6 +71,11 @@ public class DigitalHealthDao
 			lstParam.add(expertType);
 		}
 
+		if (ObjectCensor.isStrRegular(parentId))
+		{
+			sql.append(" and t.parent_Id= ? ");
+			lstParam.add(parentId);
+		}
 		if (ObjectCensor.isStrRegular(hospitalId))
 		{
 			sql.append(" and t.hospital_id=?  order by team_order ");

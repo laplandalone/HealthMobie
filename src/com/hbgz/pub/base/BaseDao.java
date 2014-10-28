@@ -56,7 +56,7 @@ public abstract class BaseDao
 	public void save(Object entity) 
 	{
 		hibernateTemplate.clear(); // added by yangjingwen for exception
-		hibernateTemplate.save(entity);
+		System.out.println(hibernateTemplate.save(entity));
 	}
 
 	/** 删除数据库PO对象 */

@@ -71,7 +71,6 @@ function createTable(data, flagParam)
 			content += "<td width='3%' style='text-align:center'><input type='checkbox' name='box' class='"+obj.state+"' id='"+obj.doctorId+"' value='"+obj.teamId+"' ";
 			if(obj.onlineFlag == '0')
 			{
-				content += "checked='checked' ";
 				onlineNum++;
 			}
 			var sex = obj.sex;
