@@ -34,31 +34,29 @@ function qryPatientVisit()
 function createTable(data)
 {
 	var content = "<table id='table1' width='100%' border='1' cellspacing='0' cellpadding='0' class='maintable'>";
+	content += "<tr class='tabletop'><td width='10%'>随访ID</td><td width='20%'>随访姓名</td><td width='10%'>随访类型</td><td width='10%'>随访人ID</td><td width='10%'>卡ID</td><td width='10%'>状态</td><td width='30%'>随访时间</td></tr>";
 	if(data.length > 0)
 	{
 		$.each(data, function(i, obj){
-			if(i != data.length - 1)
+			if(i % 2)
 			{
-				if(i % 2 == 0)
-				{
-					content += "<tr><td style='text-align:right;width:30%'>"+obj.codeFlagVal+"&nbsp;&nbsp;</td><td style='text-align:left;width:20%'>&nbsp;&nbsp;"+obj.codeValFlag+"</td>";
-				}
-				else
-				{
-					content += "<td style='text-align:right;width:30%'>"+obj.codeFlagVal+"&nbsp;&nbsp;</td><td style='text-align:left;width:20%'>&nbsp;&nbsp;"+obj.codeValFlag+"</td></tr>";
-				}
+				content += "<tr class='bkf0' onmouseover='trColorChange(this,"+i+")' onmouseout='trColorChange(this,"+i+")' onclick='viewVisitDetail("+obj.visitId+")'>";
 			}
 			else
 			{
-				if(i % 2 == 0)
-				{
-					content += "<tr><td style='text-align:right;width:30%'>"+obj.codeFlagVal+"&nbsp;&nbsp;</td><td style='text-align:left;width:20%'>&nbsp;&nbsp;"+obj.codeValFlag+"</td><td style='text-align:left;width:30%'>&nbsp;</td><td style='text-align:left;width:20%'>&nbsp;</td></tr>";
-				}
-				else
-				{
-					content += "<td style='text-align:right;width:30%'>"+obj.codeFlagVal+"&nbsp;&nbsp;</td><td style='text-align:left;width:20%'>&nbsp;&nbsp;"+obj.codeValFlag+"</td></tr>";
-				}
+				content += "<tr class='aaa' onmouseover='trColorChange(this,"+i+")' onmouseout='trColorChange(this,"+i+")' onclick='viewVisitDetail("+obj.visitId+")'>";
 			}
+			var state = obj.state;
+			if(state == "00A")
+			{
+				state = "正常";
+			}
+			else
+			{
+				state = "作废";
+			}
+			content += "<td width='10%' style='text-align:center'>"+obj.visitId+"</td><td width='20%' style='text-align:center'>"+obj.visitName+"</td><td width='10%' style='text-align:center'>"+obj.visitType+"</td>";
+			content += "<td width='10%' style='text-align:center'>"+obj.patientId+"</td><td width='10%' style='text-align:center'>"+obj.cardId+"</td><td width='10%' style='text-align:center'>"+state+"</td><td width='30%' style='text-align:center'>"+obj.createDate+"</td></tr>";
 		});
 	}
 	else
@@ -67,4 +65,29 @@ function createTable(data)
 	}
 	content += "</table>";
 	$("#template").html(content);
+}
+
+function viewVisitDetail(visitId)
+{
+	lockScreen();
+	$.dialog({width:"900px", esc:false, title:"随访明细", content:"url:/visit.htm?method=qryVisitDetail&visitId="+visitId, min:false, max:false, lock:true, close:function(){unlockScreen();}});
+}
+
+function trColorChange(val, i) 
+{
+	if (val.className == "bkf0" || val.className == "aaa")
+	{
+		val.className = "trcolor";
+	} 
+	else 
+	{
+		if (i % 2)
+		{
+			val.className = "bkf0";
+		}
+		else
+		{
+			val.className = "aaa";
+		}
+	}
 }

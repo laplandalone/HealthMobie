@@ -14,12 +14,22 @@ public class PatientVisitService
 	@Autowired
 	private DigitalHealthDao digitalHealthDao;
 	
-	public List qryPatientVisitList(String visitId, String startTime, String endTime) throws Exception
+	public List qryPatientVisitList(String startTime, String endTime) throws Exception
+	{
+		List sList = null;
+		if(ObjectCensor.isStrRegular(startTime, endTime))
+		{
+			sList = digitalHealthDao.qryPatientVisitList(startTime, endTime);
+		}
+		return sList;
+	}
+
+	public List qryVisitDetail(String visitId) throws Exception 
 	{
 		List sList = null;
 		if(ObjectCensor.isStrRegular(visitId))
 		{
-			sList = digitalHealthDao.qryPatientVisitList(visitId, startTime, endTime);
+			sList = digitalHealthDao.qryVisitDetail(visitId);
 		}
 		return sList;
 	}

@@ -136,6 +136,19 @@ input.subtext3{width:70px;border:1px solid #C0DC56;background:#fff;}
    height:23px;
    text-align: center;
 }
+
+.maintable2 {
+         border-collapse:collapse;
+         border-spacing:0;
+		 border: 1px solid #ccc;
+		 height:auto;
+		 margin-top: 20px;
+     }
+.maintable2 tr td{
+   border-color: #ccc;
+   height:23px;
+}
+
 .inputtable{
 	width:145px;
 	border:1px solid #C0DC56;

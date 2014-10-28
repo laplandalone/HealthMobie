@@ -635,16 +635,25 @@ public class DigitalHealthDao
 		return itzcQryCenter.executeSqlByMapListWithTrans(sql, lstParam);
 	}
 	
-	public List qryPatientVisitList(String visitId, String startTime, String endTime) throws Exception
+	public List qryPatientVisitList(String startTime, String endTime) throws Exception
+	{
+		StringBuffer sql = new StringBuffer();
+		sql.append("select visit_id, patient_id, card_id, visit_name, visit_type, state, to_char(create_date, 'yyyy-MM-dd hh24:mi:ss') create_date ");
+		sql.append("from patient_visit_t where state = '00A' and create_date between to_date(?, 'yyyy-MM-dd hh24:mi:ss') and to_date(?, 'yyyy-MM-dd hh24:mi:ss') order by create_date desc");
+		ArrayList lstParam = new ArrayList();
+		lstParam.add(startTime);
+		lstParam.add(endTime + " 23:59:59");
+		return itzcQryCenter.executeSqlByMapListWithTrans(sql.toString(), lstParam);
+	}
+
+	public List qryVisitDetail(String visitId) throws Exception 
 	{
 		StringBuffer sql = new StringBuffer();
 		sql.append("select (select distinct code_name from code_name_t where state = '00A' and code_type = 'PATIENT_VISIT_T' and code_flag = a.code_flag) code_flag_val, ");
 		sql.append("(select code_val_flag from code_name_t where state = '00A' and code_type = 'PATIENT_VISIT_T' and code_flag = a.code_flag and code_val = a.code_val) code_val_flag ");
-		sql.append("from patient_visit_t a where state = '00A' and visit_id = ? and create_date between to_date(?, 'yyyy-MM-dd hh24:mi:ss') and to_date(?, 'yyyy-MM-dd hh24:mi:ss') order by create_date ");
+		sql.append("from patient_visit_detail_t a where state = '00A' and visit_id = ? order by create_date ");
 		ArrayList lstParam = new ArrayList();
 		lstParam.add(visitId);
-		lstParam.add(startTime);
-		lstParam.add(endTime + " 23:59:59");
 		return itzcQryCenter.executeSqlByMapListWithTrans(sql.toString(), lstParam);
 	}
 }
