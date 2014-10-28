@@ -1,1 +1,1 @@
-aabbccddeeffgg
+aabbccddeeff
