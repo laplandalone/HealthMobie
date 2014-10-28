@@ -110,7 +110,7 @@
 						</li>
 						<li>
 							<img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; 
-							<a href="/view/visit/patientVisitList.jsp" target="main">随机回访查询</a>
+							<a href="/view/visit/patientVisitList.jsp" target="main">患者随访查询</a>
 						</li>
 					</c:if>
 				</ul>

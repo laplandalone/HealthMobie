@@ -9,6 +9,7 @@ import com.hbgz.model.HospitalT;
 import com.hbgz.model.HospitalUserRelationshipT;
 import com.hbgz.model.RegisterOrderT;
 import com.hbgz.model.TeamT;
+import com.hbgz.model.UserContactT;
 import com.hbgz.pub.base.BaseDao;
 import com.hbgz.pub.util.ObjectCensor;
 
@@ -81,5 +82,15 @@ public class HibernateObjectDao extends BaseDao
 		}
 		String hql = "from RegisterOrderT as model where  model.orderId=?";
 		return this.find(hql, new String[]{ orderId });
+	}
+	
+	public List<UserContactT> qryUserContactT(String userId)
+	{
+		if (!ObjectCensor.isStrRegular(userId))
+		{
+			return null;
+		}
+		String hql = "from UserContactT as model where  model.state='00A' and model.userId=?";
+		return this.find(hql, new String[]{ userId });
 	}
 }

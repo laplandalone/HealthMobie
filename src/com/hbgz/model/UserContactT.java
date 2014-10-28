@@ -102,7 +102,7 @@ public class UserContactT implements java.io.Serializable {
 		this.contactSex = contactSex;
 	}
 
-	@Column(name = "CONTACT_NO", length = 4)
+	@Column(name = "CONTACT_NO", length = 18)
 	public String getContactNo() {
 		return this.contactNo;
 	}

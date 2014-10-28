@@ -948,8 +948,19 @@ public class DigitalHealthService
 	public boolean addUserContact(String user) throws   JsonException
 	{
 		UserContactT contactT = (UserContactT) JsonUtils.toBean(user, UserContactT.class);
+		contactT.setContactId(sysId.getId()+"");
+		contactT.setState("00A");
+		contactT.setCreateDate(new Date());
 		hibernateObjectDao.save(contactT);
 		return true;
+	}
+	
+	@ServiceType(value = "BUS20037")
+	public JSONArray getUserContact(String userId) throws JsonException
+	{
+		List list = hibernateObjectDao.qryUserContactT(userId);
+		JSONArray jsonArray = JsonUtils.fromArray(list);
+		return jsonArray;
 	}
 	
 	// 查询用户的挂号订单
