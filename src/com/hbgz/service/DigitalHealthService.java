@@ -4,10 +4,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -38,7 +38,6 @@ import com.hbgz.pub.cache.CacheManager;
 import com.hbgz.pub.cloudPush.AndroidPushMsg;
 import com.hbgz.pub.exception.JsonException;
 import com.hbgz.pub.exception.QryException;
-import com.hbgz.pub.exception.TransferException;
 import com.hbgz.pub.resolver.BeanFactoryHelper;
 import com.hbgz.pub.sequence.SysId;
 import com.hbgz.pub.util.AlipaySign;
@@ -928,18 +927,37 @@ public class DigitalHealthService
 	}
 	
 	@ServiceType(value = "BUS20035")
-	public boolean addPatientVisit(String json) throws SQLException, QryException, TransferException
+	public boolean addPatientVisit(String json) throws Exception
 	{
-		System.out.println(json);
-		Map map = new HashMap();
-		map.put("visit_id", "10001");
-		map.put("visit_type", "asd");
-		map.put("patient_id", "10001");
-		map.put("card_id", "10001");
-		map.put("code_flag", "patient_recover");
-		map.put("code_val", "1");
-		saveDB.insertRecord("patient_visit_t", map);
-		return false;
+		Map map = (Map)JsonUtils.toBean(json, Map.class);
+		Iterator it = map.keySet().iterator();    
+		List<Map> sList = new ArrayList<Map>();
+		while(it.hasNext())
+		{    
+			String key = it.next().toString();
+			String value = StringUtil.getMapKeyVal(map, key);
+			if(ObjectCensor.isStrRegular(value))
+			{
+				Map paramMap = new HashMap();
+				paramMap.put("visit_id", "10001");
+				paramMap.put("visit_type", "asd");
+				paramMap.put("code_flag", key);
+				paramMap.put("code_val", value);
+				sList.add(paramMap);
+			}
+		}   
+		Map visitMap = new HashMap();
+		visitMap.put("visit_id", "10001");
+		visitMap.put("visit_name", "张三");
+		visitMap.put("visit_type", "asd");
+		visitMap.put("patient_id", "10001");
+		visitMap.put("card_id", "10001");
+		saveDB.insertRecord("patient_visit_t", visitMap);
+		if(ObjectCensor.checkListIsNull(sList))
+		{
+			saveDB.insertRecord("patient_visit_detail_t", sList);
+		}
+		return true;
 	}
 	
 

@@ -4,9 +4,11 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
@@ -17,6 +19,8 @@ import org.springframework.stereotype.Repository;
 import com.hbgz.pub.exception.QryException;
 import com.hbgz.pub.exception.TransferException;
 import com.hbgz.pub.qry.QryCenter;
+import com.hbgz.pub.util.ObjectCensor;
+import com.hbgz.pub.util.StringUtil;
 
 @Repository
 public class SaveDB {
@@ -35,7 +39,6 @@ public class SaveDB {
 	 */
 	public void insertRecord( String strTableName, Map mapResult)
 			throws SQLException, QryException, TransferException {
-		// TODO Auto-generated method stub
 		log.debug("tableName:"+strTableName);
 		log.debug("tableValue:"+mapResult);
 		conn=itzcQryCenter.getDataSource().getConnection();
@@ -105,6 +108,78 @@ public class SaveDB {
 			} catch (SQLException e1) {
 				conn.rollback();
 				throw new QryException(e1.getMessage(), sqlInsert);
+			}
+		}
+	}
+	
+	/**
+	 * 拼装SQL语句及数据持久化
+	 * 
+	 * @param jt
+	 * @param strTableName
+	 * @param mapResult
+	 * @throws Exception 
+	 */
+	public void insertRecord( String strTableName, List<Map> mapResultList) throws Exception
+	{
+		Statement stmt = null;
+		log.debug("tableName:"+strTableName);
+		log.debug("tableValue:"+mapResultList);
+		if (ObjectCensor.checkListIsNull(mapResultList))
+		{
+			try 
+			{
+				conn = itzcQryCenter.getDataSource().getConnection();
+				stmt = conn.createStatement();
+				for(int i = 0, len = mapResultList.size(); i < len; i++)
+				{
+					String sqlInsert = "";
+					String sqlInsertHead = "insert into " + strTableName;
+					String sqlInsertColumns = "(";
+					String sqlInsertValues = "values (";
+					Map mapResult = mapResultList.get(i);
+					boolean isFirst = true;
+					for (Iterator iterMap = mapResult.keySet().iterator(); iterMap .hasNext();) 
+					{
+						String key = (String) iterMap.next();
+						if (!isFirst) 
+						{
+							sqlInsertColumns += " , ";
+							sqlInsertValues += " , ";
+						}
+						sqlInsertColumns += key;
+						sqlInsertValues += "'" + StringUtil.getMapKeyVal(mapResult, key) + "'";
+						isFirst = false;
+					}
+					sqlInsertColumns += " ) ";
+					sqlInsertValues += " ) ";
+					sqlInsert = sqlInsertHead + sqlInsertColumns + sqlInsertValues;
+					log.debug(sqlInsert);
+					stmt.addBatch(sqlInsert);
+				}
+				stmt.executeBatch();
+			} 
+			catch (SQLException e) {
+				// 订单入库时出现异常回滚
+				conn.rollback();
+				throw new QryException(e.getMessage());
+			} 
+			catch (Exception e) {
+				// 订单入库时出现异常回滚
+				conn.rollback();
+				throw new TransferException(strTableName + "转换异常");
+			} 
+			finally 
+			{
+				try 
+				{
+					if (stmt != null)
+						stmt.close();
+				} catch (SQLException e1) 
+				{
+					conn.rollback();
+					throw new QryException(e1.getMessage());
+				}
 			}
 		}
 	}
