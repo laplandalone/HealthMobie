@@ -3,6 +3,7 @@ package com.hbgz.dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.text.StrBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -44,8 +45,9 @@ public class UserQustionDao extends BaseDao
 		{
 			return null;
 		}
-		StringBuffer sql = new StringBuffer("select ID,QUESTION_ID,TEAM_ID,USER_ID,DOCTOR_ID,USER_TELEPHONE,HOSPITAL_ID,RECORD_TYPE,CONTENT,to_char(create_date, 'yyyy-MM-dd')create_date");
-	    sql.append(" from user_question_t where state='00A' and record_type='ask' and doctor_id ='"+doctorId+"' and question_id ");
+	   StringBuffer ans = new StringBuffer();
+	   StringBuffer sql = new StringBuffer("select ID,QUESTION_ID,TEAM_ID,USER_ID,DOCTOR_ID,USER_TELEPHONE,HOSPITAL_ID,RECORD_TYPE,CONTENT,to_char(create_date, 'yyyy-MM-dd')create_date");
+	   sql.append(" from user_question_t where state='00A' and record_type='ask' and doctor_id ='"+doctorId+"' and question_id ");
 	   if("ans".equals(type))
 	   {
 		   sql.append("  in  ");
@@ -53,9 +55,50 @@ public class UserQustionDao extends BaseDao
 	   {
 		   sql.append(" not  in  ");
 	   }
-	    sql.append(" (select question_id from user_question_t t where state='00A' and doctor_id = '"+doctorId+"' and record_type='ans') order by create_date desc ");
-		ArrayList lstParam = new ArrayList();
+	   sql.append(" (select question_id from user_question_t t where state='00A' and doctor_id = '"+doctorId+"' and record_type='ans')");
+	
+	   if("ans".equals(type))
+	   {
+		   ans.append("select * from ( "+sql+")");
+		   ans.append(" where question_id not in (");
+		   
+		   ans.append("select QUESTION_ID");
+		   ans.append(" from  user_question_t t where record_type='copy' and (question_id, create_date) in ");
+		   ans.append(" (select question_id, max(create_date) from user_question_t t where doctor_id = '"+doctorId+"' group by question_id) ) order by create_date desc ");
+		   
+	   } else
+	   {
+		    sql.append(" union all  ");
+		    
+		    sql.append ("select ID,QUESTION_ID,TEAM_ID,USER_ID,DOCTOR_ID,USER_TELEPHONE,HOSPITAL_ID,RECORD_TYPE,CONTENT,to_char(create_date, 'yyyy-MM-dd')create_date");
+			sql.append(" from user_question_t where state='00A' and record_type='ask' and doctor_id ='"+doctorId+"' and question_id ");
+		    sql.append(" in (select QUESTION_ID");
+		    sql.append(" from  user_question_t t where record_type='copy' and (question_id, create_date) in ");
+		    sql.append(" (select question_id, max(create_date) from user_question_t t where doctor_id = '"+doctorId+"' group by question_id) )order by create_date desc ");
+	   }
+	   
+	    ArrayList lstParam = new ArrayList();
+	    if("ans".equals(type))
+		{
+	    	return itzcQryCenter.executeSqlByMapListWithTrans(ans.toString(), lstParam);
+		}else
+		{
+			return itzcQryCenter.executeSqlByMapListWithTrans(sql.toString(), lstParam);
+		}
 		
+	}
+	
+	
+	public List qryQuestionNoAnsCopy(String doctorId) throws QryException
+	{
+		if (!ObjectCensor.isStrRegular(doctorId))
+		{
+			return null;
+		}
+		StringBuffer sql = new StringBuffer("select ID,QUESTION_ID,TEAM_ID,USER_ID,DOCTOR_ID,USER_TELEPHONE,HOSPITAL_ID,RECORD_TYPE,CONTENT,to_char(create_date, 'yyyy-MM-dd')create_date");
+	    sql.append(" from  user_question_t t where record_type='copy' and (question_id, create_date) in ");
+	    sql.append(" (select question_id, max(create_date) from user_question_t t where doctor_id = '"+doctorId+"' group by question_id) order by create_date desc ");
+		ArrayList lstParam = new ArrayList();
 		return itzcQryCenter.executeSqlByMapListWithTrans(sql.toString(), lstParam);
 	}
 	

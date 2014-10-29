@@ -771,12 +771,11 @@ public class DigitalHealthService
 				List list = synHISService.synDoctorRegister(doctorId);
 				String registerNum=list.size()+"";
 				map.put("register_num", registerNum);
-				List lstQ=userQustionDao.qryQuestionNoAns(doctorId,"noans");
+				List lstQ=getDoctorQuestionsByType(doctorId,"noans");
 				if(ObjectCensor.checkListIsNull(lstQ))
 				{
 					map.put("ques_num", lstQ.size());
 				}
-				System.out.println(map);
 				return map;
 			}
 		}
