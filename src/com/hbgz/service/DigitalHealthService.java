@@ -962,6 +962,15 @@ public class DigitalHealthService
 		return jsonArray;
 	}
 	
+	@ServiceType(value = "BUS20038")
+	public boolean updateUserContact(String user) throws   JsonException
+	{
+		UserContactT contactT = (UserContactT) JsonUtils.toBean(user, UserContactT.class);
+		contactT.setCreateDate(new Date());
+		hibernateObjectDao.update(contactT);
+		return true;
+	}
+	
 	// 查询用户的挂号订单
 	public List qryRegisterOrder(String hospitalId, String teamId, String doctorId,
 			String startTime, String endTime, String state) throws Exception
