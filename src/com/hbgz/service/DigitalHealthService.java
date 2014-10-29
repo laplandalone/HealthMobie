@@ -932,6 +932,7 @@ public class DigitalHealthService
 		Map map = (Map)JsonUtils.toBean(json, Map.class);
 		Iterator it = map.keySet().iterator();    
 		List<Map> sList = new ArrayList<Map>();
+		Long visitId = sysId.getId();
 		while(it.hasNext())
 		{    
 			String key = it.next().toString();
@@ -939,7 +940,7 @@ public class DigitalHealthService
 			if(ObjectCensor.isStrRegular(value))
 			{
 				Map paramMap = new HashMap();
-				paramMap.put("visit_id", "10001");
+				paramMap.put("visit_id", visitId);
 				paramMap.put("visit_type", "asd");
 				paramMap.put("code_flag", key);
 				paramMap.put("code_val", value);
@@ -947,7 +948,7 @@ public class DigitalHealthService
 			}
 		}   
 		Map visitMap = new HashMap();
-		visitMap.put("visit_id", "10001");
+		visitMap.put("visit_id", visitId);
 		visitMap.put("visit_name", "张三");
 		visitMap.put("visit_type", "asd");
 		visitMap.put("patient_id", "10001");
