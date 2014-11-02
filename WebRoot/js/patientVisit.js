@@ -34,7 +34,7 @@ function qryPatientVisit()
 function createTable(data)
 {
 	var content = "<table id='table1' width='100%' border='1' cellspacing='0' cellpadding='0' class='maintable'>";
-	content += "<tr class='tabletop'><td width='10%'>随访ID</td><td width='20%'>随访姓名</td><td width='10%'>随访类型</td><td width='10%'>随访人ID</td><td width='10%'>卡ID</td><td width='10%'>状态</td><td width='30%'>随访时间</td></tr>";
+	content += "<tr class='tabletop'><td style='text-align:center' width='20%'>随访姓名</td><td style='text-align:center' width='10%'>随访类型</td><td style='text-align:center' width='10%'>就诊卡号</td><td style='text-align:center' width='30%'>随访时间</td></tr>";
 	if(data.length > 0)
 	{
 		$.each(data, function(i, obj){
@@ -46,17 +46,22 @@ function createTable(data)
 			{
 				content += "<tr class='aaa' onmouseover='trColorChange(this,"+i+")' onmouseout='trColorChange(this,"+i+")' onclick='viewVisitDetail("+obj.visitId+")'>";
 			}
-			var state = obj.state;
-			if(state == "00A")
+			var visitType = obj.visitType;
+			if(visitType == "asd")
 			{
-				state = "正常";
+				visitType = "先心手术随访";
 			}
-			else
+			else if(visitType == "mvr")
 			{
-				state = "作废";
+				visitType = "房颤手术随访";
 			}
-			content += "<td width='10%' style='text-align:center'>"+obj.visitId+"</td><td width='20%' style='text-align:center'>"+obj.visitName+"</td><td width='10%' style='text-align:center'>"+obj.visitType+"</td>";
-			content += "<td width='10%' style='text-align:center'>"+obj.patientId+"</td><td width='10%' style='text-align:center'>"+obj.cardId+"</td><td width='10%' style='text-align:center'>"+state+"</td><td width='30%' style='text-align:center'>"+obj.createDate+"</td></tr>";
+			var cardId = obj.cardId;
+			if(cardId == "" ||　cardId == null)
+			{
+				cardId = "无";
+			}
+			content += "<td width='20%' style='text-align:center'>"+obj.visitName+"</td><td width='10%' style='text-align:center'>"+visitType+"</td>";
+			content += "<td width='10%' style='text-align:center'>"+cardId+"</td><td width='30%' style='text-align:center'>"+obj.createDate+"</td></tr>";
 		});
 	}
 	else

@@ -337,7 +337,7 @@ public class DigitalHealthService
 	public String addUserRegisgerOrder(String hospitalId,String userId, String registerId, String doctorId,
 			String doctorName, String orderNum, String orderFee, String registerTime,
 			String userName, String userNo, String userTelephone, String sex, String teamId,
-			String teamName) throws Exception
+			String teamName,String saveFlag,String contactId) throws Exception
 	{
 		String orderId = sysId.getId() + "";
 		
@@ -352,21 +352,26 @@ public class DigitalHealthService
 				orderNum = StringUtil.getMapKeyVal(orderMap, "num");
 			}
 		}
-		
-		/*同步客户资料*/
-		List userList = hibernateObjectDao.findByProperty("HospitalUserT", "userId",userId);
-		if(ObjectCensor.checkListIsNull(userList))
+		if("true".equals(saveFlag))
 		{
-			HospitalUserT hospitalUserT = (HospitalUserT) userList.get(0);
-			String userNameT=hospitalUserT.getUserName();
-			String userNoT=hospitalUserT.getUserNo();
-			if(StringUtil.isNull(userNameT) || StringUtil.isNull(userNoT))
+			/*同步客户资料*/
+			List contactList = hibernateObjectDao.findByProperty("UserContactT", "contactId",contactId);
+			if(!ObjectCensor.checkListIsNull(contactList))
 			{
-				hospitalUserT.setUserName(userName);
-				hospitalUserT.setUserNo(userNo);
-				hibernateObjectDao.update(hospitalUserT);
+				UserContactT contactT = new UserContactT();
+				contactT.setUserId(userId);
+				contactT.setContactId(sysId.getId()+"");
+				contactT.setContactName(userName);
+				contactT.setContactSex(sex);
+				contactT.setContactTelephone(userTelephone);
+				contactT.setContactNo(userNo);
+				contactT.setCreateDate(SysDate.getSysDate());
+				contactT.setState("00A");
+				hibernateObjectDao.save(contactT);
 			}
 		}
+		
+	
 		
 		/*同步修改亚心医院预约号*/
 		if("102".equals(hospitalId))
@@ -551,10 +556,10 @@ public class DigitalHealthService
 	{
 		JSONObject rtnObj = new JSONObject();
 		JSONObject jsonObject = JSONObject.fromObject(param);
-		String applicationType = jsonObject.getString("applicationType");
-		String applicationVersionCode = jsonObject.getString("applicationVersionCode");
-		String deviceType = jsonObject.getString("deviceType");
-		String hospitalId=jsonObject.getString("hospitalId");
+		String applicationType = StringUtil.getJSONObjectKeyVal(jsonObject,"applicationType");
+		String applicationVersionCode = StringUtil.getJSONObjectKeyVal(jsonObject,"applicationVersionCode");
+		String deviceType = StringUtil.getJSONObjectKeyVal(jsonObject,"deviceType");
+		String hospitalId=StringUtil.getJSONObjectKeyVal(jsonObject,"hospitalId");
 		if(!ObjectCensor.isStrRegular(hospitalId))
 		{
 			hospitalId="101";
@@ -773,7 +778,13 @@ public class DigitalHealthService
 				List lstQ=getDoctorQuestionsByType(doctorId,"noans");
 				if(ObjectCensor.checkListIsNull(lstQ))
 				{
-					map.put("ques_num", lstQ.size());
+					if(lstQ.get(0)==null)
+					{
+						map.put("ques_num", "0");
+					}else
+					{
+						map.put("ques_num", lstQ.size());
+					}
 				}
 				return map;
 			}
@@ -892,12 +903,23 @@ public class DigitalHealthService
 				Map map = (Map) list.get(i);
 				String name = StringUtil.getMapKeyVal(map,"doctorName");
 				String namePinYin = PinyinUtil.getPinyin(name);
+				String pinYinAll=PinyinUtil.getPinyinAll(name)+"";
 				if(firstFlag)
 				{
+					boolean b = true;
 					if(pinYin!=null && namePinYin.contains(pinYin))
 					{
 						doctorList.add(map);
+						b=false;
 					}
+					if(b)
+					{
+						if(pinYinAll.contains(pinYin))
+						{
+							doctorList.add(map);
+						}
+					}
+					
 				}else
 				{
 					if(name!=null && name.contains(doctorName))
@@ -927,8 +949,10 @@ public class DigitalHealthService
 	}
 	
 	@ServiceType(value = "BUS20035")
-	public boolean addPatientVisit(String json) throws Exception
+	public boolean addPatientVisit(String json,String userId,String visitType) throws Exception
 	{
+		
+		
 		Map map = (Map)JsonUtils.toBean(json, Map.class);
 		Iterator it = map.keySet().iterator();    
 		List<Map> sList = new ArrayList<Map>();
@@ -941,23 +965,29 @@ public class DigitalHealthService
 			{
 				Map paramMap = new HashMap();
 				paramMap.put("visit_id", visitId);
-				paramMap.put("visit_type", "asd");
+				paramMap.put("visit_type", visitType);
 				paramMap.put("code_flag", key);
 				paramMap.put("code_val", value);
 				sList.add(paramMap);
 			}
 		}   
-		Map visitMap = new HashMap();
-		visitMap.put("visit_id", visitId);
-		visitMap.put("visit_name", "张三");
-		visitMap.put("visit_type", "asd");
-		visitMap.put("patient_id", "10001");
-		visitMap.put("card_id", "10001");
-		saveDB.insertRecord("patient_visit_t", visitMap);
-		if(ObjectCensor.checkListIsNull(sList))
+		List userList = hibernateObjectDao.findByProperty("HospitalUserT", "telephone",userId);
+		if(ObjectCensor.checkListIsNull(userList))
 		{
-			saveDB.insertRecord("patient_visit_detail_t", sList);
+			HospitalUserT hospitalUserT = (HospitalUserT) userList.get(0);
+			Map visitMap = new HashMap();
+			visitMap.put("visit_id", visitId);
+			visitMap.put("visit_name", hospitalUserT.getUserName());
+			visitMap.put("visit_type", "asd");
+			visitMap.put("patient_id", hospitalUserT.getUserId());
+			visitMap.put("card_id","");
+			saveDB.insertRecord("patient_visit_t", visitMap);
+			if(ObjectCensor.checkListIsNull(sList))
+			{
+				saveDB.insertRecord("patient_visit_detail_t", sList);
+			}
 		}
+		
 		return true;
 	}
 	

@@ -70,12 +70,9 @@
 				<div id="template" class="box">
 					<table width="100%" border="1" cellspacing="0" cellpadding="0" class="maintable1">
 						<tr class="tabletop">
-							<td width="10%">随访ID</td>
 							<td width="20%">随访姓名</td>
 							<td width="10%">随访类型</td>
-							<td width="10%">随访人ID</td>
-							<td width="10%">卡ID</td>
-							<td width="10%">状态</td>
+							<td width="10%">就诊卡号</td>
 							<td width="30%">随访时间</td>
 						</tr>
 					</table>

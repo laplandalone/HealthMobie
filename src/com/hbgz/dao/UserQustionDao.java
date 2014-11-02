@@ -63,8 +63,8 @@ public class UserQustionDao extends BaseDao
 		   ans.append(" where question_id not in (");
 		   
 		   ans.append("select QUESTION_ID");
-		   ans.append(" from  user_question_t t where record_type='copy' and (question_id, create_date) in ");
-		   ans.append(" (select question_id, max(create_date) from user_question_t t where doctor_id = '"+doctorId+"' group by question_id) ) order by create_date desc ");
+		   ans.append(" from  user_question_t t where state='00A' and record_type='copy' and (question_id, create_date) in ");
+		   ans.append(" (select question_id, max(create_date) from user_question_t t where state='00A' and doctor_id = '"+doctorId+"' group by question_id) ) order by create_date desc ");
 		   
 	   } else
 	   {
@@ -73,8 +73,8 @@ public class UserQustionDao extends BaseDao
 		    sql.append ("select ID,QUESTION_ID,TEAM_ID,USER_ID,DOCTOR_ID,USER_TELEPHONE,HOSPITAL_ID,RECORD_TYPE,CONTENT,to_char(create_date, 'yyyy-MM-dd')create_date");
 			sql.append(" from user_question_t where state='00A' and record_type='ask' and doctor_id ='"+doctorId+"' and question_id ");
 		    sql.append(" in (select QUESTION_ID");
-		    sql.append(" from  user_question_t t where record_type='copy' and (question_id, create_date) in ");
-		    sql.append(" (select question_id, max(create_date) from user_question_t t where doctor_id = '"+doctorId+"' group by question_id) )order by create_date desc ");
+		    sql.append(" from  user_question_t t where state='00A' and record_type='copy' and (question_id, create_date) in ");
+		    sql.append(" (select question_id, max(create_date) from user_question_t t where state='00A' and  doctor_id = '"+doctorId+"' group by question_id) )order by create_date desc ");
 	   }
 	   
 	    ArrayList lstParam = new ArrayList();
