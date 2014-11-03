@@ -100,6 +100,7 @@
 							<img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; 
 							<a href="/view/news/newsList.jsp?&doctorId=<%=doctorId%>" target="main">信息发布管理</a>
 						</li>
+						<c:if test="${sessionScope.userPrivs=='4' && sessionScope.hospitalId=='102'}">
 						<li>
 							<img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; 
 							<a href="/view/doctor/onlineDocotrList.jsp" target="main">在线医生管理</a>
@@ -112,6 +113,7 @@
 							<img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; 
 							<a href="/view/visit/patientVisitList.jsp" target="main">患者随访查询</a>
 						</li>
+						</c:if>
 					</c:if>
 				</ul>
 			</div>

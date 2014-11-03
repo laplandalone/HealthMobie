@@ -41,7 +41,7 @@ public class SysCacheDao extends BaseDao
 	{
 		StringBuffer sql = new StringBuffer();
 		ArrayList lstParam = new ArrayList();
-		sql.append("select t.* from hospital_config_t t where state='00A' ");
+		sql.append("select t.* from hospital_config_t t where state='00A' order by config_id ");
 		return itzcQryCenter.executeSqlByMapListWithTrans(sql.toString(), lstParam);
 	}
 	
