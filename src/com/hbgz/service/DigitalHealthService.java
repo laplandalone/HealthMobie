@@ -27,6 +27,7 @@ import com.hbgz.dao.HibernateObjectDao;
 import com.hbgz.dao.SaveDB;
 import com.hbgz.dao.UserQustionDao;
 import com.hbgz.model.DoctorRegisterT;
+import com.hbgz.model.HospitalLogT;
 import com.hbgz.model.HospitalNewsT;
 import com.hbgz.model.HospitalUserT;
 import com.hbgz.model.RegisterOrderT;
@@ -305,11 +306,21 @@ public class DigitalHealthService
 	}
 
 	@ServiceType(value = "BUS2005")
-	public Map getUser(String telephone, String password) throws QryException
+	public Map getUser(String telephone, String password,String hospitalId) throws QryException
 	{
 		List users = digitalHealthDao.qryUserByTelephone(telephone, password);
 		if (ObjectCensor.checkListIsNull(users))
 		{
+			if(ObjectCensor.isStrRegular(telephone,hospitalId))
+			{
+				HospitalLogT logT = new HospitalLogT();
+				logT.setCreateDate(SysDate.getSysDate());
+				logT.setState("00A");
+				logT.setHospitalId(hospitalId);
+				logT.setLogId(sysId.getId()+"");
+				logT.setTelephone(telephone);
+				hibernateObjectDao.save(logT);
+			}
 			return (Map) users.get(0);
 		}
 		return null;
@@ -560,6 +571,17 @@ public class DigitalHealthService
 		String applicationVersionCode = StringUtil.getJSONObjectKeyVal(jsonObject,"applicationVersionCode");
 		String deviceType = StringUtil.getJSONObjectKeyVal(jsonObject,"deviceType");
 		String hospitalId=StringUtil.getJSONObjectKeyVal(jsonObject,"hospitalId");
+		String telephone=StringUtil.getJSONObjectKeyVal(jsonObject,"telephone");
+		if(ObjectCensor.isStrRegular(telephone))
+		{
+			HospitalLogT logT = new HospitalLogT();
+			logT.setCreateDate(SysDate.getSysDate());
+			logT.setState("00A");
+			logT.setHospitalId(hospitalId);
+			logT.setLogId(sysId.getId()+"");
+			logT.setTelephone(telephone);
+			hibernateObjectDao.save(logT);
+		}
 		if(!ObjectCensor.isStrRegular(hospitalId))
 		{
 			hospitalId="101";
@@ -611,7 +633,7 @@ public class DigitalHealthService
 		params.put("pwd", "cb6fbeee3deb608f000a8f132531b738");
 		params.put("p", accNbr);
 		params.put("isUrlEncode", "no");
-	    params.put("msg","【海星通技术】尊敬的用户，您的"+pswType+"是"+StringUtil.getMapKeyVal(map, accNbr)+"。益健康愿成为您健康的好帮手");
+	    params.put("msg","【海星通技术】尊敬的用户，您的"+pswType+"是"+StringUtil.getMapKeyVal(map, accNbr)+"。益健康愿成为您健康的好帮手。");
 		
 		// 新用户注册
 		if(!ObjectCensor.checkListIsNull(userList) && "NEW_USER".equals(type))

@@ -8,6 +8,13 @@ import java.util.LinkedHashMap;
  */
 public class JoinParams
 {
+	private String userId;
+	public String getUserId() {
+		return userId;
+	}
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
 	//ÇþµÀ±êÊ¶
 	private String channel;
 	
