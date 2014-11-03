@@ -202,7 +202,8 @@ public class DoctorController
 				int pageNum = Integer.parseInt(StringUtil.getJSONObjectKeyVal(obj, "curId"));
 				int pageSize = Integer.parseInt(StringUtil.getJSONObjectKeyVal(obj, "pageNum"));
 				String teamId = StringUtil.getJSONObjectKeyVal(obj, "teamId");
-				JSONObject object = digitalHealthService.qryOnlineDortorList(pageNum, pageSize, hospitalId, teamId);
+				String skill = StringUtil.getJSONObjectKeyVal(obj, "skill");
+				JSONObject object = digitalHealthService.qryOnlineDortorList(pageNum, pageSize, hospitalId, teamId, skill);
 				log.error(object);
 				pw.println(object);
 			}
