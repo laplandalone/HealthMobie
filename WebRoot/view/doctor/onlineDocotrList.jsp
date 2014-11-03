@@ -28,10 +28,6 @@
 								
 							</select>
 						</td>
-						<td align="right" width="10%">医生功能：</td>
-						<td width="8%">
-							<input type="text" id="skill" name="skill" class="subtext">
-						</td>
 						<td align="right" width="10%">
 							<input type="button" class="button3" value="查询" onclick="qryOnlineDortor()"/>
 						</td>
