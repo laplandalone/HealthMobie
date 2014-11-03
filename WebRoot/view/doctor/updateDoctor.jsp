@@ -109,9 +109,8 @@
 		</script>
 	</head>
 	<body>
-		<div id="template" style="height:500px;overflow:auto">
-			<table width="50%" border="0" cellspacing="0" cellpadding="0" align='center' >
-				<br />
+		<div id="template" style="height:100%;overflow:auto">
+			<table width="70%" border="0" cellspacing="0" cellpadding="0" align='center' >
 				<tr align='left'>
 				<td>
 					<div class="titleba">
@@ -120,61 +119,61 @@
 					</td>
 				</tr>
 			</table>
-			<table width="50%" border="1" cellspacing="0" cellpadding="0" align='center' class="maintable1">
+			<table width="70%" border="1" cellspacing="0" cellpadding="0" align='center' class="maintable1">
 				<tr>
 					<td align="center" width='30%'>医生名称</td>
-					<td align="center">${doctor.name}</td>
+					<td align="left">${doctor.name}</td>
 				</tr>
 				<tr>
 					<td align="center" width='30%'>电话</td>
-					<td align="center">${doctor.telephone}</td>
+					<td align="left">${doctor.telephone}</td>
 				</tr>
 				<tr>
 					<td align="center" width='20%'>性别</td>
-					<td align="center">${doctor.sex}</td>
+					<td align="left">${doctor.sex}</td>
 				</tr>
 				<tr>
 					<td align="center" width='20%'>科室</td>
-					<td align="center">${doctor.team_name}</td>
+					<td align="left">${doctor.team_name}</td>
 				</tr>
 				<tr>
 					<td align="center" width='20%'>挂号费</td>
-					<td align="center">
+					<td align="left">
 						<input type="text" id="fee" class="subtext" value='${doctor.register_fee}'>
 					</td>
 				</tr>
 				<tr>
 					<td align="center" width='20%'>登录用户名</td>
-					<td align="center">
+					<td align="left">
 						<input type="text" id="name" class="subtext" value='${doctor.manager_name}'>
 					</td>
 				</tr>
 				<tr>
 					<td align="center" width='30%'>密码</td>
-					<td align="center">
+					<td align="left">
 						<input type="password" class="subtext" id="password" value='${doctor.password}'>
 					</td>
 				</tr>
 				<tr>
 					<td align="center" width='30%'>确认密码</td>
-					<td align="center">
+					<td align="left">
 						<input type="password" class="subtext" id="confimPassword" value='${doctor.password}'>
 					</td>
 				</tr>
 				<tr>
 					<td align="center" width='30%'>医生简介</td>
-					<td align="center">
-						<textarea rows='4' cols="40" class="textarea" id="introduce" ><c:out value="${doctor.introduce}" /></textarea>
+					<td align="left">
+						<textarea rows='4' cols="93" class="textarea" id="introduce" ><c:out value="${doctor.introduce}" /></textarea>
 					</td>
 				</tr>
 				<tr>
 					<td align="center" width='30%'>擅长</td>
-					<td align="center">
-						<textarea rows='4' cols="40" class="textarea" id="skill" ><c:out value="${doctor.skill}" /></textarea>
+					<td align="left">
+						<textarea rows='4' cols="93" class="textarea" id="skill" ><c:out value="${doctor.skill}" /></textarea>
 					</td>
 				</tr>
 			</table>
-			<table width="50%" border="0" cellspacing="0" cellpadding="0" align='center' >
+			<table width="70%" border="0" cellspacing="0" cellpadding="0" align='center' >
 				<br />
 				<tr align='center'>
 				<td>
@@ -183,8 +182,7 @@
 				</tr>
 			</table>
 			<br />
-			<table width="50%" border="0" cellspacing="0" cellpadding="0" align='center'>
-				<br />
+			<table width="70%" border="0" cellspacing="0" cellpadding="0" align='center'>
 				<tr align='left'>
 				<td>
 					<div class="titleba">
@@ -193,7 +191,7 @@
 					</td>
 				</tr>
 			</table>
-			<table width="50%" border="1" cellspacing="0" cellpadding="0" align='center' class="maintable1">
+			<table width="70%" border="1" cellspacing="0" cellpadding="0" align='center' class="maintable1">
 				<tr class="tabletop">
 					<td align="center">工作日</td>
 					<td align="center" width="20%">上午/下午</td>

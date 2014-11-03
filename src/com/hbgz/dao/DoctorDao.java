@@ -47,6 +47,7 @@ public class DoctorDao extends BaseDao
 		{
 			sql.append("and upper(t.name) like upper('%"+doctorName+"%') ");
 		}
+		sql.append("order by t.order_num ");
 		return itzcQryCenter.executeSqlByMapList(sql.toString(), lstParam);
 	}
 	

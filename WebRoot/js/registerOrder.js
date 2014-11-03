@@ -58,6 +58,7 @@ $(document).ready(function(){
 		$("#startTime").val(startTime);
 		$("#endTime").val(endTime);
 	}
+	qryRegisterOrder();
 });
 
 function qryRegisterOrder()

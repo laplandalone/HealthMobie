@@ -96,7 +96,16 @@
 						</td>
 						<td align="center"><c:out value="${doctor.post}" /></td>
 	
-						<td align="center"><c:out value="${doctor.sex }" />
+						<td align="center">
+							<c:choose>
+								<c:when test="${doctor.sex == '' || doctor.sex ==  null || doctor.sex == 'null' || doctor.sex == undefined}">
+									<c:out value="无"></c:out>
+								</c:when>
+								<c:otherwise>
+									<c:out value="${doctor.sex }" />
+								</c:otherwise>
+							</c:choose>
+						</td>
 						<td align="center"><c:out value="${doctor.team_name}" /></td>
 						<td style="text-align:center !important">
 							<a href="javascript:void(0)" class="linkmore" onclick="queryDoctor('${doctor.doctor_id}')">管理</a>

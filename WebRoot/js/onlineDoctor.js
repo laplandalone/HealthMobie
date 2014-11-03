@@ -10,6 +10,7 @@ $(document).ready(function(){
 			} 
 		}
 	});
+	qryOnlineDortor();
 });
 
 function qryOnlineDortor()
@@ -78,16 +79,21 @@ function createTable(data, flagParam)
 			{
 				sex = "";
 			}
-			var lineState='';
-			if(obj.onlineFlag=='0')
+			var lineState = '';
+			if(obj.onlineFlag == '0')
 			{
-				lineState='是';
+				lineState = '是';
 			}
-			if(obj.onlineFlag=='1')
+			if(obj.onlineFlag == '1')
 			{
-				lineState='否';
+				lineState = '否';
 			}
-			content += "/></td><td width='7%' style='text-align:center'>"+obj.name+"</td><td width='7%' style='text-align:center'>"+obj.post+"</td><td width='3%' style='text-align:center'>"+sex+"</td><td width='8%' style='text-align:center'>"+obj.teamName+"</td>";
+			var post = obj.post;
+			if(post == "" || post == null || post == "null" || post == undefined)
+			{
+				post = "无";
+			}
+			content += "/></td><td width='7%' style='text-align:center'>"+obj.name+"</td><td width='7%' style='text-align:center'>"+post+"</td><td width='3%' style='text-align:center'>"+sex+"</td><td width='8%' style='text-align:center'>"+obj.teamName+"</td>";
 			content += "<td width='6%' style='text-align:center'>"+lineState+"</td> ";
 			var introduce = obj.introduce;
 			if(introduce != "" && introduce != null && introduce != undefined)

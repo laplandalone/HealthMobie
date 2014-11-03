@@ -1,3 +1,7 @@
+$(document).ready(function(){
+	qryPatientVisit();
+});
+
 function qryPatientVisit()
 {
 	var obj = JSON.stringify($("select,input").serializeObject());
