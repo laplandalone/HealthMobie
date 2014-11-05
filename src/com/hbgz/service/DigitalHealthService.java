@@ -973,8 +973,6 @@ public class DigitalHealthService
 	@ServiceType(value = "BUS20035")
 	public boolean addPatientVisit(String json,String userId,String visitType) throws Exception
 	{
-		
-		
 		Map map = (Map)JsonUtils.toBean(json, Map.class);
 		Iterator it = map.keySet().iterator();    
 		List<Map> sList = new ArrayList<Map>();
@@ -1000,7 +998,7 @@ public class DigitalHealthService
 			Map visitMap = new HashMap();
 			visitMap.put("visit_id", visitId);
 			visitMap.put("visit_name", hospitalUserT.getUserName());
-			visitMap.put("visit_type", "asd");
+			visitMap.put("visit_type", visitType);
 			visitMap.put("patient_id", hospitalUserT.getUserId());
 			visitMap.put("card_id","");
 			saveDB.insertRecord("patient_visit_t", visitMap);
@@ -1398,17 +1396,17 @@ public class DigitalHealthService
 		return array;
 	}
 
-	public JSONObject qryOnlineDortorList(int pageNum, int pageSize, String hospitalId, String teamId) throws Exception 
+	public JSONObject qryOnlineDortorList(int pageNum, int pageSize, String hospitalId, String teamId, String skill) throws Exception 
 	{
 		JSONObject obj = new JSONObject();
 		if(ObjectCensor.isStrRegular(hospitalId))
 		{
-			List sList = digitalHealthDao.qryOnlineDortorList(pageNum, pageSize, hospitalId, teamId);
+			List sList = digitalHealthDao.qryOnlineDortorList(pageNum, pageSize, hospitalId, teamId, skill);
 			int count = 0;
 			if(ObjectCensor.checkListIsNull(sList))
 			{
 				obj.element("onlineDortorList", sList);
-				count = digitalHealthDao.qryOnlineDortorCount(hospitalId, teamId);
+				count = digitalHealthDao.qryOnlineDortorCount(hospitalId, teamId, skill);
 			}
 			obj.element("count", count);
 		}
@@ -1436,6 +1434,15 @@ public class DigitalHealthService
 			array = JsonUtils.fromArray(list);
 		}
 		return array;
+	}
+
+	public boolean addDoctor(JSONObject obj) throws Exception 
+	{
+		Long doctorId = sysId.getId();
+		obj.element("doctor_id", doctorId);
+		Map map = (Map) JsonUtils.toBean(obj.toString(), Map.class);
+		saveDB.insertRecord("doctor_t", map);
+		return false;
 	}
 	
 }

@@ -1,8 +1,12 @@
 $(document).ready(function(){
-	$.getJSON("/doctor.htm?method=qryTeamList",function(data){
+	$.getJSON("/doctor.htm?method=qryTeamList", {"random":Math.random()}, function(data){
 		if(data.length > 0)
 		{
 			var obj = document.getElementById("teamId");
+			if(obj == null || obj == undefined)
+			{
+				obj = document.getElementById("team_id");
+			}
 			for(var k = 0 ; k < data.length ; k++)
 			{  
 				var varItem = new Option(data[k].teamName, data[k].teamId);
@@ -299,4 +303,75 @@ function trColorChange(val, i)
 			val.className = "aaa";
 		}
 	}
+}
+
+//取消新增医生
+function cancel()
+{
+	window.location.reload();
+}
+
+//新增医生
+function addDoctor()
+{
+	if(!checkParam())
+	{
+		return;
+	}
+	else
+	{
+		var obj = JSON.stringify($("select,input,textarea").serializeObject());
+		var dig = null;
+		$.ajax({
+			type : "POST",
+			url : "/doctor.htm?method=addDoctor",
+			data : obj,
+			contentType:"application/json;charset=UTF-8",
+			beforeSend : function()
+			{
+				dig = new $.dialog({title:"正在新增请等待...",esc:false,min:false,max:false,lock:true});
+			},
+			success: function(data) 
+			{
+				try
+				{
+					dig.close();
+				}
+				catch(e)
+				{
+					
+				}
+				if(data)
+				{
+					$.dialog({title:false, width:"150px", esc:false, height:"60px", zIndex:2000, icon:"succ.png", lock:true, content:"新增医生成功!", ok:function() {window.location.reload(); return true;}});
+				}
+				else
+				{
+					$.dialog({title:false, width:"150px", esc:false, height:"60px", zIndex:2000, icon:"fail.png", lock:true, content:"新增医生失败!", ok:function() {window.location.reload(); return true;}});
+				}
+			},
+			error : function(data)
+			{
+				dig.close();
+				$.dialog({title : false,esc:false, zIndex: 2000,width:"150px",height:"60px", icon: "fail.png", lock: true, content: "新增失败!",ok: function(){return true;}});
+			}
+		});
+	}
+}
+
+function checkParam()
+{
+	var name = $("#name").val();
+	if(name == "" || name == null || name == undefined)
+	{
+		$.dialog.alert("请输入医生名称!", function(){return true;});
+		return false;
+	}
+	var teamId = $("#team_id").val();
+	if(teamId == "" || teamId == null || teamId == undefined)
+	{
+		$.dialog.alert("请选择医生所在的科室!", function(){return true;});
+		return false;
+	}
+	return true;
 }

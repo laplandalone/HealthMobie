@@ -98,7 +98,7 @@
 							}
 							else
 							{
-								$.dialog({title:false, width:"150px", esc:false, height:"60px", zIndex:2000, icon:"fail.png", lock:true, content:"医新增提醒失败!", ok:function() {window.location.reload(); return true;}});
+								$.dialog({title:false, width:"150px", esc:false, height:"60px", zIndex:2000, icon:"fail.png", lock:true, content:"新增提醒失败!", ok:function() {window.location.reload(); return true;}});
 							}
 						},
 						error : function(data)

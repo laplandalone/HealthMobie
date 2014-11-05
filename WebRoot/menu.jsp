@@ -83,7 +83,7 @@
 							<a href="/doctor.htm?method=queryPre&doctorId=<%=doctorId%>" target="main">医生信息管理</a>
 						</li>
 					</c:if>
-						<c:if test="${sessionScope.userPrivs=='4'}">
+					<c:if test="${sessionScope.userPrivs=='4'}">
 						<li>
 							<img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; 
 							<a href="/ques.htm?method=queryPre&doctorId=<%=doctorId%>&startTime=&endTime=" target="main" >用户提问管理</a>
@@ -101,18 +101,26 @@
 							<a href="/view/news/newsList.jsp?&doctorId=<%=doctorId%>" target="main">信息发布管理</a>
 						</li>
 						<c:if test="${sessionScope.userPrivs=='4' && sessionScope.hospitalId=='102'}">
-						<li>
-							<img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; 
-							<a href="/view/doctor/onlineDocotrList.jsp" target="main">在线医生管理</a>
-						</li>
-						<li>
-							<img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; 
-							<a href="/view/wake/addWake.jsp" target="main">新增提醒管理</a>
-						</li>
-						<li>
-							<img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; 
-							<a href="/view/visit/patientVisitList.jsp" target="main">患者随访查询</a>
-						</li>
+							<li>
+								<img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; 
+								<a href="/view/doctor/onlineDocotrList.jsp" target="main">在线医生管理</a>
+							</li>
+							<li>
+								<img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; 
+								<a href="/view/wake/addWake.jsp" target="main">新增提醒管理</a>
+							</li>
+							<li>
+								<img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; 
+								<a href="/view/visit/patientVisitList.jsp" target="main">患者随访查询</a>
+							</li>
+							<li>
+								<img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; 
+								<a href="/view/visit/patientVisitList.jsp" target="main">患者随访查询</a>
+							</li>
+							<li>
+								<img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; 
+								<a href="/view/doctor/addDoctor.jsp" target="main">新增医生管理</a>
+							</li>
 						</c:if>
 					</c:if>
 				</ul>

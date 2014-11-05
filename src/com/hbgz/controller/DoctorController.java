@@ -202,7 +202,8 @@ public class DoctorController
 				int pageNum = Integer.parseInt(StringUtil.getJSONObjectKeyVal(obj, "curId"));
 				int pageSize = Integer.parseInt(StringUtil.getJSONObjectKeyVal(obj, "pageNum"));
 				String teamId = StringUtil.getJSONObjectKeyVal(obj, "teamId");
-				JSONObject object = digitalHealthService.qryOnlineDortorList(pageNum, pageSize, hospitalId, teamId);
+				String skill = StringUtil.getJSONObjectKeyVal(obj, "skill");
+				JSONObject object = digitalHealthService.qryOnlineDortorList(pageNum, pageSize, hospitalId, teamId, skill);
 				log.error(object);
 				pw.println(object);
 			}
@@ -230,7 +231,28 @@ public class DoctorController
 			PrintWriter pw = response.getWriter();
 			pw.println(flag);
 			pw.close();
-		} catch (Exception e)
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	@RequestMapping(params = "method=addDoctor")
+	public void addDoctor(@RequestBody JSONObject obj, HttpServletRequest request, HttpServletResponse response)
+	{
+		try 
+		{
+			HttpSession session = request.getSession();
+			String hospitalId= (String)session.getAttribute("hospitalId");
+			obj.element("hospital_id", hospitalId);
+			log.error(obj);
+			boolean flag = digitalHealthService.addDoctor(obj);
+			PrintWriter pw = response.getWriter();
+			pw.println(flag);
+			pw.close();
+		}
+		catch (Exception e) 
 		{
 			e.printStackTrace();
 		}
