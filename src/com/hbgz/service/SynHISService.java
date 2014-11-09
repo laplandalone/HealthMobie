@@ -562,10 +562,9 @@ public class SynHISService {
 		StringBuffer sql=new StringBuffer("<DS><SQL><str>");
 		sql.append("insert into mz_yydj ");
 		sql.append("(yylsh,xm,xb,csrq,yysj,yyysdm,yyysxm,lxdz,dqsj,czydm,lxdh,yynr,xh,sfzh,sff) values ");
-		sql.append("('"+id+"','"+orderT.getUserName()+"','"+sex+"','"+birthDay+"','"+registerTime+"','"+orderT.getDoctorId().trim()+"','"+orderT.getDoctorName()+"','"+userAddress+"',GETDATE(),'"+czydm+"','"+orderT.getUserTelephone()+"','"+orderT.getTeamName()+"',"+xh+",'"+orderT.getUserNo()+"','Y')");
+		sql.append("('"+id+"','"+orderT.getUserName()+"','"+sex+"','"+birthDay+"','"+registerTime+"','"+orderT.getDoctorId().trim()+"','"+orderT.getDoctorName()+"','"+userAddress+"',GETDATE(),'"+czydm+"','"+orderT.getUserTelephone()+"','掌上亚心',"+xh+",'"+orderT.getUserNo()+"','10')");
 		sql.append("</str></SQL></DS>");
 		String result =new SynHISService().invokeFunc(sql.toString());
-		System.out.println(result);
 	}
 	
 	
@@ -587,8 +586,19 @@ public class SynHISService {
 //		sql.append("('201409285000','haha','1','1984.08.01','2014.08.01','9999R','单纯开药','湖北省武汉市水厂一路4号4楼','2014.08.01','1178R','13808652241','开药',2,'422822198407311010','Y')</str></SQL>");
 		
 //		sql.append("</DS>");
-		String sqls="<DS><SQL><str>select top 10 delb ,c.bzdm team_id,c.bzmc team_name,kszjdm doctor_id,b.zgxm doctor_name,derq day from mz_ghde a,comm_zgdm b,mz_bzdyb c where a.kszjdm=b.zgid and a.kszjdm=c.ysdm and a.kszjdm='1405R' and derq > '2014.10.20' order by derq  </str></SQL></DS>";
-		String result =new SynHISService().invokeFunc(sqls);
-		System.out.println(result);
+//		String sqls="<DS><SQL><str>select top 10 delb ,c.bzdm team_id,c.bzmc team_name,kszjdm doctor_id,b.zgxm doctor_name,derq day from mz_ghde a,comm_zgdm b,mz_bzdyb c where a.kszjdm=b.zgid and a.kszjdm=c.ysdm and a.kszjdm='1405R' and derq > '2014.10.20' order by derq  </str></SQL></DS>";
+		String sqla="<DS><SQL><str>select distinct  bzdm team_id ,bzmc team_name from mz_bzdyb order by team_id </str></SQL></DS>";
+		String result =new SynHISService().invokeFunc(sqla);
+		Document doc = XMLComm.loadXMLString(result);
+		Element root = doc.getRootElement();
+		List list = root.getChildren();
+		for (int i = 0; i < list.size(); i++)
+		{
+			Element e = (Element) list.get(i);
+			TeamT teamT = new TeamT();
+			String teamId=e.getChildText("team_name");
+			System.out.println(teamId);
+		}
+		
 	}
 }

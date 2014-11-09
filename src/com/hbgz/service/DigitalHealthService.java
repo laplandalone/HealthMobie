@@ -366,7 +366,11 @@ public class DigitalHealthService
 		if("true".equals(saveFlag))
 		{
 			/*同步客户资料*/
-			List contactList = hibernateObjectDao.findByProperty("UserContactT", "contactId",contactId);
+			List contactList=null;
+			
+			
+			contactList = hibernateObjectDao.findByProperty("UserContactT", "contactNo",userNo);
+			
 			if(!ObjectCensor.checkListIsNull(contactList))
 			{
 				UserContactT contactT = new UserContactT();
@@ -1013,14 +1017,22 @@ public class DigitalHealthService
 	
 
 	@ServiceType(value = "BUS20036")
-	public boolean addUserContact(String user) throws   JsonException
+	public String addUserContact(String user) throws   JsonException
 	{
 		UserContactT contactT = (UserContactT) JsonUtils.toBean(user, UserContactT.class);
 		contactT.setContactId(sysId.getId()+"");
 		contactT.setState("00A");
 		contactT.setCreateDate(new Date());
-		hibernateObjectDao.save(contactT);
-		return true;
+		String no=contactT.getContactNo();
+		List userList = hibernateObjectDao.findByProperty("UserContactT", "contactNo",no);
+		if(!ObjectCensor.checkListIsNull(userList))
+		{
+			hibernateObjectDao.save(contactT);
+			return "0";
+		}else
+		{
+			return "1";
+		}
 	}
 	
 	@ServiceType(value = "BUS20037")

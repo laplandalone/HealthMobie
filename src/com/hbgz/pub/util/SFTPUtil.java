@@ -1,14 +1,15 @@
 package com.hbgz.pub.util;
 
-import java.io.InputStream;
+import java.io.BufferedInputStream;
+import java.io.OutputStream;
 import java.util.Iterator;
 import java.util.Properties;
 import java.util.Vector;
 
-import net.sf.json.JSONObject;
+import org.apache.tools.zip.ZipEntry;
+import org.apache.tools.zip.ZipOutputStream;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import net.sf.json.JSONObject;
 
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelSftp;
@@ -17,20 +18,17 @@ import com.jcraft.jsch.Session;
 
 public class SFTPUtil 
 {
-	private static Log log = LogFactory.getLog(SFTPUtil.class);
+	private static String[] array = new String[]{"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 	
-	/**
-     * 连接sftp服务器
-     */
-	private static ChannelSftp connect(JSONObject obj) throws Exception
-	{
-		String serverIp = StringUtil.getJSONObjectKeyVal(obj, "paramDesc");
-		String userName = StringUtil.getJSONObjectKeyVal(obj, "paramValue");
-		String password = StringUtil.getJSONObjectKeyVal(obj, "param1");
+    private static ChannelSftp connect(JSONObject obj) throws Exception
+    {
+		String server = StringUtil.getJSONObjectKeyVal(obj, "server");
+		String user = StringUtil.getJSONObjectKeyVal(obj, "user");
+		String password = StringUtil.getJSONObjectKeyVal(obj, "password");
 		//创建JSch对象 
 		JSch jsch = new JSch();
 		//按照用户名，主机ip，端口获取一个Session对象 
-		Session session = jsch.getSession(userName, serverIp, 22);
+		Session session = jsch.getSession(user, server, 22);
 		//设置暗码 
 		session.setPassword(password);
 		Properties config = new Properties(); 
@@ -44,82 +42,125 @@ public class SFTPUtil
 		// 建树SFTP通道的连接 
 		channel.connect();
 		return (ChannelSftp) channel;
-	}
-	
-	/**
-     * 上传附件
-     */
-	public static String uploadFile(JSONObject obj, String fileName, InputStream is)
-	{
-		String retVal = "failure";
-		try 
+    }
+    
+    public static void downloadFile(JSONObject obj, String fileName, OutputStream os, ZipOutputStream zos, BufferedInputStream br) throws Exception
+    {
+		ChannelSftp sftp = connect(obj);
+		String filePath = StringUtil.getJSONObjectKeyVal(obj, "path");
+		if(ObjectCensor.isStrRegular(filePath))
 		{
-			ChannelSftp sftp = connect(obj);
-			String path = StringUtil.getJSONObjectKeyVal(obj, "param2");
-			log.error(path);
-			if(ObjectCensor.isStrRegular(path))
-			{
-				sftp.cd(path);
-				sftp.put(is, fileName);
-				retVal = "success";
-				if(sftp != null)
-				{
-					if(sftp.isConnected())
-					{
-						sftp.disconnect();
-					}
-				}
-			}
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();
+		    sftp.cd(filePath);
 		}
-		return retVal;
-	}
-	
-	/**
-	 * 删除文件
-	 */
-	public static String deleteFile(JSONObject obj, String fileName)
-	{
-		String retVal = "failure";
-		try 
+		if(zos != null)
 		{
-			ChannelSftp sftp = connect(obj);
-			String path = StringUtil.getJSONObjectKeyVal(obj, "param2");
-			log.error(path);
-			if(ObjectCensor.isStrRegular(path))
-			{
-				Vector vector = sftp.ls(path);
-				if(vector.size() > 0)
+		    zos.setEncoding("GBK");
+		}
+		String prefix = "";
+		if(fileName.indexOf(";") != -1)
+		{
+		    String[] str = fileName.split(";");
+		    prefix = str[0].substring(0, str[0].lastIndexOf("_"));
+		}
+		Vector vector = sftp.ls(filePath);
+		if(vector.size() > 0)
+		{
+		    Iterator iter = vector.iterator();
+		    while(iter.hasNext())
+		    {
+				String filesName = iter.next().toString();
+				if(fileName.indexOf(";") == -1)
 				{
-					Iterator iterator = vector.iterator();
-					while (iterator.hasNext()) 
-					{
-						String filesName = iterator.next().toString();
-						if(filesName.indexOf(fileName) != -1)
-				    	{
-				    		sftp.cd(path);
-				    		sftp.rm(fileName);
-				    		break;
-				    	}
-					}
-					retVal = "success";
-				    if(sftp != null)
+				    if(filesName.indexOf(fileName) != -1)
 				    {
-						if(sftp.isConnected())
+						sftp.get(fileName, os);
+						sftp.rm(fileName);
+						break;
+				    }
+				}
+				else
+				{
+				    if(filesName.indexOf(prefix) != -1)
+				    {
+						String[] array = fileName.split(";");
+						for(int i = 0, len = array.length; i < len; i++)
 						{
-						    sftp.disconnect();
+						    if(filesName.indexOf(array[i]) != -1)
+						    {
+								String zipEntryFileName = filesName.substring(filesName.lastIndexOf("_") + 1);
+								zos.putNextEntry(new ZipEntry(zipEntryFileName)); 
+								sftp.get(array[i], zos);
+								zos.closeEntry(); 
+								sftp.rm(array[i]);
+								break;
+						    }
 						}
 				    }
 				}
-			}
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();
+		    }
 		}
-		return retVal;
+		if(zos != null)
+	  	{
+	  	    zos.flush();
+	  	    zos.close();
+	  	}
+	  	if(br != null)
+	  	{
+	  	    int len = 0;
+	  	    byte[] buf = new byte[1024];
+	  	    while ((len = br.read(buf)) != -1)
+	  	    {
+	  	    	os.write(buf, 0, len);
+	  	    }
+	  	    br.close();
+	  	}
+	  	if(os != null)
+	  	{
+	  	    os.close();
+	  	}
+	  	if(sftp != null)
+	  	{
+	  		sftp.disconnect();
+	  	}
+    }
+
+	public static int getFileSize(JSONObject obj, String fileName) throws Exception
+	{
+		int size = 0;
+		ChannelSftp sftp = connect(obj);
+		String filePath = StringUtil.getJSONObjectKeyVal(obj, "path");
+		if(ObjectCensor.isStrRegular(filePath))
+		{
+		    sftp.cd(filePath);
+		}
+		Vector vector = sftp.ls(filePath);
+		if(vector.size() > 0)
+		{
+			Iterator iter = vector.iterator();
+			while(iter.hasNext())
+			{
+				String filesName = iter.next().toString();
+				if(filesName.indexOf(fileName) != -1)
+				{
+					for(int j = 0, l = array.length; j < l; j++)
+		    		{
+		    			int index = filesName.indexOf(array[j]);
+		    			if(index != -1)
+		    			{
+		    				filesName = filesName.substring(0, index - 1);
+		    				filesName = filesName.substring(filesName.lastIndexOf(" ") + 1);
+		    				size = Integer.parseInt(filesName);
+		    				break;
+		    			}
+		    		}
+					break;
+				}
+			}
+		}
+		if(sftp != null)
+	  	{
+			sftp.disconnect();
+	  	}
+		return size;
 	}
 }
