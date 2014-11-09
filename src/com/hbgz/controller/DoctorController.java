@@ -105,7 +105,6 @@ public class DoctorController
 	@RequestMapping(params = "method=updateDoctor")
 	public void updateDoctor(HttpServletResponse response , HttpServletRequest request) throws Exception
 	{
-		ModelAndView model = new ModelAndView("updateDoctor");
 		HttpSession session = request.getSession();
 		String hospitalId= (String)session.getAttribute("hospitalId");
 		String doctorId = (String)request.getParameter("doctorId");
@@ -120,12 +119,14 @@ public class DoctorController
 		String address = request.getParameter("address");
 		
 		Writer wr = response.getWriter();
-		if(ObjectCensor.isStrRegular(doctorId,hospitalId,name,password) )
+		if(ObjectCensor.isStrRegular(doctorId,hospitalId) )
 		{
-			try {
+			try
+			{
 				digitalHealthService.updateHospitalMananger(hospitalId, doctorId, name, password);
-				digitalHealthService.updateDoctor(hospitalId,doctorId, fee,introduce,skill, post, time, address);
-			} catch (Exception e) 
+				digitalHealthService.updateDoctor(hospitalId, doctorId, fee, introduce, skill, post, time, address);
+			} 
+			catch (Exception e) 
 			{
 				e.printStackTrace();
 				wr.write("error");

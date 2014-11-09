@@ -60,22 +60,25 @@
 				var time = $("#work_time").val();
 				var address = $("#work_address").val();
 			    var fee = $("#fee");
-				if(name.val() == '')
-				{
-					$.dialog.alert("用户名为空!", function(){return true;});
-					return;
-				}
+//				if(name.val() == '')
+//				{
+//					$.dialog.alert("用户名为空!", function(){return true;});
+//					return;
+//				}
 			
-				if(psw.val() == '')
-				{
-					$.dialog.alert("密码为空!", function(){return true;});
-					return;
-				}
+//				if(psw.val() == '')
+//				{
+//					$.dialog.alert("密码为空!", function(){return true;});
+//					return;
+//				}
 				
-				if(psw.val() != confimPsw.val())
+				if(psw.val() != "" && psw.val() != null && psw.val() != undefined && confimPsw.val() != "" && confimPsw.val() != null && confimPsw.val() != undefined)
 				{
-					$.dialog.alert("密码不一致请重新输入!", function(){return true;});
-					return;
+					if(psw.val() != confimPsw.val())
+					{
+						$.dialog.alert("密码不一致请重新输入!", function(){return true;});
+						return;
+					}
 				}
 				$.ajax({
 					url:"/doctor.htm?method=updateDoctor",
