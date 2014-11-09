@@ -1,20 +1,27 @@
 $(document).ready(function(){
-	$.getJSON("/doctor.htm?method=qryTeamList", {"random":Math.random()}, function(data){
-		if(data.length > 0)
+	$.ajax({
+		type : "POST",
+		url : "/doctor.htm?method=qryTeamList",
+		async : false,
+		dataType : "json",
+		success : function(data)
 		{
-			var obj = document.getElementById("teamId");
-			if(obj == null || obj == undefined)
-			{
-				obj = document.getElementById("team_id");
-			}
+			var content = "";
 			for(var k = 0 ; k < data.length ; k++)
 			{  
-				var varItem = new Option(data[k].teamName, data[k].teamId);
-				obj.options.add(varItem);
+				content += "<option value="+data[k].teamId+">"+data[k].teamName+"</option>";
 			} 
+			var obj = $("#teamId");
+			if(obj == null || obj == undefined)
+			{
+				$("#team_id").html(content);
+			}
+			else
+			{
+				$("#teamId").html(content);
+			}
 		}
 	});
-	qryOnlineDortor();
 });
 
 function qryOnlineDortor()
@@ -26,6 +33,7 @@ function qryOnlineDortor()
 		type : "POST",
 		url : "/doctor.htm?method=qryOnlineDortorList",
 		data : obj,
+		async : false,
 		contentType : "application/json;charset=UTF-8",
 		dataType : "json",
 		beforeSend : function()

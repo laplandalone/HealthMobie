@@ -17,7 +17,7 @@
 		<script type="text/javascript" src="<%=path%>/js/onlineDoctor.js"></script>
   	</head>
   
-  	<body>
+  	<body onload="qryOnlineDortor()">
   		<form action="">
   			<div class="mainsearch">
 		  		<table width="100%">
@@ -25,7 +25,7 @@
 						<td align="right" width="10%">在线科室：</td>
 						<td width="8%">
 							<select id="teamId" name="teamId" class="subselect">
-								
+								<option></option>
 							</select>
 						</td>
 						
