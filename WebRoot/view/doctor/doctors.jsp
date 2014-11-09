@@ -45,6 +45,35 @@
 				}
 			}
 			
+			function deleteDoctor(doctorId)
+			{
+				$.dialog.confirm("选中的医生确定要下线?", 
+					function(){
+						$.ajax({
+							type : "POST",
+							url : "/doctor.htm?method=deleteDoctor",
+							data : "doctorId="+doctorId,
+							success: function(data) 
+							{
+								if(data == "success")
+								{
+									$.dialog({title:false, width:"150px", esc:false, height:"60px", zIndex:2000, icon:"succ.png", lock:true, content:"删除医生信息成功!", ok:function() {queryMed(); return true;}});
+								}
+								else
+								{
+									$.dialog({title:false, width:"150px", esc:false, height:"60px", zIndex:2000, icon:"fail.png", lock:true, content:"删除医生信息失败!", ok:function() {queryMed(); return true;}});
+								}
+							},
+							error : function(data)
+							{
+								$.dialog.alert(data.statusText, function(){return true;});
+							}
+						});
+					},
+					function(){return true;}
+				);
+			}
+			
 			function enterQry(fName)
 			{
 				if(event.keyCode == 13)
@@ -109,6 +138,8 @@
 						<td align="center"><c:out value="${doctor.team_name}" /></td>
 						<td style="text-align:center !important">
 							<a href="javascript:void(0)" class="linkmore" onclick="queryDoctor('${doctor.doctor_id}')">管理</a>
+							&nbsp;&nbsp;&nbsp;&nbsp;
+							<a href="javascript:void(0)" class="linkmore" onclick="deleteDoctor('${doctor.doctor_id}')">删除</a>
 						</td>
 					</tr>
 				</c:forEach>

@@ -30,7 +30,7 @@ public class DoctorDao extends BaseDao
 		StringBuffer sql = new StringBuffer();
 		sql.append("select t.doctor_id, t.hospital_id, t.telephone, t.post, t.name, ");
 		sql.append("t.sex, decode(t.expert_flag, '0', '×¨¼Ò') expert_flag, a.team_name ");
-		sql.append("from doctor_t t, team_t a where a.team_id = t.team_id and t.hospital_id = ? ");
+		sql.append("from doctor_t t, team_t a where a.team_id = t.team_id and t.hospital_id = ? and t.state = '00A' ");
 		ArrayList lstParam = new ArrayList();
 		lstParam.add(hospitalId);
 		if(ObjectCensor.isStrRegular(doctorId))
@@ -54,7 +54,7 @@ public class DoctorDao extends BaseDao
 	public List qryDoctorList(String hospitalId, String teamId) throws QryException 
 	{
 		StringBuffer sql = new StringBuffer();
-		sql.append("select * from doctor_t where state = '00A' and hospital_id = ? ");
+		sql.append("select * from doctor_t where state = '00A' and hospital_id = ? order by order_num ");
 		ArrayList lstParam = new ArrayList();
 		lstParam.add(hospitalId);
 		if(ObjectCensor.isStrRegular(teamId))
@@ -102,8 +102,42 @@ public class DoctorDao extends BaseDao
 				e.printStackTrace();
 				flag = false;
 			}
-			return flag;
 		}
+		return flag;
+	}
+	
+	public boolean deleteHospitalMananger(String hospitalId, String doctorId)
+	{
+		String sql = "update hospital_manager_t set  state='00X' where state='00A' and  hospital_id='"+hospitalId+"' and doctor_id='"+doctorId+"' ";
+		
+		Connection conn = null;
+		Statement stmt = null;
+		boolean flag = true;
+		try
+		{
+			conn = itzcQryCenter.getDataSource().getConnection();
+			stmt = conn.createStatement();
+			stmt.execute(sql.toString());
+		} 
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			flag = false;
+		} 
+		finally
+		{
+			try
+			{
+				stmt.close();
+				conn.close();
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+				flag = false;
+			}
+		}
+		return flag;
 	}
 	
 	/**
@@ -115,9 +149,9 @@ public class DoctorDao extends BaseDao
 	 * @return
 	 * @throws QryException
 	 */
-	public boolean updateDoctor(String hospitalId,String doctorId,String fee,String introduce,String skill) throws QryException
+	public boolean updateDoctor(String hospitalId,String doctorId,String fee,String introduce,String skill, String post, String time, String address) throws QryException
 	{
-		String sql = "update doctor_T set  register_fee='"+fee+"', introduce='"+introduce+"',skill='"+skill+"' where state='00A' and  hospital_id='"+hospitalId+"' and doctor_id='"+doctorId+"'";
+		String sql = "update doctor_T set  register_fee='"+fee+"', introduce='"+introduce+"',skill='"+skill+"', post = '"+post+"', work_time = '"+time+"', work_address = '"+address+"' where state='00A' and  hospital_id='"+hospitalId+"' and doctor_id='"+doctorId+"'";
 		
 		Connection conn = null;
 		Statement stmt = null;
@@ -131,19 +165,55 @@ public class DoctorDao extends BaseDao
 		{
 			e.printStackTrace();
 			flag = false;
-		} finally
+		} 
+		finally
 		{
 			try
 			{
 				stmt.close();
 				conn.close();
 
-			} catch (Exception e)
+			}
+			catch (Exception e)
 			{
 				e.printStackTrace();
 				flag = false;
 			}
-			return flag;
 		}
+		return flag;
+	}
+	
+	public boolean deleteDoctor(String hospitalId, String doctorId)
+	{
+		String sql = "update doctor_T set state='00X' where state='00A' and hospital_id='"+hospitalId+"' and doctor_id='"+doctorId+"' ";
+		
+		Connection conn = null;
+		Statement stmt = null;
+		boolean flag = true;
+		try
+		{
+			conn = itzcQryCenter.getDataSource().getConnection();
+			stmt = conn.createStatement();
+			stmt.execute(sql.toString());
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+			flag = false;
+		} 
+		finally
+		{
+			try
+			{
+				stmt.close();
+				conn.close();
+
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+				flag = false;
+			}
+		}
+		return flag;
 	}
 }

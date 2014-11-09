@@ -1122,11 +1122,29 @@ public class DigitalHealthService
 		return false;
 	}
 	
-	public boolean updateDoctor(String hospitalId,String doctorId,String fee,String introduce,String skill) throws QryException
+	public boolean deleteHospitalMananger(String hospitalId, String doctorId)
+	{
+		if(ObjectCensor.isStrRegular(hospitalId, doctorId))
+		{
+			return doctorDao.deleteHospitalMananger(hospitalId, doctorId);
+		}
+		return false;
+	}
+	
+	public boolean updateDoctor(String hospitalId,String doctorId,String fee,String introduce,String skill, String post, String time, String address) throws QryException
 	{
 		if (ObjectCensor.isStrRegular(hospitalId,doctorId))
 		{
-			return doctorDao.updateDoctor(hospitalId, doctorId, fee, introduce, skill);
+			return doctorDao.updateDoctor(hospitalId, doctorId, fee, introduce, skill, post, time, address);
+		}
+		return false;
+	}
+	
+	public boolean deleteDoctor(String hospitalId, String doctorId)
+	{
+		if (ObjectCensor.isStrRegular(hospitalId,doctorId))
+		{
+			return doctorDao.deleteDoctor(hospitalId, doctorId);
 		}
 		return false;
 	}
@@ -1444,5 +1462,9 @@ public class DigitalHealthService
 		saveDB.insertRecord("doctor_t", map);
 		return false;
 	}
-	
+
+	public List qryOnLineDoctorQuesList(String hospitalId, String teamId) throws Exception 
+	{
+		return digitalHealthDao.qryOnLineDoctorQuesList(hospitalId, teamId);
+	}
 }

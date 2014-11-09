@@ -42,23 +42,35 @@ public class QuestionController
 		ModelAndView model = new ModelAndView("questionList");
 		HttpSession session = request.getSession();
 		String hospitalId= (String)session.getAttribute("hospitalId");
-		String doctorId = (String)request.getParameter("doctorId");
-		String startTime = (String)request.getParameter("startTime");
-		String endTime = (String)request.getParameter("endTime");
-		if(ObjectCensor.isStrRegular(doctorId))
+		String privs = (String) session.getAttribute("userPrivs");
+		if("4".equals(privs))
 		{
-			List userFileLst = digitalHealthService.getUserQuestionsByDoctorId(doctorId, hospitalId, startTime, endTime);
-			log.error(userFileLst);
-			model.addObject("quesLst", userFileLst);
-			model.addObject("startTime", startTime);
-			model.addObject("endTime", endTime);
-			model.addObject("doctorId", doctorId);
-			model.setViewName("/view/question/questionList");
+			String teamId = request.getParameter("teamId");
+			List sList = digitalHealthService.qryOnLineDoctorQuesList(hospitalId, teamId);
+			model.addObject("quesLst", sList);
+			model.addObject("teamId", teamId);
+			model.setViewName("/view/question/onlineDoctorQuesList");
 		}
 		else
 		{
-			model.addObject("result", "error");
-			model.setViewName("error");
+			String doctorId = (String)request.getParameter("doctorId");
+			String startTime = (String)request.getParameter("startTime");
+			String endTime = (String)request.getParameter("endTime");
+			if(ObjectCensor.isStrRegular(doctorId))
+			{
+				List userFileLst = digitalHealthService.getUserQuestionsByDoctorId(doctorId, hospitalId, startTime, endTime);
+				log.error(userFileLst);
+				model.addObject("quesLst", userFileLst);
+				model.addObject("startTime", startTime);
+				model.addObject("endTime", endTime);
+				model.addObject("doctorId", doctorId);
+				model.setViewName("/view/question/questionList");
+			}
+			else
+			{
+				model.addObject("result", "error");
+				model.setViewName("error");
+			}
 		}
 		return model;
 	}

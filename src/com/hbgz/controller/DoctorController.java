@@ -115,19 +115,43 @@ public class DoctorController
 		String fee = (String)request.getParameter("fee"); 
 		String introduce=request.getParameter("introduce");
 		String skill=request.getParameter("skill");
+		String post = request.getParameter("post");
+		String time = request.getParameter("time");
+		String address = request.getParameter("address");
 		
 		Writer wr = response.getWriter();
 		if(ObjectCensor.isStrRegular(doctorId,hospitalId,name,password) )
 		{
 			try {
 				digitalHealthService.updateHospitalMananger(hospitalId, doctorId, name, password);
-				digitalHealthService.updateDoctor(hospitalId,doctorId, fee,introduce,skill);
+				digitalHealthService.updateDoctor(hospitalId,doctorId, fee,introduce,skill, post, time, address);
 			} catch (Exception e) 
 			{
 				e.printStackTrace();
 				wr.write("error");
 				return;
 			}
+		}
+		else
+		{
+			wr.write("error");
+			return;
+		}
+		wr.write("success");
+		wr.close();
+	}
+	
+	@RequestMapping(params = "method=deleteDoctor")
+	public void deleteDoctor(HttpServletResponse response , HttpServletRequest request) throws Exception
+	{
+		HttpSession session = request.getSession();
+		String hospitalId= (String)session.getAttribute("hospitalId");
+		String doctorId = (String)request.getParameter("doctorId");
+		Writer wr = response.getWriter();
+		if(ObjectCensor.isStrRegular(hospitalId, doctorId))
+		{
+			digitalHealthService.deleteHospitalMananger(hospitalId, doctorId);
+			digitalHealthService.deleteDoctor(hospitalId, doctorId);
 		}
 		else
 		{

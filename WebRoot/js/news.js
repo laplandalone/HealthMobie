@@ -59,8 +59,6 @@ $(document).ready(function(){
 		$("#startTime").val(startTime);
 		$("#endTime").val(endTime);
 	}
-	
-	qryNewsList();
 });
 
 function reload()

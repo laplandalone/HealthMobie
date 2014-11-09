@@ -56,7 +56,9 @@
 				var confimPsw = $("#confimPassword");
 				var introduce=$("#introduce");
 				var skill=$("#skill");
-				
+				var post = $("#post").val();
+				var time = $("#work_time").val();
+				var address = $("#work_address").val();
 			    var fee = $("#fee");
 				if(name.val() == '')
 				{
@@ -78,7 +80,7 @@
 				$.ajax({
 					url:"/doctor.htm?method=updateDoctor",
 					type:"POST",
-					data:"introduce="+introduce.val()+"&skill="+skill.val()+"&name="+name.val()+"&password="+psw.val()+"&confimPassword="+confimPsw.val()+"&doctorId="+'${doctor.doctor_id}'+"&fee="+fee.val(),
+					data:"introduce="+introduce.val()+"&skill="+skill.val()+"&name="+name.val()+"&password="+psw.val()+"&confimPassword="+confimPsw.val()+"&doctorId="+'${doctor.doctor_id}'+"&fee="+fee.val()+"&post="+post+"&time="+time+"&address="+address,
 					
 					success:function(data)
 					{
@@ -140,6 +142,24 @@
 					<td align="center" width='20%'>挂号费</td>
 					<td align="left">
 						<input type="text" id="fee" class="subtext" value='${doctor.register_fee}'>
+					</td>
+				</tr>
+				<tr>
+					<td align="center" width='20%'>门诊时间</td>
+					<td align="left">
+						<input type="text" id="work_time" class="subtext" value='${doctor.work_time}'>
+					</td>
+				</tr>
+				<tr>
+					<td align="center" width='20%'>门诊地点</td>
+					<td align="left">
+						<input type="text" id="work_address" class="subtext" value='${doctor.work_address}'>
+					</td>
+				</tr>
+				<tr>
+					<td align="center" width='20%'>职称</td>
+					<td align="left">
+						<input type="text" id="post" class="subtext" value='${doctor.post}'>
 					</td>
 				</tr>
 				<tr>

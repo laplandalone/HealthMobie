@@ -41,12 +41,12 @@ public class DigitalHealthDao
 
 		if (ObjectCensor.isStrRegular(expertType))
 		{
-			sql.append(" and a.expert_flag=?");
+			sql.append(" and a.expert_flag = ?");
 			lstParam.add(expertType);
 		}
 		if (ObjectCensor.isStrRegular(onLineType))
 		{
-			sql.append(" and t.online_flag=?");
+			sql.append(" and t.online_flag = ?");
 			lstParam.add(onLineType);
 		}
 		if (ObjectCensor.isStrRegular(teamId))
@@ -114,7 +114,7 @@ public class DigitalHealthDao
 		{
 			return null;
 		}
-		String sql = "select distinct (t.register_week),a.doctor_id,a.name ,a.post,b.team_name,a.introduce from doctor_register_t t,doctor_t a,team_t b where (b.team_type='1' or b.team_type='2') and t.state='00A' and a.doctor_id=t.doctor_id and b.team_id=t.team_id and t.team_id=? and b.hospital_Id=?";
+		String sql = "select distinct (t.register_week),a.doctor_id,a.name ,a.post,b.team_name,a.introduce from doctor_register_t t,doctor_t a,team_t b where (b.team_type='1' or b.team_type='2') and t.state='00A' and a.doctor_id=t.doctor_id and b.team_id=t.team_id and t.team_id=? and b.hospital_Id=? order by a.order_num ";
 		ArrayList lstParam = new ArrayList();
 		lstParam.add(teamId);
 		lstParam.add(hospitalId);
@@ -359,11 +359,14 @@ public class DigitalHealthDao
 		query.append("decode(a.order_state, '000', '未处理', '00A', '已预约', '00X', '已作废') order_state ");
 		query.append("from register_order_t a,  hospital_t b ");
 		query.append("where a.state = '00A' and b.state = '00A' and  a.hospital_id=b.hospital_id  and b.hospital_id = ? ");
-		query.append("and to_date(substr(a.register_time, 0, 10), 'yyyy-mm-dd') between to_date(?,'yyyy-mm-dd') and to_date(?,'yyyy-mm-dd') ");
 		ArrayList lstParam = new ArrayList();
 		lstParam.add(hospitalId);
-		lstParam.add(startTime);
-		lstParam.add(endTime);
+		if(ObjectCensor.isStrRegular(startTime, endTime))
+		{
+			query.append("and to_date(substr(a.register_time, 0, 10), 'yyyy-mm-dd') between to_date(?,'yyyy-mm-dd') and to_date(?,'yyyy-mm-dd') ");
+			lstParam.add(startTime);
+			lstParam.add(endTime);
+		}
 		if(ObjectCensor.isStrRegular(doctorId))
 		{
 			query.append("and a.doctor_id = ? ");
@@ -385,7 +388,7 @@ public class DigitalHealthDao
 	
 	public List getDoctorById(String doctorId) throws QryException
 	{
-		String sql = "select a.*,b.team_name,c.name manager_name,c.password,(select t.config_val  from hospital_config_t t where config_name='imgip' and config_type='IMGWEB' and t.state='00A')||photo_url img_url from doctor_t a,team_t b,hospital_manager_t c where (b.team_type='1' or b.team_type='2') and a.state='00A' and a.team_id=b.team_id and a.doctor_id=? and c.state(+)='00A' and c.doctor_id(+)=a.doctor_id";
+		String sql = "select a.*,b.team_name,c.name manager_name,c.password,(select t.config_val  from hospital_config_t t where config_name='imgip' and config_type='IMGWEB' and t.state='00A')||photo_url img_url from doctor_t a,team_t b,hospital_manager_t c where (b.team_type='1' or b.team_type='2') and a.state='00A' and a.team_id=b.team_id and a.doctor_id=? and c.state(+)='00A' and c.doctor_id(+)=a.doctor_id order by a.order_num ";
 		ArrayList lstParam = new ArrayList();
 		lstParam.add(doctorId);
 		return itzcQryCenter.executeSqlByMapList(sql, lstParam);
@@ -667,6 +670,25 @@ public class DigitalHealthDao
 		sql.append("from patient_visit_detail_t a where state = '00A' and visit_id = ? order by create_date ");
 		ArrayList lstParam = new ArrayList();
 		lstParam.add(visitId);
+		return itzcQryCenter.executeSqlByMapListWithTrans(sql.toString(), lstParam);
+	}
+
+	public List qryOnLineDoctorQuesList(String hospitalId, String teamId) throws Exception 
+	{
+		StringBuffer sql = new StringBuffer();
+		sql.append("select distinct a.doctor_id, a.name, a.order_num, a.post, b.team_name, ");
+		sql.append("(select count(distinct question_id) from user_question_t where state = '00A' and doctor_id = a.doctor_id and record_type = 'ask') total_ques_num, ");
+		sql.append("(select count(distinct question_id) from user_question_t where state = '00A' and doctor_id = a.doctor_id and (record_type = 'ans' or record_type = 'copy')) total_reply_num ");
+		sql.append("from doctor_t a, team_t b where a.state = '00A' and a.online_flag = '1' and b.state = '00A' and a.hospital_id = b.hospital_id ");
+		sql.append("and a.team_id = b.team_id and b.expert_flag = '1' and a.hospital_id = ? ");
+		ArrayList lstParam = new ArrayList();
+		lstParam.add(hospitalId);
+		if(ObjectCensor.isStrRegular(teamId))
+		{
+			sql.append("and a.team_id = ? ");
+			lstParam.add(teamId);
+		}
+		sql.append("order by a.order_num ");
 		return itzcQryCenter.executeSqlByMapListWithTrans(sql.toString(), lstParam);
 	}
 }
