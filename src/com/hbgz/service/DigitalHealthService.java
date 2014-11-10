@@ -995,7 +995,7 @@ public class DigitalHealthService
 				sList.add(paramMap);
 			}
 		}   
-		List userList = hibernateObjectDao.findByProperty("HospitalUserT", "telephone",userId);
+		List userList = hibernateObjectDao.findByProperty("HospitalUserT", "userId",userId);
 		if(ObjectCensor.checkListIsNull(userList))
 		{
 			HospitalUserT hospitalUserT = (HospitalUserT) userList.get(0);
