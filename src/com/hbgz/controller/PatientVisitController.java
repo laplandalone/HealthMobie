@@ -3,6 +3,7 @@ package com.hbgz.controller;
 import java.io.PrintWriter;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.sf.json.JSONArray;
@@ -57,15 +58,23 @@ public class PatientVisitController
 	}
 	
 	@RequestMapping(params = "method=qryVisitDetail")
-	public ModelAndView qryVisitDetail(String visitId, HttpServletResponse response)
+	public ModelAndView qryVisitDetail(HttpServletRequest request, HttpServletResponse response)
 	{
 		ModelAndView view = new ModelAndView("visitDetail");
 		try 
 		{
+			String visitId = request.getParameter("visitId");
+			String visitType = request.getParameter("visitType");
+			String visitName = request.getParameter("visitName");
+			String sex = request.getParameter("sex");
+			sex = (sex == null || "".equals(sex) || "null".equals(sex)) ? "нч" : sex;
 			List sList = patientVisitService.qryVisitDetail(visitId);
 			log.error(sList);
 			view.setViewName("/view/visit/visitDetail");
 			view.addObject("sList", sList);
+			view.addObject("visitType", visitType);
+			view.addObject("visitName", visitName);
+			view.addObject("sex", sex);
 		} 
 		catch (Exception e) 
 		{

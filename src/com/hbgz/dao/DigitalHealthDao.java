@@ -654,7 +654,8 @@ public class DigitalHealthDao
 	public List qryPatientVisitList(String startTime, String endTime) throws Exception
 	{
 		StringBuffer sql = new StringBuffer();
-		sql.append("select visit_id, patient_id, card_id, visit_name, visit_type, state, to_char(create_date, 'yyyy-MM-dd hh24:mi:ss') create_date ");
+		sql.append("select visit_id, patient_id, card_id, visit_name, visit_type, state, to_char(create_date, 'yyyy-MM-dd hh24:mi:ss') create_date, ");
+		sql.append("(select sex from hospital_user_t where state = '00A' and user_id = patient_id) sex ");
 		sql.append("from patient_visit_t where state = '00A' and create_date between to_date(?, 'yyyy-MM-dd hh24:mi:ss') and to_date(?, 'yyyy-MM-dd hh24:mi:ss') order by create_date desc");
 		ArrayList lstParam = new ArrayList();
 		lstParam.add(startTime);
