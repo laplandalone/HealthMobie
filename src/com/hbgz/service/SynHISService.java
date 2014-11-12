@@ -110,7 +110,7 @@ public class SynHISService {
 //				String post="";
 				String teamId=e.getChildText("team_id");;
 				DoctorT doctorT = new DoctorT();
-				doctorT.setDoctorId(doctorId);
+				doctorT.setDoctorId(doctorId.trim());
 				doctorT.setName(doctorName);
 				doctorT.setHospitalId("102");
 //				doctorT.setSex(sex);
@@ -166,7 +166,7 @@ public class SynHISService {
 			Map newMap = new HashMap();
 			newMap.put("doctorName", doctorName);
 			newMap.put("teamName", teamName);
-			newMap.put("doctorId", doctorId);
+			newMap.put("doctorId", doctorId.trim());
 			newMap.put("teamId", teamId);
 			newMap.put("post", "");
 			newMap.put("week",weekStr);
@@ -226,7 +226,7 @@ public class SynHISService {
 			Map newMap = new HashMap();
 			newMap.put("doctorName", doctorName);
 			newMap.put("teamName", teamName);
-			newMap.put("doctorId", doctorId);
+			newMap.put("doctorId", doctorId.trim());
 			newMap.put("teamId", teamId);
 			newMap.put("post", "");
 			newMap.put("week",weekStr);
@@ -293,7 +293,7 @@ public class SynHISService {
 			Map newMap = new HashMap();
 			newMap.put("doctorName", doctorName);
 			newMap.put("teamName", teamName);
-			newMap.put("doctorId", doctorId);
+			newMap.put("doctorId", doctorId.trim());
 			newMap.put("teamId", teamId);
 			newMap.put("post", "");
 			newMap.put("week",weekStr);
