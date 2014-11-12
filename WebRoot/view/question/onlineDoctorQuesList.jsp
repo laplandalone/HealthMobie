@@ -90,10 +90,10 @@
 					<td align="center" width="10%">未回复数</td>
 				</tr>
 				<c:forEach items="${quesLst }" var="ques" varStatus="i">
-					<c:if test="${i.index % 2 == 0 }">
+					<c:if test="${i.index % 2 != 0 }">
 						<tr class='bkf0' onmouseover="trColorChange(this,${i.index})" onmouseout="trColorChange(this,${i.index })">
 					</c:if>
-					<c:if test="${i.index % 2 != 0 }">
+					<c:if test="${i.index % 2 == 0 }">
 						<tr class='aaa' onmouseover="trColorChange(this,${i.index})" onmouseout="trColorChange(this,${i.index })">
 					</c:if>
 						<td align="center" width='15%'>${ques.name }</td>
