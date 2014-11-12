@@ -60,7 +60,7 @@ public class HibernateObjectDao extends BaseDao
 		{
 			return null;
 		}
-		String hql = "from HospitalNewsT as model where  model.state='00A' and model.effDate<=sysdate and model.expDate>=sysdate and model.hospitalId=? and model.typeId=? and model.newsType=? ";
+		String hql = "from HospitalNewsT as model where  model.state='00A' and model.effDate<=sysdate and model.expDate>=sysdate and model.hospitalId=? and model.typeId=? and model.newsType=?  create_date desc";
 		return this.find(hql, new String[]{ hospitalId, typeId, type });
 	}
 	
