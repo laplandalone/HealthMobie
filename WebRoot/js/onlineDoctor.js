@@ -11,7 +11,7 @@ $(document).ready(function(){
 			{  
 				content += "<option value="+data[k].teamId+">"+data[k].teamName+"</option>";
 			} 
-			var obj = $("#teamId");
+			var obj = $("#teamId").val();
 			if(obj == null || obj == undefined)
 			{
 				$("#team_id").html(content);
