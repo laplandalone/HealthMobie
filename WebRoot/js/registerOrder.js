@@ -3,7 +3,7 @@ $(document).ready(function(){
 	//科室发生改变
 	$("#teamId").change(function(){
 		var teamId = $("#teamId").val();
-		$.getJSON("/mobile.htm?method=qryDoctorList",{"teamId":teamId, "hospitalId":hospitalId},function(data){ 
+		$.getJSON("/mobile.htm?method=qryDoctorList",{"teamId":teamId, "hospitalId":hospitalId, "random":Math.random()},function(data){ 
 			var options = "<option value='' selected='selected'>---请选择---</option>";
 			if(data.length > 0)
 			{

@@ -83,6 +83,25 @@
 					eval(fName);
 				}	
 			}
+			
+			function trColorChange(val, i) 
+			{
+				if (val.className == "bkf0" || val.className == "aaa")
+				{
+					val.className = "trcolor";
+				} 
+				else 
+				{
+					if (i % 2)
+					{
+						val.className = "bkf0";
+					}
+					else
+					{
+						val.className = "aaa";
+					}
+				}
+			}
 		</script>
 	</head>
 	<body>
@@ -110,7 +129,7 @@
 				<td width="10%">&nbsp;</td>
 			</tr>
 		</table>
-		<div id="template" style="height:700px;overflow:auto">
+		<div id="template" style="overflow:auto">
 			<table width="100%" border="1" cellspacing="0" cellpadding="0" class="maintable1">
 				<tr class="tabletop">
 					<td>医生名称</td>
@@ -120,11 +139,23 @@
 					<td width="10%">操作</td>
 				</tr>
 				<c:forEach items="${doctorLst }" var="doctor" varStatus="i">
-					<tr>
+					<c:if test="${i.index % 2 != 0 }">
+						<tr class='bkf0' onmouseover="trColorChange(this,${i.index})" onmouseout="trColorChange(this,${i.index })">
+					</c:if>
+					<c:if test="${i.index % 2 == 0 }">
+						<tr class='aaa' onmouseover="trColorChange(this,${i.index})" onmouseout="trColorChange(this,${i.index })">
+					</c:if>
 						<td align="center" width='15%'><c:out value="${doctor.name}" />
 						</td>
-						<td align="center"><c:out value="${doctor.post}" /></td>
-	
+						<td align="center">
+							<c:choose>
+								<c:when test="${doctor.post == '' || doctor.post ==  null || doctor.post == 'null' || doctor.post == undefined}">
+									<c:out value="无"></c:out>
+								</c:when>
+								<c:otherwise>
+									<c:out value="${doctor.post}" /></td>
+								</c:otherwise>
+							</c:choose>
 						<td align="center">
 							<c:choose>
 								<c:when test="${doctor.sex == '' || doctor.sex ==  null || doctor.sex == 'null' || doctor.sex == undefined}">
