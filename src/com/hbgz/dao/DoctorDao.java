@@ -54,7 +54,7 @@ public class DoctorDao extends BaseDao
 	public List qryDoctorList(String hospitalId, String teamId) throws QryException 
 	{
 		StringBuffer sql = new StringBuffer();
-		sql.append("select * from doctor_t where state = '00A' and hospital_id = ? order by order_num ");
+		sql.append("select * from doctor_t where state = '00A' and hospital_id = ? ");
 		ArrayList lstParam = new ArrayList();
 		lstParam.add(hospitalId);
 		if(ObjectCensor.isStrRegular(teamId))
@@ -62,6 +62,7 @@ public class DoctorDao extends BaseDao
 			sql.append("and team_id = ? ");
 			lstParam.add(teamId);
 		}
+		sql.append("order by order_num ");
 		return itzcQryCenter.executeSqlByMapListWithTrans(sql.toString(), lstParam);
 	}
 	

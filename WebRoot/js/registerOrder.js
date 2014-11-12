@@ -4,60 +4,60 @@ $(document).ready(function(){
 	$("#teamId").change(function(){
 		var teamId = $("#teamId").val();
 		$.getJSON("/mobile.htm?method=qryDoctorList",{"teamId":teamId, "hospitalId":hospitalId},function(data){ 
+			var options = "<option value='' selected='selected'>---请选择---</option>";
 			if(data.length > 0)
 			{
-				var obj = document.getElementById("doctorId");
-				for(var j = obj.options.length - 1; j > 0; j--)
-				{
-					obj.options.remove(j);
+				for(var i = 0; i < data.length; i++)
+				{ 
+					if(doctorId == data[i].doctorId)
+					{
+						options += "<option value='"+data[i].doctorId+"' selected='selected'>"+data[i].name+"</option>"; 
+					}
+					else
+					{
+						options += "<option value='"+data[i].doctorId+"'>"+data[i].name+"</option>"; 
+					}
 				}
-				for(var k = 0 ; k < data.length ; k++)
-				{  
-					var varItem = new Option(data[k].name,data[k].doctorId);
-					obj.options.add(varItem);
-				} 
 			}
+			$("#doctorId").html(options);
 		});
 	});
 	
 	var teamId = $("#selTeamId").val();
-	$("#teamId option[value='" + teamId + "']").attr("selected", true);
-	$.getJSON("/mobile.htm?method=qryDoctorList",{"teamId":teamId, "hospitalId":hospitalId},function(data){
-		var options = "";
-		var doctorId = $("#selDoctorId").val();
-		if(doctorId == "")
-		{
-			options += "<option value='' selected='selected'>---请选择---</option>"; 
-		}
-		else
-		{
-			options += "<option value=''>---请选择---</option>"; 
-		}
-		if(data.length > 0)
-		{
-			for(var i = 0; i < data.length; i++)
-			{ 
-				if(doctorId == data[i].doctorId)
-				{
-					options += "<option value='"+data[i].doctorId+"' selected='selected'>"+data[i].name+"</option>"; 
-				}
-				else
-				{
-					options += "<option value='"+data[i].doctorId+"'>"+data[i].name+"</option>"; 
+	if(teamId != "" && teamId != null && teamId != undefined)
+	{
+		$.getJSON("/mobile.htm?method=qryDoctorList",{"teamId":teamId, "hospitalId":hospitalId},function(data){
+			var options = "";
+			var doctorId = $("#selDoctorId").val();
+			if(doctorId == "")
+			{
+				options += "<option value='' selected='selected'>---请选择---</option>"; 
+			}
+			else
+			{
+				options += "<option value=''>---请选择---</option>"; 
+			}
+			if(data.length > 0)
+			{
+				for(var i = 0; i < data.length; i++)
+				{ 
+					if(doctorId == data[i].doctorId)
+					{
+						options += "<option value='"+data[i].doctorId+"' selected='selected'>"+data[i].name+"</option>"; 
+					}
+					else
+					{
+						options += "<option value='"+data[i].doctorId+"'>"+data[i].name+"</option>"; 
+					}
 				}
 			}
-		}
-		$("#doctorId").html(options);
-	});
-	var state = $("#selState").val();
-	$("#state option[value='" + state + "']").attr("selected", true);
+			$("#doctorId").html(options);
+		});
+	}
 	var startTime = $("#selStartTime").val();
 	var endTime = $("#selEndTime").val();
-	if(startTime != "" && endTime != "")
-	{
-		$("#startTime").val(startTime);
-		$("#endTime").val(endTime);
-	}
+	$("#startTime").val(startTime);
+	$("#endTime").val(endTime);
 });
 
 function qryRegisterOrder()

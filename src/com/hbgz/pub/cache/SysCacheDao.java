@@ -15,7 +15,6 @@ import com.googlecode.ehcache.annotations.TriggersRemove;
 import com.hbgz.pub.base.BaseDao;
 import com.hbgz.pub.exception.QryException;
 import com.hbgz.pub.qry.QryCenter;
-import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
@@ -59,7 +58,7 @@ public class SysCacheDao extends BaseDao
 	public List qryTeamList(String hospitalId) throws QryException 
 	{
 		StringBuffer sql = new StringBuffer();
-		sql.append("select * from team_t where state = '00A' and expert_flag = '1' and hospital_id = ? ");
+		sql.append("select * from team_t where state = '00A' and hospital_id = ? ");
 		ArrayList lstParam = new ArrayList();
 		lstParam.add(hospitalId);
 		return itzcQryCenter.executeSqlByMapListWithTrans(sql.toString(), lstParam);

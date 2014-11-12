@@ -29,7 +29,6 @@
 			<input type="hidden" id="selEndTime" value="${endTime }"/>
 			<input type="hidden" id="selTeamId" value="${teamId }"/>
 			<input type="hidden" id="selDoctorId" value="${doctorId }"/>
-			<input type="hidden" id="selState" value="${state }"/>
 			<tr>
 				<td align="right" width="12%">预约时间：</td>
 				<td align="center" width="8%">
@@ -67,7 +66,12 @@
 					<select id="teamId" name="teamId" class="subselect">
 						<option value="">---请选择---</option>
 						<c:forEach items="${teamList }" var="team">
-							<option value="${team.teamId }">${team.teamName }</option>
+							<c:if test="${teamId == team.teamId }">
+								<option value="${team.teamId }" selected="selected">${team.teamName }</option>
+							</c:if>
+							<c:if test="${teamId != team.teamId }">
+								<option value="${team.teamId }">${team.teamName }</option>
+							</c:if>
 						</c:forEach>
 					</select>
 				</td>
@@ -84,10 +88,32 @@
 				<td width="12%" align="right">订单状态：</td>
 				<td width="8%">
 					<select id="state" name="state" class="subselect">
-						<option value="">---请选择---</option>
-						<option value="000">未处理</option>
-						<option value="00A">已预约</option>
-						<option value="00X">已作废</option>
+						<c:choose>
+							<c:when test="${state == '000' }">
+								<option value="">---请选择---</option>
+								<option value="000" selected="selected">未处理</option>
+								<option value="00A">已预约</option>
+								<option value="00X">已作废</option>
+							</c:when>
+							<c:when test="${state == '00A' }">
+								<option value="">---请选择---</option>
+								<option value="000">未处理</option>
+								<option value="00A" selected="selected">已预约</option>
+								<option value="00X">已作废</option>
+							</c:when>
+							<c:when test="${state == '00X' }">
+								<option value="">---请选择---</option>
+								<option value="000">未处理</option>
+								<option value="00A">已预约</option>
+								<option value="00X" selected="selected">已作废</option>
+							</c:when>
+							<c:otherwise>
+								<option value="" selected="selected">---请选择---</option>
+								<option value="000">未处理</option>
+								<option value="00A">已预约</option>
+								<option value="00X">已作废</option>
+							</c:otherwise>
+						</c:choose>
 					</select>
 				</td>
 				<td width="15%" align="right">
