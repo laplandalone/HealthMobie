@@ -680,7 +680,7 @@ public class DigitalHealthDao
 		sql.append("select distinct a.doctor_id, a.name, a.order_num, a.post, b.team_name, ");
 		sql.append("(select count(distinct question_id) from user_question_t where state = '00A' and doctor_id = a.doctor_id and record_type = 'ask') total_ques_num, ");
 		sql.append("(select count(distinct question_id) from user_question_t where state = '00A' and doctor_id = a.doctor_id and (record_type = 'ans' or record_type = 'copy')) total_reply_num ");
-		sql.append("from doctor_t a, team_t b where a.state = '00A' and a.online_flag = '1' and b.state = '00A' and a.hospital_id = b.hospital_id ");
+		sql.append("from doctor_t a, team_t b where a.state = '00A' and a.online_flag = '0' and b.state = '00A' and a.hospital_id = b.hospital_id ");
 		sql.append("and a.team_id = b.team_id and b.expert_flag = '1' and a.hospital_id = ? ");
 		ArrayList lstParam = new ArrayList();
 		lstParam.add(hospitalId);
