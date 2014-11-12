@@ -278,7 +278,7 @@ public class SynHISService {
 			String doctorId=e.getChildText("doctor_id");
 			if(ObjectCensor.isStrRegular(doctorIdT))
 			{
-				if(!doctorId.equals(doctorIdT))
+				if(!doctorId.equals(doctorIdT.trim()))
 				{
 					continue;
 				}
@@ -414,7 +414,7 @@ public class SynHISService {
 					newMap.put("registerId", registerId);
 					newMap.put("teamName", teamName);
 					newMap.put("userOrderNum", userOrderNum);// 预约号码
-					newMap.put("doctorId", doctorId);
+					newMap.put("doctorId", doctorId.trim());
 					newMap.put("teamId", teamId);
 					newMap.put("fee", StringUtil.getMapKeyVal(doctor, "register_fee"));
 					newMap.put("registerNum", registerNum);
@@ -586,9 +586,9 @@ public class SynHISService {
 //		sql.append("('201409285000','haha','1','1984.08.01','2014.08.01','9999R','单纯开药','湖北省武汉市水厂一路4号4楼','2014.08.01','1178R','13808652241','开药',2,'422822198407311010','Y')</str></SQL>");
 		
 //		sql.append("</DS>");
-//		String sqls="<DS><SQL><str>select top 10 delb ,c.bzdm team_id,c.bzmc team_name,kszjdm doctor_id,b.zgxm doctor_name,derq day from mz_ghde a,comm_zgdm b,mz_bzdyb c where a.kszjdm=b.zgid and a.kszjdm=c.ysdm and a.kszjdm='1405R' and derq > '2014.10.20' order by derq  </str></SQL></DS>";
+		String sqls="<DS><SQL><str>select top 10 delb ,c.bzdm team_id,c.bzmc team_name,kszjdm doctor_id,b.zgxm doctor_name,derq day from mz_ghde a,comm_zgdm b,mz_bzdyb c where a.kszjdm=b.zgid and a.kszjdm=c.ysdm and a.kszjdm='1405R' and derq > '2014.10.20' order by derq  </str></SQL></DS>";
 		String sqla="<DS><SQL><str>select distinct  bzdm team_id ,bzmc team_name from mz_bzdyb order by team_id </str></SQL></DS>";
-		String result =new SynHISService().invokeFunc(sqla);
+		String result =new SynHISService().invokeFunc(sqls);
 		Document doc = XMLComm.loadXMLString(result);
 		Element root = doc.getRootElement();
 		List list = root.getChildren();
@@ -596,7 +596,7 @@ public class SynHISService {
 		{
 			Element e = (Element) list.get(i);
 			TeamT teamT = new TeamT();
-			String teamId=e.getChildText("team_name");
+			String teamId=e.getChildText("doctor_id").toString();
 			System.out.println(teamId);
 		}
 		
