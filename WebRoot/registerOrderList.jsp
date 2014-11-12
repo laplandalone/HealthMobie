@@ -81,7 +81,12 @@
 					<select id="doctorId" name="doctorId" class="subselect">
 						<option value="">---请选择---</option>
 						<c:forEach items="${doctorList }" var="doctor">
-							<option value="${doctor.doctorId }">${doctor.name }</option>
+							<c:if test="${doctorId == doctor.doctorId }">
+								<option value="${doctor.doctorId }" selected="selected">${doctor.name }</option>
+							</c:if>
+							<c:if test="${doctorId != doctor.doctorId }">
+								<option value="${doctor.doctorId }">${doctor.name }</option>
+							</c:if>
 						</c:forEach>
 					</select>
 				</td>
