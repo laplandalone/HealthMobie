@@ -115,7 +115,9 @@
 					<select id="teamId" name="teamId" class="subselect">
 						<option value="">---请选择---</option>
 						<c:forEach items="${teamLst }" var="team">
-							<option value="${team.teamId }">${team.teamName }</option>
+							<c:if test="${team.expertFlag == '1' }">
+								<option value="${team.teamId }">${team.teamName }</option>
+							</c:if>
 						</c:forEach>
 					</select>
 				</td>
@@ -134,8 +136,8 @@
 				<tr class="tabletop">
 					<td>医生名称</td>
 					<td width="20%">职称</td>
-					<td width="20%">性别</td>
-					<td width="10%">科室</td>
+					<td width="10%">性别</td>
+					<td width="20%">科室</td>
 					<td width="10%">操作</td>
 				</tr>
 				<c:forEach items="${doctorLst }" var="doctor" varStatus="i">

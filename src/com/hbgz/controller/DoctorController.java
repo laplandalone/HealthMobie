@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.hbgz.pub.cache.CacheManager;
 import com.hbgz.pub.util.ObjectCensor;
 import com.hbgz.pub.util.StringUtil;
 import com.hbgz.service.DigitalHealthService;
@@ -29,20 +30,22 @@ import com.hbgz.service.DigitalHealthService;
 /**
  * 
  * @author ran haiquan 18907181648@189.cn
- *
+ * 
  */
 @Controller
 @RequestMapping("/doctor.htm")
 public class DoctorController 
 {
 	private static Log log = LogFactory.getLog(DoctorController.class);
-	
+
 	@Autowired
 	private DigitalHealthService digitalHealthService;
-	
-	
+
+	@Autowired
+	private CacheManager cacheManager;
+
 	@RequestMapping(params = "method=queryPre")
-	public ModelAndView queryPre(HttpServletResponse response , HttpServletRequest request) throws Exception
+	public ModelAndView queryPre(HttpServletResponse response, HttpServletRequest request) throws Exception 
 	{
 		ModelAndView model = new ModelAndView("doctors");
 		HttpSession session = request.getSession();
@@ -63,68 +66,70 @@ public class DoctorController
 			model.addObject("doctorLst", doctorLst);
 			model.setViewName("/view/doctor/doctors");
 		} 
-		else
+		else 
 		{
 			model.setViewName("error");
 		}
 		return model;
 	}
-	
+
 	@RequestMapping(params = "method=getDoctor")
-	public ModelAndView  getDoctorById(HttpServletResponse response , HttpServletRequest request) throws Exception
+	public ModelAndView getDoctorById(HttpServletResponse response, HttpServletRequest request) throws Exception 
 	{
 		ModelAndView model = new ModelAndView("updateDoctor");
-		String doctorId = (String)request.getParameter("doctorId");
-		
-		if(ObjectCensor.isStrRegular(doctorId))
+		String doctorId = (String) request.getParameter("doctorId");
+		if (ObjectCensor.isStrRegular(doctorId)) 
 		{
-			Map doctor  = digitalHealthService.getDoctor(doctorId);
-			List registers =digitalHealthService.getDoctorRegister(doctorId);
-			String fee="";
-			String num="";
-			if(ObjectCensor.checkListIsNull(registers))
+			HttpSession session = request.getSession();
+			String hospitalId = (String) session.getAttribute("hospitalId");
+			Map doctor = digitalHealthService.getDoctor(doctorId);
+			List registers = digitalHealthService.getDoctorRegister(doctorId);
+			String fee = "";
+			String num = "";
+			if (ObjectCensor.checkListIsNull(registers)) 
 			{
 				Map map = (Map) registers.get(0);
-				fee=StringUtil.getMapKeyVal(map, "register_fee");
-				num=StringUtil.getMapKeyVal(map,"register_num");
-				doctor.put("fee",fee);
-				doctor.put("num",num);
+				fee = StringUtil.getMapKeyVal(map, "register_fee");
+				num = StringUtil.getMapKeyVal(map, "register_num");
+				doctor.put("fee", fee);
+				doctor.put("num", num);
 			}
-		
+
 			model.addObject("doctor", doctor);
 			model.addObject("registers", registers);
 			model.setViewName("/view/doctor/updateDoctor");
-		}
-		else
-		{
+		} else {
 			model.setViewName("error");
 		}
 		return model;
 	}
-	
+
 	@RequestMapping(params = "method=updateDoctor")
-	public void updateDoctor(HttpServletResponse response , HttpServletRequest request) throws Exception
+	public void updateDoctor(HttpServletResponse response,
+			HttpServletRequest request) throws Exception 
 	{
 		HttpSession session = request.getSession();
-		String hospitalId= (String)session.getAttribute("hospitalId");
-		String doctorId = (String)request.getParameter("doctorId");
-		
-		String name = (String)request.getParameter("name");
-		String password = (String)request.getParameter("password");
-		String fee = (String)request.getParameter("fee"); 
-		String introduce=request.getParameter("introduce");
-		String skill=request.getParameter("skill");
+		String hospitalId = (String) session.getAttribute("hospitalId");
+		String doctorId = (String) request.getParameter("doctorId");
+
+		String name = (String) request.getParameter("name");
+		String password = (String) request.getParameter("password");
+		String fee = (String) request.getParameter("fee");
+		String introduce = request.getParameter("introduce");
+		String skill = request.getParameter("skill");
 		String post = request.getParameter("post");
 		String time = request.getParameter("time");
 		String address = request.getParameter("address");
-		
+		String telephone = request.getParameter("telephone");
+		String sex = request.getParameter("sex");
+
 		Writer wr = response.getWriter();
-		if(ObjectCensor.isStrRegular(doctorId,hospitalId) )
+		if (ObjectCensor.isStrRegular(doctorId, hospitalId)) 
 		{
-			try
+			try 
 			{
 				digitalHealthService.updateHospitalMananger(hospitalId, doctorId, name, password);
-				digitalHealthService.updateDoctor(hospitalId, doctorId, fee, introduce, skill, post, time, address);
+				digitalHealthService.updateDoctor(hospitalId, doctorId, fee, introduce, skill, post, time, address, telephone, sex);
 			} 
 			catch (Exception e) 
 			{
@@ -132,8 +137,8 @@ public class DoctorController
 				wr.write("error");
 				return;
 			}
-		}
-		else
+		} 
+		else 
 		{
 			wr.write("error");
 			return;
@@ -141,20 +146,20 @@ public class DoctorController
 		wr.write("success");
 		wr.close();
 	}
-	
+
 	@RequestMapping(params = "method=deleteDoctor")
-	public void deleteDoctor(HttpServletResponse response , HttpServletRequest request) throws Exception
+	public void deleteDoctor(HttpServletResponse response, HttpServletRequest request) throws Exception 
 	{
 		HttpSession session = request.getSession();
-		String hospitalId= (String)session.getAttribute("hospitalId");
-		String doctorId = (String)request.getParameter("doctorId");
+		String hospitalId = (String) session.getAttribute("hospitalId");
+		String doctorId = (String) request.getParameter("doctorId");
 		Writer wr = response.getWriter();
-		if(ObjectCensor.isStrRegular(hospitalId, doctorId))
+		if (ObjectCensor.isStrRegular(hospitalId, doctorId)) 
 		{
 			digitalHealthService.deleteHospitalMananger(hospitalId, doctorId);
 			digitalHealthService.deleteDoctor(hospitalId, doctorId);
-		}
-		else
+		} 
+		else 
 		{
 			wr.write("error");
 			return;
@@ -162,59 +167,57 @@ public class DoctorController
 		wr.write("success");
 		wr.close();
 	}
-	
+
 	@RequestMapping(params = "method=updateRegisterTime")
-	public ModelAndView updateRegisterTime(HttpServletResponse response , HttpServletRequest request) throws Exception
+	public ModelAndView updateRegisterTime(HttpServletResponse response,
+			HttpServletRequest request) throws Exception 
 	{
 		ModelAndView model = new ModelAndView("updateRegisterTime");
 		HttpSession session = request.getSession();
-		String hospitalId= (String)session.getAttribute("hospitalId");
-		String doctorId = (String)request.getParameter("doctorId");
-		
-		String registerTimes = (String)request.getParameter("registerTimes");
-		
-		digitalHealthService.updateDoctorRegisterTimes(registerTimes,doctorId);
-		
-		if(ObjectCensor.isStrRegular(doctorId,hospitalId) )
+		String hospitalId = (String) session.getAttribute("hospitalId");
+		String doctorId = (String) request.getParameter("doctorId");
+		String registerTimes = (String) request.getParameter("registerTimes");
+		digitalHealthService.updateDoctorRegisterTimes(registerTimes, doctorId);
+		if (ObjectCensor.isStrRegular(doctorId, hospitalId)) 
 		{
-			return new ModelAndView(new RedirectView("/doctor.htm?method=getDoctor&doctorId="+doctorId));
-		}
-		else
+			return new ModelAndView(new RedirectView("/doctor.htm?method=getDoctor&doctorId=" + doctorId));
+		} 
+		else 
 		{
 			model.setViewName("error");
 		}
 		return model;
 	}
-	
+
 	@RequestMapping(params = "method=qryTeamList")
-	public void qryTeamList(HttpServletRequest request, HttpServletResponse response) throws IOException
+	public void qryTeamList(HttpServletRequest request, HttpServletResponse response) throws IOException 
 	{
 		response.setCharacterEncoding("UTF-8");
 		PrintWriter wr = response.getWriter();
 		HttpSession session = request.getSession();
 		String hospitalId = (String) session.getAttribute("hospitalId");
-		if(ObjectCensor.isStrRegular(hospitalId))
+		if (ObjectCensor.isStrRegular(hospitalId)) 
 		{
 			try 
 			{
 				JSONArray teamArray = digitalHealthService.qryTeamList(hospitalId);
 				log.error(teamArray);
 				wr.println(teamArray);
-			}
+			} 
 			catch (Exception e) 
 			{
 				wr.println("error");
 			}
-		}
-		else
+		} 
+		else 
 		{
 			wr.println("error");
 		}
 		wr.close();
 	}
-	
+
 	@RequestMapping(params = "method=qryOnlineDortorList")
-	public void qryOnlineDortorList(@RequestBody JSONObject obj ,HttpServletRequest request, HttpServletResponse response)
+	public void qryOnlineDortorList(@RequestBody JSONObject obj, HttpServletRequest request, HttpServletResponse response) 
 	{
 		try 
 		{
@@ -222,7 +225,7 @@ public class DoctorController
 			HttpSession session = request.getSession();
 			String hospitalId = (String) session.getAttribute("hospitalId");
 			PrintWriter pw = response.getWriter();
-			if(ObjectCensor.isStrRegular(hospitalId))
+			if (ObjectCensor.isStrRegular(hospitalId)) 
 			{
 				int pageNum = Integer.parseInt(StringUtil.getJSONObjectKeyVal(obj, "curId"));
 				int pageSize = Integer.parseInt(StringUtil.getJSONObjectKeyVal(obj, "pageNum"));
@@ -231,8 +234,8 @@ public class DoctorController
 				JSONObject object = digitalHealthService.qryOnlineDortorList(pageNum, pageSize, hospitalId, teamId, skill);
 				log.error(object);
 				pw.println(object);
-			}
-			else
+			} 
+			else 
 			{
 				pw.println("error");
 			}
@@ -243,9 +246,9 @@ public class DoctorController
 			e.printStackTrace();
 		}
 	}
-	
+
 	@RequestMapping(params = "method=updateOnlineState")
-	public void updateOnlineState(HttpServletRequest request, HttpServletResponse response)
+	public void updateOnlineState(HttpServletRequest request, HttpServletResponse response) 
 	{
 		try 
 		{
@@ -257,26 +260,26 @@ public class DoctorController
 			pw.println(flag);
 			pw.close();
 		}
-		catch (Exception e)
+		catch (Exception e) 
 		{
 			e.printStackTrace();
 		}
 	}
-	
+
 	@RequestMapping(params = "method=addDoctor")
-	public void addDoctor(@RequestBody JSONObject obj, HttpServletRequest request, HttpServletResponse response)
+	public void addDoctor(@RequestBody JSONObject obj, HttpServletRequest request, HttpServletResponse response) 
 	{
 		try 
 		{
 			HttpSession session = request.getSession();
-			String hospitalId= (String)session.getAttribute("hospitalId");
+			String hospitalId = (String) session.getAttribute("hospitalId");
 			obj.element("hospital_id", hospitalId);
 			log.error(obj);
 			boolean flag = digitalHealthService.addDoctor(obj);
 			PrintWriter pw = response.getWriter();
 			pw.println(flag);
 			pw.close();
-		}
+		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();

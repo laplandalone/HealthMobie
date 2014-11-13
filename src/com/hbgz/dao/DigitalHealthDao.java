@@ -356,7 +356,8 @@ public class DigitalHealthDao
 	{
 		StringBuffer query = new StringBuffer();
 		query.append("select a.order_num,a.order_id, a.register_id, a.order_fee,a.doctor_name, a.register_time, a.create_date, a.team_name,a.user_name,a.user_telephone, b.hospital_name, ");
-		query.append("decode(a.order_state, '000', '未处理', '00A', '已预约', '00X', '已作废') order_state ");
+		query.append("decode(a.order_state, '000', '未处理', '00A', '已预约', '00X', '已作废') order_state, ");
+		query.append("decode(a.pay_state, '100', '未支付', '101', '已支付', '102', '已取消') pay_state ");
 		query.append("from register_order_t a,  hospital_t b ");
 		query.append("where a.state = '00A' and b.state = '00A' and  a.hospital_id=b.hospital_id  and b.hospital_id = ? ");
 		ArrayList lstParam = new ArrayList();
@@ -379,7 +380,14 @@ public class DigitalHealthDao
 		}
 		if(ObjectCensor.isStrRegular(state))
 		{
-			query.append("and a.order_state = ? ");
+			if("101".equals(hospitalId))
+			{
+				query.append("and a.order_state = ? ");
+			}
+			else if("102".equals(hospitalId))
+			{
+				query.append("and a.pay_state = ? ");
+			}
 			lstParam.add(state);
 		}
 		query.append("order by a.create_date desc");

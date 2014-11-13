@@ -19,7 +19,7 @@
 	 	<div class="top">
 	    	<div class="logo">
 		    	<div class="baseInfo">
-					当前用户:${sessionScope.username}<span style="padding-left:40px">&nbsp;<span style="padding-left:20px">&nbsp;</span><a href="javascript:void(0)" onclick="unlogin()" class="linkmore">注销</a>	
+					当前用户:${sessionScope.username}<span style="padding-left:40px">&nbsp;<span style="padding-left:20px">&nbsp;</span><input type="button" onclick="unlogin()" class="button1" value="注销" />
 		    	</div>
 	    	</div>
 	    </div>

@@ -30,7 +30,7 @@ public class DoctorDao extends BaseDao
 		StringBuffer sql = new StringBuffer();
 		sql.append("select t.doctor_id, t.hospital_id, t.telephone, t.post, t.name, ");
 		sql.append("t.sex, decode(t.expert_flag, '0', '×¨¼Ò') expert_flag, a.team_name ");
-		sql.append("from doctor_t t, team_t a where a.team_id = t.team_id and t.hospital_id = ? and t.state = '00A' ");
+		sql.append("from doctor_t t, team_t a where a.team_id = t.team_id and t.hospital_id = ? and t.state = '00A' and a.expert_flag = '1' ");
 		ArrayList lstParam = new ArrayList();
 		lstParam.add(hospitalId);
 		if(ObjectCensor.isStrRegular(doctorId))
@@ -75,15 +75,24 @@ public class DoctorDao extends BaseDao
 	 * @return
 	 * @throws QryException
 	 */
-	public boolean updateHospitalMananger(String hospitalId,String doctorId,String name,String password) throws QryException
+	public boolean updateHospitalMananger(String hospitalId, String doctorId, String name, String password) throws QryException
 	{
-		String sql = "update hospital_manager_t set  name='"+name+"',password='"+password+"' where state='00A' and  hospital_id='"+hospitalId+"' and doctor_id='"+doctorId+"'";
 		
 		Connection conn = null;
 		Statement stmt = null;
 		boolean flag = true;
 		try
 		{
+			String sql = "select * from hospital_manager_t where state = '00A' and hospital_id = '"+hospitalId+"' and doctor_id = '"+doctorId+"' ";
+			List sList = itzcQryCenter.executeSqlByMapListWithTrans(sql, new ArrayList());
+			if(ObjectCensor.checkListIsNull(sList))
+			{
+				sql = "update hospital_manager_t set  name='"+name+"',password='"+password+"' where state='00A' and  hospital_id='"+hospitalId+"' and doctor_id='"+doctorId+"' ";
+			}
+			else
+			{
+				sql = "insert into hospital_manager_t(hospital_id, manager_id, name, password, privs, doctor_id) values('"+hospitalId+"', '"+doctorId+"', '"+name+"', '"+password+"', '4', '"+doctorId+"') ";
+			}
 			conn = itzcQryCenter.getDataSource().getConnection();
 			stmt = conn.createStatement();
 			stmt.execute(sql.toString());
@@ -150,10 +159,9 @@ public class DoctorDao extends BaseDao
 	 * @return
 	 * @throws QryException
 	 */
-	public boolean updateDoctor(String hospitalId,String doctorId,String fee,String introduce,String skill, String post, String time, String address) throws QryException
+	public boolean updateDoctor(String hospitalId, String doctorId, String fee, String introduce, String skill, String post, String time, String address, String telephone, String sex) throws QryException
 	{
-		String sql = "update doctor_T set  register_fee='"+fee+"', introduce='"+introduce+"',skill='"+skill+"', post = '"+post+"', work_time = '"+time+"', work_address = '"+address+"' where state='00A' and  hospital_id='"+hospitalId+"' and doctor_id='"+doctorId+"'";
-		
+		String sql = "update doctor_T set  register_fee='"+fee+"', introduce='"+introduce+"',skill='"+skill+"', post = '"+post+"', work_time = '"+time+"', work_address = '"+address+"', telephone = '"+telephone+"', sex = '"+sex+"' where state='00A' and  hospital_id='"+hospitalId+"' and doctor_id='"+doctorId+"'";
 		Connection conn = null;
 		Statement stmt = null;
 		boolean flag = true;

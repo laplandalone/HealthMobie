@@ -382,3 +382,5 @@ a{
 .ui_buttons{
 	text-align: center !important;
 }
+
+.button1 { background:url(../images/btn2.png) 0 0 no-repeat; width:82px; height:28px; border: none;color:#777777;cursor:pointer;}

@@ -60,6 +60,8 @@
 				var time = $("#work_time").val();
 				var address = $("#work_address").val();
 			    var fee = $("#fee");
+			    var telephone = $("#telephone").val();
+			    var sex = $("input:radio[name=sex]:checked").val();
 //				if(name.val() == '')
 //				{
 //					$.dialog.alert("用户名为空!", function(){return true;});
@@ -83,7 +85,7 @@
 				$.ajax({
 					url:"/doctor.htm?method=updateDoctor",
 					type:"POST",
-					data:"introduce="+introduce.val()+"&skill="+skill.val()+"&name="+name.val()+"&password="+psw.val()+"&confimPassword="+confimPsw.val()+"&doctorId="+'${doctor.doctor_id}'+"&fee="+fee.val()+"&post="+post+"&time="+time+"&address="+address,
+					data:"introduce="+introduce.val()+"&skill="+skill.val()+"&name="+name.val()+"&password="+psw.val()+"&confimPassword="+confimPsw.val()+"&doctorId="+'${doctor.doctor_id}'+"&fee="+fee.val()+"&post="+post+"&time="+time+"&address="+address+"&telephone="+telephone+"&sex="+sex,
 					
 					success:function(data)
 					{
@@ -131,15 +133,30 @@
 				</tr>
 				<tr>
 					<td align="center" width='30%'>电话</td>
-					<td align="left">${doctor.telephone}</td>
+					<td align="left"><input type="text" id="telephone" class="subtext" value='${doctor.telephone}'></td>
 				</tr>
 				<tr>
 					<td align="center" width='20%'>性别</td>
-					<td align="left">${doctor.sex}</td>
+					<td align="left">
+						<c:choose>
+							<c:when test="${doctor.sex == '男' }">
+								<input type="radio" name="sex" value="男" checked="checked"/>男&nbsp;&nbsp;&nbsp;&nbsp;
+								<input type="radio" name="sex" value="女"/>女
+							</c:when>
+							<c:when test="${doctor.sex == '女' }">
+								<input type="radio" name="sex" value="男"/>男&nbsp;&nbsp;&nbsp;&nbsp;
+								<input type="radio" name="sex" value="女" checked="checked"/>女
+							</c:when>
+							<c:otherwise>
+								<input type="radio" name="sex" value="男"/>男&nbsp;&nbsp;&nbsp;&nbsp;
+								<input type="radio" name="sex" value="女"/>女
+							</c:otherwise>
+						</c:choose>
+					</td>
 				</tr>
 				<tr>
 					<td align="center" width='20%'>科室</td>
-					<td align="left">${doctor.team_name}</td>
+					<td align="left">${doctor.team_name }</td>
 				</tr>
 				<tr>
 					<td align="center" width='20%'>挂号费</td>

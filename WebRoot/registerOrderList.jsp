@@ -66,11 +66,13 @@
 					<select id="teamId" name="teamId" class="subselect">
 						<option value="">---请选择---</option>
 						<c:forEach items="${teamList }" var="team">
-							<c:if test="${teamId == team.teamId }">
-								<option value="${team.teamId }" selected="selected">${team.teamName }</option>
-							</c:if>
-							<c:if test="${teamId != team.teamId }">
-								<option value="${team.teamId }">${team.teamName }</option>
+							<c:if test="${team.expertFlag == '0' }">
+								<c:if test="${teamId == team.teamId }">
+									<option value="${team.teamId }" selected="selected">${team.teamName }</option>
+								</c:if>
+								<c:if test="${teamId != team.teamId }">
+									<option value="${team.teamId }">${team.teamName }</option>
+								</c:if>
 							</c:if>
 						</c:forEach>
 					</select>
@@ -94,30 +96,62 @@
 				<td width="8%">
 					<select id="state" name="state" class="subselect">
 						<c:choose>
-							<c:when test="${state == '000' }">
-								<option value="">---请选择---</option>
-								<option value="000" selected="selected">未处理</option>
-								<option value="00A">已预约</option>
-								<option value="00X">已作废</option>
+							<c:when test="${hospitalId == '101' }">
+								<c:choose>
+									<c:when test="${state == '000' }">
+										<option value="">---请选择---</option>
+										<option value="000" selected="selected">未处理</option>
+										<option value="00A">已预约</option>
+										<option value="00X">已作废</option>
+									</c:when>
+									<c:when test="${state == '00A' }">
+										<option value="">---请选择---</option>
+										<option value="000">未处理</option>
+										<option value="00A" selected="selected">已预约</option>
+										<option value="00X">已作废</option>
+									</c:when>
+									<c:when test="${state == '00X' }">
+										<option value="">---请选择---</option>
+										<option value="000">未处理</option>
+										<option value="00A">已预约</option>
+										<option value="00X" selected="selected">已作废</option>
+									</c:when>
+									<c:otherwise>
+										<option value="" selected="selected">---请选择---</option>
+										<option value="000">未处理</option>
+										<option value="00A">已预约</option>
+										<option value="00X">已作废</option>
+									</c:otherwise>
+								</c:choose>
 							</c:when>
-							<c:when test="${state == '00A' }">
-								<option value="">---请选择---</option>
-								<option value="000">未处理</option>
-								<option value="00A" selected="selected">已预约</option>
-								<option value="00X">已作废</option>
+							<c:when test="${hospitalId == '102' }">
+								<c:choose>
+									<c:when test="${state == '100' }">
+										<option value="">---请选择---</option>
+										<option value="100" selected="selected">未支付</option>
+										<option value="101">已支付</option>
+										<option value="102">已取消</option>
+									</c:when>
+									<c:when test="${state == '101' }">
+										<option value="">---请选择---</option>
+										<option value="100">未支付</option>
+										<option value="101" selected="selected">已支付</option>
+										<option value="102">已取消</option>
+									</c:when>
+									<c:when test="${state == '102' }">
+										<option value="">---请选择---</option>
+										<option value="100">未支付</option>
+										<option value="101">已支付</option>
+										<option value="102" selected="selected">已取消</option>
+									</c:when>
+									<c:otherwise>
+										<option value="">---请选择---</option>
+										<option value="100">未支付</option>
+										<option value="101">已支付</option>
+										<option value="102">已取消</option>
+									</c:otherwise>
+								</c:choose>
 							</c:when>
-							<c:when test="${state == '00X' }">
-								<option value="">---请选择---</option>
-								<option value="000">未处理</option>
-								<option value="00A">已预约</option>
-								<option value="00X" selected="selected">已作废</option>
-							</c:when>
-							<c:otherwise>
-								<option value="" selected="selected">---请选择---</option>
-								<option value="000">未处理</option>
-								<option value="00A">已预约</option>
-								<option value="00X">已作废</option>
-							</c:otherwise>
 						</c:choose>
 					</select>
 				</td>
@@ -140,7 +174,11 @@
 				<td align="center" width="12%">预约时间</td>
 				<td align="center" width="10%">创建时间</td>
 				<td align="center" width="6%">订单状态</td>
-				<td align="center" width="10%">操作</td>
+				<c:choose>
+					<c:when test="${hospitalId == '101' }">
+						<td align="center" width="10%">操作</td>
+					</c:when>
+				</c:choose>
 			</tr>
 			<c:forEach items="${registerOrderList }" var="registerOrder">
 				<tr>
@@ -160,23 +198,30 @@
 					<td>${registerOrder.orderFee }</td>
 					<td>${registerOrder.registerTime }</td>
 					<td><fmt:formatDate value="${registerOrder.createDate }" pattern="yyyy-MM-dd HH:mm:ss"/></td>
-					<td>${registerOrder.orderState }</td>
-					<td style="text-align:center !important">
-						<c:choose>
-							<c:when test="${registerOrder.orderState == '未处理' }">
-								<a href="javascript:void(0)" class="linkmore"
-									onclick="appointment('${registerOrder.name }', ${registerOrder.orderId })">预约</a>
-										&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<c:choose>
+						<c:when test="${hospitalId == '101' }">
+							<td>${registerOrder.orderState }</td>
+							<td style="text-align:center !important">
+								<c:choose>
+									<c:when test="${registerOrder.orderState == '未处理' }">
 										<a href="javascript:void(0)" class="linkmore"
-									onclick="invalid('${registerOrder.name }', ${registerOrder.orderId })">作废</a>
-							</c:when>
-							<c:otherwise>
-								<a href="javascript:void(0)" style="color:#cccccc">预约</a>
-										&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-										<a href="javascript:void(0)" style="color:#cccccc">作废</a>
-							</c:otherwise>
-						</c:choose>
-					</td>
+											onclick="appointment('${registerOrder.name }', ${registerOrder.orderId })">预约</a>
+												&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+												<a href="javascript:void(0)" class="linkmore"
+											onclick="invalid('${registerOrder.name }', ${registerOrder.orderId })">作废</a>
+									</c:when>
+									<c:otherwise>
+										<a href="javascript:void(0)" style="color:#cccccc">预约</a>
+												&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+												<a href="javascript:void(0)" style="color:#cccccc">作废</a>
+									</c:otherwise>
+								</c:choose>
+							</td>
+						</c:when>
+						<c:when test="${hospitalId == '102' }">
+							<td>${registerOrder.payState }</td>
+						</c:when>
+					</c:choose>
 				</tr>
 			</c:forEach>
 		</table>
