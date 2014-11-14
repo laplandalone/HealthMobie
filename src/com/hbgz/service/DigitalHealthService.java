@@ -1143,11 +1143,11 @@ public class DigitalHealthService
 		return false;
 	}
 	
-	public boolean updateDoctor(String hospitalId,String doctorId,String fee,String introduce,String skill, String post, String time, String address) throws QryException
+	public boolean updateDoctor(String hospitalId,String doctorId,String fee,String introduce,String skill, String post, String time, String address, String telephone, String sex) throws QryException
 	{
 		if (ObjectCensor.isStrRegular(hospitalId,doctorId))
 		{
-			return doctorDao.updateDoctor(hospitalId, doctorId, fee, introduce, skill, post, time, address);
+			return doctorDao.updateDoctor(hospitalId, doctorId, fee, introduce, skill, post, time, address, telephone, sex);
 		}
 		return false;
 	}

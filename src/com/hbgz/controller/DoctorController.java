@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
-import com.hbgz.pub.cache.CacheManager;
 import com.hbgz.pub.util.ObjectCensor;
 import com.hbgz.pub.util.StringUtil;
 import com.hbgz.service.DigitalHealthService;
@@ -40,9 +39,6 @@ public class DoctorController
 
 	@Autowired
 	private DigitalHealthService digitalHealthService;
-
-	@Autowired
-	private CacheManager cacheManager;
 
 	@RequestMapping(params = "method=queryPre")
 	public ModelAndView queryPre(HttpServletResponse response, HttpServletRequest request) throws Exception 
@@ -80,8 +76,6 @@ public class DoctorController
 		String doctorId = (String) request.getParameter("doctorId");
 		if (ObjectCensor.isStrRegular(doctorId)) 
 		{
-			HttpSession session = request.getSession();
-			String hospitalId = (String) session.getAttribute("hospitalId");
 			Map doctor = digitalHealthService.getDoctor(doctorId);
 			List registers = digitalHealthService.getDoctorRegister(doctorId);
 			String fee = "";
