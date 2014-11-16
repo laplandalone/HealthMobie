@@ -659,15 +659,30 @@ public class DigitalHealthDao
 		return itzcQryCenter.executeSqlByMapListWithTrans(sql, lstParam);
 	}
 	
-	public List qryPatientVisitList(String startTime, String endTime) throws Exception
+	public List qryPatientVisitList(String startTime, String endTime, String visitName, String visitType, String cardId) throws Exception
 	{
 		StringBuffer sql = new StringBuffer();
 		sql.append("select visit_id, patient_id, card_id, visit_name, visit_type, state, to_char(create_date, 'yyyy-MM-dd hh24:mi:ss') create_date, ");
 		sql.append("(select sex from hospital_user_t where state = '00A' and user_id = patient_id) sex ");
-		sql.append("from patient_visit_t where state = '00A' and create_date between to_date(?, 'yyyy-MM-dd hh24:mi:ss') and to_date(?, 'yyyy-MM-dd hh24:mi:ss') order by create_date desc");
+		sql.append("from patient_visit_t where state = '00A' and create_date between to_date(?, 'yyyy-MM-dd hh24:mi:ss') and to_date(?, 'yyyy-MM-dd hh24:mi:ss') ");
 		ArrayList lstParam = new ArrayList();
 		lstParam.add(startTime);
 		lstParam.add(endTime + " 23:59:59");
+		if(ObjectCensor.isStrRegular(visitName))
+		{
+			sql.append("and upper(visit_name) like upper('%"+visitName+"%') ");
+		}
+		if(ObjectCensor.isStrRegular(visitType))
+		{
+			sql.append("and visit_type = ? ");
+			lstParam.add(visitType);
+		}
+		if(ObjectCensor.isStrRegular(cardId))
+		{
+			sql.append("and card_id = ? ");
+			lstParam.add(cardId);
+		}
+		sql.append("order by create_date desc");
 		return itzcQryCenter.executeSqlByMapListWithTrans(sql.toString(), lstParam);
 	}
 

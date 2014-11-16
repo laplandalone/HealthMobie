@@ -38,7 +38,7 @@ function qryPatientVisit()
 function createTable(data)
 {
 	var content = "<table id='table1' width='100%' border='1' cellspacing='0' cellpadding='0' class='maintable'>";
-	content += "<tr class='tabletop'><td style='text-align:center' width='20%'>随访姓名</td><td style='text-align:center' width='10%'>随访类型</td><td style='text-align:center' width='10%'>就诊卡号</td><td style='text-align:center' width='30%'>随访时间</td></tr>";
+	content += "<tr class='tabletop'><td style='text-align:center' width='20%'>随访姓名</td><td style='text-align:center' width='10%'>随访类型</td><td style='text-align:center' width='10%'>病案号</td><td style='text-align:center' width='30%'>随访时间</td></tr>";
 	if(data.length > 0)
 	{
 		$.each(data, function(i, obj){

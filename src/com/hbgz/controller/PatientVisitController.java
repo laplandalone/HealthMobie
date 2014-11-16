@@ -40,12 +40,12 @@ public class PatientVisitController
 			out = response.getWriter();
 			String startTime = StringUtil.getJSONObjectKeyVal(obj, "startTime");
 			String endTime = StringUtil.getJSONObjectKeyVal(obj, "endTime");
-			List sList = patientVisitService.qryPatientVisitList(startTime, endTime);
+			String visitName = StringUtil.getJSONObjectKeyVal(obj, "visitName");
+			String visitType = StringUtil.getJSONObjectKeyVal(obj, "visitType");
+			String cardId = StringUtil.getJSONObjectKeyVal(obj, "cardId");
+			List sList = patientVisitService.qryPatientVisitList(startTime, endTime, visitName, visitType, cardId);
 			log.error(sList);
-			if(ObjectCensor.checkListIsNull(sList))
-			{
-				out.println(JSONArray.fromObject(sList));
-			}
+			out.println(JSONArray.fromObject(sList));
 		}
 		catch (Exception e) 
 		{

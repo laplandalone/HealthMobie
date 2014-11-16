@@ -52,10 +52,25 @@
 								</tr>
 							</table>
 						</td>
+						<td align="right" width="8%">患者姓名</td>
+						<td width="10%">
+							<input type="text" id="visitName" name="visitName" class="subtext"/>
+						</td>
+						<td align="right" width="8%">随访类别</td>
+						<td width="10%">
+							<select id="visitType" name="visitType" class="subselect">
+								<option value="">全部</option>
+								<option value="asd">先心手术随访</option>
+								<option value="mvr">房颤手术随访</option>
+							</select>
+						</td>
+						<td align="right" width="8%">病案号</td>
+						<td width="10%">
+							<input type="text" id="cardId" name="cardId" class="subtext"/>
+						</td>
 						<td align="right" width="10%">
 							<input type="button" class="button3" value="查询" onclick="qryPatientVisit()"/>
 						</td>
-						<td width="72%">&nbsp;</td>
 					</tr>
 				</table>
   			</div>
@@ -72,7 +87,7 @@
 						<tr class="tabletop">
 							<td width="20%">随访姓名</td>
 							<td width="10%">随访类型</td>
-							<td width="10%">就诊卡号</td>
+							<td width="10%">病案号</td>
 							<td width="30%">随访时间</td>
 						</tr>
 					</table>
