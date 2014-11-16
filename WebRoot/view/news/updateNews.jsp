@@ -113,6 +113,10 @@
 				var expDate = $("#expDate").val();
 				var newsContent = $("#newsContent").val();
 				var newsImageUrl = $("#newsImageUrl").val();
+				if(newsImageUrl == "" || newsImageUrl == null || newsImageUrl == undefined)
+				{
+					newsImageUrl = $("#newsImages").val();
+				}
 				$.ajax({
 					type:"POST",
 					url:"/news.htm?method=updateNews",
@@ -180,6 +184,7 @@
     		<input type="hidden" id="newsId"/>
     		<input type="hidden" id="oldNewsId" value="${news.newsId }"/>
     		<input type="hidden" id="creditValueType" value="1"/>
+    		<input type="hidden" id="newsImages" value="${news.newsImages }">
     		<table width="630px" border="0" cellspacing="10" cellpadding="0" align='center'>
     			<tr>
     				<td width="13%" align="right">文章类型</td>
