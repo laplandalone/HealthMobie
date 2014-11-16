@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.hbgz.pub.util.ObjectCensor;
+import com.hbgz.pub.util.StringUtil;
 import com.hbgz.service.DigitalHealthService;
 
 @Controller
@@ -92,7 +93,11 @@ public class NewsController
 		{
 			JSONObject obj = digitalHealthService.getNewsById(newsId, hospitalId);
 			log.error(obj);
+			String newsType = StringUtil.getJSONObjectKeyVal(obj, "newsType");
+			JSONArray array = digitalHealthService.getNewsType(hospitalId, newsType);
+			log.error(array);
 			model.addObject("news", obj);
+			model.addObject("typeList", array);
 			model.setViewName("/view/news/updateNews");
 		}
 		else

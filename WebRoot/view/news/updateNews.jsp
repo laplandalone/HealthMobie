@@ -20,7 +20,6 @@
 		<script type="text/javascript" src="<%=path%>/js/comm.js"></script>
 		<script type="text/javascript" src="<%=path%>/js/json.js"></script>
 		<script type="text/javascript" src="<%=path%>/js/json2.js"></script>
-		<script type="text/javascript" src="<%=path%>/js/news.js"></script>
 		<style type="text/css">
 			.ifile {  
 				position: absolute;  
@@ -35,27 +34,6 @@
 		<script type="text/javascript">
 			var api = frameElement.api, W = api.opener;
 			$(document).ready(function(){
-				var newsType = $("#newsType").val();
-				$.getJSON("/news.htm?method=qryNewsTypeList", {"newsType":newsType, "random":Math.random()}, function(data){
-					var options = "";
-					var typeId = $("#selTypeId").val();
-					if(data.length > 0)
-					{
-						for(var i = 0; i < data.length; i++)
-						{
-							if(typeId == data[i].configId)
-							{
-								options += "<option value='"+data[i].configId+"' selected='selected'>"+data[i].configVal+"</option>"; 
-							}
-							else
-							{
-								options += "<option value='"+data[i].configId+"'>"+data[i].configVal+"</option>"; 
-							}
-						}
-					}
-					$("#typeId").html(options);
-				});
-				
 				$("#newsType").change(function(){
 					var newsType = $("#newsType").val();
 					$.getJSON("/news.htm?method=qryNewsTypeList", {"newsType":newsType, "random":Math.random()}, function(data){ 
@@ -202,7 +180,6 @@
     		<input type="hidden" id="newsId"/>
     		<input type="hidden" id="oldNewsId" value="${news.newsId }"/>
     		<input type="hidden" id="creditValueType" value="1"/>
-    		<input type="hidden" id="selTypeId" value="${news.typeId }"/>
     		<table width="630px" border="0" cellspacing="10" cellpadding="0" align='center'>
     			<tr>
     				<td width="13%" align="right">文章类型</td>
@@ -221,7 +198,14 @@
     				<td width="13%" align="right">标题类型</td>
 					<td width="12%">
 						<select id="typeId" class="subselect" style="width: 110px">
-							
+							<c:forEach items="${typeList }" var="type">
+								<c:if test="${news.typeId == type.configId }">
+									<option value="${type.configId }" selected="selected">${type.configVal }</option>
+								</c:if>
+								<c:if test="${news.typeId != type.configId }">
+									<option value="${type.configId }">${type.configVal }</option>
+								</c:if>
+							</c:forEach>
 						</select>
 					</td>
 					<td width="8%">状态</td>
