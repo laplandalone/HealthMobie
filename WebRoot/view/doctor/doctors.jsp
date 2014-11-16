@@ -47,7 +47,7 @@
 			
 			function deleteDoctor(doctorId)
 			{
-				$.dialog.confirm("选中的医生确定要下线?", 
+				$.dialog.confirm("是否删除该医生?", 
 					function(){
 						$.ajax({
 							type : "POST",
