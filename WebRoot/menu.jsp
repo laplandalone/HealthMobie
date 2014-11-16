@@ -121,7 +121,11 @@
 							</li>
 							<li>
 								<img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; 
-								<a href="/view/visit/patientVisitList.jsp" target="main">患者随访查询</a>
+								<a href="/view/visit/patientVisitList.jsp?visitType=asd" target="main">先心手术随访</a>
+							</li>
+							<li>
+								<img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; 
+								<a href="/view/visit/patientVisitList.jsp?visitType=mvr" target="main">房颤手术随访</a>
 							</li>
 							<li>
 								<img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; 

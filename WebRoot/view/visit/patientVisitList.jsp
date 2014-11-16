@@ -1,6 +1,7 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%
 	String path = request.getContextPath();
+	String visitType = request.getParameter("visitType");
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -20,6 +21,7 @@
   	<body>
   		<form action="">
   			<div class="mainsearch">
+  				<input type="hidden" id="visitType" name="visitType" value="<%=visitType %>"/>
 		  		<table width="100%">
 					<tr>
 						<td align="right" width="10%">随访时间：</td>
@@ -56,6 +58,7 @@
 						<td width="10%">
 							<input type="text" id="visitName" name="visitName" class="subtext"/>
 						</td>
+						<!--  
 						<td align="right" width="8%">随访类别</td>
 						<td width="10%">
 							<select id="visitType" name="visitType" class="subselect">
@@ -64,6 +67,7 @@
 								<option value="mvr">房颤手术随访</option>
 							</select>
 						</td>
+						-->
 						<td align="right" width="8%">病案号</td>
 						<td width="10%">
 							<input type="text" id="cardId" name="cardId" class="subtext"/>
