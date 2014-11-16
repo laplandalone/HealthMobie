@@ -1,59 +1,59 @@
 $(document).ready(function(){
 	var hospitalId = $("#hospitalId").val();
 	//科室发生改变
-	$("#teamId").change(function(){
-		var teamId = $("#teamId").val();
-		$.getJSON("/mobile.htm?method=qryDoctorList",{"teamId":teamId, "hospitalId":hospitalId, "random":Math.random()},function(data){ 
-			var options = "<option value='' selected='selected'>---请选择---</option>";
-			if(data.length > 0)
-			{
-				for(var i = 0; i < data.length; i++)
-				{ 
-					if(doctorId == data[i].doctorId)
-					{
-						options += "<option value='"+data[i].doctorId+"' selected='selected'>"+data[i].name+"</option>"; 
-					}
-					else
-					{
-						options += "<option value='"+data[i].doctorId+"'>"+data[i].name+"</option>"; 
-					}
-				}
-			}
-			$("#doctorId").html(options);
-		});
-	});
+//	$("#teamId").change(function(){
+//		var teamId = $("#teamId").val();
+//		$.getJSON("/mobile.htm?method=qryDoctorList",{"teamId":teamId, "hospitalId":hospitalId, "random":Math.random()},function(data){ 
+//			var options = "<option value='' selected='selected'>---请选择---</option>";
+//			if(data.length > 0)
+//			{
+//				for(var i = 0; i < data.length; i++)
+//				{ 
+//					if(doctorId == data[i].doctorId)
+//					{
+//						options += "<option value='"+data[i].doctorId+"' selected='selected'>"+data[i].name+"</option>"; 
+//					}
+//					else
+//					{
+//						options += "<option value='"+data[i].doctorId+"'>"+data[i].name+"</option>"; 
+//					}
+//				}
+//			}
+//			$("#doctorId").html(options);
+//		});
+//	});
 	
-	var teamId = $("#selTeamId").val();
-	if(teamId != "" && teamId != null && teamId != undefined)
-	{
-		$.getJSON("/mobile.htm?method=qryDoctorList",{"teamId":teamId, "hospitalId":hospitalId},function(data){
-			var options = "";
-			var doctorId = $("#selDoctorId").val();
-			if(doctorId == "")
-			{
-				options += "<option value='' selected='selected'>---请选择---</option>"; 
-			}
-			else
-			{
-				options += "<option value=''>---请选择---</option>"; 
-			}
-			if(data.length > 0)
-			{
-				for(var i = 0; i < data.length; i++)
-				{ 
-					if(doctorId == data[i].doctorId)
-					{
-						options += "<option value='"+data[i].doctorId+"' selected='selected'>"+data[i].name+"</option>"; 
-					}
-					else
-					{
-						options += "<option value='"+data[i].doctorId+"'>"+data[i].name+"</option>"; 
-					}
-				}
-			}
-			$("#doctorId").html(options);
-		});
-	}
+//	var teamId = $("#selTeamId").val();
+//	if(teamId != "" && teamId != null && teamId != undefined)
+//	{
+//		$.getJSON("/mobile.htm?method=qryDoctorList",{"teamId":teamId, "hospitalId":hospitalId},function(data){
+//			var options = "";
+//			var doctorId = $("#selDoctorId").val();
+//			if(doctorId == "")
+//			{
+//				options += "<option value='' selected='selected'>---请选择---</option>"; 
+//			}
+//			else
+//			{
+//				options += "<option value=''>---请选择---</option>"; 
+//			}
+//			if(data.length > 0)
+//			{
+//				for(var i = 0; i < data.length; i++)
+//				{ 
+//					if(doctorId == data[i].doctorId)
+//					{
+//						options += "<option value='"+data[i].doctorId+"' selected='selected'>"+data[i].name+"</option>"; 
+//					}
+//					else
+//					{
+//						options += "<option value='"+data[i].doctorId+"'>"+data[i].name+"</option>"; 
+//					}
+//				}
+//			}
+//			$("#doctorId").html(options);
+//		});
+//	}
 	var startTime = $("#selStartTime").val();
 	var endTime = $("#selEndTime").val();
 	$("#startTime").val(startTime);
@@ -65,9 +65,9 @@ function qryRegisterOrder()
 	var startTime = $("#startTime").val();
 	var endTime = $("#endTime").val();
 	var teamId = $("#teamId").val();
-	var doctorId = $("#doctorId").val();
+//	var doctorId = $("#doctorId").val();
 	var state = $("#state").val();
-	window.location.href = "/mobile.htm?method=qryRegisterOrder&state="+state+"&teamId="+teamId+"&doctorId="+doctorId+"&startTime="+startTime+"&endTime="+endTime;
+	window.location.href = "/mobile.htm?method=qryRegisterOrder&state="+state+"&teamId="+teamId+"&doctorId=&startTime="+startTime+"&endTime="+endTime;
 }
 
 //预约挂号

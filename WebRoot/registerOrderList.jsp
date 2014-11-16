@@ -77,6 +77,7 @@
 						</c:forEach>
 					</select>
 				</td>
+				<!--  
 				<td width="12%" align="right">医生名称：</td>
 				<td width="8%">
 					<c:set var="doctorList" value="<%=doctorList %>"></c:set>
@@ -92,6 +93,7 @@
 						</c:forEach>
 					</select>
 				</td>
+				-->
 				<td width="12%" align="right">订单状态：</td>
 				<td width="8%">
 					<select id="state" name="state" class="subselect">
