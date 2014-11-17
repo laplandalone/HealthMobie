@@ -129,6 +129,10 @@
 							</li>
 							<li>
 								<img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; 
+								<a href="/view/visit/patientVisitList.jsp?visitType=gxb" target="main">冠心病手术随访</a>
+							</li>							
+							<li>
+								<img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; 
 								<a href="/view/doctor/addDoctor.jsp" target="main">新增医生管理</a>
 							</li>
 						</c:if>
