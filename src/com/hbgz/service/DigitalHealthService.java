@@ -33,6 +33,7 @@ import com.hbgz.model.HospitalUserT;
 import com.hbgz.model.RegisterOrderT;
 import com.hbgz.model.UserContactT;
 import com.hbgz.model.UserQuestionT;
+import com.hbgz.model.UserRelateT;
 import com.hbgz.pub.annotation.ServiceType;
 import com.hbgz.pub.base.SysDate;
 import com.hbgz.pub.cache.CacheManager;
@@ -1049,6 +1050,55 @@ public class DigitalHealthService
 		UserContactT contactT = (UserContactT) JsonUtils.toBean(user, UserContactT.class);
 		contactT.setCreateDate(new Date());
 		hibernateObjectDao.update(contactT);
+		return true;
+	}
+	
+	@ServiceType(value = "BUS20039")
+	public String  addUserRelate(String userId,String telephone,String password) throws QryException
+	{
+		List users = digitalHealthDao.qryUserByTelephone(telephone, password);
+		if (ObjectCensor.checkListIsNull(users))
+		{
+			List relateUser = hibernateObjectDao.findByProperty("UserRelateT", "relatePhone", telephone);
+			if (!ObjectCensor.checkListIsNull(relateUser))
+			{
+				UserRelateT relateT = new UserRelateT();
+				relateT.setRelateId(sysId.getId()+"");
+				relateT.setUserId(userId);
+				relateT.setRelatePhone(telephone);
+				relateT.setRealtePass(password);
+				relateT.setState("00A");
+				relateT.setCreateDate(SysDate.getSysDate());
+				hibernateObjectDao.save(relateT);
+			}else
+			{
+				return "1";/*关联账号已存在*/
+			}
+		}else
+		{
+			return "0";/*关联账号不存在*/
+		}
+		return "2";/*关联账号成功*/
+	}
+	
+	
+	@ServiceType(value = "BUS20040")
+	public JSONArray getUserRelate(String userId) throws JsonException
+	{
+		List list = hibernateObjectDao.qryUserRelateT(userId);
+		JSONArray jsonArray = JsonUtils.fromArray(list);
+		return jsonArray;
+	}
+	
+	@ServiceType(value = "BUS20041")
+	public boolean deleteUserRelate(String relateId) throws JsonException
+	{
+		List relateUser = hibernateObjectDao.findByProperty("UserRelateT", "relateId", relateId);
+
+		if (ObjectCensor.checkListIsNull(relateUser))
+		{
+			hibernateObjectDao.delete(relateUser.get(0));
+		}
 		return true;
 	}
 	
