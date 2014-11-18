@@ -36,8 +36,17 @@ public class RegisterOrderT implements java.io.Serializable {
 	private Date createDate;
 	private String hospitalId;
 	private String payState;
-
+	private String detailTime;
 	// Constructors
+
+	@Column(name = "DETAIL_TIME", nullable = false, length = 20)
+	public String getDetailTime() {
+		return detailTime;
+	}
+
+	public void setDetailTime(String detailTime) {
+		this.detailTime = detailTime;
+	}
 
 	/** default constructor */
 	public RegisterOrderT() {
@@ -47,7 +56,7 @@ public class RegisterOrderT implements java.io.Serializable {
 	public RegisterOrderT(String orderId, String userId, String registerId,
 			String orderState, String registerTime, String userName,
 			String userNo, String userTelephone, String sex, String teamId,
-			String teamName) {
+			String teamName,String detailTime) {
 		this.orderId = orderId;
 		this.userId = userId;
 		this.registerId = registerId;
@@ -59,6 +68,7 @@ public class RegisterOrderT implements java.io.Serializable {
 		this.sex = sex;
 		this.teamId = teamId;
 		this.teamName = teamName;
+		this.detailTime=detailTime;
 	}
 
 	/** full constructor */

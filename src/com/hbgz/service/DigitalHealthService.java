@@ -1102,6 +1102,32 @@ public class DigitalHealthService
 		return true;
 	}
 	
+	@ServiceType(value = "BUS20042")
+	public String addQHUserRegisgerOrder(String hospitalId,String userId, String registerId, String doctorId,
+			String doctorName, String orderNum, String orderFee, String registerTime,
+			String userName, String userNo, String userTelephone, String sex, String teamId,
+			String teamName,String detailTime) throws Exception
+	{
+		String orderId = sysId.getId() + "";
+		
+		/*普通挂号,默认取自定义预约号码*/ 
+		if ("0".equals(orderNum) && "0".equals(registerId))
+		{
+			String registerTimeT = registerTime.replace(" ", "");
+			List list = digitalHealthDao.qryOrderNormalTotal(teamId, registerTimeT);
+			if (ObjectCensor.checkListIsNull(list))
+			{
+				Map orderMap = (Map) list.get(0);
+				orderNum = StringUtil.getMapKeyVal(orderMap, "num");
+			}
+		}
+		
+		boolean flag= digitalHealthDao.addQHRegisterOrder(hospitalId,orderId, userId, registerId, doctorId, doctorName,
+				orderNum, orderFee, registerTime, userName, userNo, userTelephone, sex, teamId,
+				teamName,detailTime);
+		
+		return orderId;
+	}
 	// 查询用户的挂号订单
 	public List qryRegisterOrder(String hospitalId, String teamId, String doctorId,
 			String startTime, String endTime, String state) throws Exception
