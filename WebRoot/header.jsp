@@ -15,10 +15,10 @@
 			}
 		</script>
 	</head>
-	<body>
+	<body style="background-color:#f2f2f2;height:70px">
 	 	<div class="top">
 	    	<div class="logo">
-		    	<div class="baseInfo">
+		    	<div class="baseInfo" style="height:37px;">
 					当前用户:${sessionScope.username}<span style="padding-left:40px">&nbsp;<span style="padding-left:20px">&nbsp;</span><input type="button" onclick="unlogin()" class="button1" value="注销" />
 		    	</div>
 	    	</div>

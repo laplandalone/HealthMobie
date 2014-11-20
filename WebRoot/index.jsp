@@ -61,7 +61,7 @@
 		<div id="lockDiv"></div>
 		<div id="container" style="position:fixed; height:100%; width:100%; background-color: white;">
 			<div id="header" style="margin:0 auto;">
-				<iframe src="header.jsp" name="header" id="headerIframe" frameborder="0" scrolling="no" width="100%" height="64px"></iframe>
+				<iframe src="header.jsp" name="header" id="headerIframe" frameborder="0" scrolling="no" width="100%" height="70px"></iframe>
 			</div>
 			<div id="frame_main" style="margin-top: 0px; width: 100%; ">
 				<div id="main_left" style="float:left; width: 150px">
