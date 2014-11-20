@@ -1,29 +1,3 @@
-$(document).ready(function(){
-	$.ajax({
-		type : "POST",
-		url : "/doctor.htm?method=qryTeamList",
-		async : false,
-		dataType : "json",
-		success : function(data)
-		{
-			var content = "";
-			for(var k = 0 ; k < data.length ; k++)
-			{  
-				content += "<option value="+data[k].teamId+">"+data[k].teamName+"</option>";
-			} 
-			var obj = $("#teamId").val();
-			if(obj == null || obj == undefined)
-			{
-				$("#team_id").html(content);
-			}
-			else
-			{
-				$("#teamId").html(content);
-			}
-		}
-	});
-});
-
 function qryOnlineDortor()
 {
 	var obj = JSON.stringify($("select,input").serializeObject());
@@ -65,7 +39,6 @@ function createTable(data, flagParam)
 	content += "<tr class='tabletop'><td width='3%'>选择</td><td width='7%'>医生名称</td><td width='7%'>职称</td><td width='3%'>性别</td><td width='8%'>科室</td><td width='6%'>是否在线</td> <td width='20%'>医生介绍</td><td width='20%'>擅长领域</td></tr>";
 	if(data.count > 0)
 	{
-		$("#tab").css("display", "block");
 		var cnt = 0;
 		if(flagParam == 0)
 		{

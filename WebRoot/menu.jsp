@@ -98,6 +98,10 @@
 									</li>
 								</ul>
 							</li>
+							<li>
+								<img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; 
+								<a href="/view/user/userList.jsp" target="main">用户信息管理</a>
+							</li>
 						</c:if>
 					</c:if>
 				</ul>

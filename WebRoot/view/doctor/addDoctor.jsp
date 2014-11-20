@@ -1,6 +1,10 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ page import="com.hbgz.pub.cache.PubData"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
 	String path = request.getContextPath();
+	String hospitalId = (String) session.getAttribute("hospitalId");
+	List teamLst = PubData.qryTeamList(hospitalId);
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -15,6 +19,9 @@
 		<script type="text/javascript" src="<%=path%>/js/json2.js"></script>
 		<script type="text/javascript" src="<%=path%>/js/json.js"></script>
 		<script type="text/javascript" src="<%=path%>/js/onlineDoctor.js"></script>
+		<script type="text/javascript">
+		
+		</script>
   	</head>
   
   	<body>
@@ -41,8 +48,14 @@
 						</td>
 						<td align="right">所属科室：</td>
 						<td>
+							<c:set var="teamLst" value="<%=teamLst %>"></c:set>
 							<select id="team_id" name="team_id" class="subselect" style="width: 150px">
 								<option value="">---请选择---</option>
+								<c:forEach items="${teamLst }" var="team">
+									<c:if test="${team.expertFlag == '1' }">
+										<option value="${team.teamId }">${team.teamName }</option>
+									</c:if>
+								</c:forEach>
 							</select>
 						</td>
 					</tr>

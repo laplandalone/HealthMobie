@@ -789,4 +789,52 @@ public class DigitalHealthDao
 		sql.append("order by a.order_num ");
 		return itzcQryCenter.executeSqlByMapListWithTrans(sql.toString(), lstParam);
 	}
+
+	public List qryUserList(int pageNum, int pageSize, String userName, String sex, String telephone) throws Exception 
+	{
+		StringBuffer query = new StringBuffer();
+		query.append("SELECT * FROM (SELECT A.*, ROWNUM ROWNUMBER FROM (");
+		query.append("select user_id, user_name, telephone, sex, decode(user_no, '无', user_no, substr(user_no, 0, 10) || '********') user_no, card_no, create_date ");
+		query.append("from (select user_id, decode(user_name, null, '无', user_name) user_name, telephone, decode(sex, null, '无', sex) sex, decode(user_no, null, '无', user_no) user_no, ");
+		query.append("decode(card_no, null, '无', card_no) card_no, to_char(create_date, 'yyyy-mm-dd') create_date from hospital_user_t where state = '00A' ");
+		ArrayList lstParam = new ArrayList();
+		if(ObjectCensor.isStrRegular(userName))
+		{
+			query.append("and upper(user_name) like upper('%"+userName+"%') ");
+		}
+		if(ObjectCensor.isStrRegular(sex))
+		{
+			query.append("and sex = ? ");
+			lstParam.add(sex);
+		}
+		if(ObjectCensor.isStrRegular(telephone))
+		{
+			query.append("and upper(telephone) like upper('%"+telephone+"%') ");
+		}
+		query.append(") order by create_date desc) A WHERE ROWNUM <= ?)  WHERE ROWNUMBER >= ? ");
+		lstParam.add(pageNum * pageSize);
+		lstParam.add((pageNum - 1) * pageSize + 1);
+		return itzcQryCenter.executeSqlByMapListWithTrans(query.toString(), lstParam);
+	}
+
+	public int qryUserCount(String userName, String sex, String telephone) throws Exception 
+	{
+		StringBuffer query = new StringBuffer();
+		query.append("select * from hospital_user_t where state = '00A' ");
+		ArrayList lstParam = new ArrayList();
+		if(ObjectCensor.isStrRegular(userName))
+		{
+			query.append("and upper(user_name) like upper('%"+userName+"%') ");
+		}
+		if(ObjectCensor.isStrRegular(sex))
+		{
+			query.append("and sex = ? ");
+			lstParam.add(sex);
+		}
+		if(ObjectCensor.isStrRegular(telephone))
+		{
+			query.append("and upper(telephone) like upper('%"+telephone+"%') ");
+		}
+		return itzcQryCenter.getCount(query.toString(), lstParam);
+	}
 }

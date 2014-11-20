@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.hbgz.pub.util.ObjectCensor;
 import com.hbgz.pub.util.StringUtil;
 import com.hbgz.service.PatientVisitService;
 
@@ -81,5 +80,32 @@ public class PatientVisitController
 			view.setViewName("error");
 		}
 		return view;
+	}
+	
+	@RequestMapping(params = "method=qryUserList")
+	public void qryUserList(@RequestBody JSONObject obj, HttpServletResponse response)
+	{
+		response.setCharacterEncoding("UTF-8");
+		PrintWriter out = null;
+		try
+		{
+			out = response.getWriter();
+			int pageNum = Integer.parseInt(StringUtil.getJSONObjectKeyVal(obj, "curId"));
+			int pageSize = Integer.parseInt(StringUtil.getJSONObjectKeyVal(obj, "pageNum"));
+			String userName = StringUtil.getJSONObjectKeyVal(obj, "userName");
+			String sex = StringUtil.getJSONObjectKeyVal(obj, "sex");
+			String telephone = StringUtil.getJSONObjectKeyVal(obj, "telephone");
+			JSONObject object = patientVisitService.qryUserList(pageNum, pageSize, userName, sex, telephone);
+			log.error(object);
+			out.println(object);
+		}
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			out.close();
+		}
 	}
 }

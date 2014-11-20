@@ -19,7 +19,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.hbgz.pub.util.ObjectCensor;
 import com.hbgz.pub.util.SFTPUtil;
 
 @Controller	

@@ -1,10 +1,6 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-<%@ page import="com.hbgz.pub.cache.PubData"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
 	String path = request.getContextPath();
-	String hospitalId = (String) session.getAttribute("hospitalId");
-	List teamLst = PubData.qryTeamList(hospitalId);
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -18,33 +14,34 @@
 		<script type="text/javascript" src="<%=path%>/js/comm.js"></script>
 		<script type="text/javascript" src="<%=path%>/js/json2.js"></script>
 		<script type="text/javascript" src="<%=path%>/js/json.js"></script>
-		<script type="text/javascript" src="<%=path%>/js/onlineDoctor.js"></script>
+		<script type="text/javascript" src="<%=path%>/js/user.js"></script>
   	</head>
   
-  	<body onload="qryOnlineDortor()">
+  	<body onload="qryUserList()">
   		<form action="">
   			<div class="mainsearch">
 		  		<table width="100%">
 					<tr>
-						<td align="right" width="10%">在线科室：</td>
+						<td align="right" width="10%">用户名称：</td>
 						<td width="8%">
-							<c:set var="teamLst" value="<%=teamLst %>"></c:set>
-							<select id="teamId" name="teamId" class="subselect">
-								<c:forEach items="${teamLst }" var="team">
-									<c:if test="${team.expertFlag == '1' }">
-										<option value="${team.teamId }">${team.teamName }</option>
-									</c:if>
-								</c:forEach>
+							<input id="userName" name="userName" class="subtext"/>
+						</td>
+						<td align="right" width="10%">用户性别：</td>
+						<td width="8%">
+							<select id="sex" name="sex" class="subselect">
+								<option value="">全部</option>
+								<option value="男">男</option>
+								<option value="女">女</option>
 							</select>
 						</td>
-						<td align="right" width="10%">医生名称：</td>
+						<td align="right" width="10%">联系方式：</td>
 						<td width="8%">
-							<input id="doctorName" name="doctorName" class="subtext"/>
+							<input id="telephone" name="telephone" class="subtext"/>
 						</td>
 						<td align="right" width="10%">
-							<input type="button" class="button3" value="查询" onclick="qryOnlineDortor()"/>
+							<input type="button" class="button3" value="查询" onclick="qryUserList()"/>
 						</td>
-						<td width="54%">&nbsp;</td>
+						<td width="36%">&nbsp;</td>
 					</tr>
 				</table>
   			</div>
@@ -59,14 +56,13 @@
 				<div id="template" class="box">
 					<table width="100%" border="1" cellspacing="0" cellpadding="0" class="maintable1">
 						<tr class="tabletop">
-							<td width="3%">选择</td>
-							<td width="7%">医生名称</td>
-							<td width="7%">职称</td>
-							<td width="3%">性别</td>
-							<td width="8%">科室</td>
-							<td width="6%">是否在线</td>
-							<td width="20%">医生介绍</td>
-							<td width="20%">擅长领域</td>
+							<td width="8%">用户ID</td>
+							<td width="10%">用户名称</td>
+							<td width="10%">联系方式</td>
+							<td width="8%">用户性别</td>
+							<td width="20%">证件号码</td>
+							<td width="15%">用户病案号</td>
+							<td width="20%">注册时间</td>
 						</tr>
 					</table>
 				</div>
@@ -92,8 +88,8 @@
 								<td>
 									<input type="button" id="goto" onclick="gotoFunc()" />
 								</td>
-		  						<td width="20%" align="center"><input type="button" id="online" value="上线" onclick="doctorOnline()" class="button3"/></td>
-		  						<td width="20%" align="center"><input type="button" id="offline" value="下线" onclick="doctorOffline()" class="button3" /></td>
+		  						<td width="20%">&nbsp;</td>
+		  						<td width="20%">&nbsp;</td>
 		  					</tr>
 		  				</table>
 		  			</div>

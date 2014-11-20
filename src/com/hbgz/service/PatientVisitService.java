@@ -2,6 +2,8 @@ package com.hbgz.service;
 
 import java.util.List;
 
+import net.sf.json.JSONObject;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,5 +34,22 @@ public class PatientVisitService
 			sList = digitalHealthDao.qryVisitDetail(visitId);
 		}
 		return sList;
+	}
+
+	public JSONObject qryUserList(int pageNum, int pageSize, String userName, String sex, String telephone) throws Exception 
+	{
+		JSONObject obj = new JSONObject();
+		if(ObjectCensor.isStrRegular())
+		{
+			List sList = digitalHealthDao.qryUserList(pageNum, pageSize, userName, sex, telephone);
+			int count = 0;
+			if(ObjectCensor.checkListIsNull(sList))
+			{
+				obj.element("userList", sList);
+				count = digitalHealthDao.qryUserCount(userName, sex, telephone);
+			}
+			obj.element("count", count);
+		}
+		return obj;
 	}
 }
