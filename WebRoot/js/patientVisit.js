@@ -51,6 +51,10 @@ function createTable(data)
 			{
 				visitType = "房颤手术随访";
 			}
+			else if(visitType == "gxb")
+			{
+				visitType = "冠心病手术随访";
+			}
 			if(i % 2)
 			{
 				content += "<tr class='bkf0' onmouseover='trColorChange(this,"+i+")' onmouseout='trColorChange(this,"+i+")' onclick='viewVisitDetail("+obj.visitId+", \""+visitType+"\", \""+obj.visitName+"\", \""+obj.sex+"\")'>";
