@@ -566,7 +566,7 @@ public class DigitalHealthDao
 	{
 		StringBuffer query = new StringBuffer();
 		query.append("SELECT * FROM (SELECT A.*, ROWNUM ROWNUMBER FROM (");
-		query.append("select a.*, b.team_name from doctor_t a, team_t b where a.team_id = b.team_id and a.hospital_id = ? and b.expert_flag = '1' ");
+		query.append("select a.*, b.team_name from doctor_t a, team_t b where a.state = '00A' and b.state = '00A' and a.team_id = b.team_id and a.hospital_id = ? and b.expert_flag = '1' ");
 		ArrayList lstParam = new ArrayList();
 		lstParam.add(hospitalId);
 		if(ObjectCensor.isStrRegular(teamId))
@@ -587,7 +587,7 @@ public class DigitalHealthDao
 	public int qryOnlineDortorCount(String hospitalId, String teamId, String skill) throws Exception 
 	{
 		StringBuffer query = new StringBuffer();
-		query.append("select a.*, b.team_name from doctor_t a, team_t b where a.team_id = b.team_id and a.hospital_id = ? and b.expert_flag = '1' ");
+		query.append("select a.*, b.team_name from doctor_t a, team_t b where a.state = '00A' and b.state = '00A' and a.team_id = b.team_id and a.hospital_id = ? and b.expert_flag = '1' ");
 		ArrayList lstParam = new ArrayList();
 		lstParam.add(hospitalId);
 		if(ObjectCensor.isStrRegular(teamId))
