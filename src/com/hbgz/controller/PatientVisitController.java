@@ -64,8 +64,14 @@ public class PatientVisitController
 		{
 			String visitId = request.getParameter("visitId");
 			String visitType = request.getParameter("visitType");
+			String iso = new String(visitType.getBytes("UTF-8"),"ISO-8859-1");   
+			visitType = new String(iso.getBytes("ISO-8859-1"),"UTF-8");  
 			String visitName = request.getParameter("visitName");
+			iso = new String(visitName.getBytes("UTF-8"),"ISO-8859-1");   
+			visitName = new String(iso.getBytes("ISO-8859-1"),"UTF-8");  
 			String sex = request.getParameter("sex");
+			iso = new String(sex.getBytes("UTF-8"),"ISO-8859-1");   
+			sex = new String(iso.getBytes("ISO-8859-1"),"UTF-8");  
 			sex = (sex == null || "".equals(sex) || "null".equals(sex)) ? "нч" : sex;
 			List sList = patientVisitService.qryVisitDetail(visitId);
 			log.error(sList);

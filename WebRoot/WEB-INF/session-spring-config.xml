@@ -13,13 +13,13 @@
     http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring     
     http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring/ehcache-spring-1.1.xsd">
 	
-	
+	<!--  
 	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
 			<value>classpath:jdbc.properties</value>
 		</property>
 	</bean>
-
+	
 	<bean id="dataSource" destroy-method="close"
 		class="org.apache.commons.dbcp.BasicDataSource">
 		<property name="driverClassName" value="${jdbc.driverClassName}" />
@@ -33,6 +33,13 @@
 		<property name= "validationQueryTimeout" ><value>1</value></property> 
 		<property name= "timeBetweenEvictionRunsMillis" ><value>30000</value></property> 
 		<property name= "numTestsPerEvictionRun" ><value>16</value></property> 
+	</bean>
+	-->
+	
+	<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean"> 
+		<property name="jndiName"> 
+			<value>jdbc/itzc</value> 
+		</property> 
 	</bean>
 
 	<bean id="itzcQryCenter" class="com.hbgz.pub.qry.QryCenter">
