@@ -562,7 +562,7 @@ public class DigitalHealthDao
 		return flag;
 	}
 
-	public List qryOnlineDortorList(int pageNum, int pageSize, String hospitalId, String teamId, String skill) throws Exception 
+	public List qryOnlineDortorList(int pageNum, int pageSize, String hospitalId, String teamId, String skill, String doctorName) throws Exception 
 	{
 		StringBuffer query = new StringBuffer();
 		query.append("SELECT * FROM (SELECT A.*, ROWNUM ROWNUMBER FROM (");
@@ -578,13 +578,17 @@ public class DigitalHealthDao
 		{
 			query.append("and upper(a.skill) like upper('%"+skill+"%') ");
 		}
+		if(ObjectCensor.isStrRegular(doctorName))
+		{
+			query.append("and upper(a.name) like upper('%"+doctorName+"%') ");
+		}
 		query.append("order by a.order_num) A WHERE ROWNUM <= ?)  WHERE ROWNUMBER >= ? ");
 		lstParam.add(pageNum * pageSize);
 		lstParam.add((pageNum - 1) * pageSize + 1);
 		return itzcQryCenter.executeSqlByMapListWithTrans(query.toString(), lstParam);
 	}
 
-	public int qryOnlineDortorCount(String hospitalId, String teamId, String skill) throws Exception 
+	public int qryOnlineDortorCount(String hospitalId, String teamId, String skill, String doctorName) throws Exception 
 	{
 		StringBuffer query = new StringBuffer();
 		query.append("select a.*, b.team_name from doctor_t a, team_t b where a.state = '00A' and b.state = '00A' and a.team_id = b.team_id and a.hospital_id = ? and b.expert_flag = '1' ");
@@ -598,6 +602,10 @@ public class DigitalHealthDao
 		if(ObjectCensor.isStrRegular(skill))
 		{
 			query.append("and upper(a.skill) like upper('%"+skill+"%') ");
+		}
+		if(ObjectCensor.isStrRegular(doctorName))
+		{
+			query.append("and upper(a.name) like upper('%"+doctorName+"%') ");
 		}
 		return itzcQryCenter.getCount(query.toString(), lstParam);
 	}
@@ -759,7 +767,7 @@ public class DigitalHealthDao
 		return itzcQryCenter.executeSqlByMapListWithTrans(sql.toString(), lstParam);
 	}
 
-	public List qryOnLineDoctorQuesList(String hospitalId, String teamId) throws Exception 
+	public List qryOnLineDoctorQuesList(String hospitalId, String teamId, String doctorName) throws Exception 
 	{
 		StringBuffer sql = new StringBuffer();
 		sql.append("select distinct a.doctor_id, a.name, a.order_num, a.post, b.team_name, ");
@@ -773,6 +781,10 @@ public class DigitalHealthDao
 		{
 			sql.append("and a.team_id = ? ");
 			lstParam.add(teamId);
+		}
+		if(ObjectCensor.isStrRegular(doctorName))
+		{
+			sql.append("and upper(a.name) like upper('%"+doctorName+"%') ");
 		}
 		sql.append("order by a.order_num ");
 		return itzcQryCenter.executeSqlByMapListWithTrans(sql.toString(), lstParam);

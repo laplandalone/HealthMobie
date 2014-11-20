@@ -1502,17 +1502,17 @@ public class DigitalHealthService
 		return array;
 	}
 
-	public JSONObject qryOnlineDortorList(int pageNum, int pageSize, String hospitalId, String teamId, String skill) throws Exception 
+	public JSONObject qryOnlineDortorList(int pageNum, int pageSize, String hospitalId, String teamId, String skill, String doctorName) throws Exception 
 	{
 		JSONObject obj = new JSONObject();
 		if(ObjectCensor.isStrRegular(hospitalId))
 		{
-			List sList = digitalHealthDao.qryOnlineDortorList(pageNum, pageSize, hospitalId, teamId, skill);
+			List sList = digitalHealthDao.qryOnlineDortorList(pageNum, pageSize, hospitalId, teamId, skill, doctorName);
 			int count = 0;
 			if(ObjectCensor.checkListIsNull(sList))
 			{
 				obj.element("onlineDortorList", sList);
-				count = digitalHealthDao.qryOnlineDortorCount(hospitalId, teamId, skill);
+				count = digitalHealthDao.qryOnlineDortorCount(hospitalId, teamId, skill, doctorName);
 			}
 			obj.element("count", count);
 		}
@@ -1551,8 +1551,8 @@ public class DigitalHealthService
 		return false;
 	}
 
-	public List qryOnLineDoctorQuesList(String hospitalId, String teamId) throws Exception 
+	public List qryOnLineDoctorQuesList(String hospitalId, String teamId, String doctorName) throws Exception 
 	{
-		return digitalHealthDao.qryOnLineDoctorQuesList(hospitalId, teamId);
+		return digitalHealthDao.qryOnLineDoctorQuesList(hospitalId, teamId, doctorName);
 	}
 }

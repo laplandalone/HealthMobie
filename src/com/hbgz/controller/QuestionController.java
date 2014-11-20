@@ -46,9 +46,11 @@ public class QuestionController
 		if("4".equals(privs))
 		{
 			String teamId = request.getParameter("teamId");
-			List sList = digitalHealthService.qryOnLineDoctorQuesList(hospitalId, teamId);
+			String doctorName = request.getParameter("doctorName");
+			List sList = digitalHealthService.qryOnLineDoctorQuesList(hospitalId, teamId, doctorName);
 			model.addObject("quesLst", sList);
 			model.addObject("teamId", teamId);
+			model.addObject("doctorName", doctorName);
 			model.setViewName("/view/question/onlineDoctorQuesList");
 		}
 		else

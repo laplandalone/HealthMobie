@@ -39,7 +39,8 @@
 			function qryOnlineDortorQues()
 			{
 				var teamId = $("#teamId").val();
-				window.location.href = "/ques.htm?method=queryPre&teamId="+teamId;
+				var doctorName = $("#doctorName").val();
+				window.location.href = "/ques.htm?method=queryPre&teamId="+teamId+"&doctorName="+doctorName;
 			}
 			
 			function trColorChange(val, i) 
@@ -73,6 +74,10 @@
 						<select id="teamId" name="teamId" class="subselect">
 							
 						</select>
+					</td>
+					<td align="right" width="10%">医生名称：</td>
+					<td>
+						<input id="doctorName" name="doctorName" class="subtext" value="${doctorName }"/>
 					</td>
 					<td align="right" width="10%">
 						<input type="button" class="button3" value="查询" onclick="qryOnlineDortorQues()"/>

@@ -28,7 +28,10 @@
 								<option></option>
 							</select>
 						</td>
-						
+						<td align="right" width="10%">医生名称：</td>
+						<td>
+							<input id="doctorName" name="doctorName" class="subtext"/>
+						</td>
 						<td align="right" width="10%">
 							<input type="button" class="button3" value="查询" onclick="qryOnlineDortor()"/>
 						</td>
