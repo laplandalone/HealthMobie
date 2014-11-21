@@ -1054,12 +1054,12 @@ public class DigitalHealthService
 	}
 	
 	@ServiceType(value = "BUS20039")
-	public String  addUserRelate(String userId,String telephone,String password) throws QryException
+	public String  addUserRelate(String userId,String userPhone,String userPass,String telephone,String password) throws QryException
 	{
 		List users = digitalHealthDao.qryUserByTelephone(telephone, password);
 		if (ObjectCensor.checkListIsNull(users))
 		{
-			List relateUser = hibernateObjectDao.findByProperty("UserRelateT", "relatePhone", telephone);
+			List relateUser = hibernateObjectDao.qryUserRelateTByPhone(userId, telephone);
 			if (!ObjectCensor.checkListIsNull(relateUser))
 			{
 				UserRelateT relateT = new UserRelateT();
@@ -1070,6 +1070,21 @@ public class DigitalHealthService
 				relateT.setState("00A");
 				relateT.setCreateDate(SysDate.getSysDate());
 				hibernateObjectDao.save(relateT);
+				
+				Map relateUserMap = (Map) users.get(0);
+				String relateUserId=StringUtil.getMapKeyVal(relateUserMap, "userId");
+				List relateUserT = hibernateObjectDao.qryUserRelateTByPhone(relateUserId, userPhone);
+				if (!ObjectCensor.checkListIsNull(relateUserT))
+				{
+					UserRelateT userRelateT = new UserRelateT();
+					userRelateT.setRelateId(sysId.getId()+"");
+					userRelateT.setUserId(relateUserId);
+					userRelateT.setRelatePhone(userPhone);
+					userRelateT.setRealtePass(userPass);
+					userRelateT.setState("00A");
+					userRelateT.setCreateDate(SysDate.getSysDate());
+					hibernateObjectDao.save(userRelateT);
+				}
 			}else
 			{
 				return "1";/*关联账号已存在*/
@@ -1091,13 +1106,28 @@ public class DigitalHealthService
 	}
 	
 	@ServiceType(value = "BUS20041")
-	public boolean deleteUserRelate(String relateId) throws JsonException
+	public boolean deleteUserRelate(String relateId,String usrPhone) throws JsonException, QryException
 	{
-		List relateUser = hibernateObjectDao.findByProperty("UserRelateT", "relateId", relateId);
+		List relateUsers = hibernateObjectDao.findByProperty("UserRelateT", "relateId", relateId);
 
-		if (ObjectCensor.checkListIsNull(relateUser))
+		if (ObjectCensor.checkListIsNull(relateUsers))
 		{
-			hibernateObjectDao.delete(relateUser.get(0));
+			UserRelateT relateT = (UserRelateT) relateUsers.get(0);
+			
+			List users = digitalHealthDao.qryUserByTelephone(relateT.getRelatePhone(), relateT.getRealtePass());
+			if (ObjectCensor.checkListIsNull(users))
+			{
+				Map  relateUuser =(Map) users.get(0);
+				String userId=StringUtil.getMapKeyVal(relateUuser, "userId");
+				List relateUserTs = hibernateObjectDao.qryUserRelateTByPhone(userId, usrPhone);
+				if (ObjectCensor.checkListIsNull(relateUserTs))
+				{
+					UserRelateT relateUserT = (UserRelateT) relateUserTs.get(0);
+					hibernateObjectDao.delete(relateUserT);
+				}
+			}
+			hibernateObjectDao.delete(relateT);
+			
 		}
 		return true;
 	}
