@@ -20,11 +20,32 @@
 	  		<table width='65%' border='0' cellspacing='0' cellpadding='0' style="margin-top: 20px;" align="center">
 	  			<tr>
 	  				<td align="right" width="10%"><h3>随访名称：</h3></td>
-	  				<td width="15%">${visitType }</td>
+	  				<td width="15%">
+	  					<c:choose>
+	  						<c:when test="${obj.visitType == 'asd' }">
+	  							<c:out value="先心手术随访"></c:out>
+	  						</c:when>
+	  						<c:when test="${obj.visitType == 'mvr' }">
+	  							<c:out value="房颤手术随访"></c:out>
+	  						</c:when>
+	  						<c:when test="${obj.visitType == 'gxb' }">
+	  							<c:out value="冠心病手术随访"></c:out>
+	  						</c:when>
+	  					</c:choose>
+	  				</td>
 	  				<td align="right" width="10%"><h3>随访姓名：</h3></td>
-	  				<td width="15%">${visitName }</td>
+	  				<td width="15%">${obj.visitName }</td>
 	  				<td align="right" width="5%"><h3>性别：</h3></td>
-	  				<td width="10%">${sex }</td>
+	  				<td width="10%">
+	  					<c:choose>
+	  						<c:when test="${obj.sex == null || obj.sex == '' || obj.sex == 'null' }">
+	  							<c:out value="无"></c:out>
+	  						</c:when>
+	  						<c:otherwise>
+	  							<c:out value="${obj.sex }"></c:out>
+	  						</c:otherwise>
+	  					</c:choose>
+	  				</td>
 	  			</tr>
 	  		</table>
 	  		<table id='table1' width='100%' border='1' cellspacing='0' cellpadding='0' class="maintable2">

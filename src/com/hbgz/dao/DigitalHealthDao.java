@@ -767,6 +767,16 @@ public class DigitalHealthDao
 		return itzcQryCenter.executeSqlByMapListWithTrans(sql.toString(), lstParam);
 	}
 
+	public List qryPatientVisitById(String visitId) throws Exception 
+	{
+		StringBuffer sql = new StringBuffer();
+		sql.append("select visit_name, visit_type, (select sex from hospital_user_t where state = '00A' and user_id = patient_id) sex ");
+		sql.append("from patient_visit_t where state = '00A' and visit_id = ? ");
+		ArrayList lstParam = new ArrayList();
+		lstParam.add(visitId);
+		return itzcQryCenter.executeSqlByMapListWithTrans(sql.toString(), lstParam);
+	}
+
 	public List qryOnLineDoctorQuesList(String hospitalId, String teamId, String doctorName) throws Exception 
 	{
 		StringBuffer sql = new StringBuffer();

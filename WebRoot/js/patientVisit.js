@@ -57,11 +57,11 @@ function createTable(data)
 			}
 			if(i % 2)
 			{
-				content += "<tr class='bkf0' onmouseover='trColorChange(this,"+i+")' onmouseout='trColorChange(this,"+i+")' onclick='viewVisitDetail("+obj.visitId+", \""+visitType+"\", \""+obj.visitName+"\", \""+obj.sex+"\")'>";
+				content += "<tr class='bkf0' onmouseover='trColorChange(this,"+i+")' onmouseout='trColorChange(this,"+i+")' onclick='viewVisitDetail("+obj.visitId+")'>";
 			}
 			else
 			{
-				content += "<tr class='aaa' onmouseover='trColorChange(this,"+i+")' onmouseout='trColorChange(this,"+i+")' onclick='viewVisitDetail("+obj.visitId+", \""+visitType+"\", \""+obj.visitName+"\", \""+obj.sex+"\")'>";
+				content += "<tr class='aaa' onmouseover='trColorChange(this,"+i+")' onmouseout='trColorChange(this,"+i+")' onclick='viewVisitDetail("+obj.visitId+")'>";
 			}
 			var cardId = obj.cardId;
 			if(cardId == "" ||　cardId == null)
@@ -80,10 +80,10 @@ function createTable(data)
 	$("#template").html(content);
 }
 
-function viewVisitDetail(visitId, visitType, visitName, sex)
+function viewVisitDetail(visitId)
 {
 	lockScreen();
-	$.dialog({width:"900px", esc:false, title:"随访明细", content:"url:/visit.htm?method=qryVisitDetail&visitId="+visitId+"&visitType="+visitType+"&visitName="+visitName+"&sex="+sex, min:false, max:false, lock:true, close:function(){unlockScreen();}});
+	$.dialog({width:"900px", esc:false, title:"随访明细", content:"url:/visit.htm?method=qryVisitDetail&visitId="+visitId, min:false, max:false, lock:true, close:function(){unlockScreen();}});
 }
 
 function trColorChange(val, i) 

@@ -35,6 +35,20 @@ public class PatientVisitService
 		}
 		return sList;
 	}
+	
+	public JSONObject qryPatientVisitById(String visitId) throws Exception 
+	{
+		JSONObject obj = new JSONObject();
+		if(ObjectCensor.isStrRegular(visitId))
+		{
+			List sList = digitalHealthDao.qryPatientVisitById(visitId);
+			if(ObjectCensor.checkListIsNull(sList))
+			{
+				obj = JSONObject.fromObject(sList.get(0));
+			}
+		}
+		return obj;
+	}
 
 	public JSONObject qryUserList(int pageNum, int pageSize, String userName, String sex, String telephone) throws Exception 
 	{
