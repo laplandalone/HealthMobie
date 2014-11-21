@@ -18,6 +18,8 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<link rel="stylesheet" href="<%=path%>/pub/css/menu.css" type="text/css" />
+		<script type="text/javascript" src="<%=path%>/pub/js/jquery-1.9.1.min.js"></script>
+		<script language="javascript" type="text/javascript" src="<%=path%>/js/menu.js"></script>
 	</head>
 
 	<body>
@@ -70,9 +72,9 @@
 							</c:otherwise>
 						</c:choose>
 						<c:if test="${sessionScope.userPrivs=='4' && sessionScope.hospitalId=='102'}">
-							<li style="height:75px;line-height:1.5;">
-								<span><img src="images/li.jpg" />&nbsp;&nbsp;患者随访</span>
-								<ul>
+							<li style="height:75px;line-height:1.5;" id="accArea">
+								<span><img src="images/li.jpg" />&nbsp;&nbsp;<a href="javascript:void(0)" onclick="treeList('accList','accArea')">患者随访</a></span>
+								<ul id="accList" style="display:block">
 									<li>
 										<div class="linePic"></div><div class="posPic"></div><a class="abtn" href="/view/visit/patientVisitList.jsp?visitType=asd" target="main">先心手术随访</a>
 									</li>
@@ -84,9 +86,9 @@
 									</li>
 								</ul>
 							</li>
-							<li style="height:75px;line-height:1.5;">
-								<span><img src="images/li.jpg" />&nbsp;&nbsp;医生数据管理</span>
-								<ul>
+							<li style="height:75px;line-height:1.5;" id="docInfoArea">
+								<span><img src="images/li.jpg" />&nbsp;&nbsp;<a href="javascript:void(0)" onclick="treeList('docInfoList','docInfoArea')">医生数据管理</a></span>
+								<ul id="docInfoList" style="display:block">
 									<li>
 										<div class="linePic"></div><div class="posPic"></div><a class="abtn" href="/view/doctor/onlineDocotrList.jsp" target="main">在线医生管理</a>
 									</li>
