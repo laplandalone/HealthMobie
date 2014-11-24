@@ -17,11 +17,11 @@ import com.hbgz.pub.util.StringUtil;
 
 public class BaiduChannelClientSingleton
 {	
-	private static String apiKey = "";
+	private static String apiKey = "EHKN6qSTGpmEWN0uXk85LWGO";
 	
-	private static String secretKey = "";
+	private static String secretKey = "U4rZuCUf3vMCPk13daf9Z8aOZxzn49AK";
 	
-	static
+/*	static
 	{
 		try 
 		{
@@ -41,7 +41,7 @@ public class BaiduChannelClientSingleton
 		{
 			e.printStackTrace();
 		}
-	}
+	}*/
 	
 	private static Log log = LogFactory.getLog(BaiduChannelClientSingleton.class);
 	

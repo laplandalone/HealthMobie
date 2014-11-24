@@ -59,6 +59,6 @@ public class AndroidPushMsg
 	public static void main(String[] args)
 	{
 		//œ˚œ¢
-		pushMsg("1078586329118986050", "msg", "≤‚ ‘", "");
+		pushMsg("3699355557745457364", "msg", "≤‚ ‘", "982179218847486686");
 	}
 }
