@@ -475,27 +475,33 @@ public class MobileController
 	
 	//查询专家挂号订单
 	@RequestMapping(params = "method=qryRegisterOrder")
-	public ModelAndView qryRegisterOrder(HttpServletRequest request, HttpServletResponse response) throws Exception
+	public void qryRegisterOrder(@RequestBody JSONObject obj, HttpServletRequest request, HttpServletResponse response)
 	{
-		ModelAndView model = new ModelAndView("registerOrderList");
-		HttpSession session = request.getSession(false);
-		String hospitalId = (String) session.getAttribute("hospitalId");
-		String teamId = request.getParameter("teamId");
-		String doctorId = request.getParameter("doctorId");
-		String startTime = (String) request.getParameter("startTime");
-		String endTime = (String) request.getParameter("endTime");
-		String state = (String) request.getParameter("state");
-		List registerOrderList = digitalHealthService.qryRegisterOrder(hospitalId, teamId, doctorId, startTime, endTime, state);
-		model.addObject("registerOrderList", registerOrderList);
-		model.addObject("hospitalId", hospitalId);
-		model.addObject("teamId", teamId);
-		model.addObject("doctorId", doctorId);
-		model.addObject("startTime", startTime);
-		model.addObject("endTime", endTime);
-		model.addObject("state", state);
-		model.setViewName("registerOrderList");
-
-		return model;
+		response.setCharacterEncoding("UTF-8");
+		PrintWriter out = null;
+		try 
+		{
+			HttpSession session = request.getSession(false);
+			int pageNum = Integer.parseInt(StringUtil.getJSONObjectKeyVal(obj, "curId"));
+			int pageSize = Integer.parseInt(StringUtil.getJSONObjectKeyVal(obj, "pageNum"));
+			String hospitalId = (String) session.getAttribute("hospitalId");
+			String teamId = StringUtil.getJSONObjectKeyVal(obj, "teamId");
+			String startTime = StringUtil.getJSONObjectKeyVal(obj, "startTime");
+			String endTime = StringUtil.getJSONObjectKeyVal(obj, "endTime");
+			String state = StringUtil.getJSONObjectKeyVal(obj, "state");
+			JSONObject object = digitalHealthService.qryRegisterOrder(pageNum, pageSize, hospitalId, teamId, startTime, endTime, state);
+			log.error(object);
+			out = response.getWriter();
+			out.println(object);
+		} 
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			out.close();
+		}
 	}
 	
 	//预约或作废专家挂号订单

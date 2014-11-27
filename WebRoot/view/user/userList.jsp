@@ -99,7 +99,7 @@
   		<input type="hidden" id="treeId" />
 		<input type="hidden" id="treeNum" />
 		<input type="hidden" id="condition" />
-		<input type="hidden" id="pagingNumCnt" value="10" />
+		<input type="hidden" id="pagingNumCnt" value="16" />
 		<script type="text/javascript" src="<%=path %>/pub/js/paging.js"></script>
   	</body>
 </html>

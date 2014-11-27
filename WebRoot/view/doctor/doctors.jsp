@@ -20,163 +20,92 @@
 		<script type="text/javascript" src="<%=path%>/pub/js/date.js"></script>
 		<script type="text/javascript" src="<%=path%>/js/comm.js"></script>
 		<script type="text/javascript" src="<%=path%>/js/json2.js"></script>
-		<script type="text/javascript">
-			$(document).ready(function(){
-				var teamId = $("#selTeamId").val();
-				$("#teamId option[value='" + teamId + "']").attr("selected", true);
-				var name = $("#selName").val();
-				$("#doctorName").val(name);
-			});
-			
-			function queryMed()
-			{
-				var doctorId='<%= doctorId%>';
-				var teamId = $("#teamId").val();
-				var docotrName = $("#doctorName").val();
-				docotrName = $.trim(docotrName);
-				window.location.href = "/doctor.htm?method=queryPre&doctorId="+doctorId+"&teamId="+teamId+"&doctorName="+docotrName;
-			}
-
-			function queryDoctor(doctorId) 
-			{
-				if (doctorId != "") 
-				{
-					window.location.href = "/doctor.htm?method=getDoctor&doctorId=" + doctorId;
-				}
-			}
-			
-			function deleteDoctor(doctorId)
-			{
-				$.dialog.confirm("是否删除该医生?", 
-					function(){
-						$.ajax({
-							type : "POST",
-							url : "/doctor.htm?method=deleteDoctor",
-							data : "doctorId="+doctorId,
-							success: function(data) 
-							{
-								if(data == "success")
-								{
-									$.dialog({title:false, width:"150px", esc:false, height:"60px", zIndex:2000, icon:"succ.png", lock:true, content:"删除医生信息成功!", ok:function() {queryMed(); return true;}});
-								}
-								else
-								{
-									$.dialog({title:false, width:"150px", esc:false, height:"60px", zIndex:2000, icon:"fail.png", lock:true, content:"删除医生信息失败!", ok:function() {queryMed(); return true;}});
-								}
-							},
-							error : function(data)
-							{
-								$.dialog.alert(data.statusText, function(){return true;});
-							}
-						});
-					},
-					function(){return true;}
-				);
-			}
-			
-			function enterQry(fName)
-			{
-				if(event.keyCode == 13)
-				{   
-					event.returnValue = false;
-					fName +='()';
-					eval(fName);
-				}	
-			}
-			
-			function trColorChange(val, i) 
-			{
-				if (val.className == "bkf0" || val.className == "aaa")
-				{
-					val.className = "trcolor";
-				} 
-				else 
-				{
-					if (i % 2)
-					{
-						val.className = "bkf0";
-					}
-					else
-					{
-						val.className = "aaa";
-					}
-				}
-			}
-		</script>
+		<script type="text/javascript" src="<%=path%>/js/json.js"></script>
+		<script type="text/javascript" src="<%=path%>/js/doctor.js"></script>
 	</head>
-	<body>
-		<table width="100%">
-			<input type="hidden" id="selTeamId" value="${teamId }"/>
-			<input type="hidden" id="selName" value="${doctorName }"/>
-			<tr>
-				<td align="right" width="10%">科室名称：</td>
-				<td width="8%">
-					<c:set var="teamLst" value="<%=teamLst %>"></c:set>
-					<select id="teamId" name="teamId" class="subselect">
-						<option value="">---请选择---</option>
-						<c:forEach items="${teamLst }" var="team">
-							<c:if test="${team.expertFlag == '1' }">
-								<option value="${team.teamId }">${team.teamName }</option>
-							</c:if>
-						</c:forEach>
-					</select>
-				</td>
-				<td align="right" width="10%">医生名称：</td>
-				<td width="8%">
-					<input type="text" id="doctorName" name="doctorName" class="subtext" onkeydown="enterQry('queryMed')"/>
-				</td>
-				<td align="left">
-					<input type="button" class="button3" value="查询" onclick="queryMed()"/>
-				</td>
-				<td width="10%">&nbsp;</td>
-			</tr>
-		</table>
-		<div id="template" style="overflow:auto">
-			<table width="100%" border="1" cellspacing="0" cellpadding="0" class="maintable1">
-				<tr class="tabletop">
-					<td>医生名称</td>
-					<td width="20%">职称</td>
-					<td width="10%">性别</td>
-					<td width="20%">科室</td>
-					<td width="10%">操作</td>
-				</tr>
-				<c:forEach items="${doctorLst }" var="doctor" varStatus="i">
-					<c:if test="${i.index % 2 != 0 }">
-						<tr class='bkf0' onmouseover="trColorChange(this,${i.index})" onmouseout="trColorChange(this,${i.index })">
-					</c:if>
-					<c:if test="${i.index % 2 == 0 }">
-						<tr class='aaa' onmouseover="trColorChange(this,${i.index})" onmouseout="trColorChange(this,${i.index })">
-					</c:if>
-						<td align="center" width='15%'><c:out value="${doctor.name}" />
+	
+	<body onload="queryMed()">
+		<form action="">
+			<div class="mainsearch">
+				<input type="hidden" id="doctorId" name="doctorId" value="<%=doctorId %>"/>
+				<table width="100%">
+					<tr>
+						<td align="right" width="10%">科室名称：</td>
+						<td width="8%">
+							<c:set var="teamLst" value="<%=teamLst %>"></c:set>
+							<select id="teamId" name="teamId" class="subselect">
+								<option value="">---请选择---</option>
+								<c:forEach items="${teamLst }" var="team">
+									<c:if test="${team.expertFlag == '1' }">
+										<option value="${team.teamId }">${team.teamName }</option>
+									</c:if>
+								</c:forEach>
+							</select>
 						</td>
-						<td align="center">
-							<c:choose>
-								<c:when test="${doctor.post == '' || doctor.post ==  null || doctor.post == 'null' || doctor.post == undefined}">
-									<c:out value="无"></c:out>
-								</c:when>
-								<c:otherwise>
-									<c:out value="${doctor.post}" /></td>
-								</c:otherwise>
-							</c:choose>
-						<td align="center">
-							<c:choose>
-								<c:when test="${doctor.sex == '' || doctor.sex ==  null || doctor.sex == 'null' || doctor.sex == undefined}">
-									<c:out value="无"></c:out>
-								</c:when>
-								<c:otherwise>
-									<c:out value="${doctor.sex }" />
-								</c:otherwise>
-							</c:choose>
+						<td align="right" width="10%">医生名称：</td>
+						<td width="8%">
+							<input type="text" id="doctorName" name="doctorName" class="subtext" onkeydown="enterQry('queryMed')"/>
 						</td>
-						<td align="center"><c:out value="${doctor.team_name}" /></td>
-						<td style="text-align:center !important">
-							<a href="javascript:void(0)" class="linkmore" onclick="queryDoctor('${doctor.doctor_id}')">管理</a>
-							&nbsp;&nbsp;&nbsp;&nbsp;
-							<a href="javascript:void(0)" class="linkmore" onclick="deleteDoctor('${doctor.doctor_id}')">删除</a>
+						<td align="left">
+							<input type="button" class="button3" value="查询" onclick="queryMed()"/>
 						</td>
+						<td width="10%">&nbsp;</td>
 					</tr>
-				</c:forEach>
-			</table>
-		</div>
+				</table>
+			</div>
+			<div class="main">
+	  			<div class="title">
+					<div class="titleleft"></div>
+					<div class="titlecentre">
+						<h3>查询结果</h3>
+					</div>
+					<div class="titleright"></div>
+				</div>
+				<div id="template" class="box">
+					<table width="100%" border="1" cellspacing="0" cellpadding="0" class="maintable1">
+						<tr class="tabletop">
+							<td>医生名称</td>
+							<td width="20%">职称</td>
+							<td width="10%">性别</td>
+							<td width="20%">科室</td>
+							<td width="10%">操作</td>
+						</tr>
+					</table>
+				</div>
+				<div align="right" class="page">
+					<div class='ctrl'>
+						<table align='center' id="ctrltab">
+							<tr>
+								<td class="prev" align="right">
+									<a href="javascript:void(0)" id="prevPage" onclick=rotPaging(1);>上一页</a>
+								</td>
+								<td align="center">
+									<p id="tagId"></p>
+								</td>
+								<td class="next" align="left">
+									<a href="javascript:void(0)" onclick=rotPaging(2); id="nextPage">下一页</a>
+								</td>
+								<td>
+									共计<span id="totalPage"></span>页
+								</td>
+								<td>
+									转到<input type="text" id="gotoPage" onkeydown="gotoKeydown()" onkeypress="gotoKeydown()" onkeyup="gotoKeydown()" />页
+								</td>
+								<td>
+									<input type="button" id="goto" onclick="gotoFunc()" />
+								</td>
+		  						<td width="20%">&nbsp;</td>
+		  						<td width="20%">&nbsp;</td>
+		  					</tr>
+		  				</table>
+		  			</div>
+		  		</div>
+			</div>
+		</form>
+		<input type="hidden" id="treeId" />
+		<input type="hidden" id="treeNum" />
+		<input type="hidden" id="condition" />
+		<input type="hidden" id="pagingNumCnt" value="16" />
+		<script type="text/javascript" src="<%=path %>/pub/js/paging.js"></script>
 	</body>
 </html>

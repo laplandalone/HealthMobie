@@ -1,7 +1,6 @@
 package com.hbgz.controller;
 
 import java.io.PrintWriter;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,11 +13,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.hbgz.model.UserQuestionT;
 import com.hbgz.pub.util.ObjectCensor;
+import com.hbgz.pub.util.StringUtil;
 import com.hbgz.service.DigitalHealthService;
 
 /**
@@ -37,44 +38,55 @@ public class QuestionController
 	
 	
 	@RequestMapping(params = "method=queryPre")
-	public ModelAndView queryPre(HttpServletResponse response , HttpServletRequest request) throws Exception
+	public void queryPre(@RequestBody JSONObject obj, HttpServletRequest request, HttpServletResponse response)
 	{
-		ModelAndView model = new ModelAndView("questionList");
+		response.setCharacterEncoding("UTF-8");
 		HttpSession session = request.getSession();
 		String hospitalId= (String)session.getAttribute("hospitalId");
-		String privs = (String) session.getAttribute("userPrivs");
-		if("4".equals(privs))
+		PrintWriter out = null;
+		try 
 		{
-			String teamId = request.getParameter("teamId");
-			String doctorName = request.getParameter("doctorName");
-			List sList = digitalHealthService.qryOnLineDoctorQuesList(hospitalId, teamId, doctorName);
-			model.addObject("quesLst", sList);
-			model.addObject("teamId", teamId);
-			model.addObject("doctorName", doctorName);
-			model.setViewName("/view/question/onlineDoctorQuesList");
-		}
-		else
+			if(ObjectCensor.isStrRegular(hospitalId))
+			{
+				out = response.getWriter();
+				String privs = (String) session.getAttribute("userPrivs");
+				JSONObject object = new JSONObject();
+				if("4".equals(privs))
+				{
+					int pageNum = Integer.parseInt(StringUtil.getJSONObjectKeyVal(obj, "curId"));
+					int pageSize = Integer.parseInt(StringUtil.getJSONObjectKeyVal(obj, "pageNum"));
+					String teamId = StringUtil.getJSONObjectKeyVal(obj, "teamId");
+					String doctorName = StringUtil.getJSONObjectKeyVal(obj, "doctorName");
+					object = digitalHealthService.qryOnLineDoctorQuesList(pageNum, pageSize, hospitalId, teamId, doctorName);
+				}
+				else
+				{
+					int pageNum = Integer.parseInt(StringUtil.getJSONObjectKeyVal(obj, "curId"));
+					int pageSize = Integer.parseInt(StringUtil.getJSONObjectKeyVal(obj, "pageNum"));
+					String doctorId = StringUtil.getJSONObjectKeyVal(obj, "doctorId");
+					String startTime = StringUtil.getJSONObjectKeyVal(obj, "startTime");
+					String endTime = StringUtil.getJSONObjectKeyVal(obj, "endTime");
+					if(ObjectCensor.isStrRegular(doctorId))
+					{
+						object = digitalHealthService.qryUserQuestionsList(pageNum, pageSize, doctorId, hospitalId, startTime, endTime);
+					}
+				}
+				log.error(object);
+				out.println(object);
+			}
+		} 
+		catch (Exception e) 
 		{
-			String doctorId = (String)request.getParameter("doctorId");
-			String startTime = (String)request.getParameter("startTime");
-			String endTime = (String)request.getParameter("endTime");
-			if(ObjectCensor.isStrRegular(doctorId))
+			e.printStackTrace();
+			out.println("error");
+		}
+		finally
+		{
+			if(out != null)
 			{
-				List userFileLst = digitalHealthService.getUserQuestionsByDoctorId(doctorId, hospitalId, startTime, endTime);
-				log.error(userFileLst);
-				model.addObject("quesLst", userFileLst);
-				model.addObject("startTime", startTime);
-				model.addObject("endTime", endTime);
-				model.addObject("doctorId", doctorId);
-				model.setViewName("/view/question/questionList");
-			}
-			else
-			{
-				model.addObject("result", "error");
-				model.setViewName("error");
+				out.close();
 			}
 		}
-		return model;
 	}
 	
 	@RequestMapping(params = "method=qryQuesList")

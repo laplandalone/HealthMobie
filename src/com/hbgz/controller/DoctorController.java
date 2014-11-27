@@ -41,32 +41,47 @@ public class DoctorController
 	private DigitalHealthService digitalHealthService;
 
 	@RequestMapping(params = "method=queryPre")
-	public ModelAndView queryPre(HttpServletResponse response, HttpServletRequest request) throws Exception 
+	public void queryPre(@RequestBody JSONObject obj, HttpServletRequest request, HttpServletResponse response)
 	{
-		ModelAndView model = new ModelAndView("doctors");
-		HttpSession session = request.getSession();
-		String hospitalId = (String) session.getAttribute("hospitalId");
-		String privs = (String) session.getAttribute("userPrivs");
-		String doctorId = request.getParameter("doctorId");
-		String teamId = request.getParameter("teamId");
-		String doctorName = request.getParameter("doctorName");
-		if (ObjectCensor.isStrRegular(hospitalId)) 
+		response.setCharacterEncoding("UTF-8");
+		PrintWriter out = null;
+		try 
 		{
-			if ("3".equals(privs)) 
+			out = response.getWriter();
+			HttpSession session = request.getSession();
+			String hospitalId = (String) session.getAttribute("hospitalId");
+			if (ObjectCensor.isStrRegular(hospitalId)) 
 			{
-				doctorId = "";// 查询所有，超级管理员
+				String privs = (String) session.getAttribute("userPrivs");
+				String doctorId = StringUtil.getJSONObjectKeyVal(obj, "doctorId");
+				if ("3".equals(privs)) 
+				{
+					doctorId = "";// 查询所有，超级管理员
+				}
+				int pageNum = Integer.parseInt(StringUtil.getJSONObjectKeyVal(obj, "curId"));
+				int pageSize = Integer.parseInt(StringUtil.getJSONObjectKeyVal(obj, "pageNum"));
+				String teamId = StringUtil.getJSONObjectKeyVal(obj, "teamId");
+				String doctorName = StringUtil.getJSONObjectKeyVal(obj, "doctorName");
+				JSONObject object = digitalHealthService.getDoctorByHospitalId(pageNum, pageSize, hospitalId, doctorId, teamId, doctorName);
+				log.error(object);
+				out.println(object);
+			} 
+			else 
+			{
+				out.println("error");
 			}
-			List doctorLst = digitalHealthService.getDoctorByHospitalId(hospitalId, doctorId, teamId, doctorName);
-			model.addObject("teamId", teamId);
-			model.addObject("doctorName", doctorName);
-			model.addObject("doctorLst", doctorLst);
-			model.setViewName("/view/doctor/doctors");
 		} 
-		else 
+		catch (Exception e) 
 		{
-			model.setViewName("error");
+			out.println("error");
 		}
-		return model;
+		finally
+		{
+			if(out != null)
+			{
+				out.close();
+			}
+		}
 	}
 
 	@RequestMapping(params = "method=getDoctor")

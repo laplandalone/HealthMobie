@@ -17,63 +17,119 @@ $(document).ready(function(){
 			}
 		});
 	});
-	
-	var newsType = $("#selNewsType").val();
-	$("#newsType option[value='" + newsType + "']").attr("selected", true);
-	
-	var typeId = $("#selTypeId").val();
-	$.getJSON("/news.htm?method=qryNewsTypeList", {"newsType":newsType, "random":Math.random()}, function(data){
-		var options = "";
-		if(typeId == "")
-		{
-			options += "<option value='' selected='selected'>内容分类</option>"; 
-		}
-		else
-		{
-			options += "<option value=''>内容分类</option>"; 
-		}
-		if(data.length > 0)
-		{
-			for(var i = 0; i < data.length; i++)
-			{
-				if(typeId == data[i].configId)
-				{
-					options += "<option value='"+data[i].configId+"' selected='selected'>"+data[i].configVal+"</option>"; 
-				}
-				else
-				{
-					options += "<option value='"+data[i].configId+"'>"+data[i].configVal+"</option>"; 
-				}
-			}
-		}
-		$("#typeId").html(options);
-	});
-	
-	var state = $("#selState").val();
-	$("#state option[value='" + state + "']").attr("selected", true);
-	
-	var startTime = $("#selStartTime").val();
-	var endTime = $("#selEndTime").val();
-	if(startTime != "" && endTime != "")
-	{
-		$("#startTime").val(startTime);
-		$("#endTime").val(endTime);
-	}
 });
-
-function reload()
-{
-	window.location.reload();
-}
 
 function qryNewsList()
 {
-	var startTime = $("#startTime").val();
-	var endTime = $("#endTime").val();
-	var newsType = $("#newsType").val();
-	var typeId = $("#typeId").val();
-	var state = $("#state").val();
-	window.location.href = "/news.htm?method=qryNewsList&startTime="+startTime+"&endTime="+endTime+"&newsType="+newsType+"&typeId="+typeId+"&state="+state;
+	var obj = JSON.stringify($("select,input").serializeObject());
+	obj = qryStartFunc(obj);
+	var dig = null;
+	$.ajax({
+		type : "POST",
+		url : "/news.htm?method=qryNewsList",
+		data : obj,
+		async : false,
+		contentType : "application/json;charset=UTF-8",
+		dataType : "json",
+		beforeSend : function()
+		{
+			dig = new $.dialog({title:'正在查询请等待...',esc:false,min:false,max:false,lock:true});
+		},
+		success : function(data)
+		{
+			try
+			{
+				dig.close();
+			}
+			catch(e)
+			{
+				
+			}
+			createTable(data, 0);
+		},
+		error : function(data)
+		{
+			$.dialog.alert(data.statusText, function(){window.location.reload(); return true;});
+		}
+	});
+}
+
+function createTable(data, flagParam)
+{
+	var content = "<table id='table1' width='100%' border='1' cellspacing='0' cellpadding='0' class='maintable'>";
+	content += "<tr class='tabletop'><td width='5%'>编号</td><td width='10%'>医院名称</td><td width='6%'>所属板块</td>";
+	content += "<td width='8%'>分类</td><td width='20%'>信息标题</td><td width='6%'>发布状态</td><td width='10%'>创建时间</td><td width='5%'>操作</td></tr>";
+	if(data.count > 0)
+	{
+		var cnt = 0;
+		if(flagParam == 0)
+		{
+			cnt = qryMiddleFunc(data.count);
+		}
+		$.each(data.newsList, function(i, obj){
+			if(i % 2)
+			{
+				content += "<tr class='bkf0' onmouseover='trColorChange(this,"+i+")' onmouseout='trColorChange(this,"+i+")'>";
+			}
+			else
+			{
+				content += "<tr class='aaa' onmouseover='trColorChange(this,"+i+")' onmouseout='trColorChange(this,"+i+")'>";
+			}
+			content += "<td style='text-align:center'>"+obj.newsId+"</td><td style='text-align:center'>"+obj.hospitalName+"</td><td style='text-align:center'>"+obj.newsType+"</td><td style='text-align:center'>"+obj.typeId+"</td>";
+			content += "<td style='text-align:center'>"+obj.newsTitle+"</td><td style='text-align:center'>"+obj.stateVal+"</td><td style='text-align:center'>"+obj.createDate+"</td>";
+			content += "<td style='text-align:center !important'><a href='javascript:void(0)' class='linkmore' onclick='updateNews("+obj.newsId+")'>修改</a></td></tr>";
+		});
+		if(flagParam == 0)
+		{
+			qryEndFunc(cnt);
+		}
+	}
+	else
+	{
+		content += "<tr><td colspan='8' style='text-align:center'>没有查询到相应的记录!</td></tr>";
+		$("#ctrltab td").each(function(i,data){
+			if(i < 8)
+			{
+				$(data).css("visibility","hidden");
+			}
+		});
+	}
+	content += "</table>";
+	$("#template").html(content);
+}
+
+function qryPaging(val)
+{
+	var obj = qryPaingStartFunc(val);
+	var dig = null;
+	$.ajax({
+		type : "POST",
+		url : "/news.htm?method=qryNewsList",
+		data : obj,
+		contentType:'application/json;charset=UTF-8',
+		dataType: "json",
+		beforeSend : function()
+		{
+			dig = new $.dialog({title:'正在查询请等待...',esc:false,min:false,max:false,lock:true});
+		},
+		success: function(data) 
+		{
+			try
+			{
+				dig.close();
+			}
+			catch(e)
+			{
+				
+			}
+			createTable(data, 1);
+		},
+		error : function(data)
+		{
+			dig.close();
+			$.dialog({title : false,esc:false, zIndex: 2000,width:"150px",height:"60px", icon: 'fail.png', lock: true, content: '查询失败!',ok: function(){return true;}});
+		}
+	});
 }
 
 function updateNews(newsId)
@@ -129,7 +185,7 @@ function addNewsType()
 							}
 							else
 							{
-								$.dialog( { title:false, width:"150px", esc:false, height:"60px", zIndex:2000, icon:'fail.png', lock:true, content:'新增分类信息失败!', ok:function() {return true;}});
+								$.dialog({title:false, width:"150px", esc:false, height:"60px", zIndex:2000, icon:'fail.png', lock:true, content:'新增分类信息失败!', ok:function() {return true;}});
 							}
 						},
 						error:function(stata)
@@ -142,4 +198,23 @@ function addNewsType()
 		},
 		cancel: true
 	});
+}
+
+function trColorChange(val, i) 
+{
+	if (val.className == "bkf0" || val.className == "aaa") 
+	{
+		val.className = "trcolor";
+	} 
+	else 
+	{
+		if (i % 2)
+		{
+			val.className = "bkf0";
+		}
+		else 
+		{
+			val.className = "aaa";
+		}
+	}
 }

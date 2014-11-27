@@ -414,14 +414,15 @@ public class DigitalHealthDao
 	 * @return
 	 * @throws Exception
 	 */
-	public List qryRegisterOrder(String hospitalId, String teamId, String doctorId,  String startTime, String endTime, String state) throws Exception 
+	public List qryRegisterOrderList(int pageNum, int pageSize, String hospitalId, String teamId, String startTime, String endTime, String state) throws Exception 
 	{
 		StringBuffer query = new StringBuffer();
-		query.append("select a.order_num,a.order_id, a.register_id, a.order_fee,a.doctor_name, a.register_time, a.create_date, a.team_name,a.user_name,a.user_telephone, b.hospital_name, ");
+		query.append("select * from (select c.*, ROWNUM RN from (");
+		query.append("select a.order_num,a.order_id, a.register_id, a.order_fee,a.doctor_name, a.register_time, to_char(a.create_date, 'yyyy-MM-dd hh24:mi:ss') create_date, a.team_name,a.user_name,a.user_telephone, b.hospital_name, ");
 		query.append("decode(a.order_state, '000', '未处理', '00A', '已预约', '00X', '已作废') order_state, ");
 		query.append("decode(a.pay_state, '100', '未支付', '101', '已支付', '102', '已取消') pay_state ");
-		query.append("from register_order_t a,  hospital_t b ");
-		query.append("where a.state = '00A' and b.state = '00A' and  a.hospital_id=b.hospital_id  and b.hospital_id = ? ");
+		query.append("from register_order_t a, hospital_t b ");
+		query.append("where a.state = '00A' and b.state = '00A' and a.hospital_id = b.hospital_id  and b.hospital_id = ? ");
 		ArrayList lstParam = new ArrayList();
 		lstParam.add(hospitalId);
 		if(ObjectCensor.isStrRegular(startTime, endTime))
@@ -429,11 +430,6 @@ public class DigitalHealthDao
 			query.append("and to_date(substr(a.register_time, 0, 10), 'yyyy-mm-dd') between to_date(?,'yyyy-mm-dd') and to_date(?,'yyyy-mm-dd') ");
 			lstParam.add(startTime);
 			lstParam.add(endTime);
-		}
-		if(ObjectCensor.isStrRegular(doctorId))
-		{
-			query.append("and a.doctor_id = ? ");
-			lstParam.add(doctorId);
 		}
 		if(ObjectCensor.isStrRegular(teamId))
 		{
@@ -452,8 +448,46 @@ public class DigitalHealthDao
 			}
 			lstParam.add(state);
 		}
-		query.append("order by a.create_date desc");
+		query.append("order by a.create_date desc) c where ROWNUM <= ?) where RN >= ?");
+		lstParam.add(pageNum * pageSize);
+		lstParam.add((pageNum - 1) * pageSize + 1);
 		return itzcQryCenter.executeSqlByMapListWithTrans(query.toString(), lstParam);
+	}
+	
+	public int qryRegisterOrderCount(String hospitalId, String teamId, String startTime, String endTime, String state) throws Exception 
+	{
+		StringBuffer query = new StringBuffer();
+		query.append("select a.order_num,a.order_id, a.register_id, a.order_fee,a.doctor_name, a.register_time, a.create_date, a.team_name,a.user_name,a.user_telephone, b.hospital_name, ");
+		query.append("decode(a.order_state, '000', '未处理', '00A', '已预约', '00X', '已作废') order_state, ");
+		query.append("decode(a.pay_state, '100', '未支付', '101', '已支付', '102', '已取消') pay_state ");
+		query.append("from register_order_t a, hospital_t b ");
+		query.append("where a.state = '00A' and b.state = '00A' and a.hospital_id = b.hospital_id  and b.hospital_id = ? ");
+		ArrayList lstParam = new ArrayList();
+		lstParam.add(hospitalId);
+		if(ObjectCensor.isStrRegular(startTime, endTime))
+		{
+			query.append("and to_date(substr(a.register_time, 0, 10), 'yyyy-mm-dd') between to_date(?,'yyyy-mm-dd') and to_date(?,'yyyy-mm-dd') ");
+			lstParam.add(startTime);
+			lstParam.add(endTime);
+		}
+		if(ObjectCensor.isStrRegular(teamId))
+		{
+			query.append("and a.team_id = ? ");
+			lstParam.add(teamId);
+		}
+		if(ObjectCensor.isStrRegular(state))
+		{
+			if("101".equals(hospitalId))
+			{
+				query.append("and a.order_state = ? ");
+			}
+			else if("102".equals(hospitalId))
+			{
+				query.append("and a.pay_state = ? ");
+			}
+			lstParam.add(state);
+		}
+		return itzcQryCenter.getCount(query.toString(), lstParam);
 	}
 	
 	public List getDoctorById(String doctorId) throws QryException
@@ -483,7 +517,41 @@ public class DigitalHealthDao
 		return itzcQryCenter.executeSqlByMapList(sql, lstParam);
 	}
 
-	public List qryNewsList(String hospitalId, String startTime, String endTime, String newsType, String typeId, String state) throws Exception 
+	public List qryNewsList(int pageNum, int pageSize, String hospitalId, String startTime, String endTime, String newsType, String typeId, String state) throws Exception 
+	{
+		StringBuffer query = new StringBuffer();
+		query.append("SELECT * FROM (SELECT A.*, ROWNUM ROWNUMBER FROM (");
+		query.append("select a.news_id, a.news_title, a.state, decode(a.news_type, 'NEWS', '患教中心', 'BAIKE', '就医帮助') news_type, decode(a.state, '00A', '正常', '00X', '作废') state_val, to_char(a.create_date, 'yyyy-MM-dd hh24:mi:ss') create_date, b.hospital_name, ");
+		query.append("(select config_val from hospital_config_t where state = '00A' and hospital_id = ? and config_type = 'HOSPITALNEWS' and config_name = a.news_type and config_id = a.type_id) type_id ");
+		query.append("from hospital_news_t a, hospital_t b where a.hospital_id = b.hospital_id and b.state = '00A' and a.hospital_id = ? ");
+		query.append("and a.create_date between to_date(?, 'yyyy-MM-dd hh24:mi:ss') and to_date(?, 'yyyy-MM-dd hh24:mi:ss') ");
+		ArrayList lstParam = new ArrayList();
+		lstParam.add(hospitalId);
+		lstParam.add(hospitalId);
+		lstParam.add(startTime);
+		lstParam.add(endTime + " 23:59:59");
+		if(ObjectCensor.isStrRegular(newsType))
+		{
+			query.append("and a.news_type = ? ");
+			lstParam.add(newsType);
+		}
+		if(ObjectCensor.isStrRegular(typeId))
+		{
+			query.append("and a.type_id = ? ");
+			lstParam.add(typeId);
+		}
+		if(ObjectCensor.isStrRegular(state))
+		{
+			query.append("and a.state = ? ");
+			lstParam.add(state);
+		}
+		query.append("order by a.create_date desc) A WHERE ROWNUM <= ?)  WHERE ROWNUMBER >= ? ");
+		lstParam.add(pageNum * pageSize);
+		lstParam.add((pageNum - 1) * pageSize + 1);
+		return itzcQryCenter.executeSqlByMapListWithTrans(query.toString(), lstParam);
+	}
+	
+	public int qryNewsCount(String hospitalId, String startTime, String endTime, String newsType, String typeId, String state) throws Exception 
 	{
 		StringBuffer query = new StringBuffer();
 		query.append("select a.news_id, a.news_title, a.state, decode(a.news_type, 'NEWS', '患教中心', 'BAIKE', '就医帮助') news_type, decode(a.state, '00A', '正常', '00X', '作废') state_val, to_char(a.create_date, 'yyyy-MM-dd hh24:mi:ss') create_date, b.hospital_name, ");
@@ -510,8 +578,8 @@ public class DigitalHealthDao
 			query.append("and a.state = ? ");
 			lstParam.add(state);
 		}
-		query.append("order by a.create_date desc ");
-		return itzcQryCenter.executeSqlByMapListWithTrans(query.toString(), lstParam);
+		query.append("order by a.create_date desc");
+		return itzcQryCenter.getCount(query.toString(), lstParam);
 	}
 
 	public List getNewsById(String newsId) throws Exception 
@@ -777,7 +845,33 @@ public class DigitalHealthDao
 		return itzcQryCenter.executeSqlByMapListWithTrans(sql.toString(), lstParam);
 	}
 
-	public List qryOnLineDoctorQuesList(String hospitalId, String teamId, String doctorName) throws Exception 
+	public List qryOnLineDoctorQuesList(int pageNum, int pageSize, String hospitalId, String teamId, String doctorName) throws Exception 
+	{
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT * FROM (SELECT A.*, ROWNUM ROWNUMBER FROM (");
+		sql.append("select distinct a.doctor_id, a.name, a.order_num, a.post, b.team_name, ");
+		sql.append("(select count(distinct question_id) from user_question_t where state = '00A' and doctor_id = a.doctor_id and record_type = 'ask') total_ques_num, ");
+		sql.append("(select count(distinct question_id) from user_question_t where state = '00A' and doctor_id = a.doctor_id and (record_type = 'ans' or record_type = 'copy')) total_reply_num ");
+		sql.append("from doctor_t a, team_t b where a.state = '00A' and a.online_flag = '0' and b.state = '00A' and a.hospital_id = b.hospital_id ");
+		sql.append("and a.team_id = b.team_id and b.expert_flag = '1' and a.hospital_id = ? ");
+		ArrayList lstParam = new ArrayList();
+		lstParam.add(hospitalId);
+		if(ObjectCensor.isStrRegular(teamId))
+		{
+			sql.append("and a.team_id = ? ");
+			lstParam.add(teamId);
+		}
+		if(ObjectCensor.isStrRegular(doctorName))
+		{
+			sql.append("and upper(a.name) like upper('%"+doctorName+"%') ");
+		}
+		sql.append("order by a.order_num) A WHERE ROWNUM <= ?)  WHERE ROWNUMBER >= ? ");
+		lstParam.add(pageNum * pageSize);
+		lstParam.add((pageNum - 1) * pageSize + 1);
+		return itzcQryCenter.executeSqlByMapListWithTrans(sql.toString(), lstParam);
+	}
+	
+	public int qryOnLineDoctorQuesCount(String hospitalId, String teamId, String doctorName) throws Exception 
 	{
 		StringBuffer sql = new StringBuffer();
 		sql.append("select distinct a.doctor_id, a.name, a.order_num, a.post, b.team_name, ");
@@ -797,7 +891,7 @@ public class DigitalHealthDao
 			sql.append("and upper(a.name) like upper('%"+doctorName+"%') ");
 		}
 		sql.append("order by a.order_num ");
-		return itzcQryCenter.executeSqlByMapListWithTrans(sql.toString(), lstParam);
+		return itzcQryCenter.getCount(sql.toString(), lstParam);
 	}
 
 	public List qryUserList(int pageNum, int pageSize, String userName, String sex, String telephone) throws Exception 

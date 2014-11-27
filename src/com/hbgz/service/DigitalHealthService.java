@@ -1176,11 +1176,21 @@ public class DigitalHealthService
 		return orderId;
 	}
 	// 查询用户的挂号订单
-	public List qryRegisterOrder(String hospitalId, String teamId, String doctorId,
-			String startTime, String endTime, String state) throws Exception
+	public JSONObject qryRegisterOrder(int pageNum, int pageSize, String hospitalId, String teamId, String startTime, String endTime, String state) throws Exception
 	{
-		List registerOrderList = digitalHealthDao.qryRegisterOrder(hospitalId, teamId,doctorId, startTime, endTime, state);
-		return registerOrderList;
+		JSONObject obj = new JSONObject();
+		if(ObjectCensor.isStrRegular(hospitalId))
+		{
+			int count = 0;
+			List registerOrderList = digitalHealthDao.qryRegisterOrderList(pageNum, pageSize, hospitalId, teamId, startTime, endTime, state);
+			if(ObjectCensor.checkListIsNull(registerOrderList))
+			{
+				obj.element("registerOrderList", registerOrderList);
+				count = digitalHealthDao.qryRegisterOrderCount(hospitalId, teamId, startTime, endTime, state);
+			}
+			obj.element("count", count);
+		}
+		return obj;
 	}
 
 	// 预约或取消挂号订单
@@ -1238,14 +1248,21 @@ public class DigitalHealthService
 	 * @return
 	 * @throws QryException
 	 */
-	public JSONArray getDoctorByHospitalId(String hospitalId, String doctorId, String teamId, String doctorName) throws QryException
+	public JSONObject getDoctorByHospitalId(int pageNum, int pageSize, String hospitalId, String doctorId, String teamId, String doctorName) throws QryException
 	{
+		JSONObject obj = new JSONObject();
 		if (ObjectCensor.isStrRegular(hospitalId))
 		{
-			List list = doctorDao.qryDoctorsByHospitalId(hospitalId, doctorId, teamId, doctorName);
-			return JSONArray.fromObject(list);
+			int count = 0;
+			List sList = doctorDao.qryDoctorsByHospitalId(pageNum, pageSize, hospitalId, doctorId, teamId, doctorName);
+			if(ObjectCensor.checkListIsNull(sList))
+			{
+				obj.element("doctorList", sList);
+				count = doctorDao.qryDoctorCount(hospitalId, doctorId, teamId, doctorName);
+			}
+			obj.element("count", count);
 		}
-		return null;
+		return obj;
 	}
 	
 	public boolean updateHospitalMananger(String hospitalId,String doctorId,String name,String password) throws QryException
@@ -1350,18 +1367,21 @@ public class DigitalHealthService
 		return array;
 	}
 
-	public JSONArray qryNewsList(String hospitalId, String startTime, String endTime, String newsType, String typeId, String state) throws Exception 
+	public JSONObject qryNewsList(int pageNum, int pageSize, String hospitalId, String startTime, String endTime, String newsType, String typeId, String state) throws Exception 
 	{
-		JSONArray array = new JSONArray();
+		JSONObject obj = new JSONObject();
 		if(ObjectCensor.isStrRegular(hospitalId, startTime, endTime))
 		{
-			List sList = digitalHealthDao.qryNewsList(hospitalId, startTime, endTime, newsType, typeId, state);
+			int count = 0;
+			List sList = digitalHealthDao.qryNewsList(pageNum, pageSize, hospitalId, startTime, endTime, newsType, typeId, state);
 			if(ObjectCensor.checkListIsNull(sList))
 			{
-				array = JsonUtils.fromArray(sList);
+				obj.element("newsList", sList);
+				count = digitalHealthDao.qryNewsCount(hospitalId, startTime, endTime, newsType, typeId, state);
 			}
+			obj.element("count", count);
 		}
-		return array;
+		return obj;
 	}
 
 	public JSONObject getNewsById(String newsId, String hospitalId) throws Exception 
@@ -1598,8 +1618,56 @@ public class DigitalHealthService
 		return false;
 	}
 
-	public List qryOnLineDoctorQuesList(String hospitalId, String teamId, String doctorName) throws Exception 
+	public JSONObject qryOnLineDoctorQuesList(int pageNum, int pageSize, String hospitalId, String teamId, String doctorName) throws Exception 
 	{
-		return digitalHealthDao.qryOnLineDoctorQuesList(hospitalId, teamId, doctorName);
+		JSONObject obj = new JSONObject();
+		if(ObjectCensor.isStrRegular(hospitalId))
+		{
+			int count = 0;
+			List sList = digitalHealthDao.qryOnLineDoctorQuesList(pageNum, pageSize, hospitalId, teamId, doctorName);
+			if(ObjectCensor.checkListIsNull(sList))
+			{
+				obj.element("onLineDoctorQuesList", sList);
+				count = digitalHealthDao.qryOnLineDoctorQuesCount(hospitalId, teamId, doctorName);
+			}
+			obj.element("count", count);
+		}
+		return obj;
+	}
+	
+	public JSONObject qryUserQuestionsList(int pageNum, int pageSize, String doctorId, String hospitalId, String startTime, String endTime) throws JsonException, QryException
+	{
+		JSONObject obj = new JSONObject();
+		if(ObjectCensor.isStrRegular(hospitalId, doctorId))
+		{
+			int count = 0;
+			List sList = userQustionDao.qryUserQuestionList(pageNum, pageSize, doctorId, startTime, endTime);
+			if(ObjectCensor.checkListIsNull(sList))
+			{
+				JSONArray array = JSONArray.fromObject(sList);
+				CacheManager cacheManager = (CacheManager) BeanFactoryHelper.getBean("cacheManager");
+				String imgIp = cacheManager.getImgIp(hospitalId);
+				for (int i = 0; i < array.size(); i++) 
+				{
+					JSONObject jsonObject = array.getJSONObject(i);
+					String imgT = jsonObject.getString("imgUrl");
+					String[] imgs = imgT.split(",");
+					if (imgs != null && imgs.length > 0) 
+					{
+						for (int n = 0; n < imgs.length; n++) 
+						{
+							if (ObjectCensor.isStrRegular(imgs[n])) 
+							{
+								jsonObject.put("imgUrl" + n, imgIp + imgs[n]);
+							}
+						}
+					}
+				}
+				obj.element("questionList", array);
+				count = userQustionDao.qryUserQuestionCount(doctorId, startTime, endTime);
+			}
+			obj.element("count", count);
+		}
+		return obj;
 	}
 }

@@ -30,34 +30,34 @@
 				<ul>
 					<c:if test="${sessionScope.userPrivs=='1'}">
 						<li>
-							<img src="images/li.jpg" />&nbsp;&nbsp;<a href="/mobile.htm?method=qryRegisterOrder&state=&teamId=&doctorId=<%=doctorId%>&startTime=<%=startTime %>&endTime=<%=endTime %>" target="main">预约挂号管理</a>
+							<img src="images/li.jpg" />&nbsp;&nbsp;<a href="/view/order/registerOrderList.jsp" target="main">预约挂号管理</a>
 						</li>
 					</c:if>
 					<c:if test="${sessionScope.userPrivs=='2'}">
 						<li>
-							<img src="images/li.jpg" />&nbsp;&nbsp;<a href="/ques.htm?method=queryPre&doctorId=<%=doctorId%>&startTime=<%=startTime %>&endTime=<%=endTime %>" target="main" >用户提问管理</a>
+							<img src="images/li.jpg" />&nbsp;&nbsp;<a href="/view/question/questionList.jsp?doctorId=<%=doctorId%>" target="main" >用户提问管理</a>
 						</li>
 						<li>
-							<img src="images/li.jpg" />&nbsp;&nbsp;<a href="/doctor.htm?method=queryPre&doctorId=<%=doctorId%>" target="main">医生信息管理</a>
+							<img src="images/li.jpg" />&nbsp;&nbsp;<a href="/view/doctor/doctors.jsp?doctorId=<%=doctorId%>" target="main">医生信息管理</a>
 						</li>
 					</c:if>
 					<c:if test="${sessionScope.userPrivs=='3'}">
 						<li>
-							<img src="images/li.jpg" />&nbsp;&nbsp;<a href="/mobile.htm?method=qryRegisterOrder&state=&teamId=&doctorId=<%=doctorId%>&startTime=<%=startTime %>&endTime=<%=endTime %>" target="main">预约挂号管理</a>
+							<img src="images/li.jpg" />&nbsp;&nbsp;<a href="/view/order/registerOrderList.jsp" target="main">预约挂号管理</a>
 						</li>
 						<li>
-							<img src="images/li.jpg" />&nbsp;&nbsp;<a href="/doctor.htm?method=queryPre&doctorId=<%=doctorId%>" target="main">医生信息管理</a>
+							<img src="images/li.jpg" />&nbsp;&nbsp;<a href="/view/doctor/doctors.jsp?doctorId=<%=doctorId%>" target="main">医生信息管理</a>
 						</li>
 					</c:if>
 					<c:if test="${sessionScope.userPrivs=='4'}">
 						<li>
-							<img src="images/li.jpg" />&nbsp;&nbsp;<a href="/ques.htm?method=queryPre&doctorId=<%=doctorId%>&startTime=<%=startTime %>&endTime=<%=endTime %>" target="main" >用户提问管理</a>
+							<img src="images/li.jpg" />&nbsp;&nbsp;<a href="/view/question/onlineDoctorQuesList.jsp" target="main" >用户提问管理</a>
 						</li>
 						<li>
-							<img src="images/li.jpg" />&nbsp;&nbsp;<a href="/mobile.htm?method=qryRegisterOrder&state=&teamId=&doctorId=<%=doctorId%>&startTime=<%=startTime %>&endTime=<%=endTime %>" target="main">预约挂号管理</a>
+							<img src="images/li.jpg" />&nbsp;&nbsp;<a href="/view/order/registerOrderList.jsp" target="main">预约挂号管理</a>
 						</li>
 						<li>
-							<img src="images/li.jpg" />&nbsp;&nbsp;<a href="/news.htm?method=qryNewsList&startTime=<%=startTime %>&endTime=<%=endTime %>&newsType=&typeId=&state=" target="main">信息发布管理</a>
+							<img src="images/li.jpg" />&nbsp;&nbsp;<a href="/view/news/newsList.jsp" target="main">信息发布管理</a>
 						</li>
 						<c:choose>
 							<c:when test="${sessionScope.hospitalId=='102'}">
@@ -67,7 +67,7 @@
 							</c:when>
 							<c:otherwise>
 								<li>
-									<img src="images/li.jpg" />&nbsp;&nbsp;<a href="/doctor.htm?method=queryPre&doctorId=<%=doctorId%>" target="main">医生信息管理</a>
+									<img src="images/li.jpg" />&nbsp;&nbsp;<a href="/view/doctor/doctors.jsp?doctorId=<%=doctorId%>" target="main">医生信息管理</a>
 								</li>
 							</c:otherwise>
 						</c:choose>
@@ -96,7 +96,7 @@
 										<div class="linePic"></div><div class="posPic"></div><a class="abtn" href="/view/doctor/addDoctor.jsp" target="main">新增医生管理</a>
 									</li>
 									<li>
-										<div class="linePicLast"></div><div class="posPic"></div><a class="abtn" href="/doctor.htm?method=queryPre&doctorId=<%=doctorId%>" target="main">医生信息管理</a>
+										<div class="linePicLast"></div><div class="posPic"></div><a class="abtn" href="/view/doctor/doctors.jsp?doctorId=<%=doctorId%>" target="main">医生信息管理</a>
 									</li>
 								</ul>
 							</li>

@@ -13,6 +13,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
@@ -53,33 +54,41 @@ public class NewsController
 	}
 	
 	@RequestMapping(params = "method=qryNewsList")
-	public ModelAndView qryNewsList(HttpServletRequest request, HttpServletResponse response) throws Exception
+	public void qryNewsList(@RequestBody JSONObject obj, HttpServletRequest request, HttpServletResponse response)
 	{
-		ModelAndView model = new ModelAndView("newsList");
-		HttpSession session = request.getSession();
-		String hospitalId= (String)session.getAttribute("hospitalId");
-		if(ObjectCensor.isStrRegular(hospitalId))
+		response.setCharacterEncoding("UTF-8");
+		PrintWriter out = null;
+		try
 		{
-			String startTime = request.getParameter("startTime");
-			String endTime = request.getParameter("endTime");
-			String newsType = request.getParameter("newsType");
-			String typeId = request.getParameter("typeId");
-			String state = request.getParameter("state");
-			JSONArray array = digitalHealthService.qryNewsList(hospitalId, startTime, endTime, newsType, typeId, state);
-			model.addObject("newsList", array);
-			model.addObject("startTime", startTime);
-			model.addObject("endTime", endTime);
-			model.addObject("newsType", newsType);
-			model.addObject("typeId", typeId);
-			model.addObject("state", state);
-			model.setViewName("/view/news/newsList");
-		}
-		else
+			out = response.getWriter();
+			HttpSession session = request.getSession();
+			String hospitalId= (String)session.getAttribute("hospitalId");
+			if(ObjectCensor.isStrRegular(hospitalId))
+			{
+				int pageNum = Integer.parseInt(StringUtil.getJSONObjectKeyVal(obj, "curId"));
+				int pageSize = Integer.parseInt(StringUtil.getJSONObjectKeyVal(obj, "pageNum"));
+				String startTime = StringUtil.getJSONObjectKeyVal(obj, "startTime");
+				String endTime = StringUtil.getJSONObjectKeyVal(obj, "endTime");
+				String newsType = StringUtil.getJSONObjectKeyVal(obj, "newsType");
+				String typeId = StringUtil.getJSONObjectKeyVal(obj, "typeId");
+				String state = StringUtil.getJSONObjectKeyVal(obj, "state");
+				JSONObject object = digitalHealthService.qryNewsList(pageNum, pageSize, hospitalId, startTime, endTime, newsType, typeId, state);
+				out.println(object);
+			}
+			else
+			{
+				out.println("error");
+			}
+		} 
+		catch (Exception e)
 		{
-			model.addObject("result", "error");
-			model.setViewName("error");
+			e.printStackTrace();
+			out.println("error");
 		}
-		return model;
+		finally
+		{
+			out.close();
+		}
 	}
 	
 	@RequestMapping(params = "method=getNewsById")

@@ -138,6 +138,7 @@ public class UserQustionDao extends BaseDao
 
 	public List qryQuestionList(String doctorId, String startTime, String endTime) throws QryException 
 	{
+		List sList = null;
 		if(ObjectCensor.isStrRegular(doctorId))
 		{
 			StringBuffer sql = new StringBuffer();
@@ -152,9 +153,56 @@ public class UserQustionDao extends BaseDao
 				lstParam.add(endTime + " 23:59:59");
 			}
 			sql.append("order by create_date desc");
-			return itzcQryCenter.executeSqlByMapListWithTrans(sql.toString(), lstParam);
+			sList = itzcQryCenter.executeSqlByMapListWithTrans(sql.toString(), lstParam);
 		}
-		return null;
+		return sList;
+	}
+	
+	public List qryUserQuestionList(int pageNum, int pageSize, String doctorId, String startTime, String endTime) throws QryException 
+	{
+		List sList = null;
+		if(ObjectCensor.isStrRegular(doctorId))
+		{
+			StringBuffer sql = new StringBuffer();
+			sql.append("SELECT * FROM (SELECT A.*, ROWNUM ROWNUMBER FROM (");
+			sql.append("select id, question_id, user_id, doctor_id, user_telephone, auth_type, content, to_char(create_date, 'yyyy-MM-dd hh24:mi:ss') create_date, img_url ");
+			sql.append("from user_question_t where state = '00A' and record_type = 'ask' and doctor_id = ? ");
+			ArrayList lstParam = new ArrayList();
+			lstParam.add(doctorId);
+			if(ObjectCensor.isStrRegular(startTime, endTime))
+			{ 
+				sql.append("and create_date between to_date(?, 'yyyy-MM-dd hh24:mi:ss') and to_date(?, 'yyyy-MM-dd hh24:mi:ss') ");
+				lstParam.add(startTime);
+				lstParam.add(endTime + " 23:59:59");
+			}
+			sql.append("order by create_date desc) A WHERE ROWNUM <= ?)  WHERE ROWNUMBER >= ? ");
+			lstParam.add(pageNum * pageSize);
+			lstParam.add((pageNum - 1) * pageSize + 1);
+			sList = itzcQryCenter.executeSqlByMapListWithTrans(sql.toString(), lstParam);
+		}
+		return sList;
+	}
+	
+	public int qryUserQuestionCount(String doctorId, String startTime, String endTime) throws QryException 
+	{
+		int count = 0;
+		if(ObjectCensor.isStrRegular(doctorId))
+		{
+			StringBuffer sql = new StringBuffer();
+			sql.append("select id, question_id, user_id, doctor_id, user_telephone, auth_type, content, to_char(create_date, 'yyyy-MM-dd hh24:mi:ss') create_date, img_url ");
+			sql.append("from user_question_t where state = '00A' and record_type = 'ask' and doctor_id = ? ");
+			ArrayList lstParam = new ArrayList();
+			lstParam.add(doctorId);
+			if(ObjectCensor.isStrRegular(startTime, endTime))
+			{ 
+				sql.append("and create_date between to_date(?, 'yyyy-MM-dd hh24:mi:ss') and to_date(?, 'yyyy-MM-dd hh24:mi:ss') ");
+				lstParam.add(startTime);
+				lstParam.add(endTime + " 23:59:59");
+			}
+			sql.append("order by create_date desc");
+			count = itzcQryCenter.getCount(sql.toString(), lstParam);
+		}
+		return count;
 	}
 
 	public List qryQuesList(String doctorId, String questionId) throws QryException

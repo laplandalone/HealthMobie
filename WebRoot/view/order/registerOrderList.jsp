@@ -1,14 +1,18 @@
-<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
+<%@ page import="com.hbgz.pub.cache.PubData"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%
 	String path = request.getContextPath();
+	String hospitalId = (String) session.getAttribute("hospitalId");
+	List teamList = PubData.qryTeamList(hospitalId);
 %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-  	<head>
-    	<title>信息发布管理</title>
-    	<link href="<%=path%>/pub/css/sub.css" rel="stylesheet" type="text/css" />
+	<head>
+		<title></title>
+		<link href="<%=path%>/pub/css/sub.css" rel="stylesheet" type="text/css" />
 		<script type="text/javascript" src="<%=path%>/pub/js/jquery-1.9.1.min.js"></script>
 		<script type="text/javascript" src="<%=path%>/pub/dialog/lhgdialog.min.js?skin=idialog"></script>
 		<script type="text/javascript" src="<%=path%>/pub/js/calendar.js"></script>
@@ -16,15 +20,16 @@
 		<script type="text/javascript" src="<%=path%>/js/comm.js"></script>
 		<script type="text/javascript" src="<%=path%>/js/json2.js"></script>
 		<script type="text/javascript" src="<%=path%>/js/json.js"></script>
-		<script type="text/javascript" src="<%=path%>/js/news.js"></script>
-  	</head>
-  
-  	<body onload="qryNewsList()">
-  		<form action="">
-  			<div class="mainsearch">
-		  		<table width="100%">
-		  			<tr>
-		  				<td align="right" width="8%">创建时间：</td>
+		<script type="text/javascript" src="<%=path%>/js/registerOrder.js"></script>
+	</head>
+
+	<body onload="qryRegisterOrder()">
+		<form action="">
+			<div class="mainsearch">
+				<input type="hidden" id="hospitalId" value="<%=hospitalId %>"/>
+				<table width="100%">
+					<tr>
+						<td align="right" width="12%">预约时间：</td>
 						<td align="center" width="8%">
 							<table class="inputtable" cellspacing="0" cellpadding="0">
 								<tr>
@@ -54,38 +59,45 @@
 								</tr>
 							</table>
 						</td>
-		  				<td align="center" width="14%">
-		  					<select id="newsType" name="newsType" class="subselect">
-		  						<option value="">信息类型</option>
-		  						<option value="NEWS">患教中心</option>
-		  						<option value="BAIKE">就医帮助</option>
-		  					</select>
-		  				</td>
-		  				<td align="center" width="14%">
-		  					<select id="typeId" name="typeId" class="subselect">
-		  						<option value="">内容分类</option>
-		  					</select>
-		  				</td>
-		  				<td align="center" width="14%">
-		  					<select id="state" name="state" class="subselect">
-		  						<option value="">全部状态</option>
-		  						<option value="00A">正常</option>
-		  						<option value="00X">作废</option>
-		  					</select>
-		  				</td>
-		  				<td width="12%" align="center">
-							<input type="button" onclick="qryNewsList()" class="button3" value="查询" />
+						<td width="12%" align="right">科室名称：</td>
+						<td width="8%">
+							<c:set var="teamList" value="<%=teamList %>"></c:set>
+							<select id="teamId" name="teamId" class="subselect">
+								<option value="">---请选择---</option>
+								<c:forEach items="${teamList }" var="team">
+									<c:if test="${team.expertFlag == '0' }">
+										<option value="${team.teamId }">${team.teamName }</option>
+									</c:if>
+								</c:forEach>
+							</select>
 						</td>
-						<td width="12%" align="center">
-							<input type="button" onclick="addNews()" class="button3" value="发布新信息" />
+						<td width="12%" align="right">订单状态：</td>
+						<td width="8%">
+							<select id="state" name="state" class="subselect">
+								<c:choose>
+									<c:when test="${sessionScope.hospitalId == '101' }">
+										<option value="">全部</option>
+										<option value="000">未处理</option>
+										<option value="00A">已预约</option>
+										<option value="00X">已作废</option>
+									</c:when>
+									<c:when test="${sessionScope.hospitalId == '102' }">
+										<option value="">全部</option>
+										<option value="100">未支付</option>
+										<option value="101">已支付</option>
+										<option value="102">已取消</option>
+									</c:when>
+								</c:choose>
+							</select>
 						</td>
-						<td width="12%" align="center">
-							<input type="button" onclick="addNewsType()" class="button3" value="新增分类" />
+						<td width="15%" align="right">
+							<input type="button" onclick="qryRegisterOrder()" class="button3" value="查询" />
 						</td>
-		  			</tr>
-		  		</table>
-  			</div>
-  			<div class="main">
+						<td width="12%">&nbsp;</td>
+					</tr>
+				</table>
+			</div>
+			<div class="main">
 	  			<div class="title">
 					<div class="titleleft"></div>
 					<div class="titlecentre">
@@ -96,14 +108,23 @@
 				<div id="template" class="box">
 					<table width="100%" border="1" cellspacing="0" cellpadding="0" class="maintable1">
 						<tr class="tabletop">
-							<td width="5%">编号</td>
-							<td width="10%">医院名称</td>
-							<td width="6%">所属板块</td>
-							<td width="8%">分类</td>
-							<td width="20%">信息标题</td>
-							<td width="6%">发布状态</td>
-							<td width="10%">创建时间</td>
-							<td width="5%">操作</td>
+							<td align="center" width="5%">订单号</td>
+							<td align="center" width="5%">预约号</td>
+							<td align="center" width="4%">类型</td>
+							<td align="center" width="5%">预约人</td>
+							<td align="center" width="8%">联系方式</td>
+							<td align="center" width="10%">医院名称</td>
+							<td align="center" width="8%">科室名称</td>
+							<td align="center" width="6%">医生名称</td>
+							<td align="center" width="4%">费用</td>
+							<td align="center" width="12%">预约时间</td>
+							<td align="center" width="10%">创建时间</td>
+							<td align="center" width="6%">订单状态</td>
+							<c:choose>
+								<c:when test="${sessionScope.hospitalId == '101' }">
+									<td align="center" width="10%">操作</td>
+								</c:when>
+							</c:choose>
 						</tr>
 					</table>
 				</div>
@@ -136,11 +157,11 @@
 		  			</div>
 		  		</div>
 			</div>
-  		</form>
-  		<input type="hidden" id="treeId" />
+		</form>
+		<input type="hidden" id="treeId" />
 		<input type="hidden" id="treeNum" />
 		<input type="hidden" id="condition" />
 		<input type="hidden" id="pagingNumCnt" value="16" />
 		<script type="text/javascript" src="<%=path %>/pub/js/paging.js"></script>
-  	</body>
+	</body>
 </html>

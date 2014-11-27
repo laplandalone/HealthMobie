@@ -25,7 +25,36 @@ public class DoctorDao extends BaseDao
 	 * @return
 	 * @throws QryException
 	 */
-	public List qryDoctorsByHospitalId(String hospitalId, String doctorId, String teamId, String doctorName) throws QryException
+	public List qryDoctorsByHospitalId(int pageNum, int pageSize, String hospitalId, String doctorId, String teamId, String doctorName) throws QryException
+	{
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT * FROM (SELECT A.*, ROWNUM ROWNUMBER FROM (");
+		sql.append("select t.doctor_id, t.hospital_id, t.telephone, t.post, t.name, ");
+		sql.append("t.sex, decode(t.expert_flag, '0', '×¨¼Ò') expert_flag, a.team_name ");
+		sql.append("from doctor_t t, team_t a where a.team_id = t.team_id and t.hospital_id = ? and t.state = '00A' and a.expert_flag = '1' ");
+		ArrayList lstParam = new ArrayList();
+		lstParam.add(hospitalId);
+		if(ObjectCensor.isStrRegular(doctorId))
+		{
+			sql.append("and t.doctor_id = ? ");
+			lstParam.add(doctorId);
+		}
+		if(ObjectCensor.isStrRegular(teamId))
+		{
+			sql.append("and t.team_id = ? ");
+			lstParam.add(teamId);
+		}
+		if(ObjectCensor.isStrRegular(doctorName))
+		{
+			sql.append("and upper(t.name) like upper('%"+doctorName+"%') ");
+		}
+		sql.append("order by t.order_num) A WHERE ROWNUM <= ?)  WHERE ROWNUMBER >= ? ");
+		lstParam.add(pageNum * pageSize);
+		lstParam.add((pageNum - 1) * pageSize + 1);
+		return itzcQryCenter.executeSqlByMapList(sql.toString(), lstParam);
+	}
+	
+	public int qryDoctorCount(String hospitalId, String doctorId, String teamId, String doctorName) throws QryException
 	{
 		StringBuffer sql = new StringBuffer();
 		sql.append("select t.doctor_id, t.hospital_id, t.telephone, t.post, t.name, ");
@@ -48,7 +77,7 @@ public class DoctorDao extends BaseDao
 			sql.append("and upper(t.name) like upper('%"+doctorName+"%') ");
 		}
 		sql.append("order by t.order_num ");
-		return itzcQryCenter.executeSqlByMapList(sql.toString(), lstParam);
+		return itzcQryCenter.getCount(sql.toString(), lstParam);
 	}
 	
 	public List qryDoctorList(String hospitalId, String teamId) throws QryException 
