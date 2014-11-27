@@ -58,7 +58,16 @@ public class AndroidPushMsg
 	
 	public static void main(String[] args)
 	{
+		//userId=863332631944779153
+		//rg4=4149288692313311524
+
 		//消息
-		pushMsg("3699355557745457364", "msg", "测试", "982179218847486686");
+//		pushMsg("982179218847486686", "msg", "测试", "982179218847486686");
+//		pushMsg("982179218847486686", "msg", "{\"title\":\"Notify_title_danbo\",\"description\":\"haha\",\"open_type\":\"0\",\"custom_content\":{\"user_id\":\"71189\",\"title\":\"Hello\"}}", "");
+		
+		pushMsg("982179218847486686", "msg", "{\"title\":预约提醒,\"description\":haha,\"msg_type\":order,\"user_id\":\"22861,12345,123123\"}", "");
+
+//		String msg = String.format("{'title':'%s','description':'%s','notification_builder_id':1,'notification_basic_style':0,'open_type':2,'pkg_content':'%s','pkg_name':'%s','custom_content':{'test':'test'}}",title,jsonencode(message),pkg_content,pkg_name);
+
 	}
 }

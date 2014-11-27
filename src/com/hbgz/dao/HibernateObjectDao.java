@@ -95,6 +95,16 @@ public class HibernateObjectDao extends BaseDao
 		return this.find(hql, new String[]{ userId });
 	}
 	
+	public List<UserContactT> qryUserContactT(String userId,String no)
+	{
+		if (!ObjectCensor.isStrRegular(userId))
+		{
+			return null;
+		}
+		String hql = "from UserContactT as model where  model.state='00A' and model.userId=? and model.contactNo=?";
+		return this.find(hql, new String[]{ userId ,no});
+	}
+	
 	public List<UserRelateT> qryUserRelateT(String userId)
 	{
 		if (!ObjectCensor.isStrRegular(userId))

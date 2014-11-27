@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -34,6 +35,7 @@ import com.hbgz.model.RegisterOrderT;
 import com.hbgz.model.UserContactT;
 import com.hbgz.model.UserQuestionT;
 import com.hbgz.model.UserRelateT;
+import com.hbgz.model.WakeT;
 import com.hbgz.pub.annotation.ServiceType;
 import com.hbgz.pub.base.SysDate;
 import com.hbgz.pub.cache.CacheManager;
@@ -370,7 +372,7 @@ public class DigitalHealthService
 			List contactList=null;
 			
 			
-			contactList = hibernateObjectDao.findByProperty("UserContactT", "contactNo",userNo);
+			contactList = hibernateObjectDao.qryUserContactT(userId, userNo);
 			
 			if(!ObjectCensor.checkListIsNull(contactList))
 			{
@@ -429,6 +431,17 @@ public class DigitalHealthService
 		if(questionId==null || "".equals(questionId))
 		{
 			questionT.setQuestionId(sysId.getId() + "");
+		}
+		if("ans".equals(questionT.getRecordType()))
+		{
+			WakeT wakeT = new WakeT();
+			wakeT.setWakeId(BigDecimal.valueOf(sysId.getId()));
+			wakeT.setCreateDate(SysDate.getSysDate());
+			wakeT.setWakeContent("您的提问有新的回复请查收");
+			wakeT.setWakeDate(SysDate.getSysDate());
+			wakeT.setWakeValue(questionT.getUserId());
+			wakeT.setState("00A");
+			wakeT.setWakeType("ques");
 		}
 		userQustionDao.save(questionT);
 		return true;
@@ -1025,7 +1038,7 @@ public class DigitalHealthService
 		contactT.setState("00A");
 		contactT.setCreateDate(new Date());
 		String no=contactT.getContactNo();
-		List userList = hibernateObjectDao.findByProperty("UserContactT", "contactNo",no);
+		List userList = hibernateObjectDao.qryUserContactT(contactT.getUserId(), no);
 		if(!ObjectCensor.checkListIsNull(userList))
 		{
 			hibernateObjectDao.save(contactT);
@@ -1054,24 +1067,27 @@ public class DigitalHealthService
 	}
 	
 	@ServiceType(value = "BUS20039")
-	public String  addUserRelate(String userId,String userPhone,String userPass,String telephone,String password) throws QryException
+	public String  addUserRelate(String userId,String userPhone,String userName,String userPass,String telephone,String password) throws QryException
 	{
-		List users = digitalHealthDao.qryUserByTelephone(telephone, password);
+ 		List users = digitalHealthDao.qryUserByTelephone(telephone, password);
 		if (ObjectCensor.checkListIsNull(users))
 		{
 			List relateUser = hibernateObjectDao.qryUserRelateTByPhone(userId, telephone);
 			if (!ObjectCensor.checkListIsNull(relateUser))
 			{
+				Map relateUserMap = (Map) users.get(0);
+				
 				UserRelateT relateT = new UserRelateT();
 				relateT.setRelateId(sysId.getId()+"");
 				relateT.setUserId(userId);
 				relateT.setRelatePhone(telephone);
-				relateT.setRealtePass(password);
+				relateT.setRelatePass(password);
 				relateT.setState("00A");
+				relateT.setRelateName(StringUtil.getMapKeyVal(relateUserMap, "userName"));
 				relateT.setCreateDate(SysDate.getSysDate());
 				hibernateObjectDao.save(relateT);
 				
-				Map relateUserMap = (Map) users.get(0);
+				
 				String relateUserId=StringUtil.getMapKeyVal(relateUserMap, "userId");
 				List relateUserT = hibernateObjectDao.qryUserRelateTByPhone(relateUserId, userPhone);
 				if (!ObjectCensor.checkListIsNull(relateUserT))
@@ -1080,8 +1096,9 @@ public class DigitalHealthService
 					userRelateT.setRelateId(sysId.getId()+"");
 					userRelateT.setUserId(relateUserId);
 					userRelateT.setRelatePhone(userPhone);
-					userRelateT.setRealtePass(userPass);
+					userRelateT.setRelatePass(userPass);
 					userRelateT.setState("00A");
+					userRelateT.setRelateName(userName);
 					userRelateT.setCreateDate(SysDate.getSysDate());
 					hibernateObjectDao.save(userRelateT);
 				}
@@ -1114,7 +1131,7 @@ public class DigitalHealthService
 		{
 			UserRelateT relateT = (UserRelateT) relateUsers.get(0);
 			
-			List users = digitalHealthDao.qryUserByTelephone(relateT.getRelatePhone(), relateT.getRealtePass());
+			List users = digitalHealthDao.qryUserByTelephone(relateT.getRelatePhone(), relateT.getRelatePass());
 			if (ObjectCensor.checkListIsNull(users))
 			{
 				Map  relateUuser =(Map) users.get(0);

@@ -20,16 +20,25 @@ public class UserRelateT implements java.io.Serializable {
 	private String relateId;
 	private String userId;
 	private String relatePhone;
-	private String realtePass;
+	private String relatePass;
 	private String channelId;
 	private String pushUserId;
 	private Date createDate;
 	private String state;
-
+	private String relateName;
 	// Constructors
 
 	/** default constructor */
 	public UserRelateT() {
+	}
+
+	@Column(name = "RELATE_NAME", length = 20)
+	public String getRelateName() {
+		return relateName;
+	}
+
+	public void setRelateName(String relateName) {
+		this.relateName = relateName;
 	}
 
 	/** minimal constructor */
@@ -40,16 +49,17 @@ public class UserRelateT implements java.io.Serializable {
 
 	/** full constructor */
 	public UserRelateT(String relateId, String userId, String relatePhone,
-			String realtePass, String channelId, String pushUserId,
-			Date createDate, String state) {
+			String relatePass, String channelId, String pushUserId,
+			Date createDate, String state,String relateName) {
 		this.relateId = relateId;
 		this.userId = userId;
 		this.relatePhone = relatePhone;
-		this.realtePass = realtePass;
+		this.relatePass = relatePass;
 		this.channelId = channelId;
 		this.pushUserId = pushUserId;
 		this.createDate = createDate;
 		this.state = state;
+		this.relateName=relateName;
 	}
 
 	// Property accessors
@@ -81,13 +91,13 @@ public class UserRelateT implements java.io.Serializable {
 		this.relatePhone = relatePhone;
 	}
 
-	@Column(name = "REALTE_PASS", length = 20)
-	public String getRealtePass() {
-		return this.realtePass;
+	@Column(name = "RELATE_PASS", length = 20)
+	public String getRelatePass() {
+		return this.relatePass;
 	}
 
-	public void setRealtePass(String realtePass) {
-		this.realtePass = realtePass;
+	public void setRelatePass(String relatePass) {
+		this.relatePass = relatePass;
 	}
 
 	@Column(name = "CHANNEL_ID", length = 20)

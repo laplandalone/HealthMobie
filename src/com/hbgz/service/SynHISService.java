@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ import cn.ISH_Service.Service1Locator;
 import cn.ISH_Service.Service1Soap12Stub;
 
 import com.googlecode.ehcache.annotations.Cacheable;
+import com.hbgz.controller.DoctorController;
 import com.hbgz.dao.DigitalHealthDao;
 import com.hbgz.dao.HibernateObjectDao;
 import com.hbgz.model.DoctorT;
@@ -30,6 +33,7 @@ import com.hbgz.pub.util.ObjectCensor;
 import com.hbgz.pub.util.StringUtil;
 import com.hbgz.pub.xml.XMLComm;
 
+
 @Service
 public class SynHISService {
 	
@@ -41,7 +45,7 @@ public class SynHISService {
 
 	@Autowired
 	private SysId sysId;
-	
+	private static Log log = LogFactory.getLog(SynHISService.class);
 	public  String invokeFunc(String sql) throws Exception 
 	{
 		Service1 ser = new Service1Locator();
@@ -326,7 +330,7 @@ public class SynHISService {
 	public List getHisDoctorRegister(String doctorIdT,String userId,String dateStr) throws Exception
 	{
 		String derq=dateStr.replace('-','.');
-		String sql="<DS><SQL><str>select a.id,c.bzmc team_name,c.bzdm team_id,kszjdm doctor_id,derq day,swdes-ylrs-swyyrs am_num,xwdes-xwylrs-xwyyrs pm_num,swyyrs+1 am_user_register_num, xwyyrs+1 pm_user_register_num  from mz_ghde a, mz_bzdyb c where derq='"+derq+"' and a.kszjdm=c.ysdm and kszjdm='"+doctorIdT+"' </str></SQL></DS>";
+		String sql="<DS><SQL><str>select c.yszc,a.id,c.bzmc team_name,c.bzdm team_id,kszjdm doctor_id,derq day,swdes-ylrs-swyyrs am_num,xwdes-xwylrs-xwyyrs pm_num,swyyrs+1 am_user_register_num, xwyyrs+1 pm_user_register_num  from mz_ghde a, mz_bzdyb c where derq='"+derq+"' and a.kszjdm=c.ysdm and kszjdm='"+doctorIdT+"' </str></SQL></DS>";
 		String ss =invokeFunc(sql);
 		Document doc = XMLComm.loadXMLString(ss);
 		Element root = doc.getRootElement();
@@ -335,7 +339,8 @@ public class SynHISService {
 		String dayT="";
 		
 		List userOrderList = digitalHealthDao.qryUserOrderByPhone(userId,dateStr);
-		
+		String registerFee="";
+	
 		String[] dayTypes=new String[]{"am","pm"};
 		List doctorList = digitalHealthDao.getDoctorById(doctorIdT.trim());
 		if(ObjectCensor.checkListIsNull(list))
@@ -359,12 +364,22 @@ public class SynHISService {
 					String doctorId=e.getChildText("doctor_id");
 					String teamId=e.getChildText("team_id");
 					String teamName=e.getChildText("team_name");
+					String yszc=e.getChildText("yszc");
 					String registerId=e.getChildText("id");
 					String registerNum=e.getChildText(dayTypeMark+"_num");/*可预约号数*/
 					String userOrderNum=e.getChildText(dayTypeMark+"_user_register_num");/*用户可预约号*/
 					String dayType="";
 					String numMax="false";
-					
+					if("06".equals(yszc))
+					{
+						registerFee="9.5";
+					}else if("07".equals(yszc))
+					{
+						registerFee="6.5";
+					}else if("08".equals(yszc))
+					{
+						registerFee="4.5";
+					}
 					if("am".startsWith(dayTypeMark))
 					{
 						dayType="上午";
@@ -416,7 +431,7 @@ public class SynHISService {
 					newMap.put("userOrderNum", userOrderNum);// 预约号码
 					newMap.put("doctorId", doctorId.trim());
 					newMap.put("teamId", teamId);
-					newMap.put("fee", StringUtil.getMapKeyVal(doctor, "register_fee"));
+					newMap.put("fee", registerFee);
 					newMap.put("registerNum", registerNum);
 					newMap.put("day",day);
 					newMap.put("workTime", " 星期" + weekStr + " " + dayType);
@@ -516,7 +531,7 @@ public class SynHISService {
 		
 		StringBuffer sqljzsc =new StringBuffer();
 		sqljzsc.append("<DS>");
-		sqljzsc.append("<SQL><str>select  jzsc from mz_bzdyb  where bzdm  = '"+ teamId +"' and ysdm ='"+doctorId+"'</str></SQL>");
+		sqljzsc.append("<SQL><str>select  jzsc,yszc from mz_bzdyb  where bzdm  = '"+ teamId +"' and ysdm ='"+doctorId+"'</str></SQL>");
 		sqljzsc.append("</DS>");
 		
 		String jzscRst =new SynHISService().invokeFunc(sqljzsc.toString());
@@ -524,10 +539,12 @@ public class SynHISService {
 		Element rootJzsc  = docJzsc.getRootElement();
 		List listJzsc = rootJzsc.getChildren();
 		String jzsc="";
+		String yszc="";
 		for (int n = 0; n < listJzsc.size(); n++)
 		{
 			Element e = (Element) listJzsc.get(n);
 			jzsc=e.getChildText("jzsc");
+			yszc=e.getChildText("yszc");
 		}
 		
 		int jzscInt=0;
@@ -561,10 +578,12 @@ public class SynHISService {
 		
 		StringBuffer sql=new StringBuffer("<DS><SQL><str>");
 		sql.append("insert into mz_yydj ");
-		sql.append("(yylsh,xm,xb,csrq,yysj,yyysdm,yyysxm,lxdz,dqsj,czydm,lxdh,yynr,xh,sfzh,sff) values ");
-		sql.append("('"+id+"','"+orderT.getUserName()+"','"+sex+"','"+birthDay+"','"+registerTime+"','"+orderT.getDoctorId().trim()+"','"+orderT.getDoctorName()+"','"+userAddress+"',GETDATE(),'"+czydm+"','"+orderT.getUserTelephone()+"','掌上亚心',"+xh+",'"+orderT.getUserNo()+"','10')");
+		sql.append("(yylsh,xm,xb,csrq,yysj,yyysdm,yyysxm,lxdz,dqsj,czydm,lxdh,yynr,xh,sfzh,sff,ghlbdm) values ");
+		sql.append("('"+id+"','"+orderT.getUserName()+"','"+sex+"','"+birthDay+"','"+registerTime+"','"+orderT.getDoctorId().trim()+"','"+orderT.getDoctorName()+"','"+userAddress+"',GETDATE(),'"+czydm+"','"+orderT.getUserTelephone()+"','掌上亚心',"+xh+",'"+orderT.getUserNo()+"','10','"+yszc+"')");
 		sql.append("</str></SQL></DS>");
+		log.error("pay-sql:"+sql);
 		String result =new SynHISService().invokeFunc(sql.toString());
+		log.error("pay:"+result);
 	}
 	
 	
@@ -588,7 +607,9 @@ public class SynHISService {
 //		sql.append("</DS>");
 		String sqls="<DS><SQL><str>select top 10 delb ,c.bzdm team_id,c.bzmc team_name,kszjdm doctor_id,b.zgxm doctor_name,derq day from mz_ghde a,comm_zgdm b,mz_bzdyb c where a.kszjdm=b.zgid and a.kszjdm=c.ysdm and a.kszjdm='1405R' and derq > '2014.10.20' order by derq  </str></SQL></DS>";
 		String sqla="<DS><SQL><str>select distinct  bzdm team_id ,bzmc team_name from mz_bzdyb order by team_id </str></SQL></DS>";
-		String result =new SynHISService().invokeFunc(sqls);
+		String sss ="<DS><SQL><str>select   top 10 * from mz_bzdyb   </str></SQL></DS>";
+		String result =new SynHISService().invokeFunc(sss);
+		System.out.println(result);
 		Document doc = XMLComm.loadXMLString(result);
 		Element root = doc.getRootElement();
 		List list = root.getChildren();

@@ -56,8 +56,8 @@ public class AndroidPushBroadcastMsg
 	public static void main(String[] args)
 	{
 		//消息
-		pushMsg("msg", "<user_id>71189</user_id><message>Hello</message><title>Hello</title>");
+//		pushMsg("notice", "<user_id>71189</user_id><message>Hello</message><title>Hello</title>");
 		//通知
-//		pushMsg("notice", "{\"title\":\"Notify_title_danbo\",\"description\":\"Notify_description_content\",\"open_type\":0,\"custom_content\":{\"user_id\":\"71189\",\"title\":\"Hello\"}}");
+		pushMsg("msg", "{\"title\":预约提醒,\"description\":haha,\"msg_type\":order,\"user_id\":\"\"}");
 	}
 }
