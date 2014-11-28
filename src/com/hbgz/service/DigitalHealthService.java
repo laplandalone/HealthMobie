@@ -437,9 +437,9 @@ public class DigitalHealthService
 			WakeT wakeT = new WakeT();
 			wakeT.setWakeId(BigDecimal.valueOf(sysId.getId()));
 			wakeT.setCreateDate(SysDate.getSysDate());
-			wakeT.setWakeContent("您的提问有新的回复请查收");
+			wakeT.setWakeContent(userQuestion);
 			wakeT.setWakeDate(SysDate.getSysDate());
-			wakeT.setWakeValue(questionT.getUserId());
+			wakeT.setWakeValue("now");
 			wakeT.setState("00A");
 			wakeT.setWakeType("ques");
 		}
@@ -701,48 +701,37 @@ public class DigitalHealthService
 	}
 
 	/**
-	 * 更新支付状态，100，未支付初始状态，101，支付成功；102，取消支付成功
-	 * PAY_STATE,000初始状态，00A已处理，00X取消
+	 * 更新支付状态：     
+	 * order_state,100：未支付；101：已取消；102：已支付;103:退款中;104:已退款；
 	 * @param orderId
 	 * @param payState
 	 * @return
 	 * @throws Exception
 	 */
 	@ServiceType(value = "BUS20023")
-	public boolean orderPay(String orderId,String orderState) throws  Exception
+	public boolean orderPay(String orderId,String payState) throws  Exception
 	{
 		boolean flag=false;
-		String payState="";
 		RegisterOrderT registerOrder=null;
-		if (ObjectCensor.isStrRegular(orderId, orderState))
+		if (ObjectCensor.isStrRegular(orderId, payState))
 		{
 			List<RegisterOrderT> sList = hibernateObjectDao.qryRegisterOrderT(orderId);
 			if (ObjectCensor.checkListIsNull(sList))
 			{
 				 registerOrder = sList.get(0);
-				
-				 if("00X".equals(orderState))
-				 {
-					 payState="102";
-				 }else if("00A".equals(orderState))
-				 {
-					 payState="101";
-				 }
-				 registerOrder.setOrderState(orderState);
 				 registerOrder.setPayState(payState);
 				 hibernateObjectDao.update(registerOrder);
 				 flag=true;
 			}
 		}
 		
-		
-		if(flag && "101".equals(payState) && registerOrder!=null)
+		if(flag && "102".equals(payState) && registerOrder!=null)
 		{
 			synHISService.addOrderPay(registerOrder);
 		}else 
 		
 		/*取消预约*/
-		if(flag && "102".equals(payState) && registerOrder!=null)
+		if(flag && "103".equals(payState) && registerOrder!=null)
 		{
 			String id=registerOrder.getRegisterId();
 			String weekTypeT=registerOrder.getRegisterTime();
