@@ -405,13 +405,14 @@ public class DigitalHealthDao
 	
 	/**
 	 * 查询用户的挂号订单
+	 * pay_state:100：未支付；101：已取消；102：已支付;103:退款中;104:已退款；
 	 * @param hospitalName
 	 * @param teamName
 	 * @param doctorName
 	 * @param userId
 	 * @param startTime
-	 * @param endTime
-	 * @return
+	 * @param endTime  
+	 * @return 
 	 * @throws Exception
 	 */
 	public List qryRegisterOrderList(int pageNum, int pageSize, String hospitalId, String teamId, String startTime, String endTime, String state) throws Exception 
@@ -420,7 +421,7 @@ public class DigitalHealthDao
 		query.append("select * from (select c.*, ROWNUM RN from (");
 		query.append("select a.order_num,a.order_id, a.register_id, a.order_fee,a.doctor_name, a.register_time, to_char(a.create_date, 'yyyy-MM-dd hh24:mi:ss') create_date, a.team_name,a.user_name,a.user_telephone, b.hospital_name, ");
 		query.append("decode(a.order_state, '000', '未处理', '00A', '已预约', '00X', '已作废') order_state, ");
-		query.append("decode(a.pay_state, '100', '未支付', '101', '已支付', '102', '已取消') pay_state ");
+		query.append("decode(a.pay_state, '100', '未支付', '101', '已取消', '102', '已支付','103','申请退款','104','已退款') pay_state,pay_state pay_state_code ");
 		query.append("from register_order_t a, hospital_t b ");
 		query.append("where a.state = '00A' and b.state = '00A' and a.hospital_id = b.hospital_id  and b.hospital_id = ? ");
 		ArrayList lstParam = new ArrayList();

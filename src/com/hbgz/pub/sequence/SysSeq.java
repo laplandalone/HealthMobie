@@ -44,8 +44,7 @@ public class SysSeq
 
 	private static String SqlSequenceQuery = "SELECT seq_name, seq_id, step_value, min_value, max_value FROM  SYS_SEQUENCE_T where ";
 
-	private static String SqlSequenceUpdate = "UPDATE "
-			+ "SYS_SEQUENCE_T SET seq_id = ? " + "WHERE seq_name = ? ";
+	private static String SqlSequenceUpdate = "UPDATE SYS_SEQUENCE_T SET seq_id = ? " + "WHERE seq_name = ? ";
 
 	/** 根据SQL取得一个日期，可以用来取得Oracle系统时间 */
 	public Date getSysDate() 

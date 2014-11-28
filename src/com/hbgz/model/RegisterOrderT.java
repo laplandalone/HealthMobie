@@ -37,11 +37,22 @@ public class RegisterOrderT implements java.io.Serializable {
 	private String hospitalId;
 	private String payState;
 	private String detailTime;
+	private String platformOrderId;
 	// Constructors
 
+	
 	@Column(name = "DETAIL_TIME", nullable = false, length = 20)
 	public String getDetailTime() {
 		return detailTime;
+	}
+
+	@Column(name = "Platform_Order_Id", nullable = false, length = 20)
+	public String getPlatformOrderId() {
+		return platformOrderId;
+	}
+
+	public void setPlatformOrderId(String platformOrderId) {
+		this.platformOrderId = platformOrderId;
 	}
 
 	public void setDetailTime(String detailTime) {
@@ -77,7 +88,7 @@ public class RegisterOrderT implements java.io.Serializable {
 			String orderState, String orderFee, String registerTime,
 			String userName, String userNo, String userTelephone, String sex,
 			String teamId, String teamName, String state, Date createDate,
-			String hospitalId, String payState) {
+			String hospitalId, String payState,String platformOrderId) {
 		this.orderId = orderId;
 		this.userId = userId;
 		this.registerId = registerId;
@@ -97,6 +108,7 @@ public class RegisterOrderT implements java.io.Serializable {
 		this.createDate = createDate;
 		this.hospitalId = hospitalId;
 		this.payState = payState;
+		this.platformOrderId=platformOrderId;
 	}
 
 	// Property accessors

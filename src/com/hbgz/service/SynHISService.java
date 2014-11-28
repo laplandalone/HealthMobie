@@ -57,6 +57,7 @@ public class SynHISService {
 			AuthHeader authHeader = new AuthHeader();
 			authHeader.setAuthorizationCode("pF8/tPHpkBoAgVxqLZyOMg==");
 			servStub.setHeader("http://ISH_Service.cn/", "AuthHeader",authHeader);
+			log.error("HISSQL:"+sql);
 			String retVal = servStub.SQLExecH(sql);
 			return retVal;
 		} catch (Exception err) 
@@ -454,7 +455,7 @@ public class SynHISService {
 	 * @param id-register_id
 	 * @throws Exception
 	 */
-	public String hisRegisterOrder(String id,String weekTypeT,String orderType) throws Exception
+	public String hisRegisterOrder(String id,String weekTypeT,String orderType,String platformOrderId) throws Exception
 	{
 		String weekType="";
 		String userRegisterNum="";
@@ -485,6 +486,17 @@ public class SynHISService {
 				Element e = (Element) list.get(i);
 				userRegisterNum=e.getChildText("user_register_num");
 			}
+			
+			/*取消预约*/
+			if("-".equals(orderType) && ObjectCensor.isStrRegular(platformOrderId))
+			{
+				StringBuffer orderSql=new StringBuffer();
+				orderSql.append("<DS>");
+				orderSql.append("<SQL><str>update mz_yydj set  qxf  =  'Y'  where yylsh  = '"+platformOrderId+"'</str></SQL>");
+				orderSql.append("</DS>");
+				String ssss =invokeFunc(orderSql.toString());
+				System.out.println(ssss);
+			}
 		}
 		return userRegisterNum;
 	
@@ -495,7 +507,7 @@ public class SynHISService {
 	 * @param orderT
 	 * @throws Exception
 	 */
-	public void addOrderPay(RegisterOrderT orderT) throws Exception
+	public String addOrderPay(RegisterOrderT orderT) throws Exception
 	{
 		
 		/*重新分配序号*/
@@ -507,7 +519,7 @@ public class SynHISService {
 		sqlxh.append("<SQL><str>update mz_ghde set xh   = xh    where id = "+delb+"</str></SQL>");
 		sqlxh.append("</DS>");
 		
-		String ss = new SynHISService().invokeFunc(sqlxh.toString());
+		String ss = invokeFunc(sqlxh.toString());
 		
 		int xh=0; /*专家序号*/
 		Document doc = XMLComm.loadXMLString(ss);
@@ -534,7 +546,7 @@ public class SynHISService {
 		sqljzsc.append("<SQL><str>select  jzsc,yszc from mz_bzdyb  where bzdm  = '"+ teamId +"' and ysdm ='"+doctorId+"'</str></SQL>");
 		sqljzsc.append("</DS>");
 		
-		String jzscRst =new SynHISService().invokeFunc(sqljzsc.toString());
+		String jzscRst =invokeFunc(sqljzsc.toString());
 		Document docJzsc = XMLComm.loadXMLString(jzscRst);
 		Element rootJzsc  = docJzsc.getRootElement();
 		List listJzsc = rootJzsc.getChildren();
@@ -582,8 +594,8 @@ public class SynHISService {
 		sql.append("('"+id+"','"+orderT.getUserName()+"','"+sex+"','"+birthDay+"','"+registerTime+"','"+orderT.getDoctorId().trim()+"','"+orderT.getDoctorName()+"','"+userAddress+"',GETDATE(),'"+czydm+"','"+orderT.getUserTelephone()+"','掌上亚心',"+xh+",'"+orderT.getUserNo()+"','10','"+yszc+"')");
 		sql.append("</str></SQL></DS>");
 		log.error("pay-sql:"+sql);
-		String result =new SynHISService().invokeFunc(sql.toString());
-		log.error("pay:"+result);
+		String sss =invokeFunc(sql.toString());
+		return id;
 	}
 	
 	
@@ -607,19 +619,19 @@ public class SynHISService {
 //		sql.append("</DS>");
 		String sqls="<DS><SQL><str>select top 10 delb ,c.bzdm team_id,c.bzmc team_name,kszjdm doctor_id,b.zgxm doctor_name,derq day from mz_ghde a,comm_zgdm b,mz_bzdyb c where a.kszjdm=b.zgid and a.kszjdm=c.ysdm and a.kszjdm='1405R' and derq > '2014.10.20' order by derq  </str></SQL></DS>";
 		String sqla="<DS><SQL><str>select distinct  bzdm team_id ,bzmc team_name from mz_bzdyb order by team_id </str></SQL></DS>";
-		String sss ="<DS><SQL><str>select   top 10 * from mz_bzdyb   </str></SQL></DS>";
+		String sss ="<DS><SQL><str>update mz_yydj set  qxf  =  'Y'  where yylsh  = '201411286081'  </str></SQL></DS>";
 		String result =new SynHISService().invokeFunc(sss);
 		System.out.println(result);
-		Document doc = XMLComm.loadXMLString(result);
-		Element root = doc.getRootElement();
-		List list = root.getChildren();
-		for (int i = 0; i < list.size(); i++)
-		{
-			Element e = (Element) list.get(i);
-			TeamT teamT = new TeamT();
-			String teamId=e.getChildText("doctor_id").toString();
-			System.out.println(teamId);
-		}
+//		Document doc = XMLComm.loadXMLString(result);
+//		Element root = doc.getRootElement();
+//		List list = root.getChildren();
+//		for (int i = 0; i < list.size(); i++)
+//		{
+//			Element e = (Element) list.get(i);
+//			TeamT teamT = new TeamT();
+//			String teamId=e.getChildText("doctor_id").toString();
+//			System.out.println(teamId);
+//		}
 		
 	}
 }

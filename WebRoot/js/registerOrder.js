@@ -43,10 +43,9 @@ function createTable(data, flagParam)
 	content += "<td align='center' width='8%'>科室名称</td><td align='center' width='6%'>医生名称</td>";
 	content += "<td align='center' width='4%'>费用</td><td align='center' width='12%'>预约时间</td>";
 	content += "<td align='center' width='10%'>创建时间</td><td align='center' width='6%'>订单状态</td>";
-	if(hospitalId == "101")
-	{
-		content += "<td align='center' width='10%'>操作</td>";
-	}
+	
+	content += "<td align='center' width='10%'>操作</td>";
+	
 	content += "</tr>";
 	if(data.count > 0)
 	{
@@ -95,7 +94,16 @@ function createTable(data, flagParam)
 			}
 			else if(hospitalId == '102')
 			{
-				content += "<td>"+obj.payState+"</td>";
+				var payState = obj.payState;
+				var payStateCode = obj.payStateCode;
+				content += "<td>"+payState+"</td><td style='text-align:center !important'>";
+				if(payStateCode=='103')
+				{
+					content += "<a href='javascript:void(0)' class='linkmore' onclick='refund("+obj.orderId+")'>退款</a>";
+				}else
+				{
+					content += "无";
+				}
 			}
 			content += "</tr>";
 		});
@@ -106,7 +114,7 @@ function createTable(data, flagParam)
 	}
 	else
 	{
-		var cloumnNum = 12;
+		var cloumnNum = 13;
 		if(hospitalId == "101")
 		{
 			cloumnNum = 13;
@@ -183,6 +191,18 @@ function appointment(name, orderId)
 		function ()
 		{
 			option(orderId, "appointment");
+		},
+		function(){return true;}
+	);
+}
+
+//
+function refund(orderId)
+{
+	$.dialog.confirm("是否确定退款?",
+		function ()
+		{
+			option(orderId, "refund");
 		},
 		function(){return true;}
 	);

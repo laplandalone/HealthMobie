@@ -39,7 +39,6 @@ import com.hbgz.model.WakeT;
 import com.hbgz.pub.annotation.ServiceType;
 import com.hbgz.pub.base.SysDate;
 import com.hbgz.pub.cache.CacheManager;
-import com.hbgz.pub.cloudPush.AndroidPushMsg;
 import com.hbgz.pub.exception.JsonException;
 import com.hbgz.pub.exception.QryException;
 import com.hbgz.pub.resolver.BeanFactoryHelper;
@@ -353,7 +352,7 @@ public class DigitalHealthService
 			String userName, String userNo, String userTelephone, String sex, String teamId,
 			String teamName,String saveFlag,String contactId) throws Exception
 	{
-		String orderId = sysId.getId() + "";
+		String orderId =DateUtils.getORA_DATE_FORMAT()+sysId.getId() + "";
 		
 		/*普通挂号,默认取自定义预约号码*/ 
 		if ("0".equals(orderNum) && "0".equals(registerId))
@@ -404,9 +403,8 @@ public class DigitalHealthService
 //					String docId = StringUtil.getMapKeyVal(normalMap", "doctorId");
 //				}
 //			}
-			orderNum=synHISService.hisRegisterOrder(registerId, registerTime,"+");
+			orderNum=synHISService.hisRegisterOrder(registerId, registerTime,"+","");
 		}
-		
 		boolean flag= digitalHealthDao.addRegisterOrder(hospitalId,orderId, userId, registerId, doctorId, doctorName,
 				orderNum, orderFee, registerTime, userName, userNo, userTelephone, sex, teamId,
 				teamName);
@@ -711,7 +709,7 @@ public class DigitalHealthService
 	@ServiceType(value = "BUS20023")
 	public boolean orderPay(String orderId,String payState) throws  Exception
 	{
-		boolean flag=false;
+	
 		RegisterOrderT registerOrder=null;
 		if (ObjectCensor.isStrRegular(orderId, payState))
 		{
@@ -719,25 +717,36 @@ public class DigitalHealthService
 			if (ObjectCensor.checkListIsNull(sList))
 			{
 				 registerOrder = sList.get(0);
-				 registerOrder.setPayState(payState);
-				 hibernateObjectDao.update(registerOrder);
-				 flag=true;
+				
+				if("102".equals(payState) && registerOrder!=null)
+				{
+					 String id = synHISService.addOrderPay(registerOrder);
+					 registerOrder.setPayState(payState);
+					 registerOrder.setPlatformOrderId(id);
+					 hibernateObjectDao.update(registerOrder);
+				}
+				else 
+				
+				/*取消预约*/
+				if("103".equals(payState) && registerOrder!=null)
+				{
+					registerOrder.setPayState(payState);
+					hibernateObjectDao.update(registerOrder);
+					String id=registerOrder.getRegisterId();
+					String weekTypeT=registerOrder.getRegisterTime();
+					String platformId=registerOrder.getPlatformOrderId();
+					synHISService.hisRegisterOrder(id, weekTypeT, "-",platformId);
+				}else 
+					/*取消预约*/
+				if("101".equals(payState) && registerOrder!=null)
+				{
+					registerOrder.setPayState(payState);
+					registerOrder.setPlatformOrderId("0");
+					hibernateObjectDao.update(registerOrder);
+				}
 			}
 		}
-		
-		if(flag && "102".equals(payState) && registerOrder!=null)
-		{
-			synHISService.addOrderPay(registerOrder);
-		}else 
-		
-		/*取消预约*/
-		if(flag && "103".equals(payState) && registerOrder!=null)
-		{
-			String id=registerOrder.getRegisterId();
-			String weekTypeT=registerOrder.getRegisterTime();
-			synHISService.hisRegisterOrder(id, weekTypeT, "-");
-		}
-		return flag;
+		return true;
 	}
 	
 	@ServiceType(value = "BUS20024")
@@ -907,7 +916,7 @@ public class DigitalHealthService
 			if(ObjectCensor.checkListIsNull(sList))
 			{
 				String wakeContent = StringUtil.getMapKeyVal((Map) sList.get(0), "wakeContent");
-				AndroidPushMsg.pushMsg(pushUserId, "msg", wakeContent, pushChannelId);
+//				AndroidPushMsg.pushMsg(pushUserId, "msg", wakeContent, pushChannelId);
 				retVal = "true";
 			}
 		}
@@ -1198,6 +1207,9 @@ public class DigitalHealthService
 				} else if ("invalid".equalsIgnoreCase(optionFlag))
 				{
 					registerOrder.setOrderState("00X");
+				}else if ("refund".equalsIgnoreCase(optionFlag))
+				{
+					registerOrder.setPayState("104");
 				}
 				hibernateObjectDao.update(registerOrder);
 				flag = true;

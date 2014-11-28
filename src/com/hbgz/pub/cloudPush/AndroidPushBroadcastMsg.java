@@ -58,6 +58,6 @@ public class AndroidPushBroadcastMsg
 		//消息
 //		pushMsg("notice", "<user_id>71189</user_id><message>Hello</message><title>Hello</title>");
 		//通知
-		pushMsg("msg", "{\"title\":提问回复,\"description\":新的消息回复请查看,\"msg_type\":ques,\"user_id\":\"\",custom_param:{userId:22861,doctorId:ASH_0009,userTelephone:18907181648,questionId:26005}}");
+		pushMsg("msg", "{\"title\":提问回复,\"description\":新的消息回复请查看,\"msg_type\":ques,\"user_id\":\"22861\",custom_param:{userId:22861,doctorId:ASH_0009,userTelephone:18907181648,questionId:26005}}");
 	}
 }

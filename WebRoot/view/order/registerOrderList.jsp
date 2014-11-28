@@ -120,11 +120,9 @@
 							<td align="center" width="12%">预约时间</td>
 							<td align="center" width="10%">创建时间</td>
 							<td align="center" width="6%">订单状态</td>
-							<c:choose>
-								<c:when test="${sessionScope.hospitalId == '101' }">
-									<td align="center" width="10%">操作</td>
-								</c:when>
-							</c:choose>
+						
+							<td align="center" width="10%">操作</td>
+						
 						</tr>
 					</table>
 				</div>
