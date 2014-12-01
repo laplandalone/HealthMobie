@@ -2,7 +2,6 @@ function qryOnlineDortorQues()
 {
 	var obj = JSON.stringify($("select,input").serializeObject());
 	obj = qryStartFunc(obj);
-	alert(obj);
 	var dig = null;
 	$.ajax({
 		type : "POST",
@@ -114,7 +113,7 @@ function createTable(data, flagParam)
 				}
 				else
 				{
-					content += "<input type='button' class='button3' value='可见' onclick='updateAuth(\""+authType+"\", "+obj.id+")'/>"
+					content += "<input type='button' class='button3' value='可见' onclick='updateAuth(\""+authType+"\", "+obj.id+")'/>";
 				}
 				content += "</td><td align='center' width='15%'>"+obj.createDate+"</td>";
 				content += "<td align='center' width='8%' style='text-align:center !important'>";
@@ -236,7 +235,7 @@ function refundAjax(doctorId, questionId, userId, telephone, content, authType)
 		data:"doctorId="+doctorId+"&questionId="+questionId+"&userId="+userId+"&telephone="+telephone+"&authType="+authType+"&content="+content,
 		success:function(data)
 		{
-			$.dialog.alert("操作成功",function(){return true});
+			$.dialog.alert("操作成功",function(){return true;});
 		},
 		error:function(stata)
 		{
