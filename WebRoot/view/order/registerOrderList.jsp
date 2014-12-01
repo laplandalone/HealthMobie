@@ -84,8 +84,10 @@
 									<c:when test="${sessionScope.hospitalId == '102' }">
 										<option value="">全部</option>
 										<option value="100">未支付</option>
-										<option value="101">已支付</option>
-										<option value="102">已取消</option>
+										<option value="101">已取消</option>
+										<option value="102">已支付</option>
+										<option value="103">申请退款</option>
+										<option value="104">已退款</option>
 									</c:when>
 								</c:choose>
 							</select>
@@ -108,12 +110,10 @@
 				<div id="template" class="box">
 					<table width="100%" border="1" cellspacing="0" cellpadding="0" class="maintable1">
 						<tr class="tabletop">
-							<td align="center" width="5%">订单号</td>
+							<td align="center" width="10%">订单号</td>
 							<td align="center" width="5%">预约号</td>
-							<td align="center" width="4%">类型</td>
 							<td align="center" width="5%">预约人</td>
 							<td align="center" width="8%">联系方式</td>
-							<td align="center" width="10%">医院名称</td>
 							<td align="center" width="8%">科室名称</td>
 							<td align="center" width="6%">医生名称</td>
 							<td align="center" width="4%">费用</td>

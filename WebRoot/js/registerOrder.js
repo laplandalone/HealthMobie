@@ -37,9 +37,9 @@ function createTable(data, flagParam)
 {
 	var hospitalId = $("#hospitalId").val();
 	var content = "<table id='table1' width='100%' border='1' cellspacing='0' cellpadding='0' class='maintable'>";
-	content += "<tr class='tabletop'><td align='center' width='5%'>订单号</td><td align='center' width='5%'>预约号</td>";
-	content += "<td align='center' width='4%'>类型</td><td align='center' width='5%'>预约人</td>";
-	content += "<td align='center' width='8%'>联系方式</td><td align='center' width='10%'>医院名称</td>";
+	content += "<tr class='tabletop'><td align='center' width='10%'>订单号</td><td align='center' width='5%'>预约号</td>";
+	content += "<td align='center' width='5%'>预约人</td>";
+	content += "<td align='center' width='8%'>联系方式</td>";
 	content += "<td align='center' width='8%'>科室名称</td><td align='center' width='6%'>医生名称</td>";
 	content += "<td align='center' width='4%'>费用</td><td align='center' width='12%'>预约时间</td>";
 	content += "<td align='center' width='10%'>创建时间</td><td align='center' width='6%'>订单状态</td>";
@@ -72,8 +72,8 @@ function createTable(data, flagParam)
 			{
 				registerId = "专家号";
 			}
-			content += "<td>"+obj.orderId+"</td><td>"+obj.orderNum+"</td><td>"+registerId+"</td><td>"+obj.userName+"</td><td>"+obj.userTelephone+"</td>";
-			content += "<td>"+obj.hospitalName+"</td><td>"+obj.teamName+"</td><td>"+obj.doctorName+"</td><td>"+obj.orderFee+"</td><td>"+obj.registerTime+"</td>";
+			content += "<td>"+obj.orderId+"</td><td>"+obj.orderNum+"<td>"+obj.userName+"</td><td>"+obj.userTelephone+"</td>";
+			content += "<td>"+obj.teamName+"</td><td>"+obj.doctorName+"</td><td>"+obj.orderFee+"</td><td>"+obj.registerTime+"</td>";
 			content += "<td>"+obj.createDate+"</td>";
 			if(hospitalId == '101')
 			{

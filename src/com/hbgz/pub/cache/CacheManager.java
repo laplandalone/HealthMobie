@@ -75,6 +75,23 @@ public class CacheManager
 		return null;
 	}
 	
+	public String getNewsTypeById(String hospitalId,String id) throws QryException
+	{
+		List list = sysCacheDao.getHospitalConfig();
+		HashMap mapComp = new HashMap();
+		mapComp.put("hospitalId",hospitalId);
+		mapComp.put("configId",id);
+//		mapComp.put("configName", "HOSPITALNEWS");
+		List subList = StringUtil.getSubMapList(list, mapComp);
+		System.out.println(subList);
+		if(ObjectCensor.checkListIsNull(subList))
+		{
+			Map map = (Map) subList.get(0);
+			return StringUtil.getMapKeyVal(map, "configVal");
+		}
+		return "";
+	}
+	
 	public List getWakeType(String hospitalId, String configName) throws Exception
 	{
 		List list = sysCacheDao.getHospitalConfig();

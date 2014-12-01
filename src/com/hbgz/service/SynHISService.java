@@ -344,6 +344,7 @@ public class SynHISService {
 	
 		String[] dayTypes=new String[]{"am","pm"};
 		List doctorList = digitalHealthDao.getDoctorById(doctorIdT.trim());
+		int userOrderNumInt=0;
 		if(ObjectCensor.checkListIsNull(list))
 		{
 			Map mapComp = new HashMap();
@@ -371,6 +372,10 @@ public class SynHISService {
 					String userOrderNum=e.getChildText(dayTypeMark+"_user_register_num");/*用户可预约号*/
 					String dayType="";
 					String numMax="false";
+					if(ObjectCensor.isStrRegular(userOrderNum))
+					{
+					      userOrderNumInt = Integer.parseInt(userOrderNum);
+					}
 					if("06".equals(yszc))
 					{
 						registerFee="9.5";
@@ -387,6 +392,7 @@ public class SynHISService {
 					}else
 					{
 						dayType="下午";
+						userOrderNumInt=1000+userOrderNumInt;
 					}
 					if("0".equals(registerNum))
 					{
@@ -429,7 +435,7 @@ public class SynHISService {
 					Map newMap = new HashMap();
 					newMap.put("registerId", registerId);
 					newMap.put("teamName", teamName);
-					newMap.put("userOrderNum", userOrderNum);// 预约号码
+					newMap.put("userOrderNum", userOrderNumInt+"");// 预约号码
 					newMap.put("doctorId", doctorId.trim());
 					newMap.put("teamId", teamId);
 					newMap.put("fee", registerFee);
@@ -459,6 +465,7 @@ public class SynHISService {
 	{
 		String weekType="";
 		String userRegisterNum="";
+		int userRegisterNumInt=0;
 		if(ObjectCensor.isStrRegular(id,weekTypeT))
 		{
 			String week=weekTypeT.substring(weekTypeT.length()-2,weekTypeT.length());
@@ -494,11 +501,19 @@ public class SynHISService {
 				orderSql.append("<DS>");
 				orderSql.append("<SQL><str>update mz_yydj set  qxf  =  'Y'  where yylsh  = '"+platformOrderId+"'</str></SQL>");
 				orderSql.append("</DS>");
-				String ssss =invokeFunc(orderSql.toString());
-				System.out.println(ssss);
+				invokeFunc(orderSql.toString());
+			}
+			if(ObjectCensor.isStrRegular(userRegisterNum))
+			{
+				userRegisterNumInt=Integer.parseInt(userRegisterNum);
+			}
+			if("下午".equals(week))
+			{
+				userRegisterNumInt =1000+userRegisterNumInt;
 			}
 		}
-		return userRegisterNum;
+		
+		return userRegisterNumInt+"";
 	
 	}
 	

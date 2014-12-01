@@ -39,6 +39,7 @@ import com.hbgz.model.WakeT;
 import com.hbgz.pub.annotation.ServiceType;
 import com.hbgz.pub.base.SysDate;
 import com.hbgz.pub.cache.CacheManager;
+import com.hbgz.pub.cloudPush.AndroidPushBroadcastMsg;
 import com.hbgz.pub.exception.JsonException;
 import com.hbgz.pub.exception.QryException;
 import com.hbgz.pub.resolver.BeanFactoryHelper;
@@ -440,6 +441,14 @@ public class DigitalHealthService
 			wakeT.setWakeValue("now");
 			wakeT.setState("00A");
 			wakeT.setWakeType("ques");
+			userQustionDao.save(wakeT);
+			JSONObject msgJson = new JSONObject();
+			msgJson.put("title", "提问回复");
+			msgJson.put("description", "新的消息回复请查看");
+			msgJson.put("msg_type","ques");
+			msgJson.put("user_id", questionT.getUserId());
+			msgJson.put("custom_param", userQuestion);
+			AndroidPushBroadcastMsg.pushMsg("msg", msgJson.toString());
 		}
 		userQustionDao.save(questionT);
 		return true;
@@ -1461,6 +1470,33 @@ public class DigitalHealthService
 		hospitalNewsT.setState("00A");
 		hospitalNewsT.setNewsImages(imageUrl);
 		hibernateObjectDao.save(hospitalNewsT);
+		
+		CacheManager cacheManager = (CacheManager) BeanFactoryHelper.getBean("cacheManager");
+		String imgIp = cacheManager.getImgIp("10");
+		String newsImg = hospitalNewsT.getNewsImages();
+		if (newsImg!=null && !"".equals(newsImg))
+		{
+			hospitalNewsT.setNewsImages(imgIp+hospitalNewsT.getNewsImages());
+		}
+		String typeName=cacheManager.getNewsTypeById(hospitalId, typeId);
+		hospitalNewsT.setContent(newsContent);
+		hospitalNewsT.setNewsContent(null);
+		hospitalNewsT.setTypeName(typeName);
+		JSONObject msgJson = new JSONObject();
+		msgJson.put("title",newsTitle);
+		if(newsContent.trim().length()>20)
+		{
+			msgJson.put("description",newsContent.trim().substring(0, 20));
+		}else
+		{
+			msgJson.put("description",newsContent.trim());
+		}
+		msgJson.put("msg_type","news");
+		msgJson.put("user_id", "");
+		msgJson.put("custom_param", JsonUtils.fromObjectTimestamp(hospitalNewsT));
+		AndroidPushBroadcastMsg.pushMsg("msg", msgJson.toString());
+		
+		
 		return "true";
 	}
 
@@ -1499,7 +1535,7 @@ public class DigitalHealthService
 	public String updateNews(String hospitalId, String newsId, String newsType,
 			String typeId, String newsTitle, String effDate, String expDate,
 			String newsContent, String newsImageUrl, String state,
-			String oldNewsId) throws UnsupportedEncodingException 
+			String oldNewsId) throws UnsupportedEncodingException, QryException 
 	{
 		List<HospitalNewsT> sList = hibernateObjectDao.getNewsById(hospitalId, oldNewsId);
 		if(ObjectCensor.checkListIsNull(sList))
@@ -1549,8 +1585,11 @@ public class DigitalHealthService
 //			else
 //			{
 //				
+			
 //			}
+			
 		}
+
 		return "true";
 	}
 

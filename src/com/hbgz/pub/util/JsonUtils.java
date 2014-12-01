@@ -152,5 +152,34 @@ public class JsonUtils
 		return JSONObject.fromObject(obj , config);
 	}
 	
-	
+	public static JSONObject fromObjectTimestamp(Object obj)
+	{
+		JsonConfig config = new JsonConfig();
+		config.registerJsonValueProcessor(Timestamp.class, new JsonValueProcessor(){
+			public Object processArrayValue(Object value, JsonConfig config) 
+			{
+				return process(value);
+			}
+
+			public Object processObjectValue(String key, Object value, JsonConfig config) 
+			{
+				return process(value);
+			}
+			private Object process(Object value)
+			{
+				if(value == null)
+				{
+				
+					return "";
+				}
+				else 
+				{
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+					
+					return sdf.format(value);
+				}
+			}
+		});
+		return JSONObject.fromObject(obj , config);
+	}
 }
