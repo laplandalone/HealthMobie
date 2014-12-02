@@ -14,6 +14,7 @@
 		<script type="text/javascript" src="<%=path%>/js/comm.js"></script>
 		<script type="text/javascript" src="<%=path%>/js/json2.js"></script>
 		<script type="text/javascript" src="<%=path%>/js/json.js"></script>
+		<script type="text/javascript" src="<%=path%>/pub/WdatePicker.js"></script>
 		<script type="text/javascript">
 			$(document).ready(function(){
 				$.getJSON("/mobile.htm?method=qryWakeTypeList", {"random":Math.random()}, function(data){ 
@@ -144,18 +145,7 @@
   					<tr>
   						<td align="right">提醒时间</td>
   						<td>
-  							<table class="inputtable" cellspacing="0" cellpadding="0">
-								<tr>
-									<td>
-										<input type="text" id="wakeDate" name="wakeDate" style="border:0;height:20px;width:132px;font-size:12px" readonly/>
-									</td>
-									<td>
-										<a href="javascript:void(0);" onclick="showDate(document.getElementById('wakeDate'))"> 
-											<img src="<%=path%>/pub/images/calendar.png" style="position:relative;top:0px" /> 
-										</a>
-									</td>
-								</tr>
-							</table>
+  							<input readonly="readonly" type="text" class="Wdate" id="wakeDate" name="wakeDate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'})" style="border:1px solid #C0DC56;background:#fff;width:150px;font-size:12px;"/>
   						</td>
   					</tr>
   					<tr>

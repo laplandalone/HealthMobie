@@ -34,4 +34,6 @@ public final class Keys {
 //	public static final String PUBLIC = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDhLeb7J8kYA5PO8goUUwEm94hQ1U5JjBkT1MNt5couOlva6h4Egd6uUO+MK9ajUXkN4sdcX2hpGW5wlFdkS0WGC4VJSI5pPl7AXpaP2L3PCvEf4hY6l4FmN9SF6paRxcgJlVbUXsLEdC1k2Om6yS/nZIO8IB6PZWT8a/kSVe85MwIDAQAB";
 
 	public static final String URL  = "https://openapi.alipaydev.com/gateway.do";
+	
+	public final static String JTEMPLATE = "itzcJdbcTemplate";
 }
