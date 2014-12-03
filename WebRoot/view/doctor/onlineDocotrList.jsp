@@ -4,7 +4,7 @@
 <%
 	String path = request.getContextPath();
 	String hospitalId = (String) session.getAttribute("hospitalId");
-	List teamLst = PubData.qryTeamList(hospitalId);  alert
+	List teamLst = PubData.qryTeamList(hospitalId); 
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
