@@ -548,8 +548,33 @@ import java.util.Map;
    Date date = calendar.getTime();
 
    return date;
-
  } 
+ 
+ /** 
+  * 获得指定日期的前一天 
+  *  
+  * @param specifiedDay 
+  * @return 
+ * @throws ParseException 
+  * @throws Exception 
+  */  
+ public static Date getSpecifiedDayBefore(String specifiedDay) throws ParseException {//可以用new Date().toLocalString()传递参数   
+     Calendar c = Calendar.getInstance();  
+     Date date = null;  
+     try {  
+         date = DateUtils.CHN_DATE_TIME_FORMAT.parse(specifiedDay+" 11:00:00");
+     } catch (ParseException e) {  
+         e.printStackTrace();  
+     }  
+     c.setTime(date);  
+     int day = c.get(Calendar.DATE);  
+     c.set(Calendar.DATE, day - 1);  
+
+     String dayBefore =  DateUtils.CHN_DATE_TIME_FORMAT.format(c.getTime());  
+     return DateUtils.CHN_DATE_TIME_FORMAT.parse(dayBefore);  
+ }  
+
+
  /**
   * 几个小时，几分钟之后
   * @param hour
@@ -560,7 +585,7 @@ import java.util.Map;
  public static Date afterNTime(String dateStr,int hour,int minute) throws ParseException 
  {
 
-   Date registerDate = DateUtils.CHN_DATE_TIME_FORMAT.parse(dateStr+" 8:00:00");
+   Date registerDate = DateUtils.CHN_DATE_TIME_FORMAT.parse(dateStr+" 11:00:00");
    
    Calendar calendar = Calendar.getInstance();
 
@@ -578,5 +603,7 @@ import java.util.Map;
    public static void main(String[] args) throws ParseException 
    {
 	   System.out.println(DateUtils.afterNTime("2014-09-08", 1, 1));
+	   System.out.println(DateUtils.getSpecifiedDayBefore("2014-09-08"));
+	   System.out.println("2014-12-09  星期二 上午".substring(0, 10));
    }
 }

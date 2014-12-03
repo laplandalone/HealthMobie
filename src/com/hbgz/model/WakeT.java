@@ -1,6 +1,7 @@
 package com.hbgz.model;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,7 +24,7 @@ public class WakeT implements java.io.Serializable {
 	private String wakeValue;
 	private String wakeContent;
 	private Date createDate;
-	private Date wakeDate;
+	private Timestamp wakeDate;
 	private String state;
 	private String wakeName;
 
@@ -34,8 +35,8 @@ public class WakeT implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public WakeT(BigDecimal wakeId, String wakeType, Date createDate,
-			Date wakeDate, String state) {
+	public WakeT(BigDecimal wakeId, String wakeType, Timestamp createDate,
+			Timestamp wakeDate, String state) {
 		this.wakeId = wakeId;
 		this.wakeType = wakeType;
 		this.createDate = createDate;
@@ -45,7 +46,7 @@ public class WakeT implements java.io.Serializable {
 
 	/** full constructor */
 	public WakeT(BigDecimal wakeId, String wakeType, String wakeValue,
-			String wakeContent, Date createDate, Date wakeDate, String state,
+			String wakeContent, Date createDate, Timestamp wakeDate, String state,
 			String wakeName) {
 		this.wakeId = wakeId;
 		this.wakeType = wakeType;
@@ -86,7 +87,7 @@ public class WakeT implements java.io.Serializable {
 		this.wakeValue = wakeValue;
 	}
 
-	@Column(name = "WAKE_CONTENT", length = 200)
+	@Column(name = "WAKE_CONTENT", length = 1000)
 	public String getWakeContent() {
 		return this.wakeContent;
 	}
@@ -105,13 +106,13 @@ public class WakeT implements java.io.Serializable {
 		this.createDate = createDate;
 	}
 
-	@Temporal(TemporalType.DATE)
+
 	@Column(name = "WAKE_DATE", nullable = false, length = 7)
-	public Date getWakeDate() {
+	public Timestamp getWakeDate() {
 		return this.wakeDate;
 	}
 
-	public void setWakeDate(Date wakeDate) {
+	public void setWakeDate(Timestamp wakeDate) {
 		this.wakeDate = wakeDate;
 	}
 

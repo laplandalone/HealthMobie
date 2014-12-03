@@ -404,11 +404,40 @@ public class DigitalHealthService
 //					String docId = StringUtil.getMapKeyVal(normalMap", "doctorId");
 //				}
 //			}
-			orderNum=synHISService.hisRegisterOrder(registerId, registerTime,"+","");
+//			orderNum=synHISService.hisRegisterOrder(registerId, registerTime,"+","");
 		}
+		
 		boolean flag= digitalHealthDao.addRegisterOrder(hospitalId,orderId, userId, registerId, doctorId, doctorName,
 				orderNum, orderFee, registerTime, userName, userNo, userTelephone, sex, teamId,
 				teamName);
+			
+		List orders = hibernateObjectDao.findByProperty("RegisterOrderT", "orderId",orderId);
+		if (ObjectCensor.checkListIsNull(orders))
+		{
+			RegisterOrderT orderT = (RegisterOrderT) orders.get(0);
+
+			JSONObject msgJson = new JSONObject();
+			msgJson.put("title", "掌上亚心");
+			msgJson.put("description", "预约提醒");
+			msgJson.put("msg_type","order");
+			msgJson.put("user_id", userId);
+			msgJson.put("custom_param", JsonUtils.fromObject(orderT));
+			
+			String time = orderT.getRegisterTime().substring(0,10);
+			
+			Date wakeDate = DateUtils.getSpecifiedDayBefore(time);
+			
+			WakeT wakeT = new WakeT();
+			wakeT.setWakeId(BigDecimal.valueOf(sysId.getId()));
+			wakeT.setCreateDate(SysDate.getSysDate());
+			wakeT.setWakeContent(msgJson.toString());
+			wakeT.setWakeDate(SysDate.getFormatSimpleDate(wakeDate));
+			wakeT.setWakeValue("now");
+			wakeT.setState("00A");
+			wakeT.setWakeType("order");
+			hibernateObjectDao.save(wakeT);
+			AndroidPushBroadcastMsg.pushMsg("order", msgJson.toString());
+		} 
 		
 		/*返回order_id：用与支付*/
 		if(flag)
@@ -443,8 +472,8 @@ public class DigitalHealthService
 			wakeT.setWakeType("ques");
 			userQustionDao.save(wakeT);
 			JSONObject msgJson = new JSONObject();
-			msgJson.put("title", "提问回复");
-			msgJson.put("description", "新的消息回复请查看");
+			msgJson.put("title","掌上亚心");
+			msgJson.put("description", "提问回复");
 			msgJson.put("msg_type","ques");
 			msgJson.put("user_id", questionT.getUserId());
 			msgJson.put("custom_param", userQuestion);
@@ -1483,14 +1512,8 @@ public class DigitalHealthService
 		hospitalNewsT.setNewsContent(null);
 		hospitalNewsT.setTypeName(typeName);
 		JSONObject msgJson = new JSONObject();
-		msgJson.put("title",newsTitle);
-		if(newsContent.trim().length()>20)
-		{
-			msgJson.put("description",newsContent.trim().substring(0, 20));
-		}else
-		{
-			msgJson.put("description",newsContent.trim());
-		}
+		msgJson.put("title","掌上亚心");
+		msgJson.put("description",newsTitle);
 		msgJson.put("msg_type","news");
 		msgJson.put("user_id", "");
 		msgJson.put("custom_param", JsonUtils.fromObjectTimestamp(hospitalNewsT));

@@ -44,7 +44,7 @@ public final class SysDate
 		return getFormatSimpleDate(new Timestamp(date.getTime()));
     }
 
-    private static Timestamp getFormatSimpleDate(Date date) 
+    public static Timestamp getFormatSimpleDate(Date date) 
     {
 		String format = "yyyy-MM-dd HH:mm:ss";
 		SimpleDateFormat df = new SimpleDateFormat(format);

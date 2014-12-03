@@ -58,6 +58,8 @@ public class AndroidPushBroadcastMsg
 		//消息
 //		pushMsg("notice", "<user_id>71189</user_id><message>Hello</message><title>Hello</title>");
 		//通知
-		pushMsg("msg", "{\"title\":提问回复,\"description\":新的消息回复请查看,\"msg_type\":ques,\"user_id\":\"22861\",custom_param:{userId:22861,doctorId:ASH_0009,userTelephone:18907181648,questionId:26005}}");
+		String ss = "{\"title\":\"掌上亚心\",\"description\":\"预约提醒\",\"msg_type\":\"order\",\"user_id\":\"22861\",\"custom_param\":{\"createDate\":\"2014-12-02\",\"detailTime\":\"0\",\"doctorId\":\"9083R\",\"doctorName\":\"门诊普通号\",\"hospitalId\":\"102\",\"orderFee\":\"4.5\",\"orderId\":\"2014120226479\",\"orderNum\":\"1001\",\"orderState\":\"000\",\"payState\":\"100\",\"platformOrderId\":\"\",\"registerId\":\"1000020064\",\"registerTime\":\"2014-12-08  星期一 下午\",\"sex\":\"男\",\"state\":\"00A\",\"teamId\":\"mz12\",\"teamName\":\"门诊普通\",\"userId\":\"22861\",\"userName\":\"冉海全\",\"userNo\":\"422822198407311010\",\"userTelephone\":\"18907181648\"}}";
+		pushMsg("msg", "{\"title\":预约提醒,\"description\":提醒,\"msg_type\":order,\"user_id\":\"22861\",custom_param:{userId:22861,doctorId:ASH_0009,userTelephone:18907181648,questionId:26005}}");
+//		pushMsg("msg",ss);
 	}
 }
