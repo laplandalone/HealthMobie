@@ -117,12 +117,25 @@
 				{
 					newsImageUrl = $("#newsImages").val();
 				}
+				var dig = null;
 				$.ajax({
 					type:"POST",
 					url:"/news.htm?method=updateNews",
 					data:"newsId="+newsId+"&newsType="+newsType+"&typeId="+typeId+"&newsTitle="+newsTitle+"&effDate="+effDate+"&expDate="+expDate+"&newsContent="+newsContent+"&newsImageUrl="+newsImageUrl+"&state="+state+"&oldNewsId="+oldNewsId,
+					beforeSend : function()
+					{
+						dig = new W.$.dialog({parent:api, title:"正在修改请等待...",esc:false,min:false,max:false,lock:true});
+					},
 					success:function(data)
 					{
+						try
+						{
+							dig.close();
+						}
+						catch(e)
+						{
+							
+						}
 						if(data)
 						{
 							W.$.dialog({parent:api, title:false, width:"150px", esc:false, height:"60px", zIndex:2000, icon:'succ.png', lock:true, content:'成功修改信息!', ok:function() {W.reload(); api.close(); return true;}});
@@ -134,6 +147,14 @@
 					},
 					error:function(stata)
     				{
+    					try
+						{
+							dig.close();
+						}
+						catch(e)
+						{
+							
+						}
     					W.$.dialog.alert(stata.statusText, function(){api.close(); return true;}, api);
     				}
 				});

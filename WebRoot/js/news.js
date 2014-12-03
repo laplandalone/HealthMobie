@@ -98,6 +98,11 @@ function createTable(data, flagParam)
 	$("#template").html(content);
 }
 
+function reload() 
+{
+	window.location.reload();
+}
+
 function qryPaging(val)
 {
 	var obj = qryPaingStartFunc(val);
