@@ -1615,8 +1615,17 @@ public class DigitalHealthService
 
 		return "true";
 	}
-
 	
+	public String deleteNews(String hospitalId, String newsId)
+	{
+		List<HospitalNewsT> sList = hibernateObjectDao.getNewsById(hospitalId, newsId);
+		if(ObjectCensor.checkListIsNull(sList))
+		{
+			HospitalNewsT hospitalNewsT = sList.get(0);
+			hibernateObjectDao.delete(hospitalNewsT);
+		}
+		return "true";
+	}
 
 	public JSONArray qryTeamList(String hospitalId) throws Exception 
 	{

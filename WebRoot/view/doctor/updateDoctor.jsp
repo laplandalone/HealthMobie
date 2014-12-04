@@ -93,14 +93,15 @@
 						{
 							$.dialog.alert('操作成功',function()
 							{
-								//window.location.href="/ques.htm?method=queryPre";
+								var pageNum = $("#pageNum").val();
+								window.location.href="/view/doctor/doctors.jsp?pageNum="+pageNum;
 							});
 						}else
 						{
 							$.dialog.alert('操作失败',function()
-									{
-										//window.location.href="/ques.htm?method=queryPre";
-									});
+							{
+								//window.location.href="/ques.htm?method=queryPre";
+							});
 						}
 						
 					},
@@ -117,6 +118,7 @@
 	</head>
 	<body>
 		<div id="template" style="height:100%;overflow:auto">
+			<input type="hidden" id="pageNum" value="${pageNum }"/>
 			<table width="70%" border="0" cellspacing="0" cellpadding="0" align='center' >
 				<tr align='left'>
 				<td>

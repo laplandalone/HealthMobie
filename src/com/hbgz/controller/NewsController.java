@@ -198,6 +198,27 @@ public class NewsController
 		}
 	}
 	
+	@RequestMapping(params = "method=deleteNews")
+	public void deleteNews(HttpServletRequest request, HttpServletResponse response)
+	{
+		response.setCharacterEncoding("GBK");
+		try 
+		{
+			HttpSession session = request.getSession();
+			String hospitalId = (String) session.getAttribute("hospitalId");
+			String newsId = request.getParameter("newsId");
+			String retVal = digitalHealthService.deleteNews(hospitalId, newsId);
+			PrintWriter out = response.getWriter();
+			log.error(retVal);
+			out.println(retVal);
+			out.close();
+		} 
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+	}
+	
 	@RequestMapping(params = "method=uploadFile")
 	public void uploadFile(MultipartHttpServletRequest request, HttpServletResponse response)
 	{

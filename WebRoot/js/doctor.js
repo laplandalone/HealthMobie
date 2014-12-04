@@ -31,6 +31,11 @@ function queryMed()
 			$.dialog.alert(data.statusText, function(){window.location.reload(); return true;});
 		}
 	});
+	var pageNum = $("#pageNum").val();
+	if(pageNum != null && pageNum != "" && pageNum != undefined && pageNum != "null")
+	{
+		showList(pageNum);
+	}
 }
 
 function createTable(data, flagParam)
@@ -129,7 +134,7 @@ function queryDoctor(doctorId)
 {
 	if (doctorId != "") 
 	{
-		window.location.href = "/doctor.htm?method=getDoctor&doctorId=" + doctorId;
+		window.location.href = "/doctor.htm?method=getDoctor&doctorId="+doctorId+"&pageNum="+gcurTag;
 	}
 }
 

@@ -145,7 +145,7 @@
 						}
 						if(data)
 						{
-							W.$.dialog({parent:api, title:false, width:"150px", esc:false, height:"60px", zIndex:2000, icon:'succ.png', lock:true, content:'成功发布信息!', ok:function() {W.qryNewsList(); api.close(); return true;}});
+							W.$.dialog({parent:api, title:false, width:"150px", esc:false, height:"60px", zIndex:2000, icon:'succ.png', lock:true, content:'成功发布信息!', ok:function() {W.reload(); api.close(); return true;}});
 						}
 						else
 						{

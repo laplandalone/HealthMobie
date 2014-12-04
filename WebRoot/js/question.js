@@ -40,7 +40,7 @@ function createTable(data, flagParam)
 	if("online" == type)
 	{
 		content += "<td align='center' width='15%'>医生姓名</td><td align='center' width='20%'>医生职称</td><td align='center' width='20%'>医生科室</td>";
-		content += "<td align='center' width='10%'>提问总数</td><td align='center' width='10%'>回复数</td><td align='center' width='10%'>未回复数</td>";
+		content += "<td align='center' width='10%'>提问总数</td><td align='center' width='10%'>回复数</td><td align='center' width='10%'>未回复数</td><td align='center' width='15%'>最近提问时间</td>";
 	}
 	else if("question" == type)
 	{
@@ -75,8 +75,13 @@ function createTable(data, flagParam)
 				var totalQuesNum = obj.totalQuesNum;
 				var totalReplyNum = obj.totalReplyNum;
 				var num = totalQuesNum - totalReplyNum;
+				var createDate = obj.createDate;
+				if(createDate == null || createDate == "null" || createDate == undefined || createDate == "")
+				{
+					createDate = "无";
+				}
 				content += "<td align='center' width='15%'>"+obj.name+"</td><td align='center' width='20%'>"+post+"</td><td align='center' width='20%'>"+obj.teamName+"</td>";
-				content += "<td align='center' width='10%'>"+totalQuesNum+"</td><td align='center' width='10%'>"+totalReplyNum+"</td><td align='center' width='10%'>"+num+"</td></tr>";
+				content += "<td align='center' width='10%'>"+totalQuesNum+"</td><td align='center' width='10%'>"+totalReplyNum+"</td><td align='center' width='10%'>"+num+"</td><td align='center' width='15%'>"+createDate+"</td></tr>";
 			});
 		}
 		else if("question" == type)

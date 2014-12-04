@@ -91,6 +91,7 @@ public class DoctorController
 		String doctorId = (String) request.getParameter("doctorId");
 		if (ObjectCensor.isStrRegular(doctorId)) 
 		{
+			String pageNum = request.getParameter("pageNum");
 			Map doctor = digitalHealthService.getDoctor(doctorId);
 			List registers = digitalHealthService.getDoctorRegister(doctorId);
 			String fee = "";
@@ -103,7 +104,7 @@ public class DoctorController
 				doctor.put("fee", fee);
 				doctor.put("num", num);
 			}
-
+			model.addObject("pageNum", pageNum);
 			model.addObject("doctor", doctor);
 			model.addObject("registers", registers);
 			model.setViewName("/view/doctor/updateDoctor");

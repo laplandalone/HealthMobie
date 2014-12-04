@@ -851,6 +851,7 @@ public class DigitalHealthDao
 		StringBuffer sql = new StringBuffer();
 		sql.append("SELECT * FROM (SELECT A.*, ROWNUM ROWNUMBER FROM (");
 		sql.append("select distinct a.doctor_id, a.name, a.order_num, a.post, b.team_name, ");
+		sql.append("(select max(to_char(create_date, 'yyyy-MM-dd hh24:mi:ss')) from user_question_t where state = '00A' and doctor_id = a.doctor_id) create_date, ");
 		sql.append("(select count(distinct question_id) from user_question_t where state = '00A' and doctor_id = a.doctor_id and record_type = 'ask') total_ques_num, ");
 		sql.append("(select count(distinct question_id) from user_question_t where state = '00A' and doctor_id = a.doctor_id and (record_type = 'ans' or record_type = 'copy')) total_reply_num ");
 		sql.append("from doctor_t a, team_t b where a.state = '00A' and a.online_flag = '0' and b.state = '00A' and a.hospital_id = b.hospital_id ");

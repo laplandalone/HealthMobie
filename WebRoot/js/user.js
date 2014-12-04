@@ -36,7 +36,7 @@ function qryUserList()
 function createTable(data, flagParam)
 {
 	var content = "<table id='table1' width='100%' border='1' cellspacing='0' cellpadding='0' class='maintable'>";
-	content += "<tr class='tabletop'><td align='center' width='8%'>ID</td><td align='center' width='10%'>姓名</td><td align='center' width='10%'>联系方式</td><td align='center' width='8%'>性别</td><td align='center' width='20%'>证件号码</td><td align='center' width='15%'>病案号</td><td align='center' width='20%'>注册时间</td></tr>";
+	content += "<tr class='tabletop'><td style='text-align:center' width='8%'>ID</td><td style='text-align:center' width='10%'>姓名</td><td style='text-align:center' width='10%'>联系方式</td><td style='text-align:center' width='8%'>性别</td><td style='text-align:center' width='20%'>证件号码</td><td style='text-align:center' width='15%'>病案号</td><td style='text-align:center' width='20%'>注册时间</td></tr>";
 	if(data.count > 0)
 	{
 		var cnt = 0;

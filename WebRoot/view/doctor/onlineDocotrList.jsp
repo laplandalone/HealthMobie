@@ -92,8 +92,9 @@
 								<td>
 									<input type="button" id="goto" onclick="gotoFunc()" />
 								</td>
-		  						<td width="20%" align="center"><input type="button" id="online" value="上线" onclick="doctorOnline()" class="button3"/></td>
-		  						<td width="20%" align="center"><input type="button" id="offline" value="下线" onclick="doctorOffline()" class="button3" /></td>
+		  						<td width="10%"><input type="button" id="online" value="上线" onclick="doctorOnline()" class="button3"/></td>
+		  						<td width="10%"><input type="button" id="offline" value="下线" onclick="doctorOffline()" class="button3" /></td>
+		  						<td width="20%">&nbsp;</td>
 		  					</tr>
 		  				</table>
 		  			</div>

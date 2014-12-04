@@ -7,6 +7,7 @@
 	String hospitalId = (String) session.getAttribute("hospitalId");
 	String doctorId = request.getParameter("doctorId");
 	List teamLst = PubData.qryTeamList(hospitalId);
+	String pageNum = request.getParameter("pageNum");
 %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -27,6 +28,7 @@
 	<body onload="queryMed()">
 		<form action="">
 			<div class="mainsearch">
+				<input type="hidden" id="pageNum" value="<%=pageNum %>"/>
 				<input type="hidden" id="doctorId" name="doctorId" value="<%=doctorId %>"/>
 				<table width="100%">
 					<tr>

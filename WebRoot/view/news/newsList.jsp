@@ -24,7 +24,7 @@
   			<div class="mainsearch">
 		  		<table width="100%">
 		  			<tr>
-		  				<td align="right" width="8%">创建时间：</td>
+		  				<td align="right" width="12%">创建时间：</td>
 						<td align="center" width="8%">
 							<table class="inputtable" cellspacing="0" cellpadding="0">
 								<tr>
@@ -54,19 +54,19 @@
 								</tr>
 							</table>
 						</td>
-		  				<td align="center" width="14%">
+		  				<td align="center" width="12%">
 		  					<select id="newsType" name="newsType" class="subselect">
 		  						<option value="">信息类型</option>
 		  						<option value="NEWS">患教中心</option>
 		  						<option value="BAIKE">就医帮助</option>
 		  					</select>
 		  				</td>
-		  				<td align="center" width="14%">
+		  				<td align="center" width="12%">
 		  					<select id="typeId" name="typeId" class="subselect">
 		  						<option value="">内容分类</option>
 		  					</select>
 		  				</td>
-		  				<td align="center" width="14%">
+		  				<td align="center" width="12%">
 		  					<select id="state" name="state" class="subselect">
 		  						<option value="">状态</option>
 		  						<option value="00A">正常</option>
@@ -76,12 +76,7 @@
 		  				<td width="12%" align="center">
 							<input type="button" onclick="qryNewsList()" class="button3" value="查询" />
 						</td>
-						<td width="12%" align="center">
-							<input type="button" onclick="addNews()" class="button3" value="发布新信息" />
-						</td>
-						<td width="12%" align="center">
-							<input type="button" onclick="addNewsType()" class="button3" value="新增分类" />
-						</td>
+						<td width="24%" colspan="2">&nbsp;</td>
 		  			</tr>
 		  		</table>
   			</div>
@@ -129,7 +124,8 @@
 								<td>
 									<input type="button" id="goto" onclick="gotoFunc()" />
 								</td>
-		  						<td width="20%">&nbsp;</td>
+		  						<td width="10%"><input type="button" onclick="addNews()" class="button3" value="发布新信息" /></td>
+		  						<td width="10%"><input type="button" onclick="addNewsType()" class="button3" value="新增分类" /></td>
 		  						<td width="20%">&nbsp;</td>
 		  					</tr>
 		  				</table>

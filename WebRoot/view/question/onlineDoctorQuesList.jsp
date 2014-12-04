@@ -67,6 +67,7 @@
 							<td align="center" width="10%">提问总数</td>
 							<td align="center" width="10%">回复数</td>
 							<td align="center" width="10%">未回复数</td>
+							<td align="center" width="15%">最近提问时间</td>
 						</tr>
 					</table>
 				</div>

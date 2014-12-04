@@ -77,7 +77,10 @@ function createTable(data, flagParam)
 			}
 			content += "<td style='text-align:center'>"+obj.newsId+"</td><td style='text-align:center'>"+obj.hospitalName+"</td><td style='text-align:center'>"+obj.newsType+"</td><td style='text-align:center'>"+obj.typeId+"</td>";
 			content += "<td style='text-align:center'>"+obj.newsTitle+"</td><td style='text-align:center'>"+obj.stateVal+"</td><td style='text-align:center'>"+obj.createDate+"</td>";
-			content += "<td style='text-align:center !important'><a href='javascript:void(0)' class='linkmore' onclick='updateNews("+obj.newsId+")'>修改</a></td></tr>";
+			content += "<td style='text-align:center !important'><a href='javascript:void(0)' class='linkmore' onclick='updateNews("+obj.newsId+")'>修改</a>";
+			content += "&nbsp;&nbsp;&nbsp;&nbsp;";
+			content += "<a href='javascript:void(0)' class='linkmore' onclick='deleteNews("+obj.newsId+")'>删除</a>";
+			content += "</td></tr>";
 		});
 		if(flagParam == 0)
 		{
@@ -141,6 +144,32 @@ function updateNews(newsId)
 {
 	lockScreen();
 	$.dialog({title:"修改", content:"url:/news.htm?method=getNewsById&newsId="+newsId, min:false, max:false, lock:true, close:function(){unlockScreen();}});
+}
+
+function deleteNews(newsId)
+{
+	$.dialog.confirm("是否删除该信息 ?", function() {
+		$.ajax({
+			type : "POST",
+			url : "/news.htm?method=deleteNews",
+			data : "newsId=" + newsId,
+			success : function(data) 
+			{
+				if (data) 
+				{
+					$.dialog({title : false, width : "150px", esc : false, height : "60px", zIndex : 2000, icon : "succ.png", lock : true, content : "删除信息成功!", ok : function(){window.location.reload(); return true;}});
+				} 
+				else
+				{
+					$.dialog({title : false, width : "150px", esc : false, height : "60px", zIndex : 2000, icon : "fail.png", lock : true, content : "删除信息失败!", ok : function() {window.location.reload(); return true;}});
+				}
+			},
+			error : function(data) {$.dialog.alert(data.statusText, function() {return true;});
+			}
+		});
+	}, function() {
+		return true;
+	});
 }
 
 function addNews()
