@@ -56,19 +56,24 @@ public class WakeService extends TimerValidateService
 					exeList.add(sql);
 					
 					String msgType = StringUtil.getMapKeyVal(map, "wakeType");
-					if("ques".equals(msgType))
+					
+					AndroidPushMsgThread target = new AndroidPushMsgThread();
+					String wakeContent = StringUtil.getMapKeyVal(map, "wakeContent");
+					String wakeName = StringUtil.getMapKeyVal(map, "wakeName");
+					JSONObject obj ;
+					String userId="";
+					if(!"ALL".equals(msgType))
 					{
-						AndroidPushMsgThread target = new AndroidPushMsgThread();
-						String wakeContent = StringUtil.getMapKeyVal(map, "wakeContent");
-						JSONObject obj = JSONObject.fromObject(wakeContent);
-						String userId = StringUtil.getJSONObjectKeyVal(obj, "userId");
-						target.setCustomParam(wakeContent);
-						target.setUserId(userId);
-						target.setMsgType(msgType);
-						target.setTitle("提问回复");
-						target.setDescription("新的消息回复请查看");
-						new Thread(target).start();
+						 obj = JSONObject.fromObject(wakeContent);
+						 userId = StringUtil.getJSONObjectKeyVal(obj, "userId");
 					}
+					target.setCustomParam(wakeContent);
+					target.setUserId(userId);
+					target.setMsgType(msgType);
+					target.setTitle("掌上亚心");
+					target.setDescription(wakeName);
+					new Thread(target).start();
+					
 				}
 				
 				String[] exeSql = new String[exeList.size()];

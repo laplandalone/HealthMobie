@@ -68,7 +68,7 @@
 		  				</td>
 		  				<td align="center" width="14%">
 		  					<select id="state" name="state" class="subselect">
-		  						<option value="">全部状态</option>
+		  						<option value="">状态</option>
 		  						<option value="00A">正常</option>
 		  						<option value="00X">作废</option>
 		  					</select>

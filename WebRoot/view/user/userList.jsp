@@ -22,11 +22,11 @@
   			<div class="mainsearch">
 		  		<table width="100%">
 					<tr>
-						<td align="right" width="10%">用户名称：</td>
+						<td align="right" width="15%">用户名称：</td>
 						<td width="8%">
 							<input id="userName" name="userName" class="subtext"/>
 						</td>
-						<td align="right" width="10%">用户性别：</td>
+						<td align="right" width="15%">用户性别：</td>
 						<td width="8%">
 							<select id="sex" name="sex" class="subselect">
 								<option value="">全部</option>
@@ -34,7 +34,7 @@
 								<option value="女">女</option>
 							</select>
 						</td>
-						<td align="right" width="10%">联系方式：</td>
+						<td align="right" width="15%">联系方式：</td>
 						<td width="8%">
 							<input id="telephone" name="telephone" class="subtext"/>
 						</td>
@@ -56,13 +56,13 @@
 				<div id="template" class="box">
 					<table width="100%" border="1" cellspacing="0" cellpadding="0" class="maintable1">
 						<tr class="tabletop">
-							<td width="8%">用户ID</td>
-							<td width="10%">用户名称</td>
-							<td width="10%">联系方式</td>
-							<td width="8%">用户性别</td>
-							<td width="20%">证件号码</td>
-							<td width="15%">用户病案号</td>
-							<td width="20%">注册时间</td>
+							<td   width="8%">ID</td>
+							<td   width="10%">姓名</td>
+							<td   width="10%">联系方式</td>
+							<td   width="8%">性别</td>
+							<td   width="20%">证件号码</td>
+							<td   width="15%">病案号</td>
+							<td   width="20%">注册时间</td>
 						</tr>
 					</table>
 				</div>

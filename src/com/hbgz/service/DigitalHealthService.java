@@ -432,7 +432,7 @@ public class DigitalHealthService
 			wakeT.setCreateDate(SysDate.getSysDate());
 			wakeT.setWakeContent(msgJson.toString());
 			wakeT.setWakeDate(SysDate.getFormatSimpleDate(wakeDate));
-			wakeT.setWakeValue("now");
+			wakeT.setWakeValue("1");
 			wakeT.setState("00A");
 			wakeT.setWakeType("order");
 			hibernateObjectDao.save(wakeT);
@@ -467,7 +467,7 @@ public class DigitalHealthService
 			wakeT.setCreateDate(SysDate.getSysDate());
 			wakeT.setWakeContent(userQuestion);
 			wakeT.setWakeDate(SysDate.getSysDate());
-			wakeT.setWakeValue("now");
+			wakeT.setWakeValue("1");
 			wakeT.setState("00A");
 			wakeT.setWakeType("ques");
 			userQustionDao.save(wakeT);

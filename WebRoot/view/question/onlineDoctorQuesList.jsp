@@ -27,7 +27,7 @@
   				<input type="hidden" id="type" value="online"/>
 	  			<table width="100%">
 	  				<tr>
-	  					<td align="right" width="10%">在线科室：</td>
+	  					<td align="right" width="15%">在线科室：</td>
 						<td width="8%">
 							<c:set var="teamLst" value="<%=teamLst %>"></c:set>
 							<select id="teamId" name="teamId" class="subselect">
@@ -39,7 +39,7 @@
 								</c:forEach>
 							</select>
 						</td>
-						<td align="right" width="10%">医生名称：</td>
+						<td align="right" width="15%">医生名称：</td>
 						<td>
 							<input id="doctorName" name="doctorName" class="subtext" value="${doctorName }"/>
 						</td>
