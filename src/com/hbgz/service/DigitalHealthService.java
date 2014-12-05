@@ -17,6 +17,8 @@ import javax.servlet.http.HttpSession;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -82,6 +84,7 @@ public class DigitalHealthService
 	
 	private String projectPath = System.getProperty("user.dir");
 
+	public Log log = LogFactory.getLog(DigitalHealthService.class);
 	@ServiceType(value = "BUS2001")
 	public JSONObject getDoctorList(String expertType, String onLineType, String teamId)
 			throws QryException
@@ -671,10 +674,13 @@ public class DigitalHealthService
 	@ServiceType(value = "BUS20021")
 	public String getAuthCode(String accNbr,String type) throws  Exception
 	{
-		String pswType="注册验证码";
+		String pswType="的注册验证码";
 		if("set_psw".equals(type))
 		{
-			pswType="新密码";
+			pswType="的新密码";
+		}else if("edit_phone".equals(type))
+		{
+			pswType="正在修改手机号码,验证码";
 		}
 		
 		List userList = hibernateObjectDao.findByProperty("HospitalUserT", "telephone",accNbr);
@@ -687,14 +693,14 @@ public class DigitalHealthService
 		params.put("pwd", "cb6fbeee3deb608f000a8f132531b738");
 		params.put("p", accNbr);
 		params.put("isUrlEncode", "no");
-	    params.put("msg","【海星通技术】尊敬的用户，您的"+pswType+"是"+StringUtil.getMapKeyVal(map, accNbr)+"。益健康愿成为您健康的好帮手。");
-		
-		// 新用户注册
-		if(!ObjectCensor.checkListIsNull(userList) && "NEW_USER".equals(type))
+	    params.put("msg","【海星通技术】尊敬的用户，您"+pswType+"是"+StringUtil.getMapKeyVal(map, accNbr)+"。益健康愿成为您健康的好帮手。");
+	    log.error(StringUtil.getMapKeyVal(map, accNbr));
+		// 新用户注册,修改手机号码
+		if(!ObjectCensor.checkListIsNull(userList) && ("NEW_USER".equals(type) ||"edit_phone".equals(type)))//修改手机号码  
 		{
 		    String msgRst= HttpUtil.http(url, params, "", "", "");
 			return msgRst;
-		}else if(ObjectCensor.checkListIsNull(userList) && "NEW_USER".equals(type))//用户已注册
+		}else if(ObjectCensor.checkListIsNull(userList) && ("NEW_USER".equals(type) ||"edit_phone".equals(type)) )//用户已注册
 		{
 			return "\"{\"status\":000}\"";
 		}
@@ -1210,6 +1216,19 @@ public class DigitalHealthService
 				teamName,detailTime);
 		
 		return orderId;
+	}
+	
+	@ServiceType(value = "BUS20041")
+	public boolean updateUserPhone(String userId,String phone) throws JsonException
+	{
+		List userList = hibernateObjectDao.findByProperty("HospitalUserT", "userId",userId);
+		if(ObjectCensor.checkListIsNull(userList))
+		{
+			HospitalUserT hospitalUserT = (HospitalUserT) userList.get(0);
+			hospitalUserT.setTelephone(phone);
+			hibernateObjectDao.update(hospitalUserT);
+		}
+		return true;
 	}
 	// 查询用户的挂号订单
 	public JSONObject qryRegisterOrder(int pageNum, int pageSize, String hospitalId, String teamId, String startTime, String endTime, String state) throws Exception
