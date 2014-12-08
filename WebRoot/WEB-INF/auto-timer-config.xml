@@ -9,8 +9,19 @@
 		<property name="timerId" value="10001"></property>
 	</bean>
 
+<bean id="cancelOrderTimer" class="com.hbgz.timer.service.CancelOrderService">
+		<property name="timerId" value="10002"></property>
+	</bean>
+	
+	  
 	<task:scheduled-tasks>
 		<task:scheduled ref="wakeTimer" method="delegate"
 			cron="0 0/1 * * * ?" />
 	</task:scheduled-tasks>
+ 
+	<task:scheduled-tasks>
+		<task:scheduled ref="cancelOrderTimer" method="delegate"
+			cron="0 0/1 * * * ?" />
+	</task:scheduled-tasks>
 </beans> 
+

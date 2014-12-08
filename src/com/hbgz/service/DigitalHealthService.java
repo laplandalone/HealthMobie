@@ -392,7 +392,7 @@ public class DigitalHealthService
 			}
 		}
 		
-	
+		boolean flag=false;
 		
 		/*同步修改亚心医院预约号*/
 		if("102".equals(hospitalId))
@@ -407,40 +407,19 @@ public class DigitalHealthService
 //					String docId = StringUtil.getMapKeyVal(normalMap", "doctorId");
 //				}
 //			}
-//			orderNum=synHISService.hisRegisterOrder(registerId, registerTime,"+","");
-		}
-		
-		boolean flag= digitalHealthDao.addRegisterOrder(hospitalId,orderId, userId, registerId, doctorId, doctorName,
-				orderNum, orderFee, registerTime, userName, userNo, userTelephone, sex, teamId,
-				teamName);
-			
-		List orders = hibernateObjectDao.findByProperty("RegisterOrderT", "orderId",orderId);
-		if (ObjectCensor.checkListIsNull(orders))
+		   String  yaXinOrderNum=synHISService.hisRegisterOrder(registerId, registerTime,"+","");
+		   if(ObjectCensor.isStrRegular(yaXinOrderNum))
+		   {
+			  flag = digitalHealthDao.addRegisterOrder(hospitalId,orderId, userId, registerId, doctorId, doctorName,
+						orderNum, orderFee, registerTime, userName, userNo, userTelephone, sex, teamId,
+						teamName);
+		   }
+		}else
 		{
-			RegisterOrderT orderT = (RegisterOrderT) orders.get(0);
-
-			JSONObject msgJson = new JSONObject();
-			msgJson.put("title", "掌上亚心");
-			msgJson.put("description", "预约提醒");
-			msgJson.put("msg_type","order");
-			msgJson.put("user_id", userId);
-			msgJson.put("custom_param", JsonUtils.fromObject(orderT));
-			
-			String time = orderT.getRegisterTime().substring(0,10);
-			
-			Date wakeDate = DateUtils.getSpecifiedDayBefore(time);
-			
-			WakeT wakeT = new WakeT();
-			wakeT.setWakeId(BigDecimal.valueOf(sysId.getId()));
-			wakeT.setCreateDate(SysDate.getSysDate());
-			wakeT.setWakeContent(msgJson.toString());
-			wakeT.setWakeDate(SysDate.getFormatSimpleDate(wakeDate));
-			wakeT.setWakeValue("1");
-			wakeT.setState("00A");
-			wakeT.setWakeType("order");
-			hibernateObjectDao.save(wakeT);
-			AndroidPushBroadcastMsg.pushMsg("order", msgJson.toString());
-		} 
+			  flag = digitalHealthDao.addRegisterOrder(hospitalId,orderId, userId, registerId, doctorId, doctorName,
+						orderNum, orderFee, registerTime, userName, userNo, userTelephone, sex, teamId,
+						teamName);
+		}
 		
 		/*返回order_id：用与支付*/
 		if(flag)
@@ -463,7 +442,7 @@ public class DigitalHealthService
 		{
 			questionT.setQuestionId(sysId.getId() + "");
 		}
-		if("ans".equals(questionT.getRecordType()))
+		if("ans".equals(questionT.getRecordType()) && "102".equals(questionT.getHospitalId()))
 		{
 			WakeT wakeT = new WakeT();
 			wakeT.setWakeId(BigDecimal.valueOf(sysId.getId()));
@@ -524,17 +503,18 @@ public class DigitalHealthService
 	public String addUser(String user) throws JsonException
 	{
 		HospitalUserT userT = (HospitalUserT) JsonUtils.toBean(user, HospitalUserT.class);
-		List userList = hibernateObjectDao.findByProperty("HospitalUserT", "telephone",
-				userT.getTelephone());
+		List userList = hibernateObjectDao.findByProperty("HospitalUserT", "telephone",userT.getTelephone());
+		String id=sysId.getId() + "";
 		if (ObjectCensor.checkListIsNull(userList))
 		{
 			return "1";
 		} else
 		{
-			userT.setUserId(sysId.getId() + "");
+			userT.setUserId(id);
 			hibernateObjectDao.save(userT);
 		}
-		return "0";
+		String userStr=JSONObject.fromObject(userT).toString();
+		return userStr;
 	}
 
 	@ServiceType(value = "BUS20012")
@@ -768,6 +748,35 @@ public class DigitalHealthService
 					 registerOrder.setPayState(payState);
 					 registerOrder.setPlatformOrderId(id);
 					 hibernateObjectDao.update(registerOrder);
+					 
+					 List orders = hibernateObjectDao.findByProperty("RegisterOrderT", "orderId",orderId);
+						if (ObjectCensor.checkListIsNull(orders))
+						{
+							RegisterOrderT orderT = (RegisterOrderT) orders.get(0);
+
+							JSONObject msgJson = new JSONObject();
+							msgJson.put("title", "掌上亚心");
+							msgJson.put("description", "预约提醒");
+							msgJson.put("msg_type","order");
+							msgJson.put("user_id", orderT.getUserId());
+							msgJson.put("custom_param", JsonUtils.fromObject(orderT));
+							
+							String time = orderT.getRegisterTime().substring(0,10);
+							
+							Date wakeDate = DateUtils.getSpecifiedDayBefore(time);
+							
+							WakeT wakeT = new WakeT();
+							wakeT.setWakeId(BigDecimal.valueOf(sysId.getId()));
+							wakeT.setCreateDate(SysDate.getSysDate());
+							wakeT.setWakeContent(msgJson.toString());
+							wakeT.setWakeDate(SysDate.getFormatSimpleDate(wakeDate));
+							wakeT.setWakeValue("1");
+							wakeT.setState("00A");
+							wakeT.setWakeType("order");
+							hibernateObjectDao.save(wakeT);
+//							AndroidPushBroadcastMsg.pushMsg("order", msgJson.toString());
+						} 
+						
 				}
 				else 
 				
@@ -1218,7 +1227,7 @@ public class DigitalHealthService
 		return orderId;
 	}
 	
-	@ServiceType(value = "BUS20041")
+	@ServiceType(value = "BUS20043")
 	public boolean updateUserPhone(String userId,String phone) throws JsonException
 	{
 		List userList = hibernateObjectDao.findByProperty("HospitalUserT", "userId",userId);
@@ -1519,26 +1528,27 @@ public class DigitalHealthService
 		hospitalNewsT.setNewsImages(imageUrl);
 		hibernateObjectDao.save(hospitalNewsT);
 		
-		CacheManager cacheManager = (CacheManager) BeanFactoryHelper.getBean("cacheManager");
-		String imgIp = cacheManager.getImgIp("10");
-		String newsImg = hospitalNewsT.getNewsImages();
-		if (newsImg!=null && !"".equals(newsImg))
+		if("102".equals(hospitalId))
 		{
-			hospitalNewsT.setNewsImages(imgIp+hospitalNewsT.getNewsImages());
+			CacheManager cacheManager = (CacheManager) BeanFactoryHelper.getBean("cacheManager");
+			String imgIp = cacheManager.getImgIp("10");
+			String newsImg = hospitalNewsT.getNewsImages();
+			if (newsImg!=null && !"".equals(newsImg))
+			{
+				hospitalNewsT.setNewsImages(imgIp+hospitalNewsT.getNewsImages());
+			}
+			String typeName=cacheManager.getNewsTypeById(hospitalId, typeId);
+			hospitalNewsT.setContent(newsContent);
+			hospitalNewsT.setNewsContent(null);
+			hospitalNewsT.setTypeName(typeName);
+			JSONObject msgJson = new JSONObject();
+			msgJson.put("title","掌上亚心");
+			msgJson.put("description",newsTitle);
+			msgJson.put("msg_type","news");
+			msgJson.put("user_id", "");
+			msgJson.put("custom_param", JsonUtils.fromObjectTimestamp(hospitalNewsT));
+			AndroidPushBroadcastMsg.pushMsg("msg", msgJson.toString());
 		}
-		String typeName=cacheManager.getNewsTypeById(hospitalId, typeId);
-		hospitalNewsT.setContent(newsContent);
-		hospitalNewsT.setNewsContent(null);
-		hospitalNewsT.setTypeName(typeName);
-		JSONObject msgJson = new JSONObject();
-		msgJson.put("title","掌上亚心");
-		msgJson.put("description",newsTitle);
-		msgJson.put("msg_type","news");
-		msgJson.put("user_id", "");
-		msgJson.put("custom_param", JsonUtils.fromObjectTimestamp(hospitalNewsT));
-		AndroidPushBroadcastMsg.pushMsg("msg", msgJson.toString());
-		
-		
 		return "true";
 	}
 
