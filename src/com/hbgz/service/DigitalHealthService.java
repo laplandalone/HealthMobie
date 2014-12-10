@@ -1254,9 +1254,23 @@ public class DigitalHealthService
 		if(ObjectCensor.checkListIsNull(orderList))
 		{
 			RegisterOrderT registerOrderT = (RegisterOrderT) orderList.get(0);
-//			hibernateObjectDao.delete(registerOrderT);
+			hibernateObjectDao.delete(registerOrderT);
 		}
 		return true;
+	}
+	
+	@ServiceType(value = "BUS20045")
+	public boolean deleteUserContactT(String contactId) throws JsonException
+	{
+		boolean b= hibernateObjectDao.delete("UserContactT", "contactId",contactId);
+		return b;
+	}
+	
+	@ServiceType(value = "BUS20046")
+	public boolean deleteUserQues(String questionId) throws JsonException
+	{
+		boolean b= hibernateObjectDao.delete("UserQuestionT", "questionId",questionId);
+		return b;
 	}
 	// 查询用户的挂号订单
 	public JSONObject qryRegisterOrder(int pageNum, int pageSize, String hospitalId, String teamId, String startTime, String endTime, String state) throws Exception
