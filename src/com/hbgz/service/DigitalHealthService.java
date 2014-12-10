@@ -521,7 +521,14 @@ public class DigitalHealthService
 	public boolean updateUser(String user) throws JsonException
 	{
 		HospitalUserT userT = (HospitalUserT) JsonUtils.toBean(user, HospitalUserT.class);
-		hibernateObjectDao.update(userT);
+		List userList = hibernateObjectDao.findByProperty("HospitalUserT", "userId",userT.getUserId());
+		if (ObjectCensor.checkListIsNull(userList))
+		{
+			HospitalUserT hospitalUserT=(HospitalUserT) userList.get(0);
+			userT.setCreateDate(hospitalUserT.getCreateDate());
+			hibernateObjectDao.update(userT);
+		} 
+		
 		return true;
 	}
 
@@ -1236,6 +1243,18 @@ public class DigitalHealthService
 			HospitalUserT hospitalUserT = (HospitalUserT) userList.get(0);
 			hospitalUserT.setTelephone(phone);
 			hibernateObjectDao.update(hospitalUserT);
+		}
+		return true;
+	}
+	
+	@ServiceType(value = "BUS20044")
+	public boolean deleteRegisterOrder(String orderId) throws JsonException
+	{
+		List orderList = hibernateObjectDao.findByProperty("RegisterOrderT", "orderId",orderId);
+		if(ObjectCensor.checkListIsNull(orderList))
+		{
+			RegisterOrderT registerOrderT = (RegisterOrderT) orderList.get(0);
+//			hibernateObjectDao.delete(registerOrderT);
 		}
 		return true;
 	}
