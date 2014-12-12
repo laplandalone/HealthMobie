@@ -680,7 +680,7 @@ public class DigitalHealthService
 		params.put("pwd", "cb6fbeee3deb608f000a8f132531b738");
 		params.put("p", accNbr);
 		params.put("isUrlEncode", "no");
-	    params.put("msg","【海星通技术】尊敬的用户，您"+pswType+"是"+StringUtil.getMapKeyVal(map, accNbr)+"。益健康愿成为您健康的好帮手。");
+	    params.put("msg","【海星通技术】尊敬的用户，您"+pswType+"是"+StringUtil.getMapKeyVal(map, accNbr)+"。掌上亚心愿成为您健康的好帮手。");
 	    log.error(StringUtil.getMapKeyVal(map, accNbr));
 		// 新用户注册,修改手机号码
 		if(!ObjectCensor.checkListIsNull(userList) && ("NEW_USER".equals(type) ||"edit_phone".equals(type)))//修改手机号码  
@@ -790,16 +790,21 @@ public class DigitalHealthService
 				/*取消预约*/
 				if("103".equals(payState) && registerOrder!=null)
 				{
-					registerOrder.setPayState(payState);
-					hibernateObjectDao.update(registerOrder);
+					
 					String id=registerOrder.getRegisterId();
 					String weekTypeT=registerOrder.getRegisterTime();
 					String platformId=registerOrder.getPlatformOrderId();
 					synHISService.hisRegisterOrder(id, weekTypeT, "-",platformId);
+					registerOrder.setPayState(payState);
+					hibernateObjectDao.update(registerOrder);
 				}else 
 					/*取消预约*/
 				if("101".equals(payState) && registerOrder!=null)
 				{
+					String id=registerOrder.getRegisterId();
+					String weekTypeT=registerOrder.getRegisterTime();
+					String platformId=registerOrder.getPlatformOrderId();
+					synHISService.hisRegisterOrder(id, weekTypeT, "-",platformId);
 					registerOrder.setPayState(payState);
 					registerOrder.setPlatformOrderId("0");
 					hibernateObjectDao.update(registerOrder);

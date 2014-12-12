@@ -12,7 +12,7 @@ import javax.persistence.TemporalType;
  * RegisterOrderT entity. @author MyEclipse Persistence Tools
  */
 @Entity
-@Table(name = "REGISTER_ORDER_T", schema = "ORACLE")
+@Table(name = "REGISTER_ORDER_T")
 public class RegisterOrderT implements java.io.Serializable {
 
 	// Fields
@@ -46,7 +46,7 @@ public class RegisterOrderT implements java.io.Serializable {
 		return detailTime;
 	}
 
-	@Column(name = "Platform_Order_Id", nullable = false, length = 20)
+	@Column(name = "Platform_Order_Id", nullable = true, length = 20)
 	public String getPlatformOrderId() {
 		return platformOrderId;
 	}

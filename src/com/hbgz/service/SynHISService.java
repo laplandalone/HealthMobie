@@ -20,7 +20,6 @@ import cn.ISH_Service.Service1Locator;
 import cn.ISH_Service.Service1Soap12Stub;
 
 import com.googlecode.ehcache.annotations.Cacheable;
-import com.hbgz.controller.DoctorController;
 import com.hbgz.dao.DigitalHealthDao;
 import com.hbgz.dao.HibernateObjectDao;
 import com.hbgz.model.DoctorT;
@@ -142,7 +141,7 @@ public class SynHISService {
 	public List synTimeRegister() throws Exception 
 	{   
 		Date startDateT = DateUtils.afterNDate(1);
-		Date endDateT = DateUtils.afterNDate(14);
+		Date endDateT = DateUtils.afterNDate(7);
 		String startDate=DateUtils.CHN_DATE_FORMAT.format(startDateT);
 		String endDate=DateUtils.CHN_DATE_FORMAT.format(endDateT);
 		startDate=startDate.replace('-','.');
@@ -202,7 +201,7 @@ public class SynHISService {
 	public List synDoctorRegister(String doctorIdT) throws Exception 
 	{   
 		Date startDateT = DateUtils.afterNDate(1);
-		Date endDateT = DateUtils.afterNDate(14);
+		Date endDateT = DateUtils.afterNDate(7);
 		String startDate=DateUtils.CHN_DATE_FORMAT.format(startDateT);
 		String endDate=DateUtils.CHN_DATE_FORMAT.format(endDateT);
 		startDate=startDate.replace('-','.');
