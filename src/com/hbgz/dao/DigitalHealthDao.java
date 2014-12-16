@@ -212,7 +212,7 @@ public class DigitalHealthDao
 		}
 		StringBuffer sql = new StringBuffer();
 		sql.append(" select  team_id,user_id,doctor_id,register_id,replace(register_time,' ','')register_time from register_order_t ");
-		sql.append(" where (order_state = '000' or order_state = '00A')and state = '00A'");
+		sql.append(" where (pay_state = '100' or pay_state = '102' or pay_state = '103')and state = '00A'");
 		sql.append(" and substr(register_time, 1, 10) =? and user_id=?");
 		ArrayList lstParam = new ArrayList();
 		lstParam.add(dateStr);

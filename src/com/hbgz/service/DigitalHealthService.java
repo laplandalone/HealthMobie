@@ -1253,13 +1253,20 @@ public class DigitalHealthService
 	}
 	
 	@ServiceType(value = "BUS20044")
-	public boolean deleteRegisterOrder(String orderId) throws JsonException
+	public boolean deleteRegisterOrder(String orderId) throws Exception
 	{
 		List orderList = hibernateObjectDao.findByProperty("RegisterOrderT", "orderId",orderId);
 		if(ObjectCensor.checkListIsNull(orderList))
 		{
-			RegisterOrderT registerOrderT = (RegisterOrderT) orderList.get(0);
-			hibernateObjectDao.delete(registerOrderT);
+			RegisterOrderT registerOrder = (RegisterOrderT) orderList.get(0);
+			if("100".equals(registerOrder.getPayState()))
+			{
+				String id=registerOrder.getRegisterId();
+				String weekTypeT=registerOrder.getRegisterTime();
+				String platformId=registerOrder.getPlatformOrderId();
+				synHISService.hisRegisterOrder(id, weekTypeT, "-",platformId);
+			}
+			hibernateObjectDao.delete(registerOrder);
 		}
 		return true;
 	}

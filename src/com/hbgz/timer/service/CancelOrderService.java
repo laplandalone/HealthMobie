@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.json.JSONObject;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.BeanFactory;
@@ -18,13 +16,14 @@ import com.hbgz.pub.resolver.BeanFactoryHelper;
 import com.hbgz.pub.util.Keys;
 import com.hbgz.pub.util.ObjectCensor;
 import com.hbgz.pub.util.StringUtil;
-import com.hbgz.thread.AndroidPushMsgThread;
+import com.hbgz.service.SynHISService;
 import com.hbgz.timer.handler.TimerValidateService;
 
 public class CancelOrderService extends TimerValidateService
 {
 	private Log log = LogFactory.getLog(CancelOrderService.class);
 	
+	SynHISService hisService = new SynHISService();
 	@Override
 	public void delegate() 
 	{
@@ -51,9 +50,12 @@ public class CancelOrderService extends TimerValidateService
 				{
 					Map map = (Map) sList.get(i);
 					String orderId = StringUtil.getMapKeyVal(map, "orderId");
-					
+					String id=StringUtil.getMapKeyVal(map, "registerId");
+					String weekTypeT=StringUtil.getMapKeyVal(map, "registerTime");
+					String platformId=StringUtil.getMapKeyVal(map, "platformOrderId");
 					sql = "update  register_order_t set pay_state='101' where pay_state='100' and order_id='"+orderId+"'";
 					exeList.add(sql);
+					hisService.hisRegisterOrder(id, weekTypeT, "-", platformId);
 				}
 				
 				String[] exeSql = new String[exeList.size()];
