@@ -1,11 +1,7 @@
 package com.hbgz.model;
 
 import java.util.LinkedHashMap;
-/**
- * 
- * @author RHQ
- *
- */
+
 public class JoinParams
 {
 	private String userId;

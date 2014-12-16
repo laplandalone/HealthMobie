@@ -8,9 +8,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-/**
- * UserRelateT entity. @author MyEclipse Persistence Tools
- */
+
 @Entity
 @Table(name = "USER_RELATE_T")
 public class UserRelateT implements java.io.Serializable {

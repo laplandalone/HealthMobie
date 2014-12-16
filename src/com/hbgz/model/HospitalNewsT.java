@@ -14,9 +14,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
-/**
- * HospitalNewsT entity. @author MyEclipse Persistence Tools
- */
+
 @Entity
 @Table(name = "HOSPITAL_NEWS_T")
 public class HospitalNewsT implements java.io.Serializable

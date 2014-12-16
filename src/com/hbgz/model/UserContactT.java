@@ -8,9 +8,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-/**
- * UserContactT entity. @author MyEclipse Persistence Tools
- */
+
 @Entity
 @Table(name = "USER_CONTACT_T")
 public class UserContactT implements java.io.Serializable {

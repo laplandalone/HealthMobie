@@ -8,9 +8,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-/**
- * RegisterOrderT entity. @author MyEclipse Persistence Tools
- */
+
 @Entity
 @Table(name = "REGISTER_ORDER_T")
 public class RegisterOrderT implements java.io.Serializable {

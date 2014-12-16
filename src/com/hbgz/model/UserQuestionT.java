@@ -7,9 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-/**
- * UserQuestionT entity. @author MyEclipse Persistence Tools
- */
+
 @Entity
 @Table(name = "USER_QUESTION_T")
 public class UserQuestionT implements java.io.Serializable {

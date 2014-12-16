@@ -8,9 +8,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-/**
- * TeamT entity. @author MyEclipse Persistence Tools
- */
+
 @Entity
 @Table(name = "TEAM_T")
 public class TeamT implements java.io.Serializable {

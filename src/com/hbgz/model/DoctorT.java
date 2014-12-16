@@ -8,10 +8,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
-/**
- * DoctorT entity. @author MyEclipse Persistence Tools
- */
 @Entity
 @Table(name = "DOCTOR_T")
 public class DoctorT implements java.io.Serializable {
