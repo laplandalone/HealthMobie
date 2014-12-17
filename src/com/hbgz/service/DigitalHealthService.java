@@ -459,8 +459,27 @@ public class DigitalHealthService
 			msgJson.put("msg_type","ques");
 			msgJson.put("user_id", questionT.getUserId());
 			msgJson.put("custom_param", userQuestion);
-			AndroidPushBroadcastMsg.pushMsg("msg", msgJson.toString());
+			AndroidPushBroadcastMsg.pushMsg("msg", msgJson.toString(),questionT.getHospitalId());
+		}if("ask".equals(questionT.getRecordType()) && "102".equals(questionT.getHospitalId()))
+		{
+			WakeT wakeT = new WakeT();
+			wakeT.setWakeId(BigDecimal.valueOf(sysId.getId()));
+			wakeT.setCreateDate(SysDate.getSysDate());
+			wakeT.setWakeContent(userQuestion);
+			wakeT.setWakeDate(SysDate.getSysDate());
+			wakeT.setWakeValue("1");
+			wakeT.setState("00A");
+			wakeT.setWakeType("ques");
+			userQustionDao.save(wakeT);
+			JSONObject msgJson = new JSONObject();
+			msgJson.put("title","掌上亚心");
+			msgJson.put("description", "新的提问");
+			msgJson.put("msg_type","ques");
+			msgJson.put("user_id", questionT.getDoctorId());
+			msgJson.put("custom_param", userQuestion);
+			AndroidPushBroadcastMsg.pushMsg("msg", msgJson.toString(),"103");
 		}
+		
 		userQustionDao.save(questionT);
 		return true;
 	}
@@ -1592,7 +1611,7 @@ public class DigitalHealthService
 			msgJson.put("msg_type","news");
 			msgJson.put("user_id", "");
 			msgJson.put("custom_param", JsonUtils.fromObjectTimestamp(hospitalNewsT));
-			AndroidPushBroadcastMsg.pushMsg("msg", msgJson.toString());
+			AndroidPushBroadcastMsg.pushMsg("msg", msgJson.toString(),hospitalId);
 		}
 		return "true";
 	}

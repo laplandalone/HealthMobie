@@ -10,7 +10,6 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.BeanFactory;
 
 import com.hbgz.model.JoinParams;
-import com.hbgz.pub.util.DateUtils;
 
 /**
  * 

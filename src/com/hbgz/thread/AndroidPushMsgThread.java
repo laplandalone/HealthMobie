@@ -51,6 +51,6 @@ public class AndroidPushMsgThread implements Runnable
 	}
 	public void run() 
 	{
-		AndroidPushBroadcastMsg.pushMsg("msg", "{\"title\":\"掌上亚心\",\"description\":\""+description+"\",\"msg_type\":\""+msgType+"\",\"user_id\":\"\",custom_param:"+customParam+"}");
+		AndroidPushBroadcastMsg.pushMsg("msg", "{\"title\":\"掌上亚心\",\"description\":\""+description+"\",\"msg_type\":\""+msgType+"\",\"user_id\":\"\",custom_param:"+customParam+"}","102");
 	}
 }

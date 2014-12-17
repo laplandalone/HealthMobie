@@ -68,7 +68,7 @@ public class ServiceMsgConverter
 			Class dataType = paramTypes[i];
 			String typeName = dataType.getName();
 			String valTypeName = dataVals[i].getClass().getName();
-			// modified by yangjingwen 2012.12.17
+			
 			String dataVal = dataVals[i].toString();
 
 			if ("int".equals(typeName) && checkBaseDataType(dataVals[i])) 

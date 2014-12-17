@@ -18,11 +18,19 @@ public class AndroidPushBroadcastMsg
 {
 	private static Log log = LogFactory.getLog(AndroidPushBroadcastMsg.class);
 	
-	public static void pushMsg(String msgType, String msg)
+	public static void pushMsg(String msgType, String msg,String hospitalId)
 	{
 		if(ObjectCensor.isStrRegular(msgType, msg))
 		{
-			BaiduChannelClient channelClient = BaiduChannelClientSingleton.getInstance();
+			BaiduChannelClient channelClient = null ;
+			if("102".equals(hospitalId))
+			{
+				channelClient = BaiduChannelClientSingleton.getInstance();
+			}else if("103".equals(hospitalId))
+			{
+				channelClient = BaiduPushOnline.getInstance();
+			}
+			
 			try
 			{
 				// 4. 创建请求类对象
@@ -58,8 +66,8 @@ public class AndroidPushBroadcastMsg
 		//消息
 //		pushMsg("notice", "<user_id>71189</user_id><message>Hello</message><title>Hello</title>");
 		//通知
-		String ss = "{\"title\":\"掌上亚心\",\"description\":\"预约提醒\",\"msg_type\":\"order\",\"user_id\":\"22861\",\"custom_param\":{\"createDate\":\"2014-12-02\",\"detailTime\":\"0\",\"doctorId\":\"9083R\",\"doctorName\":\"门诊普通号\",\"hospitalId\":\"102\",\"orderFee\":\"4.5\",\"orderId\":\"2014120226479\",\"orderNum\":\"1001\",\"orderState\":\"000\",\"payState\":\"100\",\"platformOrderId\":\"\",\"registerId\":\"1000020064\",\"registerTime\":\"2014-12-08  星期一 下午\",\"sex\":\"男\",\"state\":\"00A\",\"teamId\":\"mz12\",\"teamName\":\"门诊普通\",\"userId\":\"22861\",\"userName\":\"冉海全\",\"userNo\":\"422822198407311010\",\"userTelephone\":\"18907181648\"}}";
-		pushMsg("msg", "{\"title\":预约提醒,\"description\":提醒,\"msg_type\":common,\"user_id\":\"22861\",custom_param:123123}");
+		String ss = "{\"authType\":\"public\",\"content\":\"带齐检查资料\",\"doctorId\":\"1405R\",\"questionId\":\"26239\",\"recordType\":\"ans\",\"state\":\"00A\",\"userId\":\"10814\",\"userTelephone\":\"18907181620\"}";
+		pushMsg("msg", "{\"title\":预约提醒,\"description\":提醒,\"msg_type\":ques,\"user_id\":\"22861\",custom_param:"+ss+"}","102");
 //		pushMsg("msg",ss);
 	}
 }
