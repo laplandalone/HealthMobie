@@ -3,20 +3,38 @@ package com.hbgz.service;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hbgz.dao.DigitalHealthDao;
+import com.hbgz.dao.HibernateObjectDao;
+import com.hbgz.model.PatientVisitT;
+import com.hbgz.pub.annotation.ServiceType;
+import com.hbgz.pub.exception.QryException;
+import com.hbgz.pub.util.JsonUtils;
 import com.hbgz.pub.util.ObjectCensor;
 import com.hbgz.pub.util.StringUtil;
 
-@Service
+@Service(value = "BUS300")
 public class PatientVisitService 
 {
 	@Autowired
 	private DigitalHealthDao digitalHealthDao;
+	
+	@Autowired
+	private HibernateObjectDao hibernateObjectDao;
+	
+	@ServiceType(value = "BUS3001")
+	public JSONArray getVisitPatients()
+			throws QryException
+	{
+		List<PatientVisitT> patientVisits = hibernateObjectDao.qryPatientVisits();
+		JSONArray jsonArray = JsonUtils.fromArray(patientVisits);
+		return jsonArray;
+	}
 	
 	public List qryPatientVisitList(String startTime, String endTime, String visitName, String visitType, String cardId) throws Exception
 	{

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import com.hbgz.model.HospitalNewsT;
 import com.hbgz.model.HospitalT;
 import com.hbgz.model.HospitalUserRelationshipT;
+import com.hbgz.model.PatientVisitT;
 import com.hbgz.model.RegisterOrderT;
 import com.hbgz.model.TeamT;
 import com.hbgz.model.UserContactT;
@@ -124,5 +125,11 @@ public class HibernateObjectDao extends BaseDao
 		}
 		String hql = "from UserRelateT as model where  model.state='00A' and model.userId=? and model.relatePhone=?";
 		return this.find(hql, new String[]{ userId,phone });
+	}
+	
+	public List<PatientVisitT> qryPatientVisits()
+	{
+		String hql = "from PatientVisitT as model where model.state='00A' order by createDate desc ";
+		return this.find(hql);
 	}
 }

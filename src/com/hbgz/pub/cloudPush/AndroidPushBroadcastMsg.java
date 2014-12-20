@@ -67,7 +67,7 @@ public class AndroidPushBroadcastMsg
 //		pushMsg("notice", "<user_id>71189</user_id><message>Hello</message><title>Hello</title>");
 		//通知
 		String ss = "{\"authType\":\"public\",\"content\":\"带齐检查资料\",\"doctorId\":\"1405R\",\"questionId\":\"26239\",\"recordType\":\"ans\",\"state\":\"00A\",\"userId\":\"10814\",\"userTelephone\":\"18907181620\"}";
-		pushMsg("msg", "{\"title\":预约提醒,\"description\":提醒,\"msg_type\":ques,\"user_id\":\"22861\",custom_param:"+ss+"}","102");
+		pushMsg("msg", "{\"title\":预约提醒,\"description\":提醒,\"msg_type\":ques,\"user_id\":\"0000_1\",custom_param:"+ss+"}","103");
 //		pushMsg("msg",ss);
 	}
 }
