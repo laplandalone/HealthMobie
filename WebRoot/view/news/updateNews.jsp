@@ -117,6 +117,7 @@
 				{
 					newsImageUrl = $("#newsImages").val();
 				}
+				var pageNum = $("#pageNum").val();
 				var dig = null;
 				$.ajax({
 					type:"POST",
@@ -138,11 +139,11 @@
 						}
 						if(data)
 						{
-							W.$.dialog({parent:api, title:false, width:"150px", esc:false, height:"60px", zIndex:2000, icon:'succ.png', lock:true, content:'成功修改信息!', ok:function() {W.reload(); api.close(); return true;}});
+							$.dialog({parent:api, title:false, width:"150px", esc:false, height:"60px", zIndex:2000, icon:'succ.png', lock:true, content:'成功修改信息!', ok:function() {W.reload(pageNum); api.close(); return true;}});
 						}
 						else
 						{
-							W.$.dialog({parent:api, title:false, width:"150px", esc:false, height:"60px", zIndex:2000, icon:'fail.png', lock:true, content:'修改信息失败!', ok:function() {api.close(); return true;}});
+							$.dialog({parent:api, title:false, width:"150px", esc:false, height:"60px", zIndex:2000, icon:'fail.png', lock:true, content:'修改信息失败!', ok:function() {api.close(); return true;}});
 						}
 					},
 					error:function(stata)
@@ -155,7 +156,7 @@
 						{
 							
 						}
-    					W.$.dialog.alert(stata.statusText, function(){api.close(); return true;}, api);
+    					$.dialog.alert(stata.statusText, function(){api.close(); return true;}, api);
     				}
 				});
 			}

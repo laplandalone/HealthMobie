@@ -21,41 +21,44 @@ $(document).ready(function(){
 
 function qryNewsList()
 {
-	var obj = JSON.stringify($("select,input").serializeObject());
-	obj = qryStartFunc(obj);
-	var dig = null;
-	$.ajax({
-		type : "POST",
-		url : "/news.htm?method=qryNewsList",
-		data : obj,
-		async : false,
-		contentType : "application/json;charset=UTF-8",
-		dataType : "json",
-		beforeSend : function()
-		{
-			dig = new $.dialog({title:'正在查询请等待...',esc:false,min:false,max:false,lock:true});
-		},
-		success : function(data)
-		{
-			try
-			{
-				dig.close();
-			}
-			catch(e)
-			{
-				
-			}
-			createTable(data, 0);
-		},
-		error : function(data)
-		{
-			$.dialog.alert(data.statusText, function(){window.location.reload(); return true;});
-		}
-	});
 	var pageNum = $("#pageNum").val();
 	if(pageNum != null && pageNum != "" && pageNum != undefined && pageNum != "null")
 	{
 		showList(pageNum);
+	}
+	else
+	{
+		var obj = JSON.stringify($("select,input").serializeObject());
+		obj = qryStartFunc(obj);
+		var dig = null;
+		$.ajax({
+			type : "POST",
+			url : "/news.htm?method=qryNewsList",
+			data : obj,
+			async : false,
+			contentType : "application/json;charset=UTF-8",
+			dataType : "json",
+			beforeSend : function()
+			{
+				dig = new $.dialog({title:'正在查询请等待...',esc:false,min:false,max:false,lock:true});
+			},
+			success : function(data)
+			{
+				try
+				{
+					dig.close();
+				}
+				catch(e)
+				{
+					
+				}
+				createTable(data, 0);
+			},
+			error : function(data)
+			{
+				$.dialog.alert(data.statusText, function(){window.location.reload(); return true;});
+			}
+		});
 	}
 }
 
@@ -106,9 +109,10 @@ function createTable(data, flagParam)
 	$("#template").html(content);
 }
 
-function reload() 
+function reload(pageNum) 
 {
-	window.location.reload();
+	$("#pageNum").val(pageNum);
+	qryNewsList();
 }
 
 function qryPaging(val)

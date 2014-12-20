@@ -21,6 +21,7 @@
   
   	<body onload="qryNewsList()">
   		<form action="">
+  			<input type="hidden" id="pageNum" value="${pageNum }"/>
   			<div class="mainsearch">
 		  		<table width="100%">
 		  			<tr>
