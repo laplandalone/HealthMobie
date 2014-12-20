@@ -58,7 +58,7 @@ public class SysCacheDao extends BaseDao
 	public List qryTeamList(String hospitalId) throws QryException 
 	{
 		StringBuffer sql = new StringBuffer();
-		sql.append("select * from team_t where state = '00A' and hospital_id = ? ");
+		sql.append("select * from team_t where state = '00A' and team_id <> hospital_id and hospital_id = ? ");
 		ArrayList lstParam = new ArrayList();
 		lstParam.add(hospitalId);
 		return itzcQryCenter.executeSqlByMapListWithTrans(sql.toString(), lstParam);

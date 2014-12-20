@@ -1,3 +1,4 @@
+<%@page import="java.text.SimpleDateFormat"%>
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
 <%@ page import="com.hbgz.pub.cache.PubData"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -6,6 +7,14 @@
 	String path = request.getContextPath();
 	String hospitalId = (String) session.getAttribute("hospitalId");
 	List teamList = PubData.qryTeamList(hospitalId);
+	Date currentDate = new Date();
+	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+	String startTime = sdf.format(currentDate);
+	Calendar c = Calendar.getInstance(); 
+	c.setTime(currentDate);
+	c.add(Calendar.DATE, 7);
+	Date date = c.getTime();
+	String endTime = sdf.format(date);
 %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -16,7 +25,6 @@
 		<script type="text/javascript" src="<%=path%>/pub/js/jquery-1.9.1.min.js"></script>
 		<script type="text/javascript" src="<%=path%>/pub/dialog/lhgdialog.min.js?skin=idialog"></script>
 		<script type="text/javascript" src="<%=path%>/pub/js/calendar.js"></script>
-		<script type="text/javascript" src="<%=path%>/pub/js/date.js"></script>
 		<script type="text/javascript" src="<%=path%>/js/comm.js"></script>
 		<script type="text/javascript" src="<%=path%>/js/json2.js"></script>
 		<script type="text/javascript" src="<%=path%>/js/json.js"></script>
@@ -29,12 +37,12 @@
 				<input type="hidden" id="hospitalId" value="<%=hospitalId %>"/>
 				<table width="100%">
 					<tr>
-						<td align="right" width="12%">预约时间：</td>
+						<td align="right" width="12%">预约时间</td>
 						<td align="center" width="8%">
 							<table class="inputtable" cellspacing="0" cellpadding="0">
 								<tr>
 									<td>
-										<input type="text" id="startTime" name="startTime" style="border:0;height:20px;width:130px;font-size:12px" readonly/>
+										<input type="text" id="startTime" name="startTime" style="border:0;height:20px;width:130px;font-size:12px" readonly value="<%=startTime %>"/>
 									</td>
 									<td>
 										<a href="javascript:void(0);" onclick="showDate(document.getElementById('startTime'))"> 
@@ -49,7 +57,7 @@
 							<table class="inputtable" cellspacing="0" cellpadding="0">
 								<tr>
 									<td>
-										<input type="text" id="endTime" name="endTime" style="border:0;height:20px;width:130px;font-size:12px" readonly/>
+										<input type="text" id="endTime" name="endTime" style="border:0;height:20px;width:130px;font-size:12px" readonly value="<%=endTime %>"/>
 									<td>
 									<td>
 										<a href="javascript:void(0);" onclick="showDate(document.getElementById('endTime'))"> 
@@ -59,11 +67,11 @@
 								</tr>
 							</table>
 						</td>
-						<td width="12%" align="right">科室名称：</td>
-						<td width="8%">
+						<td width="12%" align="right">科室名称</td>
+						<td width="6%">
 							<c:set var="teamList" value="<%=teamList %>"></c:set>
 							<select id="teamId" name="teamId" class="subselect">
-								<option value="">---请选择---</option>
+								<option value="">全部</option>
 								<c:forEach items="${teamList }" var="team">
 									<c:if test="${team.expertFlag == '0' }">
 										<option value="${team.teamId }">${team.teamName }</option>
@@ -71,8 +79,8 @@
 								</c:forEach>
 							</select>
 						</td>
-						<td width="12%" align="right">订单状态：</td>
-						<td width="8%">
+						<td width="12%" align="right">订单状态</td>
+						<td width="6%">
 							<select id="state" name="state" class="subselect">
 								<c:choose>
 									<c:when test="${sessionScope.hospitalId == '101' }">
@@ -92,10 +100,11 @@
 								</c:choose>
 							</select>
 						</td>
-						<td width="15%" align="right">
+						<td width="10%" align="right">预约人</td>
+						<td width="8%"><input id="userName" name="userName" class="subtext"/></td>
+						<td width="12%" align="right">
 							<input type="button" onclick="qryRegisterOrder()" class="button3" value="查询" />
 						</td>
-						<td width="12%">&nbsp;</td>
 					</tr>
 				</table>
 			</div>

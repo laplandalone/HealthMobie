@@ -70,19 +70,16 @@ public class PatientVisitService
 	{
 		JSONObject obj = new JSONObject();
 		int count = 0;
-		if(ObjectCensor.isStrRegular(startTime, endTime))
+		List sList = digitalHealthDao.qryUserLoginActivityList(pageNum, pageSize, startTime, endTime, hospitalId);
+		if(ObjectCensor.checkListIsNull(sList))
 		{
-			List sList = digitalHealthDao.qryUserLoginActivityList(pageNum, pageSize, startTime, endTime, hospitalId);
-			if(ObjectCensor.checkListIsNull(sList))
+			obj.element("activityList", sList);
+			List list = digitalHealthDao.qryUserLoginActivityCount(startTime, endTime, hospitalId);
+			if(ObjectCensor.checkListIsNull(list))
 			{
-				obj.element("activityList", sList);
-				List list = digitalHealthDao.qryUserLoginActivityCount(startTime, endTime, hospitalId);
-				if(ObjectCensor.checkListIsNull(list))
-				{
-					count = Integer.parseInt(StringUtil.getMapKeyVal((Map) list.get(0), "count"));
-					String totalNum = StringUtil.getMapKeyVal((Map) list.get(0), "totalNum");
-					obj.element("totalNum", totalNum);
-				}
+				count = Integer.parseInt(StringUtil.getMapKeyVal((Map) list.get(0), "count"));
+				String totalNum = StringUtil.getMapKeyVal((Map) list.get(0), "totalNum");
+				obj.element("totalNum", totalNum);
 			}
 		}
 		obj.element("count", count);

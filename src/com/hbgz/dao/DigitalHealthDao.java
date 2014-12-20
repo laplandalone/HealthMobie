@@ -415,7 +415,7 @@ public class DigitalHealthDao
 	 * @return 
 	 * @throws Exception
 	 */
-	public List qryRegisterOrderList(int pageNum, int pageSize, String hospitalId, String teamId, String startTime, String endTime, String state) throws Exception 
+	public List qryRegisterOrderList(int pageNum, int pageSize, String hospitalId, String teamId, String startTime, String endTime, String state, String userName) throws Exception 
 	{
 		StringBuffer query = new StringBuffer();
 		query.append("select * from (select c.*, ROWNUM RN from (");
@@ -449,13 +449,17 @@ public class DigitalHealthDao
 			}
 			lstParam.add(state);
 		}
+		if(ObjectCensor.isStrRegular(userName))
+		{
+			query.append("and upper(a.user_name) like upper('%"+userName+"%') ");
+		}
 		query.append("order by a.create_date desc) c where ROWNUM <= ?) where RN >= ?");
 		lstParam.add(pageNum * pageSize);
 		lstParam.add((pageNum - 1) * pageSize + 1);
 		return itzcQryCenter.executeSqlByMapListWithTrans(query.toString(), lstParam);
 	}
 	
-	public int qryRegisterOrderCount(String hospitalId, String teamId, String startTime, String endTime, String state) throws Exception 
+	public int qryRegisterOrderCount(String hospitalId, String teamId, String startTime, String endTime, String state, String userName) throws Exception 
 	{
 		StringBuffer query = new StringBuffer();
 		query.append("select a.order_num,a.order_id, a.register_id, a.order_fee,a.doctor_name, a.register_time, a.create_date, a.team_name,a.user_name,a.user_telephone, b.hospital_name, ");
@@ -487,6 +491,10 @@ public class DigitalHealthDao
 				query.append("and a.pay_state = ? ");
 			}
 			lstParam.add(state);
+		}
+		if(ObjectCensor.isStrRegular(userName))
+		{
+			query.append("and upper(a.user_name) like upper('%"+userName+"%') ");
 		}
 		return itzcQryCenter.getCount(query.toString(), lstParam);
 	}

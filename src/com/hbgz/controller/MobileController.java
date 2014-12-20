@@ -489,7 +489,8 @@ public class MobileController
 			String startTime = StringUtil.getJSONObjectKeyVal(obj, "startTime");
 			String endTime = StringUtil.getJSONObjectKeyVal(obj, "endTime");
 			String state = StringUtil.getJSONObjectKeyVal(obj, "state");
-			JSONObject object = digitalHealthService.qryRegisterOrder(pageNum, pageSize, hospitalId, teamId, startTime, endTime, state);
+			String userName = StringUtil.getJSONObjectKeyVal(obj, "userName");
+			JSONObject object = digitalHealthService.qryRegisterOrder(pageNum, pageSize, hospitalId, teamId, startTime, endTime, state, userName);
 			log.error(object);
 			out = response.getWriter();
 			out.println(object);

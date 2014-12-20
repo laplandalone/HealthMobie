@@ -1304,17 +1304,17 @@ public class DigitalHealthService
 		return b;
 	}
 	// 查询用户的挂号订单
-	public JSONObject qryRegisterOrder(int pageNum, int pageSize, String hospitalId, String teamId, String startTime, String endTime, String state) throws Exception
+	public JSONObject qryRegisterOrder(int pageNum, int pageSize, String hospitalId, String teamId, String startTime, String endTime, String state, String userName) throws Exception
 	{
 		JSONObject obj = new JSONObject();
 		if(ObjectCensor.isStrRegular(hospitalId))
 		{
 			int count = 0;
-			List registerOrderList = digitalHealthDao.qryRegisterOrderList(pageNum, pageSize, hospitalId, teamId, startTime, endTime, state);
+			List registerOrderList = digitalHealthDao.qryRegisterOrderList(pageNum, pageSize, hospitalId, teamId, startTime, endTime, state, userName);
 			if(ObjectCensor.checkListIsNull(registerOrderList))
 			{
 				obj.element("registerOrderList", registerOrderList);
-				count = digitalHealthDao.qryRegisterOrderCount(hospitalId, teamId, startTime, endTime, state);
+				count = digitalHealthDao.qryRegisterOrderCount(hospitalId, teamId, startTime, endTime, state, userName);
 			}
 			obj.element("count", count);
 		}
