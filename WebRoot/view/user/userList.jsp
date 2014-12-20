@@ -48,21 +48,22 @@
   			<div class="main">
 	  			<div class="title">
 					<div class="titleleft"></div>
-					<div class="titlecentre">
+					<div class="titlecentre1">
 						<h3>查询结果</h3>
+						<span style="text-align: right;" id="totalNum"></span>
 					</div>
-					<div class="titleright"></div>
 				</div>
 				<div id="template" class="box">
 					<table width="100%" border="1" cellspacing="0" cellpadding="0" class="maintable1">
 						<tr class="tabletop">
-							<td   width="8%">ID</td>
-							<td   width="10%">姓名</td>
-							<td   width="10%">联系方式</td>
-							<td   width="8%">性别</td>
-							<td   width="20%">证件号码</td>
-							<td   width="15%">病案号</td>
-							<td   width="20%">注册时间</td>
+							<td width="8%">ID</td>
+							<td width="10%">姓名</td>
+							<td width="10%">联系方式</td>
+							<td width="8%">性别</td>
+							<td width="15%">证件号码</td>
+							<td width="15%">病案号</td>
+							<td width="15%">注册时间</td>
+							<td width="15%">注册平台</td>
 						</tr>
 					</table>
 				</div>

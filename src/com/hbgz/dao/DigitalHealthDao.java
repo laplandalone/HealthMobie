@@ -900,9 +900,10 @@ public class DigitalHealthDao
 	{
 		StringBuffer query = new StringBuffer();
 		query.append("SELECT * FROM (SELECT A.*, ROWNUM ROWNUMBER FROM (");
-		query.append("select user_id, user_name, telephone, sex, decode(user_no, '无', user_no, substr(user_no, 0, 10) || '********') user_no, card_no, create_date ");
+		query.append("select user_id, user_name, telephone, sex, decode(user_no, '无', user_no, substr(user_no, 0, 10) || '********') user_no, card_no, create_date, hospital_id ");
 		query.append("from (select user_id, decode(user_name, null, '无', user_name) user_name, telephone, decode(sex, null, '无', sex) sex, decode(user_no, null, '无', user_no) user_no, ");
-		query.append("decode(card_no, null, '无', card_no) card_no, to_char(create_date, 'yyyy-mm-dd') create_date from hospital_user_t where state = '00A' ");
+		query.append("decode(card_no, null, '无', card_no) card_no, to_char(create_date, 'yyyy-mm-dd') create_date, ");
+		query.append("decode(hospital_id, null, '无', '101', '清华阳光益健康', '102', '掌上亚心') hospital_id from hospital_user_t where state = '00A' ");
 		ArrayList lstParam = new ArrayList();
 		if(ObjectCensor.isStrRegular(userName))
 		{

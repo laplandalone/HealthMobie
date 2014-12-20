@@ -35,8 +35,9 @@ function qryUserList()
 
 function createTable(data, flagParam)
 {
+	$("#totalNum").html("总注册人数："+data.count+"人");
 	var content = "<table id='table1' width='100%' border='1' cellspacing='0' cellpadding='0' class='maintable'>";
-	content += "<tr class='tabletop'><td style='text-align:center' width='8%'>ID</td><td style='text-align:center' width='10%'>姓名</td><td style='text-align:center' width='10%'>联系方式</td><td style='text-align:center' width='8%'>性别</td><td style='text-align:center' width='20%'>证件号码</td><td style='text-align:center' width='15%'>病案号</td><td style='text-align:center' width='20%'>注册时间</td></tr>";
+	content += "<tr class='tabletop'><td style='text-align:center' width='8%'>ID</td><td style='text-align:center' width='10%'>姓名</td><td style='text-align:center' width='10%'>联系方式</td><td style='text-align:center' width='8%'>性别</td><td style='text-align:center' width='15%'>证件号码</td><td style='text-align:center' width='15%'>病案号</td><td style='text-align:center' width='15%'>注册时间</td><td style='text-align:center' width='15%'>注册平台</td></tr>";
 	if(data.count > 0)
 	{
 		var cnt = 0;
@@ -54,9 +55,9 @@ function createTable(data, flagParam)
 				content += "<tr class='aaa' onmouseover='trColorChange(this,"+i+")' onmouseout='trColorChange(this,"+i+")'>";
 			}
 			content += "<td width='8%' style='text-align:center'>"+obj.userId+"</td><td width='10%' style='text-align:center'>"+obj.userName+"</td>";
-			content += "<td width='15%' style='text-align:center'>"+obj.telephone+"</td><td width='5%' style='text-align:center'>"+obj.sex+"</td>";
-			content += "<td width='20%' style='text-align:center'>"+obj.userNo+"</td><td width='10%' style='text-align:center'>"+obj.cardNo+"</td>";
-			content += "<td width='20%' style='text-align:center'>"+obj.createDate+"</td></tr>";
+			content += "<td width='10%' style='text-align:center'>"+obj.telephone+"</td><td width='8%' style='text-align:center'>"+obj.sex+"</td>";
+			content += "<td width='15%' style='text-align:center'>"+obj.userNo+"</td><td width='15%' style='text-align:center'>"+obj.cardNo+"</td>";
+			content += "<td width='15%' style='text-align:center'>"+obj.createDate+"</td><td style='text-align:center' width='15%'>"+obj.hospitalId+"</td></tr>";
 		});
 		if(flagParam == 0)
 		{
