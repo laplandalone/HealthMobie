@@ -49,7 +49,7 @@
 							<img src="images/li.jpg" />&nbsp;&nbsp;<a href="/view/doctor/doctors.jsp?doctorId=<%=doctorId%>" target="main">医生信息管理</a>
 						</li>
 					</c:if>
-					<c:if test="${sessionScope.userPrivs == '4'}">
+					<c:if test="${sessionScope.userPrivs == '4' || sessionScope.userPrivs == '5'}">
 						<li>
 							<img src="images/li.jpg" />&nbsp;&nbsp;<a href="/view/question/onlineDoctorQuesList.jsp" target="main" >用户提问管理</a>
 						</li>
@@ -71,7 +71,7 @@
 								</li>
 							</c:otherwise>
 						</c:choose>
-						<c:if test="${sessionScope.userPrivs == '4' && sessionScope.hospitalId == '102'}">
+						<c:if test="${(sessionScope.userPrivs == '4' || sessionScope.userPrivs == '5') && sessionScope.hospitalId == '102' }">
 							<li style="height:75px;line-height:1.5;" id="accArea">
 								<span><img src="images/li.jpg" />&nbsp;&nbsp;<a href="javascript:void(0)" onclick="treeList('accList','accArea')">患者随访</a></span>
 								<ul id="accList" style="display:block">
@@ -105,39 +105,7 @@
 								<a href="/view/user/userList.jsp" target="main">用户信息管理</a>
 							</li>
 						</c:if>
-						<c:if test="${sessionScope.userPrivs == '5' && sessionScope.hospitalId == '102'}">
-							<li style="height:75px;line-height:1.5;" id="accArea">
-								<span><img src="images/li.jpg" />&nbsp;&nbsp;<a href="javascript:void(0)" onclick="treeList('accList','accArea')">患者随访</a></span>
-								<ul id="accList" style="display:block">
-									<li>
-										<div class="linePic"></div><div class="posPic"></div><a class="abtn" href="/view/visit/patientVisitList.jsp?visitType=asd" target="main">先心手术随访</a>
-									</li>
-									<li>
-										<div class="linePic"></div><div class="posPic"></div><a class="abtn" href="/view/visit/patientVisitList.jsp?visitType=mvr" target="main">房颤手术随访</a>
-									</li>
-									<li>
-										<div class="linePicLast"></div><div class="posPic"></div><a class="abtn" href="/view/visit/patientVisitList.jsp?visitType=gxb" target="main">冠心病手术随访</a>
-									</li>
-								</ul>
-							</li>
-							<li style="height:75px;line-height:1.5;" id="docInfoArea">
-								<span><img src="images/li.jpg" />&nbsp;&nbsp;<a href="javascript:void(0)" onclick="treeList('docInfoList','docInfoArea')">医生数据管理</a></span>
-								<ul id="docInfoList" style="display:block">
-									<li>
-										<div class="linePic"></div><div class="posPic"></div><a class="abtn" href="/view/doctor/onlineDocotrList.jsp" target="main">在线医生管理</a>
-									</li>
-									<li>
-										<div class="linePic"></div><div class="posPic"></div><a class="abtn" href="/view/doctor/addDoctor.jsp" target="main">新增医生管理</a>
-									</li>
-									<li>
-										<div class="linePicLast"></div><div class="posPic"></div><a class="abtn" href="/view/doctor/doctors.jsp?doctorId=<%=doctorId%>" target="main">医生信息管理</a>
-									</li>
-								</ul>
-							</li>
-							<li>
-								<img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; 
-								<a href="/view/user/userList.jsp" target="main">用户信息管理</a>
-							</li>
+						<c:if test="${sessionScope.userPrivs == '5' && sessionScope.hospitalId == '102' }">
 							<li>
 								<img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; 
 								<a href="/view/user/userLoginActivity.jsp" target="main">登录活跃度统计</a>
