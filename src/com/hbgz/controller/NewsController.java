@@ -100,11 +100,13 @@ public class NewsController
 		String hospitalId= (String)session.getAttribute("hospitalId");
 		if(ObjectCensor.isStrRegular(newsId, hospitalId))
 		{
+			String pageNum = request.getParameter("pageNum");
 			JSONObject obj = digitalHealthService.getNewsById(newsId, hospitalId);
 			log.error(obj);
 			String newsType = StringUtil.getJSONObjectKeyVal(obj, "newsType");
 			JSONArray array = digitalHealthService.getNewsType(hospitalId, newsType);
 			log.error(array);
+			model.addObject("pageNum", pageNum);
 			model.addObject("news", obj);
 			model.addObject("typeList", array);
 			model.setViewName("/view/news/updateNews");

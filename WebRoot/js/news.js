@@ -52,6 +52,11 @@ function qryNewsList()
 			$.dialog.alert(data.statusText, function(){window.location.reload(); return true;});
 		}
 	});
+	var pageNum = $("#pageNum").val();
+	if(pageNum != null && pageNum != "" && pageNum != undefined && pageNum != "null")
+	{
+		showList(pageNum);
+	}
 }
 
 function createTable(data, flagParam)
@@ -143,7 +148,7 @@ function qryPaging(val)
 function updateNews(newsId)
 {
 	lockScreen();
-	$.dialog({title:"修改", content:"url:/news.htm?method=getNewsById&newsId="+newsId, min:false, max:false, lock:true, close:function(){unlockScreen();}});
+	$.dialog({title:"修改", content:"url:/news.htm?method=getNewsById&newsId="+newsId+"&pageNum="+gcurTag, min:false, max:false, lock:true, close:function(){unlockScreen();}});
 }
 
 function deleteNews(newsId)

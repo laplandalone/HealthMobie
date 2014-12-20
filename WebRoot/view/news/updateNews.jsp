@@ -202,6 +202,7 @@
   
   	<body>
     	<form action="">
+    		<input type="hidden" id="pageNum" value="${pageNum }"/>
     		<input type="hidden" id="newsId"/>
     		<input type="hidden" id="oldNewsId" value="${news.newsId }"/>
     		<input type="hidden" id="creditValueType" value="1"/>
