@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -92,6 +93,34 @@ public class PatientVisitController
 			String sex = StringUtil.getJSONObjectKeyVal(obj, "sex");
 			String telephone = StringUtil.getJSONObjectKeyVal(obj, "telephone");
 			JSONObject object = patientVisitService.qryUserList(pageNum, pageSize, userName, sex, telephone);
+			log.error(object);
+			out.println(object);
+		}
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			out.close();
+		}
+	}
+	
+	@RequestMapping(params = "method=qryUserLoginActivityList")
+	public void qryUserLoginActivityList(@RequestBody JSONObject obj, HttpServletRequest request, HttpServletResponse response)
+	{
+		response.setCharacterEncoding("UTF-8");
+		PrintWriter out = null;
+		try
+		{
+			out = response.getWriter();
+			int pageNum = Integer.parseInt(StringUtil.getJSONObjectKeyVal(obj, "curId"));
+			int pageSize = Integer.parseInt(StringUtil.getJSONObjectKeyVal(obj, "pageNum"));
+			String startTime = StringUtil.getJSONObjectKeyVal(obj, "startTime");
+			String endTime = StringUtil.getJSONObjectKeyVal(obj, "endTime");
+			HttpSession session = request.getSession();
+			String hospitalId = (String) session.getAttribute("hospitalId");
+			JSONObject object = patientVisitService.qryUserLoginActivityList(pageNum, pageSize, startTime, endTime, hospitalId);
 			log.error(object);
 			out.println(object);
 		}

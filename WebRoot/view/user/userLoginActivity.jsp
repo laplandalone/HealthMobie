@@ -6,7 +6,8 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   	<head>
-		<link href="<%=path%>/pub/css/sub.css" rel="stylesheet" type="text/css" />
+		<title>用户登录活跃度统计</title>
+    	<link href="<%=path%>/pub/css/sub.css" rel="stylesheet" type="text/css" />
 		<script type="text/javascript" src="<%=path%>/pub/js/jquery-1.9.1.min.js"></script>
 		<script type="text/javascript" src="<%=path%>/pub/dialog/lhgdialog.min.js?skin=idialog"></script>
 		<script type="text/javascript" src="<%=path%>/pub/js/calendar.js"></script>
@@ -19,33 +20,47 @@
   
   	<body onload="qryUserList()">
   		<form action="">
-  			<input type="hidden" id="qryType" value="info">
+  			<input type="hidden" id="qryType" value="activity">
   			<div class="mainsearch">
 		  		<table width="100%">
-					<tr>
-						<td align="right" width="15%">用户名称：</td>
-						<td width="8%">
-							<input id="userName" name="userName" class="subtext"/>
+		  			<tr>
+		  				<td align="right" width="12%">登录时间：</td>
+						<td align="center" width="8%">
+							<table class="inputtable" cellspacing="0" cellpadding="0">
+								<tr>
+									<td>
+										<input type="text" id="startTime" name="startTime" style="border:0;height:20px;width:130px;font-size:12px" readonly/>
+									</td>
+									<td>
+										<a href="javascript:void(0);" onclick="showDate(document.getElementById('startTime'))"> 
+											<img src="<%=path%>/pub/images/calendar.png" style="position:relative;top:0px" /> 
+										</a>
+									</td>
+								</tr>
+							</table>
 						</td>
-						<td align="right" width="15%">用户性别：</td>
-						<td width="8%">
-							<select id="sex" name="sex" class="subselect">
-								<option value="">全部</option>
-								<option value="男">男</option>
-								<option value="女">女</option>
-							</select>
+						<td align="center" width="5%">至</td>
+						<td align="center" width="8%">
+							<table class="inputtable" cellspacing="0" cellpadding="0">
+								<tr>
+									<td>
+										<input type="text" id="endTime" name="endTime" style="border:0;height:20px;width:130px;font-size:12px" readonly/>
+									<td>
+									<td>
+										<a href="javascript:void(0);" onclick="showDate(document.getElementById('endTime'))"> 
+											<img src="<%=path%>/pub/images/calendar.png" style="position:relative;top:0px" /> 
+										</a>
+									</td>
+								</tr>
+							</table>
 						</td>
-						<td align="right" width="15%">联系方式：</td>
-						<td width="8%">
-							<input id="telephone" name="telephone" class="subtext"/>
+		  				<td width="12%" align="center">
+							<input type="button" onclick="qryUserList()" class="button3" value="查询" />
 						</td>
-						<td align="right" width="10%">
-							<input type="button" class="button3" value="查询" onclick="qryUserList()"/>
-						</td>
-						<td width="36%">&nbsp;</td>
-					</tr>
-				</table>
-  			</div>
+						<td width="44%" colspan="2">&nbsp;</td>
+		  			</tr>
+		  		</table>
+  			</div>  
   			<div class="main">
 	  			<div class="title">
 					<div class="titleleft"></div>
@@ -57,14 +72,10 @@
 				<div id="template" class="box">
 					<table width="100%" border="1" cellspacing="0" cellpadding="0" class="maintable1">
 						<tr class="tabletop">
-							<td width="8%">ID</td>
-							<td width="10%">姓名</td>
-							<td width="10%">联系方式</td>
+							<td width="15%">用户名称</td>
 							<td width="8%">性别</td>
-							<td width="15%">证件号码</td>
-							<td width="15%">病案号</td>
-							<td width="15%">注册时间</td>
-							<td width="15%">注册平台</td>
+							<td width="15%">登录号码</td>
+							<td width="10%">登录活跃数</td>
 						</tr>
 					</table>
 				</div>
@@ -90,13 +101,14 @@
 								<td>
 									<input type="button" id="goto" onclick="gotoFunc()" />
 								</td>
-		  						<td width="20%">&nbsp;</td>
+		  						<td width="10%">&nbsp;</td>
+		  						<td width="10%">&nbsp;</td>
 		  						<td width="20%">&nbsp;</td>
 		  					</tr>
 		  				</table>
 		  			</div>
 		  		</div>
-  			</div>
+			</div>			
   		</form>
   		<input type="hidden" id="treeId" />
 		<input type="hidden" id="treeNum" />

@@ -104,6 +104,10 @@
 								<img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; 
 								<a href="/view/user/userList.jsp" target="main">用户信息管理</a>
 							</li>
+							<li>
+								<img src="images/li.jpg" />&nbsp;&nbsp;&nbsp; 
+								<a href="/view/user/userLoginActivity.jsp" target="main">登录活跃度统计</a>
+							</li>
 						</c:if>
 					</c:if>
 				</ul>

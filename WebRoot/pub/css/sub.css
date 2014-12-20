@@ -82,7 +82,7 @@ a:hover {color:#F00;}
 .titlecentre{width:80%; height:28px; float:left;}
 .titlecentre1{width:98%; height:28px; float:left;}
 .titleright {  height:28px; width:50px; float:right; background:url(../images/upArrows.png) 90% 45% no-repeat;  }
-.title span {color:#4D920A; display: inline; height:28px; line-height:28px; margin-left:83%;margin-top:0px;}
+.title span {color:#4D920A; display: inline; height:28px; line-height:28px; margin-left:80%;margin-top:0px;}
 .title h3 {color:#4D920A; display: inline; height:28px; line-height:28px; margin-left:10px;margin-top:0px;}
 .title a {color:#4D920A;;height:28px; line-height:28px;}
 .title a:hover{color:#F00;}

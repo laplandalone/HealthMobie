@@ -944,4 +944,52 @@ public class DigitalHealthDao
 		}
 		return itzcQryCenter.getCount(query.toString(), lstParam);
 	}
+
+	public List qryUserLoginActivityList(int pageNum, int pageSize, String startTime, String endTime, String hospitalId) throws Exception 
+	{
+		StringBuffer query = new StringBuffer();
+		query.append("SELECT * FROM (SELECT A.*, ROWNUM ROWNUMBER FROM (");
+		query.append("select decode(a.user_name, null, '无', a.user_name) user_name, b.telephone, decode(sex, null, '无', sex) sex, ");
+		query.append("b.activity_num, decode(b.hospital_id, null, '无', '101', '清华阳光益健康', '102', '掌上亚心') hospital_id ");
+		query.append("from (select count(telephone) activity_num, telephone, hospital_id from hospital_log_t where state = '00A' ");
+		ArrayList lstParam = new ArrayList();
+		if(ObjectCensor.isStrRegular(startTime, endTime))
+		{
+			query.append("and create_date between to_date(?, 'yyyy-mm-dd hh24:mi:ss') and to_date(?, 'yyyy-mm-dd hh24:mi:ss') ");
+			lstParam.add(startTime);
+			lstParam.add(endTime + " 23:59:59");
+		}
+		if(ObjectCensor.isStrRegular(hospitalId))
+		{
+			query.append("and hospital_id = ? ");
+			lstParam.add(hospitalId);
+		}
+		query.append("group by telephone, hospital_id) b left join hospital_user_t a on a.telephone = b.telephone and a.state = '00A' ");
+		query.append("order by b.activity_num desc) A WHERE ROWNUM <= ?)  WHERE ROWNUMBER >= ? ");
+		lstParam.add(pageNum * pageSize);
+		lstParam.add((pageNum - 1) * pageSize + 1);
+		return itzcQryCenter.executeSqlByMapListWithTrans(query.toString(), lstParam);
+	}
+
+	public List qryUserLoginActivityCount(String startTime, String endTime, String hospitalId) throws Exception 
+	{
+		StringBuffer query = new StringBuffer();
+		query.append("select count(*) count, sum(activity_num) total_num from (");
+		query.append("select b.activity_num from  (select count(telephone) activity_num, telephone, hospital_id ");
+		query.append("from hospital_log_t where state = '00A' ");
+		ArrayList lstParam = new ArrayList();
+		if(ObjectCensor.isStrRegular(startTime, endTime))
+		{
+			query.append("and create_date between to_date(?, 'yyyy-mm-dd hh24:mi:ss') and to_date(?, 'yyyy-mm-dd hh24:mi:ss') ");
+			lstParam.add(startTime);
+			lstParam.add(endTime + " 23:59:59");
+		}
+		if(ObjectCensor.isStrRegular(hospitalId))
+		{
+			query.append("and hospital_id = ? ");
+			lstParam.add(hospitalId);
+		}
+		query.append("group by telephone, hospital_id) b left join hospital_user_t a on a.telephone = b.telephone and a.state = '00A') ");
+		return itzcQryCenter.executeSqlByMapListWithTrans(query.toString(), lstParam);
+	}
 }

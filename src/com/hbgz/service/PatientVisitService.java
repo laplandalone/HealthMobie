@@ -1,6 +1,7 @@
 package com.hbgz.service;
 
 import java.util.List;
+import java.util.Map;
 
 import net.sf.json.JSONObject;
 
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.hbgz.dao.DigitalHealthDao;
 import com.hbgz.pub.util.ObjectCensor;
+import com.hbgz.pub.util.StringUtil;
 
 @Service
 public class PatientVisitService 
@@ -53,17 +55,37 @@ public class PatientVisitService
 	public JSONObject qryUserList(int pageNum, int pageSize, String userName, String sex, String telephone) throws Exception 
 	{
 		JSONObject obj = new JSONObject();
-		if(ObjectCensor.isStrRegular())
+		List sList = digitalHealthDao.qryUserList(pageNum, pageSize, userName, sex, telephone);
+		int count = 0;
+		if(ObjectCensor.checkListIsNull(sList))
 		{
-			List sList = digitalHealthDao.qryUserList(pageNum, pageSize, userName, sex, telephone);
-			int count = 0;
+			obj.element("userList", sList);
+			count = digitalHealthDao.qryUserCount(userName, sex, telephone);
+		}
+		obj.element("count", count);
+		return obj;
+	}
+	
+	public JSONObject qryUserLoginActivityList(int pageNum, int pageSize, String startTime, String endTime, String hospitalId) throws Exception
+	{
+		JSONObject obj = new JSONObject();
+		int count = 0;
+		if(ObjectCensor.isStrRegular(startTime, endTime))
+		{
+			List sList = digitalHealthDao.qryUserLoginActivityList(pageNum, pageSize, startTime, endTime, hospitalId);
 			if(ObjectCensor.checkListIsNull(sList))
 			{
-				obj.element("userList", sList);
-				count = digitalHealthDao.qryUserCount(userName, sex, telephone);
+				obj.element("activityList", sList);
+				List list = digitalHealthDao.qryUserLoginActivityCount(startTime, endTime, hospitalId);
+				if(ObjectCensor.checkListIsNull(list))
+				{
+					count = Integer.parseInt(StringUtil.getMapKeyVal((Map) list.get(0), "count"));
+					String totalNum = StringUtil.getMapKeyVal((Map) list.get(0), "totalNum");
+					obj.element("totalNum", totalNum);
+				}
 			}
-			obj.element("count", count);
 		}
+		obj.element("count", count);
 		return obj;
 	}
 }
