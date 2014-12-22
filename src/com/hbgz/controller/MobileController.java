@@ -144,34 +144,42 @@ public class MobileController
 		{
 			username = sessName;
 		}
-		try{
-			Map user = digitalHealthService.getUserWeb(username, password);
-			
-			if(user!=null)
+		try
+		{
+			if(ObjectCensor.isStrRegular(username, password))
 			{
-				String userId = StringUtil.getMapKeyVal(user, "manager_id");
-				String hospitalId =  StringUtil.getMapKeyVal(user, "hospital_id");
-				String userPrivs= StringUtil.getMapKeyVal(user, "privs");
-				String doctorId= StringUtil.getMapKeyVal(user, "doctor_id");
-				model.addObject("doctorId", doctorId);
-				session.setAttribute("userId", userId);
-				session.setAttribute("username", username);
-				session.setAttribute("hospitalId", hospitalId);
-				session.setAttribute("userPrivs", userPrivs);
-				session.setAttribute("password", password);
-				
-				model.setViewName("index");
+				Map user = digitalHealthService.getUserWeb(username, password);
+				if(user != null)
+				{
+					String userId = StringUtil.getMapKeyVal(user, "manager_id");
+					String hospitalId =  StringUtil.getMapKeyVal(user, "hospital_id");
+					String userPrivs= StringUtil.getMapKeyVal(user, "privs");
+					String doctorId= StringUtil.getMapKeyVal(user, "doctor_id");
+					model.addObject("doctorId", doctorId);
+					session.setAttribute("userId", userId);
+					session.setAttribute("username", username);
+					session.setAttribute("hospitalId", hospitalId);
+					session.setAttribute("userPrivs", userPrivs);
+					session.setAttribute("password", password);
+					
+					model.setViewName("index");
+				}
+				else
+				{
+					model.addObject("result", "error");
+					model.setViewName("login");
+				}
 			}
 			else
 			{
-				model.addObject("result", "error");
+				model.addObject("result", "loginAgain");
 				model.setViewName("login");
 			}
 		}
 		catch(Exception err)
 		{
-			err.printStackTrace();
-			throw err;
+			model.addObject("result", err.getMessage());
+			model.setViewName("login");
 		}
 		return model;
 	}

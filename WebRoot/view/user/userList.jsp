@@ -42,7 +42,7 @@
 						<td align="right" width="10%">
 							<input type="button" class="button3" value="查询" onclick="qryUserList()"/>
 						</td>
-						<td width="36%">&nbsp;</td>
+						<td width="20%">&nbsp;</td>
 					</tr>
 				</table>
   			</div>

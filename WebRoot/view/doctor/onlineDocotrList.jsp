@@ -26,7 +26,7 @@
   			<div class="mainsearch">
 		  		<table width="100%">
 					<tr>
-						<td align="right" width="10%">在线科室：</td>
+						<td align="right" width="12%">在线科室：</td>
 						<td width="8%">
 							<c:set var="teamLst" value="<%=teamLst %>"></c:set>
 							<select id="teamId" name="teamId" class="subselect">
@@ -37,14 +37,14 @@
 								</c:forEach>
 							</select>
 						</td>
-						<td align="right" width="10%">医生名称：</td>
+						<td align="right" width="12%">医生名称：</td>
 						<td width="8%">
 							<input id="doctorName" name="doctorName" class="subtext"/>
 						</td>
 						<td align="right" width="10%">
 							<input type="button" class="button3" value="查询" onclick="qryOnlineDortor()"/>
 						</td>
-						<td width="54%">&nbsp;</td>
+						<td width="30%">&nbsp;</td>
 					</tr>
 				</table>
   			</div>

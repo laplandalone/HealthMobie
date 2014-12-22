@@ -16,20 +16,39 @@
   	</head>
   
   	<body>
-  		<c:if test="${! empty result}">
-  			<script language="javascript">
-  				$(document).ready(function(){
-  					art.dialog({
-				   	 	lock: true,
-				    	content: "用户名或密码不正确",
-				   	 	icon: 'error',
-				    	ok: function () {
-				    		window.location.href = "/login.jsp";
-				        	return true;
-				    	},
-					});	
-  				});
-  			</script>
+  		<c:if test="${! empty result }">
+	  		<c:choose>
+		  		<c:when test="${'error' == result}">
+		  			<script language="javascript">
+		  				$(document).ready(function(){
+		  					art.dialog({
+						   	 	lock: true,
+						    	content: "用户名或密码不正确",
+						   	 	icon: 'error',
+						    	ok: function () {
+						    		window.location.href = "/login.jsp";
+						        	return true;
+						    	},
+							});	
+		  				});
+		  			</script>
+		  		</c:when>
+		  		<c:otherwise>
+		  			<script language="javascript">
+		  				$(document).ready(function(){
+		  					art.dialog({
+						   	 	lock: true,
+						    	content: "请重新登录",
+						   	 	icon: 'error',
+						    	ok: function () {
+						    		window.location.href = "/login.jsp";
+						        	return true;
+						    	},
+							});	
+		  				});
+		  			</script>
+		  		</c:otherwise>
+	  		</c:choose>
   		</c:if>
     	<div class="top">
     		<div class="logo">&nbsp;</div>

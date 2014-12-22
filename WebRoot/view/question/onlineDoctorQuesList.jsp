@@ -46,7 +46,7 @@
 						<td align="right" width="10%">
 							<input type="button" class="button3" value="查询" onclick="qryOnlineDortorQues()"/>
 						</td>
-						<td width="72%">&nbsp;</td>
+						<td width="40%">&nbsp;</td>
 	  				</tr>
 	  			</table>
   			</div>

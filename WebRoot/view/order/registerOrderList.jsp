@@ -37,12 +37,12 @@
 				<input type="hidden" id="hospitalId" value="<%=hospitalId %>"/>
 				<table width="100%">
 					<tr>
-						<td align="right" width="12%">预约时间</td>
-						<td align="center" width="8%">
-							<table class="inputtable" cellspacing="0" cellpadding="0">
+						<td align="right" width="10%">预约时间</td>
+						<td align="left" width="5%">
+							<table class="inputtable2" cellspacing="0" cellpadding="0">
 								<tr>
 									<td>
-										<input type="text" id="startTime" name="startTime" style="border:0;height:20px;width:130px;font-size:12px" readonly value="<%=startTime %>"/>
+										<input type="text" id="startTime" name="startTime" style="border:0;height:20px;width:85px;font-size:12px" readonly value="<%=startTime %>"/>
 									</td>
 									<td>
 										<a href="javascript:void(0);" onclick="showDate(document.getElementById('startTime'))"> 
@@ -52,12 +52,12 @@
 								</tr>
 							</table>
 						</td>
-						<td align="center" width="5%">至</td>
-						<td align="center" width="8%">
-							<table class="inputtable" cellspacing="0" cellpadding="0">
+						<td align="right" width="3%">至</td>
+						<td align="left" width="5%">
+							<table class="inputtable2" cellspacing="0" cellpadding="0">
 								<tr>
 									<td>
-										<input type="text" id="endTime" name="endTime" style="border:0;height:20px;width:130px;font-size:12px" readonly value="<%=endTime %>"/>
+										<input type="text" id="endTime" name="endTime" style="border:0;height:20px;width:85px;font-size:12px" readonly value="<%=endTime %>"/>
 									<td>
 									<td>
 										<a href="javascript:void(0);" onclick="showDate(document.getElementById('endTime'))"> 
@@ -68,9 +68,9 @@
 							</table>
 						</td>
 						<td width="12%" align="right">科室名称</td>
-						<td width="6%">
+						<td width="5%" align="left">
 							<c:set var="teamList" value="<%=teamList %>"></c:set>
-							<select id="teamId" name="teamId" class="subselect">
+							<select id="teamId" name="teamId" class="subselect2">
 								<option value="">全部</option>
 								<c:forEach items="${teamList }" var="team">
 									<c:if test="${team.expertFlag == '0' }">
@@ -79,9 +79,9 @@
 								</c:forEach>
 							</select>
 						</td>
-						<td width="12%" align="right">订单状态</td>
-						<td width="6%">
-							<select id="state" name="state" class="subselect">
+						<td width="10%" align="right">订单状态</td>
+						<td width="5%" align="left">
+							<select id="state" name="state" class="subselect2">
 								<c:choose>
 									<c:when test="${sessionScope.hospitalId == '101' }">
 										<option value="">全部</option>
@@ -101,8 +101,8 @@
 							</select>
 						</td>
 						<td width="10%" align="right">预约人</td>
-						<td width="8%"><input id="userName" name="userName" class="subtext"/></td>
-						<td width="12%" align="right">
+						<td width="5%" align="left"><input id="userName" name="userName" class="subtext4"/></td>
+						<td width="12%" align="left">
 							<input type="button" onclick="qryRegisterOrder()" class="button3" value="查询" />
 						</td>
 					</tr>

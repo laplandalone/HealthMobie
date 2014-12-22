@@ -26,10 +26,10 @@
 		  			<tr>
 		  				<td align="right" width="12%">创建时间：</td>
 						<td align="center" width="8%">
-							<table class="inputtable" cellspacing="0" cellpadding="0">
+							<table class="inputtable2" cellspacing="0" cellpadding="0">
 								<tr>
 									<td>
-										<input type="text" id="startTime" name="startTime" style="border:0;height:20px;width:130px;font-size:12px" readonly/>
+										<input type="text" id="startTime" name="startTime" style="border:0;height:20px;width:85px;font-size:12px" readonly/>
 									</td>
 									<td>
 										<a href="javascript:void(0);" onclick="showDate(document.getElementById('startTime'))"> 
@@ -39,12 +39,12 @@
 								</tr>
 							</table>
 						</td>
-						<td align="center" width="5%">至</td>
+						<td align="center" width="3%">至</td>
 						<td align="center" width="8%">
-							<table class="inputtable" cellspacing="0" cellpadding="0">
+							<table class="inputtable2" cellspacing="0" cellpadding="0">
 								<tr>
 									<td>
-										<input type="text" id="endTime" name="endTime" style="border:0;height:20px;width:130px;font-size:12px" readonly/>
+										<input type="text" id="endTime" name="endTime" style="border:0;height:20px;width:85px;font-size:12px" readonly/>
 									<td>
 									<td>
 										<a href="javascript:void(0);" onclick="showDate(document.getElementById('endTime'))"> 
@@ -55,19 +55,19 @@
 							</table>
 						</td>
 		  				<td align="center" width="12%">
-		  					<select id="newsType" name="newsType" class="subselect">
+		  					<select id="newsType" name="newsType" class="subselect2">
 		  						<option value="">信息类型</option>
 		  						<option value="NEWS">患教中心</option>
 		  						<option value="BAIKE">就医帮助</option>
 		  					</select>
 		  				</td>
 		  				<td align="center" width="12%">
-		  					<select id="typeId" name="typeId" class="subselect">
+		  					<select id="typeId" name="typeId" class="subselect2">
 		  						<option value="">内容分类</option>
 		  					</select>
 		  				</td>
 		  				<td align="center" width="12%">
-		  					<select id="state" name="state" class="subselect">
+		  					<select id="state" name="state" class="subselect2">
 		  						<option value="">状态</option>
 		  						<option value="00A">正常</option>
 		  						<option value="00X">作废</option>

@@ -94,6 +94,7 @@ input.subtext{width:154px;border:1px solid #C0DC56;background:#fff;}
 input.subtext1{width:620px;border:1px solid #C0DC56;background:#fff;}
 input.subtext2{width:230px;border:1px solid #C0DC56;background:#fff;}
 input.subtext3{width:70px;border:1px solid #C0DC56;background:#fff;}
+input.subtext4{width:100px;border:1px solid #C0DC56;background:#fff;}
 .textarea{border:1px solid #C0DC56;background:#fff;}
 .texttitle{border:1px solid #C0DC56;background:#fff;}
 .subselect{width:154px;border:1px solid #C0DC56;background:#fff; overflow:hidden; height:24px;}
@@ -164,6 +165,13 @@ input.subtext3{width:70px;border:1px solid #C0DC56;background:#fff;}
 	background:#fff; 
 	height:22px;
 	border-bottom:1px solid #C0DC56;
+}
+
+.inputtable2{
+	width:70px;
+	border:1px solid #C0DC56;
+	background:#fff; 
+	height:22px;
 }
 
 .tabletop{background:url(../images/tabletopbg.png) 0 0 repeat-x;}

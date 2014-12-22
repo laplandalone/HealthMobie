@@ -25,12 +25,12 @@
   				<input type="hidden" id="visitType" name="visitType" value="<%=visitType %>"/>
 		  		<table width="100%">
 					<tr>
-						<td align="right" width="10%">随访时间：</td>
+						<td align="right" width="12%">随访时间</td>
 						<td align="center" width="8%">
-							<table class="inputtable" cellspacing="0" cellpadding="0">
+							<table class="inputtable2" cellspacing="0" cellpadding="0">
 								<tr>
 									<td>
-										<input type="text" id="startTime" name="startTime" style="border:0;height:20px;width:130px;font-size:12px" readonly/>
+										<input type="text" id="startTime" name="startTime" style="border:0;height:20px;width:85px;font-size:12px" readonly/>
 									</td>
 									<td>
 										<a href="javascript:void(0);" onclick="showDate(document.getElementById('startTime'))"> 
@@ -42,10 +42,10 @@
 						</td>
 						<td align="center" width="5%">至</td>
 						<td align="center" width="8%">
-							<table class="inputtable" cellspacing="0" cellpadding="0">
+							<table class="inputtable2" cellspacing="0" cellpadding="0">
 								<tr>
 									<td>
-										<input type="text" id="endTime" name="endTime" style="border:0;height:20px;width:130px;font-size:12px" readonly/>
+										<input type="text" id="endTime" name="endTime" style="border:0;height:20px;width:85px;font-size:12px" readonly/>
 									<td>
 									<td>
 										<a href="javascript:void(0);" onclick="showDate(document.getElementById('endTime'))"> 
@@ -55,23 +55,13 @@
 								</tr>
 							</table>
 						</td>
-						<td align="right" width="8%">患者姓名</td>
-						<td width="10%">
-							<input type="text" id="visitName" name="visitName" class="subtext"/>
+						<td align="right" width="12%">患者姓名</td>
+						<td width="8%">
+							<input type="text" id="visitName" name="visitName" class="subtext4"/>
 						</td>
-						<!--  
-						<td align="right" width="8%">随访类别</td>
-						<td width="10%">
-							<select id="visitType" name="visitType" class="subselect">
-								<option value="">全部</option>
-								<option value="asd">先心手术随访</option>
-								<option value="mvr">房颤手术随访</option>
-							</select>
-						</td>
-						-->
-						<td align="right" width="8%">病案号</td>
-						<td width="10%">
-							<input type="text" id="cardId" name="cardId" class="subtext"/>
+						<td align="right" width="10%">病案号</td>
+						<td width="8%">
+							<input type="text" id="cardId" name="cardId" class="subtext4"/>
 						</td>
 						<td align="right" width="10%">
 							<input type="button" class="button3" value="查询" onclick="qryPatientVisit()"/>

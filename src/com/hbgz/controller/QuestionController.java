@@ -51,7 +51,7 @@ public class QuestionController
 				out = response.getWriter();
 				String privs = (String) session.getAttribute("userPrivs");
 				JSONObject object = new JSONObject();
-				if("4".equals(privs))
+				if("4".equals(privs) || "5".equals(privs))
 				{
 					int pageNum = Integer.parseInt(StringUtil.getJSONObjectKeyVal(obj, "curId"));
 					int pageSize = Integer.parseInt(StringUtil.getJSONObjectKeyVal(obj, "pageNum"));
