@@ -31,6 +31,7 @@ import com.hbgz.dao.SaveDB;
 import com.hbgz.dao.UserQustionDao;
 import com.hbgz.model.DoctorRegisterT;
 import com.hbgz.model.HospitalLogT;
+import com.hbgz.model.HospitalManagerT;
 import com.hbgz.model.HospitalNewsT;
 import com.hbgz.model.HospitalUserT;
 import com.hbgz.model.RegisterOrderT;
@@ -884,7 +885,7 @@ public class DigitalHealthService
 	}
 	
 	@ServiceType(value = "BUS20027")
-	public Map getUserWeb(String userName, String password) throws Exception
+	public Map getUser(String userName, String password) throws Exception
 	{
 		if (ObjectCensor.isStrRegular(userName, password))
 		{
@@ -1302,6 +1303,14 @@ public class DigitalHealthService
 	{
 		boolean b= hibernateObjectDao.delete("UserQuestionT", "questionId",questionId);
 		return b;
+	}
+	
+	@ServiceType(value = "BUS20047")
+	public boolean updateHospitalManager(String manager) throws JsonException
+	{
+		HospitalManagerT managerT = (HospitalManagerT) JsonUtils.toBean(manager, HospitalManagerT.class);
+		hibernateObjectDao.update(managerT);
+		return true;
 	}
 	// 查询用户的挂号订单
 	public JSONObject qryRegisterOrder(int pageNum, int pageSize, String hospitalId, String teamId, String startTime, String endTime, String state, String userName) throws Exception
@@ -1834,5 +1843,20 @@ public class DigitalHealthService
 			obj.element("count", count);
 		}
 		return obj;
+	}
+	
+	public Map getUserWeb(String userName, String password) throws Exception
+	{
+		if (ObjectCensor.isStrRegular(userName, password))
+		{
+			List userLst = digitalHealthDao.getHospitalManager(userName, password);
+
+			if (userLst != null && userLst.size() != 0)
+			{
+				Map map =(Map) userLst.get(0);
+				return map;
+			}
+		}
+		return null;
 	}
 }

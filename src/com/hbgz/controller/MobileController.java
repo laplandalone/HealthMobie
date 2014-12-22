@@ -104,7 +104,7 @@ public class MobileController
 			out.close();
 		}
 	}
-	
+	 
 	@RequestMapping(params = "method=uploadFile")
     public void uploadFile(MultipartHttpServletRequest request, HttpServletResponse response) 
 	{
