@@ -24,8 +24,17 @@ public class PatientVisitT implements java.io.Serializable {
 	private String cardId;
 	private String state;
 	private Date createDate;
-
+	private String copyFlag;
 	// Constructors
+
+	@Column(name = "COPY_FLAG", length = 1)
+	public String getCopyFlag() {
+		return copyFlag;
+	}
+
+	public void setCopyFlag(String copyFlag) {
+		this.copyFlag = copyFlag;
+	}
 
 	/** default constructor */
 	public PatientVisitT() {
@@ -38,7 +47,7 @@ public class PatientVisitT implements java.io.Serializable {
 
 	/** full constructor */
 	public PatientVisitT(String visitId, String visitName, String visitType,
-			String patientId, String cardId, String state, Date createDate) {
+			String patientId, String cardId, String state, Date createDate,String copyFlag) {
 		this.visitId = visitId;
 		this.visitName = visitName;
 		this.visitType = visitType;
@@ -46,6 +55,7 @@ public class PatientVisitT implements java.io.Serializable {
 		this.cardId = cardId;
 		this.state = state;
 		this.createDate = createDate;
+		this.copyFlag=copyFlag;
 	}
 
 	// Property accessors

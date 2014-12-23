@@ -34,6 +34,7 @@ import com.hbgz.model.HospitalLogT;
 import com.hbgz.model.HospitalManagerT;
 import com.hbgz.model.HospitalNewsT;
 import com.hbgz.model.HospitalUserT;
+import com.hbgz.model.PatientVisitT;
 import com.hbgz.model.RegisterOrderT;
 import com.hbgz.model.UserContactT;
 import com.hbgz.model.UserQuestionT;
@@ -1310,6 +1311,23 @@ public class DigitalHealthService
 	{
 		HospitalManagerT managerT = (HospitalManagerT) JsonUtils.toBean(manager, HospitalManagerT.class);
 		hibernateObjectDao.update(managerT);
+		return true;
+	}
+	
+	@ServiceType(value = "BUS20048")
+	public boolean addWakeT(String wakeTstr) throws JsonException
+	{
+		WakeT wakeT = (WakeT) JsonUtils.toBean(wakeTstr, WakeT.class);
+		wakeT.setWakeId(BigDecimal.valueOf(sysId.getId()));
+		String visitId=wakeT.getWakeValue();
+		List visitList = hibernateObjectDao.findByProperty("PatientVisitT", "visitId",visitId);
+		if(ObjectCensor.checkListIsNull(visitList))
+		{
+			PatientVisitT patientVisitT = (PatientVisitT) visitList.get(0);
+			patientVisitT.setCopyFlag("Y");
+			hibernateObjectDao.update(patientVisitT);
+		}
+		hibernateObjectDao.save(wakeT);
 		return true;
 	}
 	// 查询用户的挂号订单
