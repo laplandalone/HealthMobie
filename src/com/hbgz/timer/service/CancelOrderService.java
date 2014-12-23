@@ -55,7 +55,7 @@ public class CancelOrderService extends TimerValidateService
 					String platformId=StringUtil.getMapKeyVal(map, "platformOrderId");
 					sql = "update  register_order_t set pay_state='101' where pay_state='100' and order_id='"+orderId+"'";
 					exeList.add(sql);
-					hisService.hisRegisterOrder(id, weekTypeT, "-", platformId);
+					hisService.hisRegisterOrder(id, weekTypeT, "-", platformId,"");
 				}
 				
 				String[] exeSql = new String[exeList.size()];

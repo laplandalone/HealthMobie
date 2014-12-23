@@ -409,7 +409,7 @@ public class DigitalHealthService
 //					String docId = StringUtil.getMapKeyVal(normalMap", "doctorId");
 //				}
 //			}
-		   String  yaXinOrderNum=synHISService.hisRegisterOrder(registerId, registerTime,"+","");
+		   String  yaXinOrderNum=synHISService.hisRegisterOrder(registerId, registerTime,"+","","");
 		   if(ObjectCensor.isStrRegular(yaXinOrderNum))
 		   {
 			  flag = digitalHealthDao.addRegisterOrder(hospitalId,orderId, userId, registerId, doctorId, doctorName,
@@ -811,21 +811,19 @@ public class DigitalHealthService
 				/*取消预约*/
 				if("103".equals(payState) && registerOrder!=null)
 				{
-					
 					String id=registerOrder.getRegisterId();
 					String weekTypeT=registerOrder.getRegisterTime();
 					String platformId=registerOrder.getPlatformOrderId();
-					synHISService.hisRegisterOrder(id, weekTypeT, "-",platformId);
+					synHISService.hisRegisterOrder(id, weekTypeT, "-",platformId,payState);
 					registerOrder.setPayState(payState);
 					hibernateObjectDao.update(registerOrder);
 				}else 
-					/*取消预约*/
 				if("101".equals(payState) && registerOrder!=null)
 				{
 					String id=registerOrder.getRegisterId();
 					String weekTypeT=registerOrder.getRegisterTime();
 					String platformId=registerOrder.getPlatformOrderId();
-					synHISService.hisRegisterOrder(id, weekTypeT, "-",platformId);
+					synHISService.hisRegisterOrder(id, weekTypeT, "-",platformId,payState);
 					registerOrder.setPayState(payState);
 					registerOrder.setPlatformOrderId("0");
 					hibernateObjectDao.update(registerOrder);
@@ -1285,7 +1283,7 @@ public class DigitalHealthService
 				String id=registerOrder.getRegisterId();
 				String weekTypeT=registerOrder.getRegisterTime();
 				String platformId=registerOrder.getPlatformOrderId();
-				synHISService.hisRegisterOrder(id, weekTypeT, "-",platformId);
+				synHISService.hisRegisterOrder(id, weekTypeT, "-",platformId,"101");
 			}
 			hibernateObjectDao.delete(registerOrder);
 		}

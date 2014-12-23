@@ -460,7 +460,7 @@ public class SynHISService {
 	 * @param id-register_id
 	 * @throws Exception
 	 */
-	public String hisRegisterOrder(String id,String weekTypeT,String orderType,String platformOrderId) throws Exception
+	public String hisRegisterOrder(String id,String weekTypeT,String orderType,String platformOrderId,String payState) throws Exception
 	{
 		String weekType="";
 		String userRegisterNum="";
@@ -493,8 +493,8 @@ public class SynHISService {
 				userRegisterNum=e.getChildText("user_register_num");
 			}
 			
-			/*取消预约*/
-			if("-".equals(orderType) && ObjectCensor.isStrRegular(platformOrderId))
+			/*取消预约 退费*/
+			if("-".equals(orderType) && ObjectCensor.isStrRegular(platformOrderId) && "103".equals(payState))
 			{
 				StringBuffer orderSql=new StringBuffer();
 				orderSql.append("<DS>");
@@ -526,16 +526,19 @@ public class SynHISService {
 		
 		/*重新分配序号*/
 		String delb =orderT.getRegisterId();
+		String orderNum=orderT.getOrderNum();
+		int xh=0; /*专家序号*/
+		/*
 		StringBuffer sqlxh=new StringBuffer();
+		
 		sqlxh.append("<DS>");
-		sqlxh.append("<SQL><str>update mz_ghde set  xh   = xh   where id = "+delb+"</str></SQL>");
-		sqlxh.append("<SQL><str>select  xh+1 xh  from mz_ghde where id = "+delb +"</str></SQL>");
-		sqlxh.append("<SQL><str>update mz_ghde set xh   = xh    where id = "+delb+"</str></SQL>");
+		sqlxh.append("<SQL><str>update mz_ghde set  xh   = xh   where id = "+delb +"</str></SQL>");
+		sqlxh.append("<SQL><str>select  xh+1 xh  from mz_ghde   where id = "  +delb +"</str></SQL>");
+		sqlxh.append("<SQL><str>update mz_ghde set xh   = xh    where id = "+delb +"</str></SQL>");
 		sqlxh.append("</DS>");
 		
 		String ss = invokeFunc(sqlxh.toString());
 		
-		int xh=0; /*专家序号*/
 		Document doc = XMLComm.loadXMLString(ss);
 		Element root = doc.getRootElement();
 		List list = root.getChildren();
@@ -546,10 +549,15 @@ public class SynHISService {
 			Element e = (Element) list.get(i);
 			 xhStr=e.getChildText("xh");
 		}
+		*/
 		
-		if(ObjectCensor.isStrRegular(xhStr))
+		if(ObjectCensor.isStrRegular(orderNum))
 		{
-			xh=Integer.parseInt(xhStr);
+			xh=Integer.parseInt(orderNum);
+			if(xh>1000)
+			{
+				xh=xh-1000;
+			}
 		}
 		
 		String doctorId=orderT.getDoctorId();
@@ -605,7 +613,7 @@ public class SynHISService {
 		StringBuffer sql=new StringBuffer("<DS><SQL><str>");
 		sql.append("insert into mz_yydj ");
 		sql.append("(yylsh,xm,xb,csrq,yysj,yyysdm,yyysxm,lxdz,dqsj,czydm,lxdh,yynr,xh,sfzh,sff,ghlbdm) values ");
-		sql.append("('"+id+"','"+orderT.getUserName()+"','"+sex+"','"+birthDay+"','"+registerTime+"','"+orderT.getDoctorId().trim()+"','"+orderT.getDoctorName()+"','"+userAddress+"',GETDATE(),'"+czydm+"','"+orderT.getUserTelephone()+"','掌上亚心',"+xh+",'"+orderT.getUserNo()+"','10','"+yszc+"')");
+		sql.append("('"+id+"','"+orderT.getUserName()+"','"+sex+"','"+birthDay+"','"+registerTime+"','"+orderT.getDoctorId().trim()+"','"+orderT.getDoctorName()+"','"+userAddress+"',GETDATE(),'"+czydm+"','"+orderT.getUserTelephone()+"','掌上亚心',"+orderNum+",'"+orderT.getUserNo()+"','10','"+yszc+"')");
 		sql.append("</str></SQL></DS>");
 		log.error("pay-sql:"+sql);
 		String sss =invokeFunc(sql.toString());
@@ -634,7 +642,9 @@ public class SynHISService {
 		String sqls="<DS><SQL><str>select top 10 delb ,c.bzdm team_id,c.bzmc team_name,kszjdm doctor_id,b.zgxm doctor_name,derq day from mz_ghde a,comm_zgdm b,mz_bzdyb c where a.kszjdm=b.zgid and a.kszjdm=c.ysdm and a.kszjdm='1405R' and derq > '2014.10.20' order by derq  </str></SQL></DS>";
 		String sqla="<DS><SQL><str>select distinct  bzdm team_id ,bzmc team_name from mz_bzdyb order by team_id </str></SQL></DS>";
 		String sss ="<DS><SQL><str>update mz_yydj set  qxf  =  'Y'  where yylsh  = '201411286081'  </str></SQL></DS>";
-		String result =new SynHISService().invokeFunc(sss);
+		String ssss="<DS><SQL><str>select  xh+1 xh  from mz_ghde   where id =1000020274  </str></SQL></DS>";
+		String sssss="<DS><SQL><str>select  jzsc,yszc from mz_bzdyb  where bzdm  = 'sh02' and ysdm ='1854R'</str></SQL></DS>";
+		String result =new SynHISService().invokeFunc(sssss);
 		System.out.println(result);
 //		Document doc = XMLComm.loadXMLString(result);
 //		Element root = doc.getRootElement();
