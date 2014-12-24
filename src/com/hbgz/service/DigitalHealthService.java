@@ -437,13 +437,14 @@ public class DigitalHealthService
 	{
 		UserQuestionT questionT = (UserQuestionT) JsonUtils.toBean(userQuestion, UserQuestionT.class);
 		String questionId=questionT.getQuestionId();
-		questionT.setId(sysId.getId() + "");
-	
-		questionT.setCreateDate(SysDate.getSysDate());
+		
 		if(questionId==null || "".equals(questionId))
 		{
 			questionT.setQuestionId(sysId.getId() + "");
 		}
+		questionT.setId(sysId.getId() + "");
+		userQuestion=JSONObject.fromObject(questionT).toString();
+		questionT.setCreateDate(SysDate.getSysDate());
 		if("ans".equals(questionT.getRecordType()) && "102".equals(questionT.getHospitalId()))
 		{
 			WakeT wakeT = new WakeT();
@@ -458,7 +459,7 @@ public class DigitalHealthService
 			userQustionDao.save(wakeT);
 			JSONObject msgJson = new JSONObject();
 			msgJson.put("title","掌上亚心");
-			msgJson.put("description", "提问回复");
+			msgJson.put("description", "您有新的回复！");
 			msgJson.put("msg_type","ques");
 			msgJson.put("user_id", questionT.getUserId());
 			msgJson.put("custom_param", userQuestion);
@@ -477,7 +478,7 @@ public class DigitalHealthService
 			userQustionDao.save(wakeT);
 			JSONObject msgJson = new JSONObject();
 			msgJson.put("title","掌上亚心");
-			msgJson.put("description", "新的提问");
+			msgJson.put("description", "您有新的提问，请尽快回复！");
 			msgJson.put("msg_type","ques");
 			msgJson.put("user_id", questionT.getDoctorId());
 			msgJson.put("custom_param", userQuestion);
