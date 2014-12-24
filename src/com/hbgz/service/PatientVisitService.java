@@ -45,6 +45,7 @@ public class PatientVisitService
 		return sList;
 	}
 
+	@ServiceType(value = "BUS3002")
 	public List qryVisitDetail(String visitId) throws Exception 
 	{
 		List sList = null;
