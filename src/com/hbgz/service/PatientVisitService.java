@@ -46,16 +46,21 @@ public class PatientVisitService
 	}
 
 	@ServiceType(value = "BUS3002")
-	public List qryVisitDetail(String visitId) throws Exception 
+	public JSONArray qryVisitDetail(String visitId) throws Exception 
 	{
-		List sList = null;
+		JSONArray array = new JSONArray();
 		if(ObjectCensor.isStrRegular(visitId))
 		{
-			sList = digitalHealthDao.qryVisitDetail(visitId);
+			List sList = digitalHealthDao.qryVisitDetail(visitId);
+			if(ObjectCensor.checkListIsNull(sList))
+			{
+				array = JSONArray.fromObject(sList);
+			}
 		}
-		return sList;
+		return array;
 	}
 	
+	@ServiceType(value = "BUS3003")
 	public JSONObject qryPatientVisitById(String visitId) throws Exception 
 	{
 		JSONObject obj = new JSONObject();

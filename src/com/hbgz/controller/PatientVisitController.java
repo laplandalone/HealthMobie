@@ -64,12 +64,12 @@ public class PatientVisitController
 		try 
 		{
 			String visitId = request.getParameter("visitId");
-			List sList = patientVisitService.qryVisitDetail(visitId);
-			log.error(sList);
+			JSONArray array = patientVisitService.qryVisitDetail(visitId);
+			log.error(array);
 			JSONObject obj = patientVisitService.qryPatientVisitById(visitId);
 			log.error(obj);
 			view.setViewName("/view/visit/visitDetail");
-			view.addObject("sList", sList);
+			view.addObject("sList", array);
 			view.addObject("obj", obj);
 		} 
 		catch (Exception e) 
