@@ -482,7 +482,9 @@ public class SynHISService {
 			sql.append("<SQL><str>select "+weekType+" "+orderType+" 1 user_register_num from mz_ghde where id = "+id+"</str></SQL>");
 			sql.append("<SQL><str>update mz_ghde set "+weekType+"  = "+weekType+" "+orderType+" 1 where id = "+id+"</str></SQL>");
 			sql.append("</DS>");
+			log.error(sql);
 			String ss =invokeFunc(sql.toString());
+			log.error(ss);
 			Document doc = XMLComm.loadXMLString(ss);
 			Element root = doc.getRootElement();
 			List list = root.getChildren();
@@ -511,7 +513,7 @@ public class SynHISService {
 				userRegisterNumInt =1000+userRegisterNumInt;
 			}
 		}
-		
+		log.error("userRegisterNumInt:"+userRegisterNumInt);
 		return userRegisterNumInt+"";
 	
 	}

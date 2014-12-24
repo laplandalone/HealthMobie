@@ -454,6 +454,7 @@ public class DigitalHealthService
 			wakeT.setWakeValue("1");
 			wakeT.setState("00A");
 			wakeT.setWakeType("ques");
+			wakeT.setWakeFlag("N");
 			userQustionDao.save(wakeT);
 			JSONObject msgJson = new JSONObject();
 			msgJson.put("title","掌上亚心");
@@ -472,6 +473,7 @@ public class DigitalHealthService
 			wakeT.setWakeValue("1");
 			wakeT.setState("00A");
 			wakeT.setWakeType("ques");
+			wakeT.setWakeFlag("N");
 			userQustionDao.save(wakeT);
 			JSONObject msgJson = new JSONObject();
 			msgJson.put("title","掌上亚心");
@@ -801,6 +803,7 @@ public class DigitalHealthService
 							wakeT.setWakeValue("1");
 							wakeT.setState("00A");
 							wakeT.setWakeType("order");
+							wakeT.setWakeFlag("N");
 							hibernateObjectDao.save(wakeT);
 //							AndroidPushBroadcastMsg.pushMsg("order", msgJson.toString());
 						} 
