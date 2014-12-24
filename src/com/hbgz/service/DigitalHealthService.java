@@ -445,7 +445,7 @@ public class DigitalHealthService
 		questionT.setId(sysId.getId() + "");
 		userQuestion=JSONObject.fromObject(questionT).toString();
 		questionT.setCreateDate(SysDate.getSysDate());
-		if("ans".equals(questionT.getRecordType()) && "102".equals(questionT.getHospitalId()))
+		if("ans".equals(questionT.getRecordType()))
 		{
 			WakeT wakeT = new WakeT();
 			wakeT.setWakeId(BigDecimal.valueOf(sysId.getId()));
@@ -459,12 +459,12 @@ public class DigitalHealthService
 			userQustionDao.save(wakeT);
 			JSONObject msgJson = new JSONObject();
 			msgJson.put("title","掌上亚心");
-			msgJson.put("description", "您有新的回复！");
+			msgJson.put("description", "您的提问,有新的回复！");
 			msgJson.put("msg_type","ques");
 			msgJson.put("user_id", questionT.getUserId());
 			msgJson.put("custom_param", userQuestion);
 			AndroidPushBroadcastMsg.pushMsg("msg", msgJson.toString(),questionT.getHospitalId());
-		}if("ask".equals(questionT.getRecordType()) && "102".equals(questionT.getHospitalId()))
+		}if("ask".equals(questionT.getRecordType()) || "copy".equals(questionT.getRecordType()))
 		{
 			WakeT wakeT = new WakeT();
 			wakeT.setWakeId(BigDecimal.valueOf(sysId.getId()));
