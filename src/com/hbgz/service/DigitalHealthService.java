@@ -447,35 +447,35 @@ public class DigitalHealthService
 		questionT.setCreateDate(SysDate.getSysDate());
 		if("ans".equals(questionT.getRecordType()))
 		{
-			WakeT wakeT = new WakeT();
-			wakeT.setWakeId(BigDecimal.valueOf(sysId.getId()));
-			wakeT.setCreateDate(SysDate.getSysDate());
-			wakeT.setWakeContent(userQuestion);
-			wakeT.setWakeDate(SysDate.getSysDate());
-			wakeT.setWakeValue("1");
-			wakeT.setState("00A");
-			wakeT.setWakeType("ques");
-			wakeT.setWakeFlag("N");
-			userQustionDao.save(wakeT);
+//			WakeT wakeT = new WakeT();
+//			wakeT.setWakeId(BigDecimal.valueOf(sysId.getId()));
+//			wakeT.setCreateDate(SysDate.getSysDate());
+//			wakeT.setWakeContent(userQuestion);
+//			wakeT.setWakeDate(SysDate.getSysDate());
+//			wakeT.setWakeValue("1");
+//			wakeT.setState("00A");
+//			wakeT.setWakeType("ques");
+//			wakeT.setWakeFlag("N");
+//			userQustionDao.save(wakeT);
 			JSONObject msgJson = new JSONObject();
 			msgJson.put("title","掌上亚心");
-			msgJson.put("description", "您的提问,有新的回复！");
+			msgJson.put("description", "您的提问已回复！");
 			msgJson.put("msg_type","ques");
 			msgJson.put("user_id", questionT.getUserId());
 			msgJson.put("custom_param", userQuestion);
-			AndroidPushBroadcastMsg.pushMsg("msg", msgJson.toString(),questionT.getHospitalId());
+			AndroidPushBroadcastMsg.pushMsg("msg", msgJson.toString(),"102");
 		}if("ask".equals(questionT.getRecordType()) || "copy".equals(questionT.getRecordType()))
 		{
-			WakeT wakeT = new WakeT();
-			wakeT.setWakeId(BigDecimal.valueOf(sysId.getId()));
-			wakeT.setCreateDate(SysDate.getSysDate());
-			wakeT.setWakeContent(userQuestion);
-			wakeT.setWakeDate(SysDate.getSysDate());
-			wakeT.setWakeValue("1");
-			wakeT.setState("00A");
-			wakeT.setWakeType("ques");
-			wakeT.setWakeFlag("N");
-			userQustionDao.save(wakeT);
+//			WakeT wakeT = new WakeT();
+//			wakeT.setWakeId(BigDecimal.valueOf(sysId.getId()));
+//			wakeT.setCreateDate(SysDate.getSysDate());
+//			wakeT.setWakeContent(userQuestion);
+//			wakeT.setWakeDate(SysDate.getSysDate());
+//			wakeT.setWakeValue("1");
+//			wakeT.setState("00A");
+//			wakeT.setWakeType("ques");
+//			wakeT.setWakeFlag("N");
+//			userQustionDao.save(wakeT);
 			JSONObject msgJson = new JSONObject();
 			msgJson.put("title","掌上亚心");
 			msgJson.put("description", "您有新的提问，请尽快回复！");

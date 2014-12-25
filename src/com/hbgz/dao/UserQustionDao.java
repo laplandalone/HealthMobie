@@ -66,7 +66,7 @@ public class UserQustionDao extends BaseDao
 		   ans.append(" from  user_question_t t where state='00A' and record_type='copy' and (question_id, create_date) in ");
 		   ans.append(" (select question_id, max(create_date) from user_question_t t where state='00A' and doctor_id = '"+doctorId+"' group by question_id) ) order by create_date desc ");
 		   
-	   } else
+	   } else 
 	   {
 		    sql.append(" union all  ");
 		    
@@ -83,7 +83,8 @@ public class UserQustionDao extends BaseDao
 	    	return itzcQryCenter.executeSqlByMapListWithTrans(ans.toString(), lstParam);
 		}else
 		{
-			return itzcQryCenter.executeSqlByMapListWithTrans(sql.toString(), lstParam);
+			StringBuffer noansSql= new StringBuffer("select distinct(question_id), c.* from ( "+sql+") c");
+			return itzcQryCenter.executeSqlByMapListWithTrans(noansSql.toString(), lstParam);
 		}
 		
 	}
