@@ -9,11 +9,14 @@
 	List teamList = PubData.qryTeamList(hospitalId);
 	Date currentDate = new Date();
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-	String startTime = sdf.format(currentDate);
+	
 	Calendar c = Calendar.getInstance(); 
 	c.setTime(currentDate);
-	c.add(Calendar.DATE, 7);
+	c.add(Calendar.DATE, 10);
 	Date date = c.getTime();
+	c.add(Calendar.DATE, -20);
+	Date startdate = c.getTime();
+	String startTime = sdf.format(startdate);
 	String endTime = sdf.format(date);
 %>
 
