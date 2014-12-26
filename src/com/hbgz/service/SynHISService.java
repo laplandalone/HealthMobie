@@ -523,20 +523,43 @@ public class SynHISService {
 	 * @param orderT
 	 * @throws Exception
 	 */
-	public String addOrderPay(RegisterOrderT orderT) throws Exception
+	public void addOrderPay(RegisterOrderT orderT) throws Exception
 	{
 		
 		/*重新分配序号*/
 		String delb =orderT.getRegisterId();
-		String orderNum=orderT.getOrderNum();
-		int xh=0; /*专家序号*/
-		/*
+//		String orderNum=orderT.getOrderNum();
+		String doctorId=orderT.getDoctorId();
+		String teamId=orderT.getTeamId();
+		String registerTimeT=orderT.getRegisterTime();
+		String orderDay=registerTimeT.substring(0,10);
+		
+		String week=registerTimeT.substring(registerTimeT.length()-2,registerTimeT.length());
+		
+		String weekType="";
+		String xhFlag="";/*预约序号*/
+		String startTime="";/*就诊开始时间*/
+		
+		if("上午".equals(week))
+		{
+			weekType="am";
+			xhFlag="xh";
+			startTime=" 8:00:00";
+		}
+		if("下午".equals(week))
+		{
+			weekType="pm";
+			xhFlag="xwxh";
+			startTime=" 14:00:00";
+		}
+		
+		
 		StringBuffer sqlxh=new StringBuffer();
 		
 		sqlxh.append("<DS>");
-		sqlxh.append("<SQL><str>update mz_ghde set  xh   = xh   where id = "+delb +"</str></SQL>");
-		sqlxh.append("<SQL><str>select  xh+1 xh  from mz_ghde   where id = "  +delb +"</str></SQL>");
-		sqlxh.append("<SQL><str>update mz_ghde set xh   = xh    where id = "+delb +"</str></SQL>");
+		sqlxh.append("<SQL><str>update mz_ghde set  "+xhFlag+"   = "+xhFlag+"   where id = "  +delb +"</str></SQL>");
+		sqlxh.append("<SQL><str>select  "+xhFlag+"   from mz_ghde   where id = "  +delb +"</str></SQL>");
+		sqlxh.append("<SQL><str>update mz_ghde set "+xhFlag+"  = "+xhFlag+"+1    where id = "  +delb +"</str></SQL>");
 		sqlxh.append("</DS>");
 		
 		String ss = invokeFunc(sqlxh.toString());
@@ -548,22 +571,22 @@ public class SynHISService {
 		String xhStr="";
 		for (int i = 0; i < list.size(); i++)
 		{
-			Element e = (Element) list.get(i);
-			 xhStr=e.getChildText("xh");
+			 Element e = (Element) list.get(i);
+			 	if("am".equals(weekType))
+				{
+			 		xhStr=e.getChildText("xh");
+				}else
+				{
+					xhStr=e.getChildText("xwxh");
+				}
+			 
 		}
-		*/
 		
-		if(ObjectCensor.isStrRegular(orderNum))
+		int xh=0; /*专家序号,用户预约号*/
+		if(ObjectCensor.isStrRegular(xhStr))
 		{
-			xh=Integer.parseInt(orderNum);
-			if(xh>1000)
-			{
-				xh=xh-1000;
-			}
+			xh=Integer.parseInt(xhStr);
 		}
-		
-		String doctorId=orderT.getDoctorId();
-		String teamId=orderT.getTeamId();
 		
 		StringBuffer sqljzsc =new StringBuffer();
 		sqljzsc.append("<DS>");
@@ -588,12 +611,13 @@ public class SynHISService {
 		{
 			jzscInt=Integer.parseInt(jzsc);
 		}
+		 
 		jzscInt=jzscInt*xh;
 		
 		int afterHour=jzscInt/60;
 		int afterMinute=jzscInt%60;
-		String orderDay=orderT.getRegisterTime().substring(0,10);
-		Date registerDate=DateUtils.afterNTime(orderDay, afterHour, afterMinute);/*计算精确就诊时间*/
+	
+		Date registerDate=DateUtils.afterNTime(orderDay,startTime,afterHour, afterMinute);/*计算精确就诊时间*/
 		String registerTime=DateUtils.CHN_DATE_TIME_EXTENDED_FORMAT.format(registerDate);
 		
 		String currentDay=DateUtils.getORA_DATE_FORMAT();
@@ -612,14 +636,22 @@ public class SynHISService {
 		String userAddress="无";
 		String czydm="";/*操作员*/
 		
+		if("pm".equals(weekType))
+		{
+			xh=xh+1000;
+		}
+		
 		StringBuffer sql=new StringBuffer("<DS><SQL><str>");
 		sql.append("insert into mz_yydj ");
 		sql.append("(yylsh,xm,xb,csrq,yysj,yyysdm,yyysxm,lxdz,dqsj,czydm,lxdh,yynr,xh,sfzh,sff,ghlbdm) values ");
-		sql.append("('"+id+"','"+orderT.getUserName()+"','"+sex+"','"+birthDay+"','"+registerTime+"','"+orderT.getDoctorId().trim()+"','"+orderT.getDoctorName()+"','"+userAddress+"',GETDATE(),'"+czydm+"','"+orderT.getUserTelephone()+"','掌上亚心',"+orderNum+",'"+orderT.getUserNo()+"','10','"+yszc+"')");
+		sql.append("('"+id+"','"+orderT.getUserName()+"','"+sex+"','"+birthDay+"','"+registerTime+"','"+orderT.getDoctorId().trim()+"','"+orderT.getDoctorName()+"','"+userAddress+"',GETDATE(),'"+czydm+"','"+orderT.getUserTelephone()+"','掌上亚心',"+xh+",'"+orderT.getUserNo()+"','10','"+yszc+"')");
 		sql.append("</str></SQL></DS>");
 		log.error("pay-sql:"+sql);
-		String sss =invokeFunc(sql.toString());
-		return id;
+		invokeFunc(sql.toString());
+		orderT.setPayState("102");
+		orderT.setPlatformOrderId(id);
+		orderT.setOrderNum(xh+"");
+		hibernateObjectDao.update(orderT);
 	}
 	
 	

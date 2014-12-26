@@ -582,16 +582,16 @@ import java.util.Map;
   * @return
  * @throws ParseException 
   */
- public static Date afterNTime(String dateStr,int hour,int minute) throws ParseException 
+ public static Date afterNTime(String dateStr,String stateTime,int hour,int minute) throws ParseException 
  {
 
-   Date registerDate = DateUtils.CHN_DATE_TIME_FORMAT.parse(dateStr+" 11:00:00");
+   Date registerDate = DateUtils.CHN_DATE_TIME_FORMAT.parse(dateStr+stateTime);
    
    Calendar calendar = Calendar.getInstance();
 
    calendar.setTime(registerDate);
 
-   calendar.add(Calendar.DATE, hour);
+   calendar.add(Calendar.HOUR, hour);
 
    calendar.add(Calendar.MINUTE, minute);
    
@@ -602,7 +602,7 @@ import java.util.Map;
  } 
    public static void main(String[] args) throws ParseException 
    {
-	   System.out.println(DateUtils.afterNTime("2014-09-08", 1, 1));
+	   System.out.println(DateUtils.afterNTime("2014-09-08","", 1, 1));
 	   System.out.println(DateUtils.getSpecifiedDayBefore("2014-09-08"));
 	   System.out.println("2014-12-09  ÐÇÆÚ¶þ ÉÏÎç".substring(0, 10));
    }

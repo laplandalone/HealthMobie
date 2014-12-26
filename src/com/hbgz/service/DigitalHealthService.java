@@ -775,37 +775,34 @@ public class DigitalHealthService
 				
 				if("102".equals(payState) && registerOrder!=null)
 				{
-					 String id = synHISService.addOrderPay(registerOrder);
-					 registerOrder.setPayState(payState);
-					 registerOrder.setPlatformOrderId(id);
-					 hibernateObjectDao.update(registerOrder);
+					 synHISService.addOrderPay(registerOrder);
 					 
 					 List orders = hibernateObjectDao.findByProperty("RegisterOrderT", "orderId",orderId);
-						if (ObjectCensor.checkListIsNull(orders))
-						{
-							RegisterOrderT orderT = (RegisterOrderT) orders.get(0);
+					 if (ObjectCensor.checkListIsNull(orders))
+					 {
+						RegisterOrderT orderT = (RegisterOrderT) orders.get(0);
 
-							JSONObject msgJson = new JSONObject();
-							msgJson.put("title", "掌上亚心");
-							msgJson.put("description", "预约提醒");
-							msgJson.put("msg_type","order");
-							msgJson.put("user_id", orderT.getUserId());
-							msgJson.put("custom_param", JsonUtils.fromObject(orderT));
-							
-							String time = orderT.getRegisterTime().substring(0,10);
-							
-							Date wakeDate = DateUtils.getSpecifiedDayBefore(time);
-							
-							WakeT wakeT = new WakeT();
-							wakeT.setWakeId(BigDecimal.valueOf(sysId.getId()));
-							wakeT.setCreateDate(SysDate.getSysDate());
-							wakeT.setWakeContent(msgJson.toString());
-							wakeT.setWakeDate(SysDate.getFormatSimpleDate(wakeDate));
-							wakeT.setWakeValue("1");
-							wakeT.setState("00A");
-							wakeT.setWakeType("order");
-							wakeT.setWakeFlag("N");
-							hibernateObjectDao.save(wakeT);
+						JSONObject msgJson = new JSONObject();
+						msgJson.put("title", "掌上亚心");
+						msgJson.put("description", "预约提醒");
+						msgJson.put("msg_type","order");
+						msgJson.put("user_id", orderT.getUserId());
+						msgJson.put("custom_param", JsonUtils.fromObject(orderT));
+						
+						String time = orderT.getRegisterTime().substring(0,10);
+						
+						Date wakeDate = DateUtils.getSpecifiedDayBefore(time);
+						
+						WakeT wakeT = new WakeT();
+						wakeT.setWakeId(BigDecimal.valueOf(sysId.getId()));
+						wakeT.setCreateDate(SysDate.getSysDate());
+						wakeT.setWakeContent(msgJson.toString());
+						wakeT.setWakeDate(SysDate.getFormatSimpleDate(wakeDate));
+						wakeT.setWakeValue("1");
+						wakeT.setState("00A");
+						wakeT.setWakeType("order");
+						wakeT.setWakeFlag("N");
+						hibernateObjectDao.save(wakeT);
 //							AndroidPushBroadcastMsg.pushMsg("order", msgJson.toString());
 						} 
 						
