@@ -136,4 +136,14 @@ public class HibernateObjectDao extends BaseDao
 		String hql = "from WakeT as model where  model.state='00A' and model.userId=? and model.wakeType='notice'";
 		return this.find(hql, new String[]{ userId});
 	}
+	
+	public List<UserRelateT> qryUserWakeById(String visitId)
+	{
+		if (!ObjectCensor.isStrRegular(visitId))
+		{
+			return null;
+		}
+		String hql = "from WakeT as model where  model.state='00A' and model.wakeValue=? and model.wakeType='notice'";
+		return this.find(hql, new String[]{ visitId});
+	}
 }

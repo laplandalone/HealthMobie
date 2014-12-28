@@ -1326,6 +1326,7 @@ public class DigitalHealthService
 			patientVisitT.setCopyFlag("Y");
 			hibernateObjectDao.update(patientVisitT);
 		}
+		wakeT.setCreateDate(new Date());
 		hibernateObjectDao.save(wakeT);
 		return true;
 	}
@@ -1344,6 +1345,14 @@ public class DigitalHealthService
 	public JSONArray getUserWake(String userId) throws Exception
 	{
 		List list =hibernateObjectDao.qryUserWake(userId);
+		JSONArray jsonArray = JsonUtils.fromArray(list);
+		return jsonArray;
+		
+	}
+	@ServiceType(value = "BUS20051")
+	public JSONArray getUserWakeById(String visitId) throws Exception
+	{
+		List list =hibernateObjectDao.qryUserWakeById(visitId);
 		JSONArray jsonArray = JsonUtils.fromArray(list);
 		return jsonArray;
 		
