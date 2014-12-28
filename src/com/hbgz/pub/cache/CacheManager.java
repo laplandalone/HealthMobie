@@ -106,6 +106,20 @@ public class CacheManager
 		return null;
 	}
 	
+	public List getConfigByType(String hospitalId, String configType) throws Exception
+	{
+		List list = sysCacheDao.getHospitalConfig();
+		HashMap mapComp = new HashMap();
+		mapComp.put("hospitalId",hospitalId);
+		mapComp.put("configType", configType);
+		List subList = StringUtil.getSubMapList(list, mapComp);
+		if(ObjectCensor.checkListIsNull(subList))
+		{
+			return subList;
+		}
+		return null;
+	}
+	
 	public Map getAuthCode(String accNbr)
 	{
 		return sysCacheDao.getAuthCode(accNbr);

@@ -12,6 +12,7 @@ import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.hbgz.model.PatientVisitT;
 import com.hbgz.pub.exception.QryException;
 import com.hbgz.pub.qry.QryCenter;
 import com.hbgz.pub.util.ObjectCensor;
@@ -999,5 +1000,12 @@ public class DigitalHealthDao
 		}
 		query.append("group by telephone, hospital_id) b left join hospital_user_t a on a.telephone = b.telephone and a.state = '00A') ");
 		return itzcQryCenter.executeSqlByMapListWithTrans(query.toString(), lstParam);
+	}
+	
+	public List  qryPatientVisits() throws QryException
+	{
+		String sql = "select p.*,t.config_val  name from hospital_config_t t ,patient_visit_t p where t.config_name=p.visit_type";
+		ArrayList lstParam = new ArrayList();
+		return itzcQryCenter.executeSqlByMapListWithTrans(sql, lstParam);
 	}
 }

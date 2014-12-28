@@ -1329,6 +1329,25 @@ public class DigitalHealthService
 		hibernateObjectDao.save(wakeT);
 		return true;
 	}
+	
+	@ServiceType(value = "BUS20049")
+	public JSONArray getHospitalConfig(String hospitalId,String configType) throws Exception
+	{
+		CacheManager cacheManager = (CacheManager) BeanFactoryHelper.getBean("cacheManager");
+		List list =cacheManager.getConfigByType(hospitalId, configType);
+		JSONArray jsonArray = JsonUtils.fromArray(list);
+		return jsonArray;
+		
+	}
+	
+	@ServiceType(value = "BUS20050")
+	public JSONArray getUserWake(String userId) throws Exception
+	{
+		List list =hibernateObjectDao.qryUserWake(userId);
+		JSONArray jsonArray = JsonUtils.fromArray(list);
+		return jsonArray;
+		
+	}
 	// 查询用户的挂号订单
 	public JSONObject qryRegisterOrder(int pageNum, int pageSize, String hospitalId, String teamId, String startTime, String endTime, String state, String userName) throws Exception
 	{

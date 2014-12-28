@@ -30,19 +30,9 @@ public class PatientVisitService
 	@ServiceType(value = "BUS3001")
 	public JSONArray getVisitPatients()throws QryException
 	{
-		List<PatientVisitT> patientVisits = hibernateObjectDao.qryPatientVisits();
-		JSONArray jsonArray = JsonUtils.fromArray(patientVisits);
+		List patientVisits = digitalHealthDao.qryPatientVisits();
+		JSONArray jsonArray = JsonUtils.fromArrayTimestamp(patientVisits);
 		return jsonArray;
-	}
-	
-	public List qryPatientVisitList(String startTime, String endTime, String visitName, String visitType, String cardId) throws Exception
-	{
-		List sList = null;
-		if(ObjectCensor.isStrRegular(startTime, endTime))
-		{
-			sList = digitalHealthDao.qryPatientVisitList(startTime, endTime, visitName, visitType, cardId);
-		}
-		return sList;
 	}
 
 	@ServiceType(value = "BUS3002")
@@ -73,6 +63,16 @@ public class PatientVisitService
 			}
 		}
 		return obj;
+	}
+	
+	public List qryPatientVisitList(String startTime, String endTime, String visitName, String visitType, String cardId) throws Exception
+	{
+		List sList = null;
+		if(ObjectCensor.isStrRegular(startTime, endTime))
+		{
+			sList = digitalHealthDao.qryPatientVisitList(startTime, endTime, visitName, visitType, cardId);
+		}
+		return sList;
 	}
 
 	public JSONObject qryUserList(int pageNum, int pageSize, String userName, String sex, String telephone) throws Exception 
