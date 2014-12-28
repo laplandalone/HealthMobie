@@ -157,7 +157,9 @@ public class NewsController
 			String expDate = request.getParameter("expDate");
 			String newsContent = request.getParameter("newsContent");
 			String newsImageUrl = request.getParameter("newsImageUrl");
-			String retVal = digitalHealthService.addNews(hospitalId, newsId, newsType, typeId, newsTitle, effDate, expDate, newsContent, newsImageUrl);
+			String urlText = request.getParameter("urlText");
+			String url = request.getParameter("url");
+			String retVal = digitalHealthService.addNews(hospitalId, newsId, newsType, typeId, newsTitle, effDate, expDate, newsContent, newsImageUrl, urlText, url);
 			PrintWriter out = response.getWriter();
 			log.error(retVal);
 			out.println(retVal);
@@ -187,8 +189,10 @@ public class NewsController
 			String newsImageUrl = request.getParameter("newsImageUrl");
 			String state = request.getParameter("state");
 			String oldNewsId = request.getParameter("oldNewsId");
+			String urlText = request.getParameter("urlText");
+			String url = request.getParameter("url");
 			log.error(oldNewsId);
-			String retVal = digitalHealthService.updateNews(hospitalId, newsId, newsType, typeId, newsTitle, effDate, expDate, newsContent, newsImageUrl, state, oldNewsId);
+			String retVal = digitalHealthService.updateNews(hospitalId, newsId, newsType, typeId, newsTitle, effDate, expDate, newsContent, newsImageUrl, state, oldNewsId, urlText, url);
 			PrintWriter out = response.getWriter();
 			log.error(retVal);
 			out.println(retVal);

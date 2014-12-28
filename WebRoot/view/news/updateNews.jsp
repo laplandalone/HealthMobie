@@ -118,11 +118,13 @@
 					newsImageUrl = $("#newsImages").val();
 				}
 				var pageNum = $("#pageNum").val();
+				var urlText = $("#urlText").val();
+				var url = $("#url").val();
 				var dig = null;
 				$.ajax({
 					type:"POST",
 					url:"/news.htm?method=updateNews",
-					data:"newsId="+newsId+"&newsType="+newsType+"&typeId="+typeId+"&newsTitle="+newsTitle+"&effDate="+effDate+"&expDate="+expDate+"&newsContent="+newsContent+"&newsImageUrl="+newsImageUrl+"&state="+state+"&oldNewsId="+oldNewsId,
+					data:"newsId="+newsId+"&newsType="+newsType+"&typeId="+typeId+"&newsTitle="+newsTitle+"&effDate="+effDate+"&expDate="+expDate+"&newsContent="+newsContent+"&newsImageUrl="+newsImageUrl+"&state="+state+"&oldNewsId="+oldNewsId+"&urlText="+urlText+"&url="+url,
 					beforeSend : function()
 					{
 						dig = new W.$.dialog({parent:api, title:"正在修改请等待...",esc:false,min:false,max:false,lock:true});
@@ -256,6 +258,18 @@
     					<input id="newsTitle" class="subtext" type="text" style="width: 99%; height: 20px;" value="${news.newsTitle }"/>
     				</td>
     			</tr>
+    			<tr>
+					<td width="12%" align="right">链接文字</td>
+					<td colspan="5">
+						<input type="text" id="urlText" name="urlText" class="subtext" style="width: 99%; height: 20px;" value="${news.urlText }"/>
+					</td>
+				</tr>
+				<tr>
+					<td width="12%" align="right">链接地址</td>
+					<td colspan="5">
+						<input type="text" id="url" name="url" class="subtext" style="width: 99%; height: 20px;" value="${news.url }"/>
+					</td>
+				</tr>
     			<tr>
     				<td width="12%" align="right">生效时间</td>
     				<td width="30%">

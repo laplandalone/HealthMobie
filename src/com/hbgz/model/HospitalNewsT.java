@@ -35,6 +35,8 @@ public class HospitalNewsT implements java.io.Serializable
 	private Timestamp effDate;
 	private Timestamp expDate;
 	private String typeName;
+	private String urlText;
+	private String url;
 	// Constructors
 
 	@Transient
@@ -49,6 +51,28 @@ public class HospitalNewsT implements java.io.Serializable
 	/** default constructor */
 	public HospitalNewsT()
 	{
+	}
+	
+	@Column(name = "URL_TEXT", length = 200)
+	public String getUrlText()
+	{
+		return this.urlText;
+	}
+
+	public void setUrlText(String urlText)
+	{
+		this.urlText = urlText;
+	}
+	
+	@Column(name = "URL", length = 200)
+	public String getUrl()
+	{
+		return this.url;
+	}
+
+	public void setUrl(String url)
+	{
+		this.url = url;
 	}
 
 	@Column(name = "EFF_DATE")

@@ -1617,7 +1617,7 @@ public class DigitalHealthService
 		return flag;
 	}
 
-	public String addNews(String hospitalId, String newsId, String newsType, String typeId, String newsTitle, String effDate, String expDate, String newsContent, String imageUrl) throws Exception 
+	public String addNews(String hospitalId, String newsId, String newsType, String typeId, String newsTitle, String effDate, String expDate, String newsContent, String imageUrl, String urlText, String url) throws Exception 
 	{
 		if(!ObjectCensor.isStrRegular(newsId))
 		{
@@ -1635,6 +1635,8 @@ public class DigitalHealthService
 		hospitalNewsT.setNewsContent(newsContent.getBytes("GBK"));
 		hospitalNewsT.setState("00A");
 		hospitalNewsT.setNewsImages(imageUrl);
+		hospitalNewsT.setUrlText(urlText);
+		hospitalNewsT.setUrl(url);
 		hibernateObjectDao.save(hospitalNewsT);
 		
 		if("102".equals(hospitalId))
@@ -1696,7 +1698,7 @@ public class DigitalHealthService
 	public String updateNews(String hospitalId, String newsId, String newsType,
 			String typeId, String newsTitle, String effDate, String expDate,
 			String newsContent, String newsImageUrl, String state,
-			String oldNewsId) throws UnsupportedEncodingException, QryException 
+			String oldNewsId, String urlText, String url) throws UnsupportedEncodingException, QryException 
 	{
 		List<HospitalNewsT> sList = hibernateObjectDao.getNewsById(hospitalId, oldNewsId);
 		if(ObjectCensor.checkListIsNull(sList))
@@ -1726,6 +1728,8 @@ public class DigitalHealthService
 //				newsImageUrl += "," + imageUrl;
 //			}
 			newHospitalNewsT.setNewsImages(newsImageUrl);
+			newHospitalNewsT.setUrlText(urlText);
+			newHospitalNewsT.setUrl(url);
 			hibernateObjectDao.save(newHospitalNewsT);
 //			if("00X".equals(state) && !state.equals(hospitalNewsT.getState()))
 //			{

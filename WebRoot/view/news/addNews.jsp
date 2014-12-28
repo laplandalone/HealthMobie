@@ -124,11 +124,13 @@
 				var expDate = $("#expDate").val();
 				var newsContent = $("#newsContent").val();
 				var newsImageUrl = $("#newsImageUrl").val();
+				var urlText = $("#urlText").val();
+				var url = $("#url").val();
 				var dig = null;
 				$.ajax({
 					type:"POST",
 					url:"/news.htm?method=addNews",
-					data:"newsId="+newsId+"&newsType="+newsType+"&typeId="+typeId+"&newsTitle="+newsTitle+"&effDate="+effDate+"&expDate="+expDate+"&newsContent="+newsContent+"&newsImageUrl="+newsImageUrl,
+					data:"newsId="+newsId+"&newsType="+newsType+"&typeId="+typeId+"&newsTitle="+newsTitle+"&effDate="+effDate+"&expDate="+expDate+"&newsContent="+newsContent+"&newsImageUrl="+newsImageUrl+"&urlText="+urlText+"&url="+url,
 					beforeSend : function()
 					{
 						dig = new W.$.dialog({parent:api, title:"正在新增请等待...",esc:false,min:false,max:false,lock:true});
@@ -239,6 +241,18 @@
     				<td colspan="3">
     					<input id="newsTitle" name="newsTitle" class="subtext" type="text" style="width: 86%; height: 20px;"/>
     				</td>
+				</tr>
+				<tr>
+					<td width="12%" align="right">链接文字</td>
+					<td colspan="3">
+						<input type="text" id="urlText" name="urlText" class="subtext" style="width: 86%; height: 20px;"/>
+					</td>
+				</tr>
+				<tr>
+					<td width="12%" align="right">链接地址</td>
+					<td colspan="3">
+						<input type="text" id="url" name="url" class="subtext" style="width: 86%; height: 20px;"/>
+					</td>
 				</tr>
 				<tr>
 					<td width="12%" align="right">生效时间</td>
