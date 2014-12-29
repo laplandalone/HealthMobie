@@ -151,7 +151,7 @@ function showList(val) {
 	btnpre.disabled = false;
 	var treeNum = document.getElementById("treeNum");
 	//
-	qryPaging(val)
+	qryPaging(val);
 	//
 	showNode(gcurTag);
 	gcurTag = val;
