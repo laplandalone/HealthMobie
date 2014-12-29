@@ -838,7 +838,9 @@ public class DigitalHealthDao
 	{
 		StringBuffer sql = new StringBuffer();
 		sql.append("select (select distinct code_name from code_name_t where state = '00A' and code_type = 'PATIENT_VISIT_T' and code_flag = a.code_flag) code_flag_val, ");
-		sql.append("(select code_val_flag from code_name_t where state = '00A' and code_type = 'PATIENT_VISIT_T' and code_flag = a.code_flag and code_val = a.code_val) code_val_flag ");
+		sql.append("decode((select code_val from (select code_val, code_flag from code_name_t where state = '00A' and code_type = 'PATIENT_VISIT_T') where code_flag = a.code_flag and rownum <= 1), ");
+		sql.append("null, (a.code_val || (select code_val_flag from code_name_t where state = '00A' and code_type = 'PATIENT_VISIT_T' and code_flag = a.code_flag)), ");
+		sql.append("(select code_val_flag from code_name_t where state = '00A' and code_type = 'PATIENT_VISIT_T' and code_flag = a.code_flag and code_val = a.code_val)) code_val_flag ");
 		sql.append("from patient_visit_detail_t a where state = '00A' and visit_id = ? order by create_date ");
 		ArrayList lstParam = new ArrayList();
 		lstParam.add(visitId);
