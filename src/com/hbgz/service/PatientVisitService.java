@@ -28,9 +28,9 @@ public class PatientVisitService
 	private HibernateObjectDao hibernateObjectDao;
 	
 	@ServiceType(value = "BUS3001")
-	public JSONArray getVisitPatients()throws QryException
+	public JSONArray getVisitPatients(String copyFlag)throws QryException
 	{
-		List patientVisits = digitalHealthDao.qryPatientVisits();
+		List patientVisits = digitalHealthDao.qryPatientVisits(copyFlag);
 		JSONArray jsonArray = JsonUtils.fromArrayTimestamp(patientVisits);
 		return jsonArray;
 	}

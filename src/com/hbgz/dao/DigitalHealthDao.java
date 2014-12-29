@@ -1004,10 +1004,11 @@ public class DigitalHealthDao
 		return itzcQryCenter.executeSqlByMapListWithTrans(query.toString(), lstParam);
 	}
 	
-	public List  qryPatientVisits() throws QryException
+	public List  qryPatientVisits(String copyFlag) throws QryException
 	{
-		String sql = "select p.*,t.config_val  name from hospital_config_t t ,patient_visit_t p where t.config_name=p.visit_type";
+		String sql = "select p.*,t.config_val  name from hospital_config_t t ,patient_visit_t p where t.config_name=p.visit_type and p.copy_flag=?";
 		ArrayList lstParam = new ArrayList();
+		lstParam.add(copyFlag);
 		return itzcQryCenter.executeSqlByMapListWithTrans(sql, lstParam);
 	}
 }
