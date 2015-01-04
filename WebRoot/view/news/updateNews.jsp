@@ -141,12 +141,11 @@
 						}
 						if(data)
 						{
-							$.dialog({parent:api, title:false, width:"150px", esc:false, height:"60px", zIndex:2000, icon:'succ.png', lock:true, content:'成功修改信息!', ok:function() {api.close(); return true;}});
-							W.reload(pageNum);
+							$.dialog({parent:api, title:false, width:"150px", esc:false, height:"60px", zIndex:9000, icon:'succ.png', lock:true, content:'成功修改信息!', ok:function() {W.reload(pageNum); api.close(); return true;}});
 						}
 						else
 						{
-							$.dialog({parent:api, title:false, width:"150px", esc:false, height:"60px", zIndex:2000, icon:'fail.png', lock:true, content:'修改信息失败!', ok:function() {api.close(); return true;}});
+							$.dialog({parent:api, title:false, width:"150px", esc:false, height:"60px", zIndex:9000, icon:'fail.png', lock:true, content:'修改信息失败!', ok:function() {api.close(); return true;}});
 						}
 					},
 					error:function(stata)
@@ -166,8 +165,6 @@
 			
 			function cancel()
 			{
-				var pageNum = $("#pageNum").val();
-				W.reload(pageNum);
 				if($("#fileName").val() != null && $("#fileName").val() != undefined && $("#fileName").val() != "")
 		    	{
 		    		$("#fileName").uploadify("cancel", "*");
