@@ -149,7 +149,6 @@ function showList(val) {
 	}
 	btnnex.disabled = false;
 	btnpre.disabled = false;
-	var treeNum = document.getElementById("treeNum");
 	//
 	qryPaging(val);
 	//

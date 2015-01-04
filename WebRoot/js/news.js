@@ -150,7 +150,7 @@ function qryPaging(val)
 }
 
 function updateNews(newsId)
-{
+{ 
 	lockScreen();
 	$.dialog({title:"修改", content:"url:/news.htm?method=getNewsById&newsId="+newsId+"&pageNum="+gcurTag, min:false, max:false, lock:true, close:function(){unlockScreen();}});
 }

@@ -60,6 +60,7 @@ public class NewsController
 		PrintWriter out = null;
 		try
 		{
+			log.error(obj);
 			out = response.getWriter();
 			HttpSession session = request.getSession();
 			String hospitalId= (String)session.getAttribute("hospitalId");
@@ -73,6 +74,7 @@ public class NewsController
 				String typeId = StringUtil.getJSONObjectKeyVal(obj, "typeId");
 				String state = StringUtil.getJSONObjectKeyVal(obj, "state");
 				JSONObject object = digitalHealthService.qryNewsList(pageNum, pageSize, hospitalId, startTime, endTime, newsType, typeId, state);
+				log.error(object);
 				out.println(object);
 			}
 			else
