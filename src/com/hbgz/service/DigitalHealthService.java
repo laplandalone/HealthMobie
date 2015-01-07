@@ -1357,6 +1357,38 @@ public class DigitalHealthService
 		return jsonArray;
 		
 	}
+	
+	@ServiceType(value = "BUS20052")
+	public JSONObject getRegisterByTeamId(String teamId) throws Exception
+	{
+		List doctorList = digitalHealthDao.getDoctorByType("1", null, teamId);
+		
+		List list =synHISService.synTimeRegister();
+		List doctorTList = new ArrayList();
+		
+		if(ObjectCensor.checkListIsNull(list))
+		{
+				for(int n=0;n<doctorList.size();n++)
+				{
+					Map mapT = (Map) doctorList.get(n);
+					String nameT = StringUtil.getMapKeyVal(mapT,"name");
+					for(int m=0;m<list.size();m++)
+					{
+						Map map = (Map) list.get(m);
+						String name = StringUtil.getMapKeyVal(map,"doctorName");
+						if(nameT.equals(name) && !doctorTList.contains(mapT))
+						{
+							doctorTList.add(mapT);
+						}
+					}
+				}
+			}
+		
+		JSONObject obj = new JSONObject();
+		obj.element("doctors", doctorTList);
+		return obj;
+	}
+	
 	// 查询用户的挂号订单
 	public JSONObject qryRegisterOrder(int pageNum, int pageSize, String hospitalId, String teamId, String startTime, String endTime, String state, String userName) throws Exception
 	{

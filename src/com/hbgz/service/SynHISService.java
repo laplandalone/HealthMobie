@@ -659,7 +659,7 @@ public class SynHISService {
 	{
 //		String sql="<DS><SQL><str>select a.id,c.bzmc team_name,c.bzdm team_id,kszjdm doctor_id,derq day,swdes,ylrs,swyyrs ,swdes-ylrs-swyyrs am_num,xwdes-xwylrs-xwyyrs pm_num  from mz_ghde a, mz_bzdyb c where derq='2014.09.30' and a.kszjdm=c.ysdm and kszjdm='0629R' </str></SQL></DS>";
 //		String sql="<DS><SQL><str>select distinct bzmc  from mz_bzdyb c order by bzmc </str></SQL></DS>";
-		String sql="<DS><SQL><str>select distinct  bzdm team_id ,bzmc team_name from mz_bzdyb  </str></SQL></DS>";
+		
 //		String sql="<DS><SQL><str>select  yxf ,delb ,c.bzdm team_id,c.bzmc team_name,kszjdm doctor_id,b.zgxm doctor_name,derq day from mz_ghde a,comm_zgdm b,mz_bzdyb c where a.kszjdm=b.zgid and a.kszjdm=c.ysdm  and derq between  '2014.10.10' and '2014.10.16' order by c.bzdm  </str></SQL></DS>";
 		
 //		StringBuffer sql=new StringBuffer("<DS>");
@@ -678,7 +678,8 @@ public class SynHISService {
 		String sss ="<DS><SQL><str>update mz_yydj set  qxf  =  'Y'  where yylsh  = '201411286081'  </str></SQL></DS>";
 		String ssss="<DS><SQL><str>select  xh+1 xh  from mz_ghde   where id =1000020274  </str></SQL></DS>";
 		String sssss="<DS><SQL><str>select  jzsc,yszc from mz_bzdyb  where bzdm  = 'sh02' and ysdm ='1854R'</str></SQL></DS>";
-		String result =new SynHISService().invokeFunc(sssss);
+		String sql="<DS><SQL><str>select distinct  bzdm team_id ,bzmc team_name from mz_bzdyb  </str></SQL></DS>";
+		String result =new SynHISService().invokeFunc(sql);
 		System.out.println(result);
 //		Document doc = XMLComm.loadXMLString(result);
 //		Element root = doc.getRootElement();
