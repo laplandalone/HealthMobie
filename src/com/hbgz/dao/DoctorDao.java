@@ -29,7 +29,7 @@ public class DoctorDao extends BaseDao
 	{
 		StringBuffer sql = new StringBuffer();
 		sql.append("SELECT * FROM (SELECT A.*, ROWNUM ROWNUMBER FROM (");
-		sql.append("select t.doctor_id, t.hospital_id, t.telephone, t.post, t.name, ");
+		sql.append("select t.doctor_id, t.hospital_id, t.telephone, t.post, t.name, t.register_fee, ");
 		sql.append("t.sex, decode(t.expert_flag, '0', '×¨¼Ò') expert_flag, a.team_name ");
 		sql.append("from doctor_t t, team_t a where a.team_id = t.team_id and t.hospital_id = ? and t.state = '00A' and a.expert_flag = '1' ");
 		ArrayList lstParam = new ArrayList();

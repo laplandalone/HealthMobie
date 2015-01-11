@@ -42,7 +42,7 @@ function createTable(data, flagParam)
 {
 	var content = "<table id='table1' width='100%' border='1' cellspacing='0' cellpadding='0' class='maintable'>";
 	content += "<tr class='tabletop'><td align='center' width='15%'>医生名称</td><td align='center' width='20%'>职称</td>";
-	content += "<td align='center' width='10%'>性别</td><td align='center' width='20%'>科室</td><td align='center' width='10%'>操作</td></tr>";
+	content += "<td align='center' width='10%'>性别</td><td align='center' width='20%'>科室</td><td align='center' width='10%'>挂号费</td><td align='center' width='10%'>操作</td></tr>";
 	if(data.count > 0)
 	{
 		var cnt = 0;
@@ -69,9 +69,14 @@ function createTable(data, flagParam)
 			{
 				sex = "无";
 			}
+			var register_fee = obj.register_fee;
+			if(register_fee == null || register_fee == "null" || register_fee == undefined || register_fee == "")
+			{
+				register_fee = "无";
+			}
 			content += "<td style='text-align:center' width='15%'>"+obj.name+"</td><td style='text-align:center' width='20%'>"+post+"</td>";
-			content += "<td style='text-align:center' width='10%'>"+obj.sex+"</td><td style='text-align:center' width='20%'>"+obj.team_name+"</td>";
-			content += "<td align='center' width='10%' style='text-align:center !important'>";
+			content += "<td style='text-align:center' width='10%'>"+sex+"</td><td style='text-align:center' width='20%'>"+obj.team_name+"</td>";
+			content += "<td style='text-align:center' width='10%'>"+register_fee+"</td><td align='center' width='10%' style='text-align:center !important'>";
 			content += "<a href='javascript:void(0)' class='linkmore' onclick='queryDoctor(\""+obj.doctor_id+"\")'>管理</a>";
 			content += "&nbsp;&nbsp;&nbsp;&nbsp;";
 			content += "<a href='javascript:void(0)' class='linkmore' onclick='deleteDoctor(\""+obj.doctor_id+"\")'>删除</a>";
