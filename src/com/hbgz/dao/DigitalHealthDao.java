@@ -837,11 +837,13 @@ public class DigitalHealthDao
 	public List qryVisitDetail(String visitId) throws Exception 
 	{
 		StringBuffer sql = new StringBuffer();
-		sql.append("select (select distinct code_name from code_name_t where state = '00A' and code_type = 'PATIENT_VISIT_T' and code_flag = a.code_flag) code_flag_val, ");
-		sql.append("decode((select code_val from (select code_val, code_flag from code_name_t where state = '00A' and code_type = 'PATIENT_VISIT_T') where code_flag = a.code_flag and rownum <= 1), ");
-		sql.append("null, (a.code_val || (select code_val_flag from code_name_t where state = '00A' and code_type = 'PATIENT_VISIT_T' and code_flag = a.code_flag)), ");
-		sql.append("(select code_val_flag from code_name_t where state = '00A' and code_type = 'PATIENT_VISIT_T' and code_flag = a.code_flag and code_val = a.code_val)) code_val_flag ");
-		sql.append("from patient_visit_detail_t a where state = '00A' and visit_id = ? order by create_date ");
+		sql.append("SELECT code_flag_val, code_val_flag FROM ( ");
+		sql.append("select (select distinct code_name from code_name_t where state = '00A' and code_type = A.VISIT_TYPE and code_flag = a.code_flag) code_flag_val, ");
+		sql.append("decode((select code_val from code_name_t where state = '00A' AND code_flag = a.code_flag and code_type = A.VISIT_TYPE and rownum <= 1), ");
+		sql.append("null, (a.code_val || (select code_val_flag from code_name_t where state = '00A' and code_type = A.VISIT_TYPE and code_flag = a.code_flag)), ");
+		sql.append("(select code_val_flag from code_name_t where state = '00A' and code_type = A.VISIT_TYPE and code_flag = a.code_flag and code_val = a.code_val)) code_val_flag, ");
+		sql.append("(select distinct SHOW_SEQ from code_name_t where state = '00A' and code_type = A.VISIT_TYPE and code_flag = a.code_flag and code_val = a.code_val) SHOW_SEQ ");
+		sql.append("from patient_visit_detail_t a where state = '00A' and visit_id = ?) ORDER BY SHOW_SEQ ");
 		ArrayList lstParam = new ArrayList();
 		lstParam.add(visitId);
 		return itzcQryCenter.executeSqlByMapListWithTrans(sql.toString(), lstParam);
