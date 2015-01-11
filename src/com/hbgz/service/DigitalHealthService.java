@@ -573,7 +573,7 @@ public class DigitalHealthService
 	public JSONArray getUserOrderById(String userId,String hospitalId) throws QryException
 	{
 		List list = hibernateObjectDao.qryRegisterOrderTs(userId,hospitalId);
-		JSONArray jsonArray = JsonUtils.fromArray(list);
+		JSONArray jsonArray = JsonUtils.fromArrayTimestamp(list);
 		return jsonArray;
 	}
 

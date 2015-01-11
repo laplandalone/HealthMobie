@@ -13,7 +13,7 @@
     http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring     
     http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring/ehcache-spring-1.1.xsd">
     
-     <import resource="auto-timer-config.xml"/>
+    <!-- <import resource="auto-timer-config.xml"/>-->
 	
 	<!-- 
 	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">

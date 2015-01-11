@@ -1,6 +1,8 @@
 package com.hbgz.model;
 
+import java.sql.Timestamp;
 import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -31,7 +33,7 @@ public class RegisterOrderT implements java.io.Serializable {
 	private String teamId;
 	private String teamName;
 	private String state;
-	private Date createDate;
+	private Timestamp createDate;
 	private String hospitalId;
 	private String payState;
 	private String detailTime;
@@ -85,7 +87,7 @@ public class RegisterOrderT implements java.io.Serializable {
 			String doctorId, String doctorName, String orderNum,
 			String orderState, String orderFee, String registerTime,
 			String userName, String userNo, String userTelephone, String sex,
-			String teamId, String teamName, String state, Date createDate,
+			String teamId, String teamName, String state, Timestamp createDate,
 			String hospitalId, String payState,String platformOrderId) {
 		this.orderId = orderId;
 		this.userId = userId;
@@ -255,13 +257,12 @@ public class RegisterOrderT implements java.io.Serializable {
 		this.state = state;
 	}
 
-	@Temporal(TemporalType.DATE)
-	@Column(name = "CREATE_DATE", length = 7)
-	public Date getCreateDate() {
+	@Column(name = "CREATE_DATE")
+	public Timestamp getCreateDate() {
 		return this.createDate;
 	}
 
-	public void setCreateDate(Date createDate) {
+	public void setCreateDate(Timestamp createDate) {
 		this.createDate = createDate;
 	}
 
