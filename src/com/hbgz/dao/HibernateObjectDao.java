@@ -7,13 +7,12 @@ import org.springframework.stereotype.Repository;
 import com.hbgz.model.HospitalNewsT;
 import com.hbgz.model.HospitalT;
 import com.hbgz.model.HospitalUserRelationshipT;
-import com.hbgz.model.PatientVisitT;
 import com.hbgz.model.RegisterOrderT;
 import com.hbgz.model.TeamT;
 import com.hbgz.model.UserContactT;
 import com.hbgz.model.UserRelateT;
 import com.hbgz.pub.base.BaseDao;
-import com.hbgz.pub.util.ObjectCensor;
+import com.tools.pub.utils.ObjectCensor;
 
 @Repository
 public class HibernateObjectDao extends BaseDao

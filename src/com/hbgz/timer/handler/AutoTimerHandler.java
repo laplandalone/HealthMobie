@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
-import com.hbgz.pub.util.ObjectCensor;
-import com.hbgz.pub.util.StringUtil;
+import com.tools.pub.utils.ObjectCensor;
+import com.tools.pub.utils.StringUtil;
 
 @Component
 public class AutoTimerHandler 

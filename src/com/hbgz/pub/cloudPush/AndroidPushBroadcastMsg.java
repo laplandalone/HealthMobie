@@ -8,7 +8,7 @@ import com.baidu.yun.channel.exception.ChannelClientException;
 import com.baidu.yun.channel.exception.ChannelServerException;
 import com.baidu.yun.channel.model.PushBroadcastMessageRequest;
 import com.baidu.yun.channel.model.PushBroadcastMessageResponse;
-import com.hbgz.pub.util.ObjectCensor;
+import com.tools.pub.utils.ObjectCensor;
 
 /**
  * @author WM

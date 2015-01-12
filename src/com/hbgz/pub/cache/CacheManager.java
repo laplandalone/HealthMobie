@@ -10,8 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.hbgz.pub.exception.QryException;
-import com.hbgz.pub.util.ObjectCensor;
-import com.hbgz.pub.util.StringUtil;
+import com.tools.pub.utils.ObjectCensor;
+import com.tools.pub.utils.StringUtil;
 
 /**
  * <p>1、CacheManager类对SysCacheDao类缓存数据进行服务管理。

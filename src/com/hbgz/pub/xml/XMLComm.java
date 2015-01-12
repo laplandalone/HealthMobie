@@ -1,6 +1,9 @@
 package com.hbgz.pub.xml;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.StringReader;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,12 +13,15 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jdom.*;
+import org.jdom.Attribute;
+import org.jdom.Document;
+import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
-import org.jdom.output.*;
+import org.jdom.output.Format;
+import org.jdom.output.XMLOutputter;
 import org.jdom.xpath.XPath;
 
-import com.hbgz.pub.util.StringUtil;
+import com.tools.pub.utils.StringUtil;
 
 /**
  * @modify  2005-08-12 追加几个替换的节点的函数

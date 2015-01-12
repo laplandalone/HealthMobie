@@ -8,7 +8,7 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import com.hbgz.pub.resolver.BeanFactoryHelper;
+import com.tools.pub.resolver.BeanFactoryHelper;
 
 /**
  * 

@@ -1,7 +1,8 @@
 package com.hbgz.pub.qry;
 
 import org.springframework.beans.factory.BeanFactory;
-import com.hbgz.pub.resolver.BeanFactoryHelper;
+
+import com.tools.pub.resolver.BeanFactoryHelper;
 
 /**
  * SID，CRM查询类，根据区域标识，数据库类型返回对应的查询类。

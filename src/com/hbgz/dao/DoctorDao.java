@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import com.hbgz.pub.base.BaseDao;
 import com.hbgz.pub.exception.QryException;
 import com.hbgz.pub.qry.QryCenter;
-import com.hbgz.pub.util.ObjectCensor;
+import com.tools.pub.utils.ObjectCensor;
 
 @Repository
 public class DoctorDao extends BaseDao

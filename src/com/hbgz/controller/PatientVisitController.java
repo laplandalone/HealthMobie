@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.hbgz.pub.util.StringUtil;
 import com.hbgz.service.PatientVisitService;
+import com.tools.pub.utils.StringUtil;
 
 @Controller
 @RequestMapping("/visit.htm")

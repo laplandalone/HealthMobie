@@ -3,7 +3,6 @@ package com.hbgz.dao;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.text.StrBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -11,7 +10,7 @@ import com.hbgz.model.UserQuestionT;
 import com.hbgz.pub.base.BaseDao;
 import com.hbgz.pub.exception.QryException;
 import com.hbgz.pub.qry.QryCenter;
-import com.hbgz.pub.util.ObjectCensor;
+import com.tools.pub.utils.ObjectCensor;
 
 @Repository
 public class UserQustionDao extends BaseDao 

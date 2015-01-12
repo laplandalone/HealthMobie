@@ -3,7 +3,7 @@ package com.hbgz.pub.cache;
 import java.util.List;
 
 import com.hbgz.pub.exception.QryException;
-import com.hbgz.pub.resolver.BeanFactoryHelper;
+import com.tools.pub.resolver.BeanFactoryHelper;
 
 public class PubData 
 {

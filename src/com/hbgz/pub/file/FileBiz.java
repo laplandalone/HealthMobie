@@ -1,8 +1,8 @@
 package com.hbgz.pub.file;
 
 import com.hbgz.pub.util.DateUtils;
-import com.hbgz.pub.util.StringUtil;
 import com.hbgz.pub.util.SystemProperties;
+import com.tools.pub.utils.StringUtil;
 
 public class FileBiz
 {

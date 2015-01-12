@@ -2,6 +2,8 @@ package com.hbgz.pub.util;
 
 import java.net.URLEncoder;
 
+import com.tools.pub.utils.ObjectCensor;
+
 public class AlipaySign 
 {
 	public static String sign(String subject, String body, String totalFee, String outTradeNo)

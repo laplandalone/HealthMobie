@@ -28,7 +28,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.hbgz.pub.exception.QryException;
-import com.hbgz.pub.util.StringUtil;
+import com.tools.pub.utils.StringUtil;
 
 /**
  * crm项目组公用查询类

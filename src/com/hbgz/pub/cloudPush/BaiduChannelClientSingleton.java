@@ -1,8 +1,5 @@
 package com.hbgz.pub.cloudPush;
 
-import java.util.List;
-import java.util.Map;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -10,10 +7,6 @@ import com.baidu.yun.channel.auth.ChannelKeyPair;
 import com.baidu.yun.channel.client.BaiduChannelClient;
 import com.baidu.yun.core.log.YunLogEvent;
 import com.baidu.yun.core.log.YunLogHandler;
-import com.hbgz.pub.cache.CacheManager;
-import com.hbgz.pub.resolver.BeanFactoryHelper;
-import com.hbgz.pub.util.ObjectCensor;
-import com.hbgz.pub.util.StringUtil;
 
 public class BaiduChannelClientSingleton
 {	
