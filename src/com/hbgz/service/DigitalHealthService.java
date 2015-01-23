@@ -1106,6 +1106,7 @@ public class DigitalHealthService
 			visitMap.put("visit_id", visitId);
 			visitMap.put("visit_name", hospitalUserT.getUserName());
 			visitMap.put("visit_type", visitType);
+			visitMap.put("create_date", SysDate.getSysDate());
 			visitMap.put("patient_id", hospitalUserT.getUserId());
 			visitMap.put("card_id",hospitalUserT.getCardNo());
 			saveDB.insertRecord("patient_visit_t", visitMap);
@@ -1333,7 +1334,7 @@ public class DigitalHealthService
 			hibernateObjectDao.update(patientVisitT);
 		}
 		wakeT.setWakeName(DateUtils.getCHNDate()+"  随访诊断");
-		wakeT.setCreateDate(new Date());
+		wakeT.setCreateDate(SysDate.getSysDate());
 		hibernateObjectDao.save(wakeT);
 		return true;
 	}
