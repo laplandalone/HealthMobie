@@ -87,6 +87,7 @@ public class DigitalHealthService
 	private String projectPath = System.getProperty("user.dir");
 
 	public Log log = LogFactory.getLog(DigitalHealthService.class);
+	
 	@ServiceType(value = "BUS2001")
 	public JSONObject getDoctorList(String expertType, String onLineType, String teamId)
 			throws QryException
@@ -909,6 +910,11 @@ public class DigitalHealthService
 						map.put("ques_num", lstQ.size());
 					}
 				}
+				List lstV=hibernateObjectDao.qryPatientVisit();
+				if(ObjectCensor.checkListIsNull(lstV))
+				{
+					map.put("visit_num", lstV.size());
+				}
 				return map;
 			}
 		}
@@ -1101,7 +1107,7 @@ public class DigitalHealthService
 			visitMap.put("visit_name", hospitalUserT.getUserName());
 			visitMap.put("visit_type", visitType);
 			visitMap.put("patient_id", hospitalUserT.getUserId());
-			visitMap.put("card_id","");
+			visitMap.put("card_id",hospitalUserT.getCardNo());
 			saveDB.insertRecord("patient_visit_t", visitMap);
 			if(ObjectCensor.checkListIsNull(sList))
 			{
@@ -1326,6 +1332,7 @@ public class DigitalHealthService
 			patientVisitT.setCopyFlag("Y");
 			hibernateObjectDao.update(patientVisitT);
 		}
+		wakeT.setWakeName(DateUtils.getCHNDate()+"  随访诊断");
 		wakeT.setCreateDate(new Date());
 		hibernateObjectDao.save(wakeT);
 		return true;
@@ -1336,6 +1343,14 @@ public class DigitalHealthService
 	{
 		CacheManager cacheManager = (CacheManager) BeanFactoryHelper.getBean("cacheManager");
 		List list =cacheManager.getConfigByType(hospitalId, configType);
+		if(ObjectCensor.checkListIsNull(list))
+		{
+			for(int i=0;i<list.size();i++)
+			{
+				Map map = (Map) list.get(i);
+				String remark=StringUtil.getMapKeyVal(map, "remark");
+			}
+		}
 		JSONArray jsonArray = JsonUtils.fromArray(list);
 		return jsonArray;
 		

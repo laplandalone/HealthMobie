@@ -3,6 +3,7 @@ package com.hbgz.controller;
 import java.io.File;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -57,7 +58,9 @@ public class FileUploadServlet extends HttpServlet
 			Iterator itr = items.iterator();
 			JSONObject object = new JSONObject();
 			String imgages = "";
-
+			String uploadType="";
+			String hospitalId="";
+			List listImg = new ArrayList();
 			while (itr.hasNext()) 
 			{
 				FileItem item = (FileItem) itr.next();
@@ -70,8 +73,8 @@ public class FileUploadServlet extends HttpServlet
 					File tempFile = new File(item.getName());
 					String fileName = tempFile.getName();
 					InputStream is = item.getInputStream();
-					String hospitalId = object.getString("hospitalId");
-					String uploadType = object.getString("uploadType");
+				    hospitalId = object.getString("hospitalId");
+					uploadType = object.getString("uploadType");
 					path = cacheManager.getUplodPathByType(hospitalId, uploadType);
 					log.error("projectPath:" + projectPath);
 					String fullPath = projectPath + path;
@@ -80,16 +83,36 @@ public class FileUploadServlet extends HttpServlet
 					String imgUrl = path + fileName;
 					is.close();
 					imgages += imgUrl + ",";
+					listImg.add(imgUrl);
 				}
 			}
-			String questionTs = object.getString("questionT");
-			UserQuestionT questionT = (UserQuestionT) JsonUtils.toBean(questionTs, UserQuestionT.class);
-			questionT.setImgUrl(imgages);
-			JSONObject str = JSONObject.fromObject(questionT);
-			System.out.println("FileUpload:"+str);
-			String param = "{channel:\"Q\",channelType:\"Android\",serviceType:\"BUS2007\",securityCode:\"0000000000\",params:{'userQestion':'"
-					+ str.toString() + "'},rtnDataFormatType:\"JSONObject\"}";
-			retVal = ServiceEngine.invokeService(param);
+			if("ASK_IMG_PATH".equals(uploadType))
+			{
+				String questionTs = object.getString("questionT");
+				UserQuestionT questionT = (UserQuestionT) JsonUtils.toBean(questionTs, UserQuestionT.class);
+				questionT.setImgUrl(imgages);
+				JSONObject str = JSONObject.fromObject(questionT);
+				log.error("FileUpload:"+str);
+				String param = "{channel:\"Q\",channelType:\"Android\",serviceType:\"BUS2007\",securityCode:\"0000000000\",params:{'userQestion':'"
+						+ str.toString() + "'},rtnDataFormatType:\"JSONObject\"}";
+				retVal = ServiceEngine.invokeService(param);
+			}else if("VISIT_IMG_PATH".equals(uploadType))
+			{
+				String visitRst = object.getString("questionT");   
+				
+				JSONObject jsonObject = JSONObject.fromObject(visitRst);
+				String userId= object.getString("userId");;
+				String visitType=object.getString("visitType");
+				if(listImg.size()>0)
+				{
+					jsonObject.put("colour_ecg_check_0", imgages);
+				}
+				String params = "{channel:\"Q\",channelType:\"PC\",serviceType:\"BUS20035\",securityCode:\"0000000000\",params:{param:"+jsonObject.toString()+",userId:'"+userId+"',visitType:'"+visitType+"'},rtnDataFormatType:\"JSONObject\"}";
+				retVal = ServiceEngine.invokeService(params);
+				log.error(retVal);
+			}
+			
+			
 			response.setCharacterEncoding("UTF-8");
 			PrintWriter out = response.getWriter();
 			out.println(retVal);

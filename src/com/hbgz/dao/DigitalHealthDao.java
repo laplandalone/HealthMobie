@@ -170,7 +170,7 @@ public class DigitalHealthDao
 		{
 			return null;
 		}
-		String sql = "select t.user_id,t.user_name,t.telephone,t.sex,t.password,t.user_no from hospital_user_t t where t.telephone=? and t.password=? ";
+		String sql = "select t.user_id,t.user_name,t.telephone,t.sex,t.password,t.user_no,t.card_no from hospital_user_t t where t.telephone=? and t.password=? ";
 		ArrayList lstParam = new ArrayList();
 		lstParam.add(telephone);
 		lstParam.add(password);
@@ -1007,7 +1007,7 @@ public class DigitalHealthDao
 	
 	public List  qryPatientVisits(String copyFlag) throws QryException
 	{
-		String sql = "select p.*,t.config_val  name from hospital_config_t t ,patient_visit_t p where t.config_name=p.visit_type and p.copy_flag=?";
+		String sql = "select p.*,decode(p.visit_type,'asdChild','儿童先心','asdAdult','成人先心') name from patient_visit_t p where  p.copy_flag=?";
 		ArrayList lstParam = new ArrayList();
 		lstParam.add(copyFlag);
 		return itzcQryCenter.executeSqlByMapListWithTrans(sql, lstParam);

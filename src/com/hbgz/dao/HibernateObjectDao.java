@@ -7,10 +7,12 @@ import org.springframework.stereotype.Repository;
 import com.hbgz.model.HospitalNewsT;
 import com.hbgz.model.HospitalT;
 import com.hbgz.model.HospitalUserRelationshipT;
+import com.hbgz.model.PatientVisitT;
 import com.hbgz.model.RegisterOrderT;
 import com.hbgz.model.TeamT;
 import com.hbgz.model.UserContactT;
 import com.hbgz.model.UserRelateT;
+import com.hbgz.model.WakeT;
 import com.hbgz.pub.base.BaseDao;
 import com.tools.pub.utils.ObjectCensor;
 
@@ -136,7 +138,7 @@ public class HibernateObjectDao extends BaseDao
 		return this.find(hql, new String[]{ userId});
 	}
 	
-	public List<UserRelateT> qryUserWakeById(String visitId)
+	public List<WakeT> qryUserWakeById(String visitId)
 	{
 		if (!ObjectCensor.isStrRegular(visitId))
 		{
@@ -144,5 +146,11 @@ public class HibernateObjectDao extends BaseDao
 		}
 		String hql = "from WakeT as model where  model.state='00A' and model.wakeValue=? and model.wakeType='notice'";
 		return this.find(hql, new String[]{ visitId});
+	}
+	
+	public List<PatientVisitT> qryPatientVisit()
+	{
+		String hql = "from PatientVisitT as model where  model.state='00A' and model.copyFlag='N' ";
+		return this.find(hql, new String[]{});
 	}
 }
