@@ -550,6 +550,20 @@ import java.util.Map;
    return date;
  } 
  
+ public static String afterNDate(String datestr,int n) throws ParseException 
+ {
+
+   Calendar calendar = Calendar.getInstance();
+
+   calendar.setTime(DateUtils.CHN_DATE_FORMAT.parse(datestr));
+
+   calendar.add(Calendar.DATE, n);
+
+   Date date = calendar.getTime();
+
+   return CHN_DATE_FORMAT.format(date);
+ } 
+ 
  /** 
   * 获得指定日期的前一天 
   *  
@@ -602,8 +616,8 @@ import java.util.Map;
  } 
    public static void main(String[] args) throws ParseException 
    {
-	   System.out.println(DateUtils.afterNTime("2014-09-08","", 1, 1));
-	   System.out.println(DateUtils.getSpecifiedDayBefore("2014-09-08"));
-	   System.out.println("2014-12-09  星期二 上午".substring(0, 10));
+	   System.out.println(DateUtils.CHN_DATE_TIME_FORMAT.parse("2014-12-12"));
+//	   System.out.println(DateUtils.getSpecifiedDayBefore("2014-09-08"));
+//	   System.out.println("2014-12-09  星期二 上午".substring(0, 10));
    }
 }

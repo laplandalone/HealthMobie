@@ -49,6 +49,7 @@ public class FileUploadServlet extends HttpServlet
 		// 创建request的解析器,它会将数据封装到FileItem对象中
 		ServletFileUpload sfu = new ServletFileUpload(factory);
 		// 解析保存在request中的数据并返回list集合
+		System.out.println("ServletFileUpload--------------------------------");
 		List items;
 		try 
 		{
@@ -86,6 +87,7 @@ public class FileUploadServlet extends HttpServlet
 					listImg.add(imgUrl);
 				}
 			}
+			uploadType = object.getString("uploadType");
 			if("ASK_IMG_PATH".equals(uploadType))
 			{
 				String questionTs = object.getString("questionT");

@@ -38,7 +38,7 @@ public class WakeService extends TimerValidateService
 		String remark = "", failures = "Õý³£";
 		try 
 		{
-			String sql = "select * from wake_t where state = '00A' and wake_flag = 'N' and sysdate >= wake_date ";
+			String sql = "select wake_id,user_id,wake_name,wake_content,wake_type,to_char(create_date, 'yyyy-mm-dd') create_date,to_char(wake_date, 'yyyy-mm-dd') wake_date from wake_t where state = '00A' and wake_flag = 'N' and sysdate >= wake_date ";
 			QryCenter qryCenter = QryCenterFactory.getQryCenter();
 			List sList = qryCenter.executeSqlByMapListWithTrans(sql, new ArrayList());
 			log.error(sList);
@@ -51,7 +51,7 @@ public class WakeService extends TimerValidateService
 				{
 					Map map = (Map) sList.get(i);
 					String wakeId = StringUtil.getMapKeyVal(map, "wakeId");
-					
+					String userId= StringUtil.getMapKeyVal(map, "userId");
 					sql = "update wake_t set wake_flag = 'Y' where wake_id = '"+wakeId+"' ";
 					exeList.add(sql);
 					
@@ -61,11 +61,14 @@ public class WakeService extends TimerValidateService
 					String wakeContent = StringUtil.getMapKeyVal(map, "wakeContent");
 					String wakeName = StringUtil.getMapKeyVal(map, "wakeName");
 					JSONObject obj ;
-					String userId="";
-					if(!"ALL".equals(msgType))
+					
+					if(!"ALL".equals(msgType) && !"visit_plan".equals(msgType))
 					{
 						 obj = JSONObject.fromObject(wakeContent);
 						 userId = StringUtil.getJSONObjectKeyVal(obj, "userId");
+					}else if("visit_plan".equals(msgType))
+					{
+						wakeContent=JSONObject.fromObject(map).toString();
 					}
 					target.setCustomParam(wakeContent);
 					target.setUserId(userId);

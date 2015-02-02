@@ -49,6 +49,7 @@ import com.hbgz.pub.sequence.SysId;
 import com.hbgz.pub.util.AlipaySign;
 import com.hbgz.pub.util.DateUtils;
 import com.hbgz.pub.util.FileUtils;
+import com.hbgz.pub.util.HisHttpUtil;
 import com.hbgz.pub.util.HttpUtil;
 import com.hbgz.pub.util.JsonUtils;
 import com.hbgz.pub.util.PinyinUtil;
@@ -1107,8 +1108,8 @@ public class DigitalHealthService
 			visitMap.put("visit_name", hospitalUserT.getUserName());
 			visitMap.put("visit_type", visitType);
 			visitMap.put("create_date", SysDate.getSysDate());
-			visitMap.put("patient_id", hospitalUserT.getUserId());
-			visitMap.put("card_id",hospitalUserT.getCardNo());
+			visitMap.put("card_id", hospitalUserT.getUserId());
+			visitMap.put("patient_id",hospitalUserT.getCardNo());
 			saveDB.insertRecord("patient_visit_t", visitMap);
 			if(ObjectCensor.checkListIsNull(sList))
 			{
@@ -1334,34 +1335,107 @@ public class DigitalHealthService
 			hibernateObjectDao.update(patientVisitT);
 		}
 		wakeT.setWakeName(DateUtils.getCHNDate()+"  随访诊断");
+		wakeT.setWakeType("visit_result");
 		wakeT.setCreateDate(SysDate.getSysDate());
 		hibernateObjectDao.save(wakeT);
 		return true;
 	}
 	
 	@ServiceType(value = "BUS20049")
-	public JSONArray getHospitalConfig(String hospitalId,String configType) throws Exception
+	public JSONArray getHospitalConfig(String hospitalId,String configType,String userId) throws Exception
 	{
 		CacheManager cacheManager = (CacheManager) BeanFactoryHelper.getBean("cacheManager");
 		List list =cacheManager.getConfigByType(hospitalId, configType);
-		if(ObjectCensor.checkListIsNull(list))
+		List vlist = new ArrayList();
+		List userList = hibernateObjectDao.findByProperty("HospitalUserT", "userId",userId);
+		int age=-1;
+		String patientId="";
+		if(ObjectCensor.checkListIsNull(userList))
 		{
-			for(int i=0;i<list.size();i++)
+			HospitalUserT hospitalUserT = (HospitalUserT) userList.get(0);
+			patientId=hospitalUserT.getCardNo();
+			if(patientId!=null && !"".equals(patientId))
 			{
-				Map map = (Map) list.get(i);
-				String remark=StringUtil.getMapKeyVal(map, "remark");
+				String patientNo="";
+				if(patientId.length()==6)
+				{
+					patientNo="PID000"+patientId;
+				}
+				String his="select ltrim(v.operation_type) operation_type,ltrim(v.department) department,ltrim(v.patient_id) patient_id,convert(varchar(10),v.operation_time,102) operation_time,rtrim(m.patient_name) patient_name,rtrim(m.birthday) birthday from view_ssqk_app v,mzbrxx m where v.patient_id=m.patient_id and v.patient_id = '"+patientNo+"'";
+	//			String hisParam="select  * from mzbrxx where patient_id='"+patientId+"'";
+				String rtns = HisHttpUtil.http(his);
+				JSONArray arrays=JSONArray.fromObject(rtns);
+				
+				if(arrays!=null && arrays.size()>0)
+				{
+					JSONObject hisuser=arrays.getJSONObject(0);
+					String birthday=hisuser.getString("birthday");
+					String operTime=hisuser.getString("operation_time");
+					 if(birthday!=null && !"".equals(birthday))
+					{
+						if(birthday!=null && birthday.length()>4 && birthday!=null && operTime.length()>4)
+						{
+							int i=Integer.parseInt(birthday.substring(0,4));
+							int n=Integer.parseInt(operTime.substring(0,4));
+							age=n-i;
+						}
+					}
+				}
 			}
 		}
-		JSONArray jsonArray = JsonUtils.fromArray(list);
+		boolean visitFlag=false;
+		List<WakeT> visitPlans = hibernateObjectDao.qryVisitPlans(userId);/*当前是否有填写计划*/
+		
+		if(ObjectCensor.checkListIsNull(visitPlans))
+		{
+			WakeT wakeT=visitPlans.get(0);
+			Date crateWD= wakeT.getCreateDate();
+			List<PatientVisitT> patientVisitTs = hibernateObjectDao.qryPatientVisitById(patientId);/*是否已填写*/
+			if(ObjectCensor.checkListIsNull(patientVisitTs))
+			{
+				 	PatientVisitT visitTv=patientVisitTs.get(0);
+					Date crateDate=visitTv.getCreateDate();
+					if(crateWD.after(crateDate))
+					{
+						visitFlag=true;
+					}
+			}else
+			{
+				visitFlag=true;
+			}
+			
+			if(ObjectCensor.checkListIsNull(list) && age>0 && visitPlans.size()>0 && visitFlag)
+			{
+				for(int i=0;i<list.size();i++)
+				{
+					Map map = (Map) list.get(i);
+					String remark=StringUtil.getMapKeyVal(map, "remark");
+					if(age>14)
+					{
+						if(remark.indexOf("Adult")>0)
+						{
+							vlist.add(map);
+						} 
+					}else if(age>0 && age<=14)
+					{
+						if(remark.indexOf("Child")>0)
+						{
+							vlist.add(map);
+						} 
+					}
+				}
+			}
+		}
+		JSONArray jsonArray = JsonUtils.fromArray(vlist);
 		return jsonArray;
 		
 	}
 	
 	@ServiceType(value = "BUS20050")
-	public JSONArray getUserWake(String userId) throws Exception
+	public JSONArray getUserWake(String userId,String wakeType) throws Exception
 	{
-		List list =hibernateObjectDao.qryUserWake(userId);
-		JSONArray jsonArray = JsonUtils.fromArray(list);
+		List list =hibernateObjectDao.qryUserWake(userId,wakeType);
+		JSONArray jsonArray = JsonUtils.fromArrayTimestamp(list);
 		return jsonArray;
 		
 	}

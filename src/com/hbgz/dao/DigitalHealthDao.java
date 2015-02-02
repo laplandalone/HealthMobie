@@ -1007,9 +1007,11 @@ public class DigitalHealthDao
 	
 	public List  qryPatientVisits(String copyFlag) throws QryException
 	{
-		String sql = "select p.*,decode(p.visit_type,'asdChild','儿童先心','asdAdult','成人先心') name from patient_visit_t p where  p.copy_flag=?";
+		String sql = "select t.user_id,p.*,decode(p.visit_type,'asdChild','儿童先心','asdAdult','成人先心') name from patient_visit_t p,hospital_user_t t where t.card_no=p.patient_id and  p.copy_flag=?";
 		ArrayList lstParam = new ArrayList();
 		lstParam.add(copyFlag);
 		return itzcQryCenter.executeSqlByMapListWithTrans(sql, lstParam);
 	}
+	
+	
 }

@@ -128,14 +128,14 @@ public class HibernateObjectDao extends BaseDao
 		return this.find(hql, new String[]{ userId,phone });
 	}
 	
-	public List<UserRelateT> qryUserWake(String userId)
+	public List<WakeT> qryUserWake(String userId,String wakeType)
 	{
-		if (!ObjectCensor.isStrRegular(userId))
+		if (!ObjectCensor.isStrRegular(userId,wakeType))
 		{
 			return null;
 		}
-		String hql = "from WakeT as model where  model.state='00A' and model.userId=? and model.wakeType='notice'  order by createDate desc";
-		return this.find(hql, new String[]{ userId});
+		String hql = "from WakeT as model where  model.state='00A' and model.userId=? and model.wakeType=? and create_date<sysdate order by createDate desc";
+		return this.find(hql, new String[]{ userId,wakeType});
 	}
 	
 	public List<WakeT> qryUserWakeById(String visitId)
@@ -144,13 +144,29 @@ public class HibernateObjectDao extends BaseDao
 		{
 			return null;
 		}
-		String hql = "from WakeT as model where  model.state='00A' and model.wakeValue=? and model.wakeType='notice'";
+		String hql = "from WakeT as model where  model.state='00A' and model.wakeValue=? and model.wakeType='visit_result'";
 		return this.find(hql, new String[]{ visitId});
+	}
+	
+	public List<WakeT> qryVisitPlans(String userId)
+	{
+		if (!ObjectCensor.isStrRegular(userId))
+		{
+			return null;
+		}
+		String hql = "from WakeT as model where  model.state='00A' and  model.wakeType='visit_plan' and model.createDate<sysdate and model.userId=? order by createDate desc";
+		return this.find(hql, new String[]{ userId});
 	}
 	
 	public List<PatientVisitT> qryPatientVisit()
 	{
 		String hql = "from PatientVisitT as model where  model.state='00A' and model.copyFlag='N' ";
 		return this.find(hql, new String[]{});
+	}
+	
+	public List<PatientVisitT> qryPatientVisitById(String patientId)
+	{
+		String hql = "from PatientVisitT as model where  model.state='00A' and model.patientId=? order by createDate desc ";
+		return this.find(hql, new String[]{patientId});
 	}
 }

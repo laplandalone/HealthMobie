@@ -1,5 +1,6 @@
 package com.hbgz.model;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,7 +24,7 @@ public class PatientVisitT implements java.io.Serializable {
 	private String patientId;
 	private String cardId;
 	private String state;
-	private Date createDate;
+	private Timestamp createDate;
 	private String copyFlag;
 	// Constructors
 
@@ -47,7 +48,7 @@ public class PatientVisitT implements java.io.Serializable {
 
 	/** full constructor */
 	public PatientVisitT(String visitId, String visitName, String visitType,
-			String patientId, String cardId, String state, Date createDate,String copyFlag) {
+			String patientId, String cardId, String state, Timestamp createDate,String copyFlag) {
 		this.visitId = visitId;
 		this.visitName = visitName;
 		this.visitType = visitType;
@@ -114,13 +115,13 @@ public class PatientVisitT implements java.io.Serializable {
 		this.state = state;
 	}
 
-	@Temporal(TemporalType.DATE)
+	 
 	@Column(name = "CREATE_DATE", length = 7)
-	public Date getCreateDate() {
+	public Timestamp getCreateDate() {
 		return this.createDate;
 	}
 
-	public void setCreateDate(Date createDate) {
+	public void setCreateDate(Timestamp createDate) {
 		this.createDate = createDate;
 	}
 
