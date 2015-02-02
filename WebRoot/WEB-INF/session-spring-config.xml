@@ -13,7 +13,7 @@
     http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring     
     http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring/ehcache-spring-1.1.xsd">
     
-   <!--  <import resource="auto-timer-config.xml"/> -->
+     <import resource="auto-timer-config.xml"/>  
 	
 	<!-- 
 	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
@@ -56,10 +56,15 @@
         </property>
     </bean>
     
+    <bean id="hibernateTemplate" class="org.springframework.orm.hibernate3.HibernateTemplate">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
     <bean id="itzcJdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
-			<bean id="sessionFactory"
+	
+	<bean id="sessionFactory"
 		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
 		<property name="packagesToScan">
@@ -81,7 +86,19 @@
 		</property>
 	</bean>
 
-	<bean id="hibernateTemplate" class="org.springframework.orm.hibernate3.HibernateTemplate">
-		<property name="sessionFactory" ref="sessionFactory"></property>
+	<bean id="timerManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"></property>
 	</bean>
+	
+	<tx:advice id="timerAdvice" transaction-manager="timerManager">
+		<tx:attributes>
+			<tx:method name="validate*"  propagation="REQUIRED" />
+		</tx:attributes>
+	</tx:advice>
+	
+	<aop:config>
+		<aop:pointcut id="autotimerhandler" expression="execution(public * com.hbgz.timer.handler..*.*(..))" />
+		<aop:advisor pointcut-ref="autotimerhandler" advice-ref="timerAdvice" />
+	</aop:config>
 </beans>

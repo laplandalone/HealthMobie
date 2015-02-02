@@ -1108,7 +1108,7 @@ public class DigitalHealthService
 			visitMap.put("visit_name", hospitalUserT.getUserName());
 			visitMap.put("visit_type", visitType);
 			visitMap.put("create_date", SysDate.getSysDate());
-			visitMap.put("card_id", hospitalUserT.getUserId());
+			visitMap.put("user_id", hospitalUserT.getUserId());
 			visitMap.put("patient_id",hospitalUserT.getCardNo());
 			saveDB.insertRecord("patient_visit_t", visitMap);
 			if(ObjectCensor.checkListIsNull(sList))
