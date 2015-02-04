@@ -43,7 +43,8 @@ public class HibernateObjectDao extends BaseDao
 		{
 			return null;
 		}
-		String hql = "from RegisterOrderT as model where model.hospitalId=? and model.state='00A' and model.userId=? and to_date(substr(register_time, 0, 10)||' 23:59:59', 'yyyy-mm-dd hh24:mi:ss')>=sysdate order by subStr(register_time,0,10) desc,subStr(register_time,length(register_time)-2,length(register_time))";
+//		String hql = "from RegisterOrderT as model where model.hospitalId=? and model.state='00A' and model.userId=? and to_date(substr(register_time, 0, 10)||' 23:59:59', 'yyyy-mm-dd hh24:mi:ss')>=sysdate order by subStr(register_time,0,10) desc,subStr(register_time,length(register_time)-2,length(register_time))";
+		String hql = "from RegisterOrderT as model where model.hospitalId=? and model.state='00A' and model.userId=?  order by subStr(register_time,0,10) desc,subStr(register_time,length(register_time)-2,length(register_time))";
 		return this.find(hql, new String[]{hospitalId,userId });
 	}
 

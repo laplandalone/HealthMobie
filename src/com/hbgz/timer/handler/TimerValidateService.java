@@ -19,18 +19,17 @@ public abstract class TimerValidateService
 	//定时任务服务标识
 	private String timerId;
 	
-	public abstract Map executeBusiness();
+	public abstract Map executeBusiness() throws Exception ;
 	
-	public abstract void delegate();
+	public abstract void delegate()  throws Exception;
 
 	/**
 	 * 定时任务入口
 	 */
-	public void accessBusiness()
+	public void accessBusiness() throws Exception 
 	{
 		String control = "A", remark = "", failures = "", unit = "", interval = "";
-		try 
-		{
+		 
 			Map timerMap = validateTimer();
 			if(ObjectCensor.checkObjectIsNull(timerMap))
 			{
@@ -44,17 +43,9 @@ public abstract class TimerValidateService
 				unit = StringUtil.getMapKeyVal(timerMap, "unit");
 				interval = StringUtil.getMapKeyVal(timerMap, "interval");
 			}
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();
-		}
-		finally
-		{
-			BeanFactory beanFactory = BeanFactoryHelper.getBeanfactory();
-			AutoTimerHandler autoTimerHandler = (AutoTimerHandler) beanFactory.getBean("autoTimerHandler");
-			autoTimerHandler.finishBusiness(timerId, control, unit, interval, remark, failures);
-		}
+		BeanFactory beanFactory = BeanFactoryHelper.getBeanfactory();
+		AutoTimerHandler autoTimerHandler = (AutoTimerHandler) beanFactory.getBean("autoTimerHandler");
+		autoTimerHandler.finishBusiness(timerId, control, unit, interval, remark, failures);
 	}
 
 	private Map validateTimer()
@@ -62,9 +53,8 @@ public abstract class TimerValidateService
 		Map timerMap = null;
 		BeanFactory beanFactory = BeanFactoryHelper.getBeanfactory();
 		AutoTimerHandler autoTimerHandler = (AutoTimerHandler) beanFactory.getBean("autoTimerHandler");
-		log.error("validateTimer start time:" + SysDate.getCurrentTime());
 		List<Map<String, Object>> timerConfigList = autoTimerHandler.scanTimerById(timerId);
-		log.error("timerId:" + timerId + "; timerConfigList:" + timerConfigList);
+		log.error("timerId:" + timerId + " timerConfigList:" + timerConfigList);
 		if(ObjectCensor.checkListIsNull(timerConfigList))
 		{
 			timerMap = timerConfigList.get(0);

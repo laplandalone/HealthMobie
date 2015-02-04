@@ -10,11 +10,11 @@ import net.sf.json.JSONObject;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.hbgz.pub.qry.QryCenter;
 import com.hbgz.pub.qry.QryCenterFactory;
-import com.hbgz.pub.util.Keys;
 import com.hbgz.thread.AndroidPushMsgThread;
 import com.hbgz.timer.handler.TimerValidateService;
 import com.tools.pub.resolver.BeanFactoryHelper;
@@ -25,19 +25,21 @@ public class WakeService extends TimerValidateService
 {
 	private Log log = LogFactory.getLog(WakeService.class);
 	
+	@Autowired
+	private JdbcTemplate jdbcTemplate;
+	
 	@Override
-	public void delegate() 
+	public void delegate() throws Exception 
 	{
 		this.accessBusiness();
 	}
 
 	@Override
-	public Map executeBusiness() 
+	public Map executeBusiness() throws Exception 
 	{
 		Map retMap = new HashMap();
 		String remark = "", failures = "正常";
-		try 
-		{
+		 
 			String sql = "select wake_id,user_id,wake_name,wake_content,wake_type,to_char(create_date, 'yyyy-mm-dd') create_date,to_char(wake_date, 'yyyy-mm-dd') wake_date from wake_t where state = '00A' and wake_flag = 'N' and sysdate >= wake_date ";
 			QryCenter qryCenter = QryCenterFactory.getQryCenter();
 			List sList = qryCenter.executeSqlByMapListWithTrans(sql, new ArrayList());
@@ -45,7 +47,6 @@ public class WakeService extends TimerValidateService
 			if(ObjectCensor.checkListIsNull(sList))
 			{
 				BeanFactory beanFactory = BeanFactoryHelper.getBeanfactory();
-				JdbcTemplate jdbcTemplate = (JdbcTemplate) beanFactory.getBean(Keys.JTEMPLATE);
 				List<String> exeList = new ArrayList<String>();
 				for(int i = 0, len = sList.size(); i < len; i++)
 				{
@@ -86,13 +87,7 @@ public class WakeService extends TimerValidateService
 				}
 				jdbcTemplate.batchUpdate(exeSql);
 			}
-		} 
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			remark = e.getMessage();
-			failures = "处理失败!";
-		}
+		 
 		retMap.put("remark", remark);
 		retMap.put("failures", failures);
 		return retMap;

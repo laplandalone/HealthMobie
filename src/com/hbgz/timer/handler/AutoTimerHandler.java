@@ -3,10 +3,13 @@ package com.hbgz.timer.handler;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
+import com.hbgz.pub.base.SysDate;
 import com.tools.pub.utils.ObjectCensor;
 import com.tools.pub.utils.StringUtil;
 
@@ -16,11 +19,13 @@ public class AutoTimerHandler
 	@Autowired
 	private JdbcTemplate itzcJdbcTemplate;
 	
+	private Log log = LogFactory.getLog(AutoTimerHandler.class);
 	/**
 	 * 根据timerId获取定时服务任务信息，同时锁该条记录
 	 */
 	public List<Map<String, Object>> scanTimerById(String timerId)
 	{
+		log.error("validateTimer timerId:"+timerId+" start time:" + SysDate.getCurrentTime());
 		if(ObjectCensor.isStrRegular(timerId))
 		{
 			StringBuffer query = new StringBuffer();
