@@ -11,9 +11,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-/**
- * WakeT entity. @author MyEclipse Persistence Tools
- */
+ 
 @Entity
 @Table(name = "WAKE_T", schema = "ORACLE")
 public class WakeT implements java.io.Serializable {

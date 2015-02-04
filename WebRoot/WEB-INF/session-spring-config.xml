@@ -98,7 +98,7 @@
 	</tx:advice>
 	
 	<aop:config>
-		<aop:pointcut id="autotimerhandler" expression="execution(public * com.hbgz.timer.handler..*.*(..))" />
+		<aop:pointcut id="autotimerhandler" expression="execution(public * com.hbgz.timer.service..*.*(..))" />
 		<aop:advisor pointcut-ref="autotimerhandler" advice-ref="timerAdvice" />
 	</aop:config>
 </beans>

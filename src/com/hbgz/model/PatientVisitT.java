@@ -9,9 +9,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-/**
- * PatientVisitT entity. @author MyEclipse Persistence Tools
- */
+ 
 @Entity
 @Table(name = "PATIENT_VISIT_T")
 public class PatientVisitT implements java.io.Serializable {
