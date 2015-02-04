@@ -315,7 +315,7 @@ public class DigitalHealthService
 		return obj;
 	}
 
-	@ServiceType(value = "BUS2005")
+	@ServiceType(value = "BUS20055")
 	public Map getUser(String telephone, String password,String hospitalId) throws QryException
 	{
 		List users = digitalHealthDao.qryUserByTelephone(telephone, password);

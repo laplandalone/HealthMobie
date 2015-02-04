@@ -58,7 +58,6 @@ public class MobileController
 		try 
 		{
 			String retVal = mobileService.axis(param);
-			log.error(retVal);
 			response.setCharacterEncoding("UTF-8");
 			PrintWriter out = response.getWriter();
 			out.print(retVal);
