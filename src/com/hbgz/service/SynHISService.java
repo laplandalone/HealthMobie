@@ -1,4 +1,4 @@
-package com.hbgz.service;
+ package com.hbgz.service;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -26,6 +26,7 @@ import com.hbgz.model.DoctorT;
 import com.hbgz.model.RegisterOrderT;
 import com.hbgz.model.TeamT;
 import com.hbgz.pub.base.SysDate;
+import com.hbgz.pub.exception.QryException;
 import com.hbgz.pub.sequence.SysId;
 import com.hbgz.pub.util.DateUtils;
 import com.hbgz.pub.xml.XMLComm;
@@ -622,7 +623,7 @@ public class SynHISService {
 		
 		String currentDay=DateUtils.getORA_DATE_FORMAT();
 		String sysIdStr=sysId.getId()+"";
-		String id=currentDay+sysIdStr.substring(sysIdStr.length()-4,sysIdStr.length());
+//		String id=getOrderId();//currentDay+sysIdStr.substring(sysIdStr.length()-4,sysIdStr.length());
 		String sex="1";
 		if("男".equals(orderT.getSex()))
 		{
@@ -644,12 +645,12 @@ public class SynHISService {
 		StringBuffer sql=new StringBuffer("<DS><SQL><str>");
 		sql.append("insert into mz_yydj ");
 		sql.append("(yylsh,xm,xb,csrq,yysj,yyysdm,yyysxm,lxdz,dqsj,czydm,lxdh,yynr,xh,sfzh,sff,ghlbdm) values ");
-		sql.append("('"+id+"','"+orderT.getUserName()+"','"+sex+"','"+birthDay+"','"+registerTime+"','"+orderT.getDoctorId().trim()+"','"+orderT.getDoctorName()+"','"+userAddress+"',GETDATE(),'"+czydm+"','"+orderT.getUserTelephone()+"','掌上亚心',"+xh+",'"+orderT.getUserNo()+"','10','"+yszc+"')");
+		sql.append("('"+orderT.getOrderId()+"','"+orderT.getUserName()+"','"+sex+"','"+birthDay+"','"+registerTime+"','"+orderT.getDoctorId().trim()+"','"+orderT.getDoctorName()+"','"+userAddress+"',GETDATE(),'"+czydm+"','"+orderT.getUserTelephone()+"','掌上亚心',"+xh+",'"+orderT.getUserNo()+"','10','"+yszc+"')");
 		sql.append("</str></SQL></DS>");
 		log.error("pay-sql:"+sql);
 		invokeFunc(sql.toString());
 		orderT.setPayState("102");
-		orderT.setPlatformOrderId(id);
+		orderT.setPlatformOrderId(orderT.getOrderId());
 		orderT.setOrderNum(xh+"");
 		hibernateObjectDao.update(orderT);
 	}
@@ -678,7 +679,7 @@ public class SynHISService {
 		String sss ="<DS><SQL><str>update mz_yydj set  qxf  =  'Y'  where yylsh  = '201411286081'  </str></SQL></DS>";
 		String ssss="<DS><SQL><str>select  xh+1 xh  from mz_ghde   where id =1000020274  </str></SQL></DS>";
 		String sssss="<DS><SQL><str>select  jzsc,yszc from mz_bzdyb  where bzdm  = 'sh02' and ysdm ='1854R'</str></SQL></DS>";
-		String sql="<DS><SQL><str>select distinct  bzdm team_id ,bzmc team_name from mz_bzdyb  </str></SQL></DS>";
+		String sql="<DS><SQL><str> insert into mz_yydj (yylsh,xm,xb,csrq,yysj,yyysdm,yyysxm,lxdz,dqsj,czydm,lxdh,yynr,xh,sfzh,sff,ghlbdm) values ('2015022711123','袁轲','1','','2015-03-06 14:06:00','9083R','门诊普通号','无',GETDATE(),'','18627902825','掌上亚心',1002,'420102198808084036','10','08')</str></SQL></DS>";
 		String result =new SynHISService().invokeFunc(sql);
 		System.out.println(result);
 //		Document doc = XMLComm.loadXMLString(result);

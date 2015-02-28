@@ -335,6 +335,27 @@ public class DigitalHealthService
 		}
 		return null;
 	}
+	
+	public synchronized String  getOrderId() throws QryException
+	{
+		String day=DateUtils.getORA_DATE_FORMAT();
+		List list = digitalHealthDao.qryOrderIdMax(day);
+		int oldMaxId=0;
+		if(ObjectCensor.checkListIsNull(list))
+		{
+			Map map =(Map) list.get(0);
+			String id = StringUtil.getMapKeyVal(map, "orderId");
+			if(!"".equals(id) && !"0".equals(id) && id.length()==12)
+			{
+				id=id.substring(id.length()-4,id.length());
+				oldMaxId=Integer.parseInt(id);
+				oldMaxId++;
+				return day+oldMaxId++;
+			}
+		}
+		return day+4000;
+	}
+	
 
 	/**
 	 * 用户预约挂号提交
@@ -360,7 +381,7 @@ public class DigitalHealthService
 			String userName, String userNo, String userTelephone, String sex, String teamId,
 			String teamName,String saveFlag,String contactId) throws Exception
 	{
-		String orderId =DateUtils.getORA_DATE_FORMAT()+sysId.getId() + "";
+		String orderId =getOrderId();
 		
 		/*普通挂号,默认取自定义预约号码*/ 
 		if ("0".equals(orderNum) && "0".equals(registerId))

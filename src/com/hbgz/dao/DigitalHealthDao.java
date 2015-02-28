@@ -1013,5 +1013,11 @@ public class DigitalHealthDao
 		return itzcQryCenter.executeSqlByMapListWithTrans(sql, lstParam);
 	}
 	
+	public List  qryOrderIdMax(String day) throws QryException
+	{
+		String sql = "select t.order_id from register_order_t t where create_date between to_date('"+day+" 00:00:00', 'yyyy-mm-dd hh24:mi:ss') and to_date('"+day+" 23:59:59', 'yyyy-mm-dd hh24:mi:ss') order by create_date desc";
+		ArrayList lstParam = new ArrayList();
+		return itzcQryCenter.executeSqlByMapListWithTrans(sql, lstParam);
+	}
 	
 }
