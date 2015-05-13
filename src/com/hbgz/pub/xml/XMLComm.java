@@ -1,3 +1,9 @@
+/*
+ * Created on 2005-6-29
+ *
+ * TODO To change the template for this generated file go to
+ * Window - Preferences - Java - Code Style - Code Templates
+ */
 package com.hbgz.pub.xml;
 
 import java.io.ByteArrayOutputStream;
@@ -10,6 +16,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -24,15 +31,11 @@ import org.jdom.xpath.XPath;
 import com.tools.pub.utils.StringUtil;
 
 /**
- * @modify  2005-08-12 追加几个替换的节点的函数
- * jdom 对xml一些通用函数
  *
  */
 public class XMLComm
 {
-	
 	private static Log log = LogFactory.getLog(XMLComm.class);
-	
 	/**
      * 取掉一个节点下所有子结点属性(attrName)
      * @param Element ele 节点
@@ -451,7 +454,6 @@ public class XMLComm
     public static void showOneEle( Element ele, String split )
     {
         String initsplit = split;
-        log.debug( initsplit + "<" + ele.getName() + getOneEleAttr( ele ) + ">" + ele.getText() );
         split = split + "  ";
         List children = ele.getChildren();
         for ( int i = 0; i < children.size(); i++ )
@@ -459,7 +461,6 @@ public class XMLComm
             Element aEle = ( Element )children.get( i );
             if ( aEle.getChildren().size() == 0 )
             {
-                log.debug( split + "<" + aEle.getName() + getOneEleAttr( aEle ) + ">" + aEle.getText() + "</" + aEle.getName() + ">" );
             }
             else
             {
@@ -467,7 +468,6 @@ public class XMLComm
                 showOneEle( aEle, split );
             }
         }
-        log.debug( initsplit + "</" + ele.getName() + ">" );
     }
 
     /**
@@ -485,7 +485,6 @@ public class XMLComm
         try
         {
             outputter.output( doc, writer );
-            //log.debug(writer.toString());
             return writer.toString();
         } catch ( Exception e )
         {
@@ -637,19 +636,16 @@ public class XMLComm
             split = split + "  ";
             if ( ele.isRootElement() )
             {
-                log.debug( split + ele.getName() );
             }
             for ( int i = 0; i < lst.size(); i++ )
             {
                 Element one_ele = ( Element )lst.get( i );
                 if ( one_ele.getChildren().size() > 0 )
                 {
-                    log.debug( split + one_ele.getName() );
                     showAllElement( one_ele, split );
                 }
                 else
                 {
-                    log.debug( split + one_ele.getName() + ":=" + one_ele.getTextTrim() );
                 }
 
             }
@@ -672,7 +668,6 @@ public class XMLComm
             }
             if ( ele.isRootElement() )
             {
-                log.debug( ele.getName() );
                 parentName = ele.getName();
             }
             for ( int i = 0; i < lst.size(); i++ )
@@ -680,12 +675,10 @@ public class XMLComm
                 Element one_ele = ( Element )lst.get( i );
                 if ( one_ele.getChildren().size() > 0 )
                 {
-                    log.debug( parentName + "." + one_ele.getName() );
                     showAllElement_FullPath( one_ele, split, parentName + "." + one_ele.getName() );
                 }
                 else
                 {
-                    log.debug( parentName + "." + one_ele.getName() + ":=" + one_ele.getTextTrim() );
                 }
 
             }
@@ -699,68 +692,7 @@ public class XMLComm
      * @param parentName    out参数 用于返回路径(调用时为空,递归时用到)
      * @param List lstComp  out参数 由于返回比较结果(调用时为空,递归时用到)
      */
-    public static boolean compAllElement( Element ele1, Element ele2, String parentName, List lstComp )
-    {
-        if ( ( ele1 == null ) && ( ele2 == null ) )
-        {
-            return false;
-        }
-        //得到子结点的个数
-        List lstOne = ele1.getChildren();
-        List lstTwo = ele2.getChildren();
-
-        if ( ( lstOne.size() == 0 ) || ( lstTwo.size() == 0 ) )
-        {
-            return ( true );
-        }
-
-        //如果本层的结点的个数不同,则提前退出
-        if ( lstOne.size() != lstTwo.size() )
-        {
-            XmlCompResult comp = new XmlCompResult();
-            comp.setPath( parentName + "." + ele1.getName() );
-            comp.setOldNodes( lstOne.size() );
-            comp.setNewNodes( lstTwo.size() );
-            lstComp.add( comp );
-            return ( false );
-        }
-
-        //如果是根结点
-        if ( ele1.isRootElement() )
-        {
-            log.debug( ele1.getName() );
-            parentName = ele1.getName();
-        }
-
-        for ( int i = 0; i < lstOne.size(); i++ )
-        {
-            Element one_ele = ( Element )lstOne.get( i );
-            Element two_ele = ( Element )lstTwo.get( i );
-            if ( one_ele.getChildren().size() > 0 )
-            {
-                log.debug( parentName + "." + one_ele.getName() );
-                compAllElement( one_ele, two_ele, parentName + "." + one_ele.getName(), lstComp );
-            }
-            else
-            {
-                if ( !( ( one_ele.getText().equals( two_ele.getText() ) ) ) )
-                {
-                    log.debug( parentName + "." + one_ele.getName() + ": " + one_ele.getTextTrim() + "!=" + two_ele.getTextTrim() );
-                    XmlCompResult comp = new XmlCompResult();
-                    comp.setPath( parentName + "." + one_ele.getName() );
-                    comp.setOldValue( one_ele.getText() );
-                    comp.setNewValue( two_ele.getText() );
-                    lstComp.add( comp );
-                }
-                else
-                {
-                    log.debug( parentName + "." + one_ele.getName() + ":=" + one_ele.getTextTrim() );
-                }
-            }
-
-        }
-        return false;
-    }
+   
 
     /**
      * 根据一个节点,生成用于树的xml
@@ -781,12 +713,8 @@ public class XMLComm
             if ( ele.isRootElement() )
             {
                 split = 0;
-                log.debug( "d = new dTree('d');" );
-                log.debug( "d.add(0,-1,'My example tree');" );
                 split = 0;
                 parent = 0;
-                //log.debug(split+ele.getName());
-                //log.debug("d.add("+i+",)"
             }
 
             for ( int i = 0; i < lst.size(); i++ )
@@ -795,15 +723,11 @@ public class XMLComm
                 split = split + 1;
                 if ( one_ele.getChildren().size() > 0 )
                 {
-                    log.debug( "d.add(" + ( split ) + "," + ( parent ) + ",'" + one_ele.getName().trim() + "','xxx.htm');" );
-                    //log.debug(split+one_ele.getName());
                     //split=split+1;
                     AllElement_ToTree( one_ele, split, split );
                 }
                 else
                 {
-                    log.debug( "d.add(" + ( split ) + "," + ( parent ) + ",'" + one_ele.getText().trim() + "','xxx.htm');" );
-                    //log.debug(split+one_ele.getName()+":="+one_ele.getTextTrim());
                 }
 
             }
@@ -827,15 +751,12 @@ public class XMLComm
             split = split + "  ";
             if ( ele.isRootElement() )
             {
-                log.debug( split + ele.getName() );
             }
             for ( int i = 0; i < lst.size(); i++ )
             {
                 Element one_ele = ( Element )lst.get( i );
-                //log.debug(split+one_ele.getName());
                 if ( one_ele.getChildren().size() > 0 )
                 {
-                    log.debug( split + one_ele.getName() );
                     visitElement_OnlyParent( one_ele, split );
                 }
             }
@@ -855,11 +776,11 @@ public class XMLComm
                 Document myDoc=sb.build(new FileInputStream("allobj.xml"));
                 //访问子元素
                 Element root=myDoc.getRootElement(); //先得到根元素
-                log.debug("显示所有结点的Name");
+                System.out.println("显示所有结点的Name");
                 s1.showAllElement(root,"");
-                log.debug("显示所有(父类结点: 目录)的Name");
+                System.out.println("显示所有(父类结点: 目录)的Name");
                 s1.visitElement_OnlyParent(root,"");
-                log.debug("显示所有(父类结点: 目录)的Name");
+                System.out.println("显示所有(父类结点: 目录)的Name");
                 s1.showAllElement_FullPath(root,"","");
              */
 
@@ -874,10 +795,10 @@ public class XMLComm
                 ArrayList lstComp=new ArrayList();
                 s1.compAllElement(root1,root2,"",lstComp);
 
-                log.debug("显示比较结构: ");
+                System.out.println("显示比较结构: ");
                 for (int i=0;i<lstComp.size();i++){
              XmlCompResult comp=(XmlCompResult)lstComp.get(i);
-             log.debug(comp.getPath()+": "+comp.getOldValue()+"!="+comp.getNewValue());
+             System.out.println(comp.getPath()+": "+comp.getOldValue()+"!="+comp.getNewValue());
                 }
              */
 
@@ -887,14 +808,14 @@ public class XMLComm
                 Document myDoc=sb.build(new FileInputStream("tree.xml"));
                 //访问子元素
                 Element root=myDoc.getRootElement(); //先得到根元素
-                log.debug("XML树型表示");
+                System.out.println("XML树型表示");
                 s1.AllElement_ToTree(root,0,-1);
              */
 
 
         } catch ( Exception e )
         {
-            log.error("Method main caught an error:", e);
+            log.error( e.getMessage() );
         }
     }
 
@@ -997,7 +918,7 @@ public class XMLComm
             return lst;
         } catch ( Exception e )
         {
-            e.printStackTrace();
+            log.error(e.getCause());
             return null;
         }
     }
@@ -1014,6 +935,17 @@ public class XMLComm
         Element error = new Element( "Error" ).setText( errMessage + ":" + e.getMessage() );
         Element detail = new Element( "Detail" );
 
+        if ( !isRuleException( e ) )
+        {
+            StringBuffer strBuff = new StringBuffer();
+            StackTraceElement[] stacks = e.getStackTrace();
+            for ( int i = 0; i < stacks.length; i++ )
+            {
+                strBuff.append( stacks[i].toString() + "\n" );
+            }
+            detail.setText( strBuff.toString() );
+            root.addContent( detail );
+        }
 
         root.addContent( error );
         StringBuffer sbf = new StringBuffer();
@@ -1036,5 +968,83 @@ public class XMLComm
         return XMLComm.getXMLHead( "GBK" ) + sbf.toString();
     }
 
-
+    public static boolean isRuleException( Exception e )
+    {
+        if ( e instanceof Exception )
+        {
+            return ( ( ( Exception )e ).getCause() == null );
+        }
+        return false;
+    }
+    
+    /**
+	 * function：将map转换为Element
+	 * @param map ： 为子结点集合
+	 * @param parentStr:为父结点名称
+	 * @return element
+	 */
+	public static Element mapAsEle(Map map,String parentStr)
+	{
+		if(parentStr==null || "".equals(parentStr))return null;
+		
+		StringBuffer str = new StringBuffer(XMLComm.getXMLHead("GBK"));
+		str.append("<"+parentStr+">");
+		if(map!=null && map.size()!=0)
+		{
+			for(Iterator it = map.entrySet().iterator();it.hasNext();)
+			{
+				Entry e = (Entry) it.next();
+				Object key = e.getKey();
+				Object val = e.getValue();
+				if(key!=null && !"".equals(key))
+				{
+					str.append("<"+key+">"+val+"</"+key+">");
+				}
+			}
+		}
+		str.append("</"+parentStr+">");
+		Document doc = XMLComm.loadXMLString(str.toString());
+		return (Element) doc.getRootElement().clone();
+	}
+	
+	/**
+	 * function：将map转换为Element 二级结点<rule>,三级结点由Map组成
+	 * @param map ： 为子结点集合
+	 * @param parentStr:为一级结点名称
+	 * @return element
+	 */
+	public static Element listAsEle(List list,String parentStr)
+	{
+		if(parentStr==null || "".equals(parentStr))return null;
+		
+		StringBuffer str = new StringBuffer(XMLComm.getXMLHead("GBK"));
+		
+		if(list!=null && list.size()!=0)
+		{
+			str.append("<"+parentStr+">");
+			for(int i=0;i<list.size();i++)
+			{
+				str.append("<rule>");
+				Map map = (Map) list.get(i);
+				if(map!=null && map.size()!=0)
+				{
+					for(Iterator it = map.entrySet().iterator();it.hasNext();)
+					{
+						Entry e = (Entry) it.next();
+						Object key = e.getKey();
+						Object val = e.getValue();
+						if(key!=null && !"".equals(key))
+						{
+							str.append("<"+key+">"+val+"</"+key+">");
+						}
+					}
+				}
+				str.append("</rule>");
+			}
+			str.append("</"+parentStr+">");
+		}
+		
+		Document doc = XMLComm.loadXMLString(str.toString());
+		return (Element) doc.getRootElement().clone();
+	}
 }

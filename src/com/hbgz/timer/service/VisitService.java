@@ -117,7 +117,7 @@ public class VisitService extends TimerValidateService
 					wakeT.setState("00A");
 					wakeT.setWakeType("visit_plan");
 					wakeT.setWakeFlag("N");
-					if(new Date().before(SysDate.getSysDate(date30)))
+					if(new Date().before(SysDate.getSysDate(date30+" 00:00:00")))
 					{	
 						hibernateObjectDao.save(wakeT);
 					}
@@ -128,7 +128,7 @@ public class VisitService extends TimerValidateService
 					wakeT.setWakeContent("患者"+pName+",您于"+pTime+"日在亚洲心脏病医院做了相关手术,为了保障您术后健康及恢复请在"+date90+"日完成随访表格的填写.");
 					wakeT.setWakeDate(SysDate.getSysDate(date90+" 11:00:00"));
 					wakeT.setCreateDate(SysDate.getSysDate(date90+" 00:00:00"));
-					if(new Date().before(SysDate.getSysDate(date90)))
+					if(new Date().before(SysDate.getSysDate(date90+" 00:00:00")))
 					{	
 						hibernateObjectDao.save(wakeT);
 					}
@@ -140,7 +140,7 @@ public class VisitService extends TimerValidateService
 					wakeT.setWakeContent("患者"+pName+",您于"+pTime+"日在亚洲心脏病医院做了相关手术,为了保障您术后健康及恢复请在"+date180+"日完成随访表格的填写.");
 					wakeT.setWakeDate(SysDate.getSysDate(date180+" 11:00:00"));
 					wakeT.setCreateDate(SysDate.getSysDate(date180+" 00:00:00"));
-					if(new Date().before(SysDate.getSysDate(date180)))
+					if(new Date().before(SysDate.getSysDate(date180+" 00:00:00")))
 					{	
 						hibernateObjectDao.save(wakeT);
 					}
@@ -152,7 +152,7 @@ public class VisitService extends TimerValidateService
 					wakeT.setWakeContent("患者"+pName+",您于"+pTime+"日在亚洲心脏病医院做了相关手术,为了保障您术后健康及恢复请在"+date360+"日完成随访表格的填写.");
 					wakeT.setWakeDate(SysDate.getSysDate(date360+" 11:00:00"));
 					wakeT.setCreateDate(SysDate.getSysDate(date360+" 00:00:00"));
-					if(new Date().before(SysDate.getSysDate(date360)))
+					if(new Date().before(SysDate.getSysDate(date360+" 00:00:00")))
 					{	
 						hibernateObjectDao.save(wakeT);
 					}

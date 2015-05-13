@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import net.sf.json.JSONArray;
@@ -40,13 +41,13 @@ import com.hbgz.model.UserContactT;
 import com.hbgz.model.UserQuestionT;
 import com.hbgz.model.UserRelateT;
 import com.hbgz.model.WakeT;
+import com.hbgz.pub.apipay.AlipaySign;
 import com.hbgz.pub.base.SysDate;
 import com.hbgz.pub.cache.CacheManager;
 import com.hbgz.pub.cloudPush.AndroidPushBroadcastMsg;
 import com.hbgz.pub.exception.JsonException;
 import com.hbgz.pub.exception.QryException;
 import com.hbgz.pub.sequence.SysId;
-import com.hbgz.pub.util.AlipaySign;
 import com.hbgz.pub.util.DateUtils;
 import com.hbgz.pub.util.FileUtils;
 import com.hbgz.pub.util.HisHttpUtil;
@@ -776,6 +777,43 @@ public class DigitalHealthService
 		}
 	}
 
+	public Map<String, String> getParamMap(HttpServletRequest request) throws Exception 
+	{
+		Map<String, String> params = new HashMap<String, String>();
+		Map requestParams = request.getParameterMap();
+		for (Iterator iter = requestParams.keySet().iterator(); iter.hasNext();) 
+		{
+			String name = (String) iter.next();
+			String[] values = (String[]) requestParams.get(name);
+			String valueStr = "";
+			for (int i = 0; i < values.length; i++) 
+			{
+				valueStr = (i == values.length - 1 ) ? valueStr + values[i] : valueStr + values[i] + ",";
+				params.put(name, valueStr);
+			}
+		}
+		String orderId= params.get("out_trade_no");
+		String paystate= params.get("trade_status");
+		System.out.println("orderid:"+orderId+ "trade_status:"+paystate);
+		if("TRADE_SUCCESS".equals(paystate))
+		{
+			RegisterOrderT registerOrder=null;
+			List<RegisterOrderT> sList = hibernateObjectDao.qryRegisterOrderT(orderId);
+			if (ObjectCensor.checkListIsNull(sList))
+			{
+				 registerOrder = sList.get(0);
+			     if("100".equals(registerOrder.getPayState()))
+				 {
+					System.out.println("---------------orderpay-------1-------");
+					orderPay(orderId,"102");
+				 }
+			}
+			
+			
+		}
+		return params;
+	}
+	
 	/**
 	 * 更新支付状态：     
 	 * order_state,100：未支付；101：已取消；102：已支付;103:退款中;104:已退款；
@@ -796,10 +834,10 @@ public class DigitalHealthService
 			{
 				 registerOrder = sList.get(0);
 				
-				if("102".equals(payState) && registerOrder!=null)
+				if("102".equals(payState) && registerOrder!=null && "100".equals(registerOrder.getPayState()))
 				{
+					System.out.println("---------------orderpay-----2---------");
 					 synHISService.addOrderPay(registerOrder);
-					 
 					 List orders = hibernateObjectDao.findByProperty("RegisterOrderT", "orderId",orderId);
 					 if (ObjectCensor.checkListIsNull(orders))
 					 {
@@ -1447,8 +1485,15 @@ public class DigitalHealthService
 				}
 			}
 		}
-		JSONArray jsonArray = JsonUtils.fromArray(vlist);
-		return jsonArray;
+		if(vlist!=null && vlist.size()>0)
+		{
+			JSONArray jsonArray = JsonUtils.fromArray(vlist);
+			return jsonArray;
+		}else
+		{
+			return new JSONArray();
+		}
+		
 		
 	}
 	

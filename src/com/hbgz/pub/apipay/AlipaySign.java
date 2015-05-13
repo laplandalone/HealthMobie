@@ -1,7 +1,9 @@
-package com.hbgz.pub.util;
+package com.hbgz.pub.apipay;
 
 import java.net.URLEncoder;
 
+import com.hbgz.pub.util.Keys;
+import com.hbgz.pub.util.Rsa;
 import com.tools.pub.utils.ObjectCensor;
 
 public class AlipaySign 
@@ -41,7 +43,7 @@ public class AlipaySign
 		sb.append("\"&notify_url=\"");
 
 		// ÍøÖ·ĞèÒª×öURL±àÂë
-		sb.append(URLEncoder.encode("http://notify.java.jpxx.org/index.jsp"));
+		sb.append(URLEncoder.encode("http://www.hiseemedical.com:10821/alipay/planPayRst.htm"));
 		sb.append("\"&service=\"mobile.securitypay.pay");
 		sb.append("\"&_input_charset=\"UTF-8");
 //		sb.append("\"&return_url=\"");

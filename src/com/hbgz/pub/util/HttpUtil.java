@@ -117,4 +117,68 @@ public class HttpUtil
 			e.printStackTrace();
 		}
 	}
+	public static String http(String address, String param)
+	{
+		log.error("send_data:" + param);
+		HttpURLConnection conn = null;
+		try 
+		{
+			URL url = new URL(address);
+			conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("POST");
+			conn.setDoOutput(true);
+			conn.setDoInput(true);
+			conn.setUseCaches(false);
+			conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+			OutputStreamWriter osw = new OutputStreamWriter(conn.getOutputStream(), "UTF-8");
+			osw.write(param);
+			osw.flush();
+			osw.close();
+		} 
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			if (conn != null)
+			{
+				conn.disconnect();
+			}
+		}
+		
+		
+		// ∂¡»°∑µªÿƒ⁄»›
+		StringBuffer buffer = new StringBuffer();
+		BufferedReader br = null;
+		try
+		{
+			br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+			String temp;
+			while ((temp = br.readLine()) != null)
+			{
+				buffer.append(temp);
+				buffer.append("\n");
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			if(br != null)
+			{
+                try 
+                {
+                    br.close();
+                } 
+                catch (Exception e) 
+                {
+                      e.printStackTrace();
+                }
+			}
+		}
+		return buffer.toString();
+	}
 }

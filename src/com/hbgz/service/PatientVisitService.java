@@ -67,9 +67,19 @@ public class PatientVisitService
 	@ServiceType(value = "BUS3004")
 	public JSONArray getVisitPatientsById(String doctorId,String copyFlag)throws QryException
 	{
+		System.out.println("------BUS3004-----------");
 		List patientVisits = digitalHealthDao.qryPatientVisits(copyFlag);
-		JSONArray jsonArray = JsonUtils.fromArrayTimestamp(patientVisits);
-		return jsonArray;
+		if(patientVisits!=null && patientVisits.size()>0)
+		{
+			JSONArray jsonArray = JsonUtils.fromArrayTimestamp(patientVisits);
+			System.out.println("------------------");
+			return jsonArray;
+		}else
+		{
+			System.out.println("------12------------");
+			return new JSONArray();
+		}
+		
 	}
 	
 	public List qryPatientVisitList(String startTime, String endTime, String visitName, String visitType, String cardId) throws Exception
@@ -115,4 +125,5 @@ public class PatientVisitService
 		obj.element("count", count);
 		return obj;
 	}
+	 
 }

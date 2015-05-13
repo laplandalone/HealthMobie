@@ -563,6 +563,8 @@ public class SynHISService {
 		sqlxh.append("<SQL><str>update mz_ghde set "+xhFlag+"  = "+xhFlag+"+1    where id = "  +delb +"</str></SQL>");
 		sqlxh.append("</DS>");
 		
+		log.error("sqlxh:"+sqlxh);
+		
 		String ss = invokeFunc(sqlxh.toString());
 		
 		Document doc = XMLComm.loadXMLString(ss);
@@ -587,6 +589,7 @@ public class SynHISService {
 		if(ObjectCensor.isStrRegular(xhStr))
 		{
 			xh=Integer.parseInt(xhStr);
+			log.error("-------------------xh--------------:"+xh);
 		}
 		
 		StringBuffer sqljzsc =new StringBuffer();
@@ -658,7 +661,7 @@ public class SynHISService {
 	
 	public static void main(String[] args) throws Exception
 	{
-//		String sql="<DS><SQL><str>select a.id,c.bzmc team_name,c.bzdm team_id,kszjdm doctor_id,derq day,swdes,ylrs,swyyrs ,swdes-ylrs-swyyrs am_num,xwdes-xwylrs-xwyyrs pm_num  from mz_ghde a, mz_bzdyb c where derq='2014.09.30' and a.kszjdm=c.ysdm and kszjdm='0629R' </str></SQL></DS>";
+		String sql="<DS><SQL><str>select a.id,c.bzmc team_name,c.bzdm team_id,kszjdm doctor_id,derq day,swdes,ylrs,swyyrs ,swdes-ylrs-swyyrs am_num,xwdes-xwylrs-xwyyrs pm_num  from mz_ghde a, mz_bzdyb c where derq='2014.09.30' and a.kszjdm=c.ysdm and kszjdm='0629R' </str></SQL></DS>";
 //		String sql="<DS><SQL><str>select distinct bzmc  from mz_bzdyb c order by bzmc </str></SQL></DS>";
 		
 //		String sql="<DS><SQL><str>select  yxf ,delb ,c.bzdm team_id,c.bzmc team_name,kszjdm doctor_id,b.zgxm doctor_name,derq day from mz_ghde a,comm_zgdm b,mz_bzdyb c where a.kszjdm=b.zgid and a.kszjdm=c.ysdm  and derq between  '2014.10.10' and '2014.10.16' order by c.bzdm  </str></SQL></DS>";
@@ -679,8 +682,9 @@ public class SynHISService {
 		String sss ="<DS><SQL><str>update mz_yydj set  qxf  =  'Y'  where yylsh  = '201411286081'  </str></SQL></DS>";
 		String ssss="<DS><SQL><str>select  xh+1 xh  from mz_ghde   where id =1000020274  </str></SQL></DS>";
 		String sssss="<DS><SQL><str>select  jzsc,yszc from mz_bzdyb  where bzdm  = 'sh02' and ysdm ='1854R'</str></SQL></DS>";
-		String sql="<DS><SQL><str> insert into mz_yydj (yylsh,xm,xb,csrq,yysj,yyysdm,yyysxm,lxdz,dqsj,czydm,lxdh,yynr,xh,sfzh,sff,ghlbdm) values ('2015022711123','袁轲','1','','2015-03-06 14:06:00','9083R','门诊普通号','无',GETDATE(),'','18627902825','掌上亚心',1002,'420102198808084036','10','08')</str></SQL></DS>";
-		String result =new SynHISService().invokeFunc(sql);
+		String sql1="<DS><SQL><str> insert into mz_yydj (yylsh,xm,xb,csrq,yysj,yyysdm,yyysxm,lxdz,dqsj,czydm,lxdh,yynr,xh,sfzh,sff,ghlbdm) values ('2015022711123','袁轲','1','','2015-03-06 14:06:00','9083R','门诊普通号','无',GETDATE(),'','18627902825','掌上亚心',1002,'420102198808084036','10','08')</str></SQL></DS>";
+		String sql2="<DS><SQL><str> select * from view_ssqk_app v,mzbrxx m where v.patient_id=m.patient_id and v.patient_id  in ('773637') </str></SQL></DS>";
+		String result =new SynHISService().invokeFunc(sql2);
 		System.out.println(result);
 //		Document doc = XMLComm.loadXMLString(result);
 //		Element root = doc.getRootElement();
